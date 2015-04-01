@@ -10,8 +10,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.epicriseTemplate = epicriseTemplate;
 	$scope.seekTag = "";
 	$scope.epicrise = {};
-	$scope.param = {};
-	$scope.param.hid = parameters.hid;
 	$scope.dt = new Date();
 	console.log($scope.epicriseTemplate);
 
@@ -35,6 +33,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	});
 
 	initEpicriseType = function(){
+		if($scope.epicrise.epicriseGroups)
 		$scope.epicrise.epicriseGroups.forEach(function(groupElement) {
 			setGroupElementType(groupElement);
 		});

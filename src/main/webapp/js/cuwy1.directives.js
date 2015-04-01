@@ -86,6 +86,10 @@ var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngu
 
 initDeclareController = function($scope, $http, $sce, $filter){
 	console.log("--------initDeclareController--------------------");
+	$scope.param = {};
+	$scope.param.hid = parameters.hid;
+	$scope.param.hno = parameters.hno;
+	console.log($scope.param);
 
 	saveWorkDoc = function(url, $scope, $http){
 		var docToSave = $scope.epicrise;

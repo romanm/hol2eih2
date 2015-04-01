@@ -36,6 +36,17 @@
 				</ol>
 			</div>
 		</div>
+		<div ng-repeat="departmentHol in departmentsHol"
+			ng-if="departmentHol.department_id == departmentId">
+			<h3>
+			Відділення:
+				<span data-ng-show="departmentHol.department_id == departmentId"
+					class="glyphicon glyphicon-asterisk"></span> <a
+					href="/hol/department.html?dep={{departmentHol.department_id}}">
+					{{departmentHol.department_name}} </a>
+			</h3>
+			<hr/>
+		</div>
 		<div class="row">
 			<div class="col-md-3">
 				<h3 ng-repeat="departmentHol in departmentsHol"
@@ -63,19 +74,22 @@
 	<h4 ng-repeat="departmentHol in departmentsHol"
 	ng-if="departmentHol.department_profile_id == 2 "
 	>
+	<span data-ng-show="departmentHol.department_id == departmentId"
+						class="glyphicon glyphicon-asterisk"></span>
 		<a href="/hol/department.html?dep={{departmentHol.department_id}}">
 			{{departmentHol.department_name}}
 		</a>
 	</h4>
 			</div>
 			<div class="col-md-4">
-	<h4 ng-repeat="departmentHol in departmentsHol"
-	ng-if="departmentHol.department_profile_id == 1 "
-	>
-		<a href="/hol/department.html?dep={{departmentHol.department_id}}">
-			{{departmentHol.department_name}}
-		</a>
-	</h4>
+				<h4 ng-repeat="departmentHol in departmentsHol"
+					ng-if="departmentHol.department_profile_id == 1 ">
+					<span data-ng-show="departmentHol.department_id == departmentId"
+						class="glyphicon glyphicon-asterisk"></span>
+					<a href="/hol/department.html?dep={{departmentHol.department_id}}">
+						{{departmentHol.department_name}}
+					</a>
+				</h4>
 			</div>
 		</div>
 	</div>
@@ -110,20 +124,7 @@
 	<script src='/js/textAngular.min.js'></script>
 	<script src="/db/config.json.js"></script>
 	<script src="/js/cuwy1.directives.js"></script>
-	<script type="text/javascript">
-	cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', function ($scope, $http) {
-		console.log("HomeHolCtrl");
-		console.log(configHol.departments.length);
-		$scope.departmentsHol = configHol.departments;
-		$http({ method : 'GET', url : "/user"
-		}).success(function(data, status, headers, config) {
-			$scope.user = data;
-			console.log($scope.user.name);
-			console.log("--------------");
-		}).error(function(data, status, headers, config) {
-		});
-	} ] );
-	</script>
+	<script src="/js/cuwy1.controller.js"></script>
 
 </body>
 </html>

@@ -1,3 +1,20 @@
+
+cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', function ($scope, $http) {
+	console.log("HomeHolCtrl");
+	console.log(configHol.departments.length);
+	$scope.departmentsHol = configHol.departments;
+	$http({ method : 'GET', url : "/user"
+	}).success(function(data, status, headers, config) {
+		$scope.user = data;
+		console.log($scope.user.name);
+		console.log($scope.user);
+		$scope.departmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
+		console.log($scope.departmentId);
+		console.log("--------------");
+	}).error(function(data, status, headers, config) {
+	});
+} ] );
+
 cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http) {
 	
 	$scope.writeDepartment = function(department){
@@ -45,7 +62,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', function ($scope, $htt
 
 	$scope.openPatientShortHistory = function(patient){
 		console.debug('openPatientShortHistory');
-		window.location.href = "/hol/history_"+patient.history_id;
+		window.location.href = "/hol/history.html?hno="+patient.history_id;
 	}
 
 	$scope.openPatientInfo = function(patient){
