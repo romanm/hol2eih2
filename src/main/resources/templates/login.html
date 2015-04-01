@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="LoginCtrl"
+
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<title>Вхід в Електронну історію хвороби Хмельницької обласної лікарні</title>
+<link rel="stylesheet" href="/css/bootstrap.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css' />
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+</head>
+<body>
+
+	<div class="container">
+		<div class="row no-print">
+			<div class="col-xs-8">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+				</ol>
+			</div>
+			<div class="col-xs-4"
+				style="text-align: right; background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+					<li>|</li>
+					<li data-ng-show="!user.name"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&amp;hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="user.name"><span
+						class="glyphicon glyphicon-log-out"></span> :{{user.name}} <a
+						href="/hello"> Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+
+		<div th:if="${param.error}">Invalid username and password.</div>
+		<div th:if="${param.logout}">You have been logged out.</div>
+		<h1>Вхід в електронну історію хвороби</h1>
+		<div class="row">
+			<div class="col-xs-4 pull-right">
+				<form th:action="@{/login}" method="post">
+					<div>
+						<label> Ім'я користувача : <input type="text"
+							name="username" />
+						</label>
+					</div>
+					<div>
+						<label> Пароль: <input type="password" name="password" />
+						</label>
+					</div>
+					<!-- 
+			url= <span th:text="${session}"></span> hno= <span
+				th:text="${session.hno}"></span>
+			 -->
+					<div>
+						<input type="submit" value="Ввійти" />
+					</div>
+				</form>
+			</div>
+		</div>
+		<a href="/"> На головну </a>
+	</div>
+	<nav class="navbar navbar-default navbar-fixed-bottom"
+		role="navigation">
+		<div class="container">
+			<span class="glyphicon glyphicon-play"></span>
+			<ol class="list-inline navbar-right">
+				<li>|</li>
+				<li data-ng-show="!user.name"><span
+					class="glyphicon glyphicon-log-in"></span> <a
+					href="/login?url=addPatient&amp;hno={{hno}}"> Ввійти </a></li>
+				<li data-ng-show="user.name"><span
+					class="glyphicon glyphicon-log-out"></span> :{{user.name}} <a
+					href="/hello"> Вийти </a></li>
+			</ol>
+		</div>
+	</nav>
+
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/angular.min.js"></script>
+		<script src="/js/ui-bootstrap-tpls-0.11.0.js"></script>
+		<script src="/js/angular-sanitize.min.js"></script>
+		<script src='/js/textAngular-sanitize.min.js'></script>
+		<script src='/js/textAngular.min.js'></script>
+		<script src="/db/config.json.js"></script>
+		<script src="/js/cuwy1.directives.js"></script>
+		<script type="text/javascript">
+			cuwyApp.controller('LoginCtrl', [ '$scope', '$http',
+					function($scope, $http) {
+						console.log("LogoutCtrl");
+						$http({
+							method : 'GET',
+							url : "/user"
+						}).success(function(data, status, headers, config) {
+							$scope.user = data;
+							console.log($scope.user);
+							console.log("--------------");
+						}).error(function(data, status, headers, config) {
+						});
+					} ]);
+		</script>
+	
+	
+	
+</body>
+</html>

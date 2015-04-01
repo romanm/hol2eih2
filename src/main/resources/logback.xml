@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%L\t…%20.20c\t- %m%n
+			</Pattern>
+			<!-- 
+			<Pattern>%L\t…%20.20c.%M()\t- %m%n
+			</Pattern>
+			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} %-5level %logger{36} -k- %msg%n
+			</Pattern>
+			 -->
+		</encoder>
+	</appender>
+	
+	<logger name="hol2eih1" level="DEBUG" />
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

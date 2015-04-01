@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url "http://repo.spring.io/libs-release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'hol2eih2'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+//	compile("org.springframework:spring-jdbc:4.1.5.RELEASE")
+	compile("org.springframework:spring-jdbc")
+	compile("mysql:mysql-connector-java:5.1.31")
+	compile("com.h2database:h2")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    // tag::security[]
+    compile("org.springframework.boot:spring-boot-starter-security")
+    // end::security[]
+    testCompile("junit:junit")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

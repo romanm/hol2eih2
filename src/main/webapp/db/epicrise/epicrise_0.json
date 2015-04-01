@@ -1,0 +1,160 @@
+{
+  "departmentHistoryOut" : "2014-12-26T08:36:59.975Z",
+  "epicriseGroups" : [ {
+    "name" : "Діагнози",
+    "open" : false
+  }, {
+    "name" : "Операції",
+    "open" : false
+  }, {
+    "name" : "Лікування, обстеження, аналізи, рекомендації ...",
+    "type" : "isOnDemand",
+    "open" : false,
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-26T14:27:28.631Z",
+      "textHtml" : " &nbsp; "
+    }
+  }, {
+    "name" : "Лікування",
+    "type" : "isTextHtml",
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-15T08:36:59.979Z",
+      "textHtml" : "   оддл іаіва <br/>",
+      "withDate" : true
+    },
+    "open" : false
+  }, {
+    "name" : "Перебіг хвороби",
+    "type" : "isTextHtml",
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-26T08:36:59.976Z",
+      "textHtml" : "<p>фівфівіфвіфв</p>"
+    },
+    "open" : false
+  }, {
+    "name" : "ЗАС",
+    "type" : "isLabor",
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-26T08:36:59.982Z",
+      "laborValues" : { }
+    },
+    "open" : false
+  }, {
+    "name" : "ЗАК",
+    "type" : "isLabor",
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-26T08:36:59.979Z",
+      "laborValues" : {
+        "Гемоглобін" : {
+          "value" : "124"
+        },
+        "Еритроцити" : {
+          "value" : "4.6"
+        },
+        "Глюкоза натщесерце" : {
+          "value" : "6.3"
+        }
+      }
+    },
+    "open" : false,
+    "laborOpenToEdit" : "Глюкоза натщесерце"
+  }, {
+    "name" : "Рекомендовано/смерть/перевід",
+    "type" : "isTextHtml",
+    "value" : {
+      "historyTreatmentAnalysisDatetime" : "2014-12-26T08:36:59.985Z",
+      "textHtml" : "   Приймати рибій жир.<br/>"
+    },
+    "open" : false
+  } ],
+  "hid" : "45699",
+  "patientHistory" : {
+    "historyId" : 45699,
+    "historyNo" : 23533,
+    "historyUrgent" : 0,
+    "patientId" : 38684,
+    "directId" : 17,
+    "historyDepartmentIn" : 22,
+    "historyDepartmentId" : 0,
+    "historyAgeYear" : 0,
+    "historyAgeMonth" : 0,
+    "historyAgeDay" : 0,
+    "historyIn" : 1415878776000,
+    "patientHolDb" : {
+      "patientId" : 38684,
+      "patientSurname" : "Михайленко",
+      "patientPersonalName" : "Ігор",
+      "patientPatronymic" : "Іванович",
+      "patientGender" : 1,
+      "patientDob" : -111553200000,
+      "countryId" : 0,
+      "districtId" : 0,
+      "regionId" : 0,
+      "localityId" : 0,
+      "patientStreet" : "Острозького",
+      "patientHouse" : "11",
+      "patientJob" : "Старокостянтинівська ЦРЛ - лікар рентгенолог",
+      "patientPhoneHome" : "",
+      "patientPhoneMobil" : "",
+      "patientBlood" : "",
+      "patientRh" : false,
+      "patientRh2" : 0,
+      "patientFlat" : "15",
+      "patientBj" : "0",
+      "patientSc" : 0,
+      "patientTbc" : 0,
+      "patientHbs" : 0,
+      "patientT" : 0,
+      "patientHiv" : 0,
+      "patientRw" : 0,
+      "patientRwDate" : null
+    },
+    "perevid" : false,
+    "patientDepartmentMovements" : [ {
+      "historyId" : 45699,
+      "patientId" : 38684,
+      "departmentId" : 22,
+      "departmentName" : "Реанімаційне",
+      "personalSurname" : null,
+      "personalName" : null,
+      "personalPatronymic" : null,
+      "departmentHistoryIn" : 1415878776000,
+      "departmentHistoryOut" : null
+    } ],
+    "historyTreatmentAnalysises" : [ {
+      "historyTreatmentAnalysisText" : "<p>фівфівіфвіфв</p>",
+      "historyTreatmentAnalysisName" : "Перебіг хвороби",
+      "historyTreatmentAnalysisDatetime" : 1416636546000
+    }, {
+      "historyTreatmentAnalysisText" : "",
+      "historyTreatmentAnalysisName" : "Лікування",
+      "historyTreatmentAnalysisDatetime" : 1416636546000
+    }, {
+      "historyTreatmentAnalysisText" : "<table rules=\"none\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td class=\"head\">Досліджувані компоненти</td>\r\n<td class=\"head\">Результат</td>\r\n<td class=\"head\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Гемоглобін</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">г/л</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Еритроцити</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">Т/л</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Кольоровий показник</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Лейкоцити</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">Т/л</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">ШОЕ</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">мм/год</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Тромбоцити</td>\r\n<td class=\"value\">&nbsp;</td>\r\n<td class=\"description\">Т/л</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Глюкоза натщесерце</td>\r\n<td class=\"value\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>\r\n<td class=\"description\">ммоль/л</td>\r\n</tr>\r\n</tbody>\r\n</table>",
+      "historyTreatmentAnalysisName" : "ЗАК",
+      "historyTreatmentAnalysisDatetime" : 1416636546000
+    }, {
+      "historyTreatmentAnalysisText" : "<table rules=\"none\">\r\n<tbody>\r\n<tr>\r\n<td class=\"head\">Назва</td>\r\n<td class=\"head\">Результат</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Кількість</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Колір</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Прозорість</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Пит.вага</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Реакція</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Білок</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Глюкоза</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Ацетон</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Епітелій плоский</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name span-1\">Еп. перехідний</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name span-1\">Еп. уретральний</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name span-1\">Еп. нирковий</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Лейкоцити</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Еритроцити</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name span-1\">Ер. незмінені</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name span-1\">Ер. змінені</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Циліндри</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Слиз</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Бактерії</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"even\">\r\n<td class=\"name\">Солі</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n<tr class=\"odd\">\r\n<td class=\"name\">Грибки</td>\r\n<td class=\"value\">&nbsp;</td>\r\n</tr>\r\n</tbody>\r\n</table>",
+      "historyTreatmentAnalysisName" : "ЗАС",
+      "historyTreatmentAnalysisDatetime" : 1416636546000
+    }, {
+      "historyTreatmentAnalysisText" : "",
+      "historyTreatmentAnalysisName" : "Рекомендовано/смерть/перевід",
+      "historyTreatmentAnalysisDatetime" : 1416636546000
+    } ],
+    "diagnosisOnAdmission" : {
+      "icdCode" : "I64",
+      "icdName" : "Інсульт, неуточнений як крововилив чи інфаркт",
+      "historyId" : 45699,
+      "diagnosId" : 2,
+      "icdStart" : 96400,
+      "icdEnd" : 96499,
+      "icdId" : 3524,
+      "personalDepartmentId" : 126,
+      "historyDiagnosDate" : 1415878776000
+    },
+    "operationHistorys" : [ ]
+  },
+  "server" : "add from server",
+  "savedDate" : 1419604076353
+}

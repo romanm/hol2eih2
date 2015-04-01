@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="addPatientCtrl">
+<head>
+<title>Нова історія хвороби - {{patientHistory.patientHolDb.patientSurname}}</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/bootstrap.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+</head>
+
+<body data-key-cuwytrap="">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-5" style="text-align: right;">
+				Хмельницька Обласна Лікарня<br> м.Хмельницький, вул.Пілотська,
+				1 
+			</div>
+			<div class="col-xs-1" style="text-align: center;">
+				<img alt="trizub" src="/img/gerb_small.png">
+			</div>
+			<div class="col-xs-5">
+				+380 382 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <span
+					class="navbar-right no-print"> 
+				</span>
+			</div>
+		</div>
+		<div class="row no-print">
+			<div class="col-xs-8">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+					<li><a
+						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
+		[patientHistory.patientDepartmentMovements.length -1]
+		.departmentId}}">
+							відділення:
+							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+							-1].departmentName}} </a></li>
+					<li><a
+						href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
+							ІХ № <u>{{patientHistory.historyNo}}</u> :: Тітул
+					</a></li>
+				</ol>
+			</div>
+			<div class="col-xs-4" style="text-align: right;background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+					<li><span class="glyphicon glyphicon-floppy-disk"></span> <a
+						data-ng-click="savePatientHistory()" href="#"
+						title="Запис {{numberOfChange}} незбережених змін"> Запис
+							{{numberOfChange}} </a>
+						<span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+					<li>|</li>
+					<li><span class="glyphicon glyphicon-eye-open"></span> <a
+						href="/hol/history.html?hno={{patientHistory.historyId}}">
+							Перегляд </a></li>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hello"> Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+	<!-- 
+		<h2 class="centered" data-ng-show="{{!hno}}">Нова історія хвороби</h2>
+	 -->
+		<h2 class="centered" data-ng-show="{{hno}}">Тітул Історії хвороби № {{patientHistory.historyNo}}</h2>
+	
+		<div data-ng-repeat="g in newHistoryTemplate.groups"
+			data-ng-init="gr = newHistoryTemplate[g]">
+			<span data-ng-click="editOpenClose(gr)"> <b> {{gr.name}} </b>
+				<a href="#" class="no-print"> <span data-ng-if="!gr.open"
+					class="glyphicon glyphicon-chevron-right"></span> <span
+					data-ng-if="gr.open" class="glyphicon glyphicon-chevron-down"></span>
+			</a> <span data-ng-show="g == 'pip'"> <b>ПІП</b> 
+			<span class="pip">
+						{{patientHistory.patientHolDb.patientSurname}}
+						{{patientHistory.patientHolDb.patientPersonalName}}
+						{{patientHistory.patientHolDb.patientPatronymic}} </span> ,<b> д.н. </b> <span>{{patientHistory.patientHolDb.patientDob
+						| date:"dd-MM-yyyy"}}</span>
+			</span> <span data-ng-show="g == 'adress'"> <span>{{patientEditing.districtName}}</span>
+					обл., <span>{{patientEditing.regionName}}</span> р-н., <span>{{patientEditing.localityType
+						== 1 ? "м.":"с."}}</span> <span>{{patientEditing.localityName}}</span> <b>
+						Місце роботи: </b> <span>{{patientHistory.patientHolDb.patientJob}}</span>
+			</span> <span data-ng-show="g == 'diagnos'"> <span> <b>{{requiredFields.directId.name}}</b>:
+						{{patientEditing.directName}}
+				</span> <span> <b>{{requiredFields.departmentId.name}}</b>:
+						{{patientHistory.patientDepartmentMovements[0].departmentName}}
+				</span> <span> <b>{{requiredFields.icdId.name}}</b>:
+						{{patientHistory.diagnosisOnAdmission.icdCode}} -
+						{{patientHistory.diagnosisOnAdmission.icdName}}
+				</span>
+			</span>
+			</span> <span data-ng-repeat="rf in requiredFieldsNoFull(g)">
+				<span data-ng-show="$index == 0"> <i class="btn-danger">Заповніть
+						обов’язкові поля</i>:
+			</span> <span class="btn-danger" data-ng-click="gotoField(rf)">
+					{{requiredFields[rf].name}} </span>{{$last?".":","}}
+			</span>
+			<div class="row well no-print" data-ng-show="gr.open">
+				<div data-ng-show="g == 'pip'">
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<div class="input-group required-simple">
+								<div class="input-group-addon">Прізвище</div>
+								<input id="patientSurname"
+									data-ng-model="patientHistory.patientHolDb.patientSurname"
+									data-ng-change="changePatientName('patientSurname')"
+									class="form-control" type="text" />
+							</div>
+							<div class="input-group required-simple">
+								<div class="input-group-addon">Ім’я</div>
+								<input id="patientPersonalName"
+									data-ng-model="patientHistory.patientHolDb.patientPersonalName"
+									data-ng-change="changePatientName('patientPersonalName')"
+									class="form-control" type="text" />
+							</div>
+							<div class="input-group">
+								<label class="radio-inline"> <input type="radio"
+									name="patientGender"
+									ng-model="patientHistory.patientHolDb.patientGender" value="1" />
+									Чол
+								</label> <label class="radio-inline"> <input type="radio"
+									name="patientGender"
+									ng-model="patientHistory.patientHolDb.patientGender" value="0" />
+									Жін
+								</label>
+							</div>
+							<div class="input-group required-simple">
+								<div class="input-group-addon">По батькові</div>
+								<input type="text" class="form-control input-sm"
+									placeholder="По батькові" id="patientPatronymic"
+									name="patientPatronymic"
+									data-ng-change="changePatientName('patientPatronymic')"
+									ng-model="patientHistory.patientHolDb.patientPatronymic" />
+							</div>
+							<!-- 
+							<div class="input-group required-simple">
+								<div class="input-group-addon">д.н.</div>
+								<input id="patientDob" name="patientDob"
+									ng-model="patientHistory.patientHolDb.patientDob"
+									class="form-control input-sm" type="text"
+									placeholder="(дд-мм-рррр)" ng-click="open($event)"
+									datepicker-popup="dd-MM-yyyy" is-open="opened"
+									datepicker-options="dateOptions" ng-required="true" />
+							</div>
+							 -->
+							<div class="input-group required-simple">
+								<b>д.н.</b> <span>{{patientHistory.patientHolDb.patientDob
+									| date:"dd-MMM(MM)-yyyy"}}</span>
+								<datepicker
+									data-ng-model="patientHistory.patientHolDb.patientDob"
+									show-weeks="true" class="well well-sm"></datepicker>
+							</div>
+						</div>
+				 	</form>
+			</div>
+			<div data-ng-show="g == 'diagnos'">
+				
+				<form class="form-inline" role="form">
+					<div class="form-group">
+						<div class="input-group required-simple">
+							<div class="input-group-addon">{{requiredFields.directId.name}}:</div>
+							<input type="text" class="form-control" id="directId"
+								data-ng-change="changeDirectName()" name="directId"
+								data-ng-model="patientEditing.directName" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu  dropdown-menu-right-700" role="menu">
+										{{configHol.directs.length}}
+										<table>
+											<tr>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.directs"
+															ng-if="$index &lt; configHol.directs.length/4"><a
+															ng-click="setDirect(region)">{{region.direct_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.directs"
+															ng-if="isRegion2of4($index, configHol.directs)"><a
+															ng-click="setDirect(region)">{{region.direct_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.directs"
+															ng-if="isRegion3of4($index, configHol.directs)"><a
+															ng-click="setDirect(region)">{{region.direct_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.directs"
+															ng-if="$index > configHol.directs.length/4*3"><a
+															ng-click="setDirect(region)">{{region.direct_name}}</a></li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="input-group required-simple">
+								<div class="input-group-addon">{{requiredFields.departmentId.name}}:</div>
+								<input type="text" class="form-control" id="departmentId"
+									data-ng-change="changeDepartmentName()" name="departmentId"
+									data-ng-model="patientHistory.patientDepartmentMovements[0].departmentName" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-menu-right-hol" role="menu">
+										{{configHol.departments.length}}
+										<table>
+											<tr>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.departments"
+															ng-if="$index &lt; configHol.departments.length/4"><a
+															ng-click="setDepartment(region)">{{region.department_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.departments"
+															ng-if="isRegion2of4($index, configHol.departments)"><a
+															ng-click="setDepartment(region)">{{region.department_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.departments"
+															ng-if="isRegion3of4($index, configHol.departments)"><a
+															ng-click="setDepartment(region)">{{region.department_name}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in configHol.departments"
+															ng-if="$index > configHol.departments.length/4*3"><a
+															ng-click="setDepartment(region)">{{region.department_name}}</a></li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							</div>
+							</form>
+				<div collapse="collapseDirectListe">
+					<b>Пошук направляючого закладу</b>: <span
+						ng-repeat="region in configHol.directs | filter:{direct_name:patientEditing.directName} | limitTo:10">
+						<a ng-click="setDirect(region)">{{region.direct_name}}</a>,
+					</span>
+				</div>
+				<div collapse="collapseDepartmentListe">
+					<b>Пошук відділення госпіталізації</b>: <span
+						ng-repeat="region in configHol.departments | filter:{department_name:patientHistory.patientDepartmentMovements[0].departmentName} | limitTo:10">
+						<a ng-click="setDepartment(region)">{{region.department_name}}</a>,
+					</span>
+				</div>
+				<form class="form-inline" role="form">
+					<div class="form-group">
+						<div class="input-group required-simple">
+							<div class="input-group-addon">{{requiredFields.icdId.name}}:</div>
+							<input type="text" class="form-control" id="icd10"
+								data-ng-change="changeIcd10Name()" name="icd10"
+								data-ng-model="patientHistory.diagnosisOnAdmission.icdName" />
+							<div class="input-group-btn">
+								<button class="btn btn-default"
+									ng-click="openIcd10TreeDialog()">
+									<span class="glyphicon glyphicon-th-list"></span> <span
+										class="caret"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+					<div class="row" collapse="collapseIcd10Liste">
+						<div class="col-xs-6">
+							<ul>
+								<li
+									data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosisOnAdmission.icdName">
+									<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
+										{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
+									data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
+									data-ng-click="setIcd10(icd10Class1)">
+										{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </a>
+									<ul
+										data-ng-show="patientHistory.diagnosisOnAdmission.icdName.length > 2">
+										<li
+											data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosisOnAdmission.icdName">
+											<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
+												{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
+											data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
+											data-ng-click="setIcd10(icd10Class2)">
+												{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </a>
+											<ul>
+												<li
+													data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosisOnAdmission.icdName">
+													<span data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
+														{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
+													data-ng-show="{{!icd10Class3.icdCode.contains('-') }}"
+													data-ng-click="setIcd10(icd10Class3)">
+														{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
+													<ul>
+														<li
+															data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosisOnAdmission.icdName">
+															{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
+															data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
+																{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
+															data-ng-show="{{!icd10Class4.icdCode.contains('-') }}"
+															data-ng-click="setIcd10(icd10Class4)">
+																{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </a>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<div class="col-xs-6"></div>
+					</div>
+				</div>
+				<div data-ng-show="g == 'adress'">
+					<div>{{patientEditing.countryName}}</div>
+					
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<div class="input-group required-simple">
+								<div class="input-group-addon">Область:</div>
+								<input type="text" class="form-control" id="district"
+									data-ng-change="changeDistrictName()"
+									name="district" data-ng-model="patientEditing.districtName" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<!-- 
+									<div class="dropdown-menu dropdown-menu-right" role="menu">
+									 -->
+									<div class="dropdown-menu  dropdown-menu-right-hol" role="menu">
+										<table>
+											<tr>
+												<td>
+													<ul>
+														<li ng-repeat="district in districts"
+															ng-if="districts.length/3 >= $index"><a
+															ng-click="setDistrict(district)">{{district.districtName}}</a>
+														</li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="district in districts"
+															ng-if="isDistrict2of3($index, districts)"><a
+															ng-click="setDistrict(district)">{{district.districtName}}</a>
+														</li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="district in districts"
+															ng-if="$index > districts.length/3*2"><a
+															ng-click="setDistrict(district)">{{district.districtName}}</a>
+														</li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							
+							<div class="input-group required-simple">
+								<div class="input-group-addon">Район:</div>
+								<input type="text" class="form-control" id="regionName"
+										data-ng-change="changeRegionName()"
+									name="region" ng-model="patientEditing.regionName" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-ng-click="getDistrictRegions()" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-menu-right-hol" role="menu">
+										<table>
+											<tr>
+												<td>
+													<ul>
+														<li ng-repeat="region in regions"
+															ng-if="$index &lt; regions.length/4"><a
+															ng-click="setRegion(region)">{{region.regionName}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in regions"
+															ng-if="isRegion2of4($index, regions)"><a
+															ng-click="setRegion(region)">{{region.regionName}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in regions"
+															ng-if="isRegion3of4($index, regions)"><a
+															ng-click="setRegion(region)">{{region.regionName}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="region in regions"
+															ng-if="$index > regions.length/4*3"><a
+															ng-click="setRegion(region)">{{region.regionName}}</a></li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+										{{regions.length}}
+									</div>
+								</div>
+							</div>
+							
+							<div class="input-group">
+								<label class="radio"> <input type="radio"
+									name="localityType" ng-model="patientEditing.localityType"
+									value="1" /> місто
+								</label> <label class="radio"> <input type="radio"
+									name="localityType" ng-model="patientEditing.localityType"
+									value="0" /> село
+								</label>
+							</div>
+							
+							<div class="input-group required-simple">
+								<div class="input-group-addon">місто/село</div>
+								<input type="text" class="form-control"
+									id="localityId" name="localityId"
+									data-ng-change="changeLocalityName()"
+									ng-model="patientEditing.localityName" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-ng-click="getDistrictRegions()" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-menu-right" role="menu">
+										{{localitys.length}}
+										<table>
+											<tr>
+												<td>
+													<ul>
+														<li ng-repeat="locality in localitys"
+															ng-if="$index &lt; localitys.length/4"><a
+															ng-click="setLocality(locality)">
+															{{getLocalityName(locality)}}
+															</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="locality in localitys"
+															ng-if="isRegion2of4($index, localitys)"><a
+															ng-click="setLocality(locality)">{{getLocalityName(locality)}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="locality in localitys"
+															ng-if="isRegion3of4($index, localitys)"><a
+															ng-click="setLocality(locality)">{{getLocalityName(locality)}}</a></li>
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li ng-repeat="locality in localitys"
+															ng-if="$index > localitys.length/4*3"><a
+															ng-click="setLocality(locality)">{{getLocalityName(locality)}}</a></li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+
+					<div collapse="collapseDistrictListe">
+						<b>Пошук області</b>: <span
+							ng-repeat="district in districts | filter:{districtName:patientEditing.districtName}">
+							<a ng-click="setDistrict(district)">{{district.districtName}}</a>,
+						</span>
+					</div>
+					<div collapse="collapseRegionListe">
+						<b>Пошук району</b>: <span
+							ng-repeat="region in regions | filter:{regionName:patientEditing.regionName} | limitTo:10">
+							<a ng-click="setRegion(region)">{{region.regionName}}</a>,
+						</span>
+					</div>
+					<div collapse="collapseLocalityListe">
+						<b>Пошук міста/села</b>: <span
+							ng-repeat="locality in localitys | filter:patientEditing.localityName | limitTo:10">
+							<a ng-click="setLocality(locality)">{{getLocalityName(locality)}}</a>,
+						</span>
+					</div>
+
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<div class="input-group">
+								<div class="input-group-addon">Вулиця</div>
+								<input type="text" class="form-control input-sm"
+									placeholder="вулиця" id="patientStreet" name="patientStreet"
+									ng-model="patientHistory.patientHolDb.patientStreet" />
+							</div>
+							<div class="input-group">
+								<div class="input-group-addon">Будинок</div>
+								<input type="text" class="form-control input-sm"
+									id="patientHouse" name="patientHouse"
+									ng-model="patientHistory.patientHolDb.patientHouse" />
+							</div>
+							<div class="input-group">
+								<div class="input-group-addon">Квартира</div>
+								<input type="text" class="form-control input-sm"
+									id="patientFlat" name="patientFlat"
+									ng-model="patientHistory.patientHolDb.patientFlat" />
+							</div>
+							<br/>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-earphone"></span>
+								</div>
+								<input type="text" class="form-control input-sm"
+									placeholder="домашній" id="patientPhoneHome"
+									name="patientPhoneHome"
+									ng-model="patientHistory.patientHolDb.patientPhoneHome" />
+							</div>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-phone"></span>
+								</div>
+								<input type="text" class="form-control input-sm"
+									placeholder="мобільний" id="patientPhoneMobil"
+									name="patientPhoneMobil"
+									data-ng-model="patientHistory.patientHolDb.patientPhoneMobil" />
+							</div>
+							<br/>
+							<div class="input-group required-simple">
+								<div class="input-group-addon">Місце роботи:</div>
+								<input type="text" class="form-control" id="patientJob"
+									name="patientJob"
+									data-ng-change="changePatientJob()"
+									data-ng-model="patientHistory.patientHolDb.patientJob" />
+							</div>
+							<div class="input-group">
+								<div class="input-group-addon">Пільги:</div>
+								<input type="text" class="form-control" id="pilgy"
+									name="pilgy" ng-model="patientEditing.pilgy" required="" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										<li data-ng-repeat="b in benefits"><a href="#"
+											ng-click="patientEditing.pilgy=b">{{b}}</a></li>
+									</ul>
+								</div>
+							</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<nav class="navbar navbar-default navbar-fixed-bottom"
+		role="navigation">
+		<div class="container">
+			<span class="glyphicon glyphicon-play"></span>
+			<ol class="list-inline navbar-right">
+				<li><span class="glyphicon glyphicon-floppy-disk"></span> <a
+					data-ng-click="savePatientHistory()" href="#"
+					title="Запис {{numberOfChange}} незбережених змін"> Запис
+						{{numberOfChange}} </a> <span
+					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+						ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+				<li>|</li>
+				<li><span class="glyphicon glyphicon-eye-open"></span> <a
+					href="/hol/history.html?hno={{patientHistory.historyId}}">
+						Перегляд </a></li>
+				<li>|</li>
+				<li data-ng-show="!patientHistory.user"><span
+					class="glyphicon glyphicon-log-in"></span> <a
+					href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+				<li data-ng-show="patientHistory.user"><span
+					class="glyphicon glyphicon-log-out"></span>
+					:{{patientHistory.user.name}} <a href="/hello"> Вийти </a></li>
+			</ol>
+		</div>
+	</nav>
+</body>
+	<script src="/js/jquery-2.1.1.min.js"></script>
+	<script src="/js/rangy-core.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.11.0.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.js"></script>
+	<script src='/js/textAngular-sanitize.js'></script>
+	<script src='/js/textAngular.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/db/operationTree.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/cuwy1.controller.js"></script>
+	<!-- 
+	<script src="/js/locales/bootstrap-datepicker.uk.js"></script>
+	 -->
+	<script src="/js/addPatient.js"></script>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name" : "Реанімація",
+  "patientsDiagnoses" : [ {
+    "name" : " Петренко",
+    "diagnosis" : "Столбняк",
+    "url" : "patient.html"
+  }, {
+    "name" : "Іванчишин",
+    "diagnosis" : "Лептоспироз",
+    "url" : null
+  }, {
+    "name" : "Сидорчук",
+    "diagnosis" : "Енцефаліт",
+    "url" : null
+  }, {
+    "name" : "Чорний",
+    "diagnosis" : "Апендцит",
+    "url" : null
+  }, {
+    "name" : "Путін",
+    "diagnosis" : "Меланома",
+    "url" : null
+  } ]
+}

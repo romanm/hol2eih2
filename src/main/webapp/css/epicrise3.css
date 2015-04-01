@@ -1,0 +1,84 @@
+@media print {
+	.no-print, .no-print * {
+		display: none !important;
+	}
+}
+
+.pip {font-size:125%; 
+font-weight: bold;
+text-decoration: underline;}
+
+.required-tooltip {font-size:150%;color: red;}
+		.required:after {
+			content: "*"; position:absolute; color: red;
+			top:-4px;right:-8px;
+		}
+		.required-simple:after {
+			content: "*"; position:absolute; color: red;
+		}
+		.record { }
+		.record-highlight-parent { border: 1px dotted green; }
+		.record-highlight { background-color: green; color: #fff; }
+		.row h2 { margin-top: 0px; }
+		hr.shortPatienHistory { margin: 0px; border-width: 3px 0 0;}
+
+
+.breadcrumb {
+	margin-bottom: 0;
+}
+.required:after {
+	content: "*"; position:absolute; color: red;
+	top:-4px;right:-8px;
+}
+.required-simple:after {
+	content: "*"; position:absolute; color: red;
+	top:-9px;right:-1px;
+}
+.input-group {
+	margin-top: 5px;
+}
+
+.epicriseElement p:first-child {
+	display: inline;
+}
+.epicriseElement p {
+	margin-right: 8px;
+}
+.dropdown-menu-right-700{
+	left: auto;
+	right: -700px;
+}
+.dropdown-menu-right-hol{
+	left: auto;
+	right: -200px;
+}
+.ta-editor {
+	height: 600px;
+	height: auto;
+	overflow: auto;
+	font-family: inherit;
+	font-size: 100%;
+	margin: 20px 0;
+}
+.centered {
+	text-align: center;
+	background-color: silver;
+	/*
+	background-color: orange;
+	background-color: red;
+	background-color:  olive;
+	background-color: lime;
+	background-color: aqua;
+	background-color: teal;
+	*/
+}
+.mouseover:hover,
+table.tablehover > tbody > tr > td:hover{
+	border: 1px dashed navy; 
+	/*
+	border: 1px dashed navy; 
+	border: 1px dotted lime; 
+	border: 1px dotted blue; 
+	border: 1px dotted green; 
+	*/
+}

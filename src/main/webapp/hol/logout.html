@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="LogoutCtrl">
+<head>
+<title>Logout - {{patientHistory.patientHolDb.patientSurname}}</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/bootstrap.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon"
+	type="image/vnd.microsoft.icon" />
+</head>
+
+<body data-key-cuwytrap="">
+	<div class="container">
+		<div class="row no-print">
+			<div class="col-xs-8">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+				</ol>
+			</div>
+			<div class="col-xs-4"
+				style="text-align: right; background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+
+					<li>|</li>
+					<li data-ng-show="!user.name"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="user.name"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hello"> Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+
+		<div data-ng-show="!user.name">
+			<h1>Ввійдіть в електронну історію хвороби</h1>
+		</div>
+		<div data-ng-show="user.name">
+			<h1>
+				Користувач <span class="pip"> {{user.name}} </span> !
+			</h1>
+			<h2>Ви дійсно хочете вийти з електронної історії хвороби?</h2>
+			<form action="/logout" method="post">
+				Так <input type="submit" value=" Вийти " />
+			</form>
+		</div>
+
+
+		<nav class="navbar navbar-default navbar-fixed-bottom"
+			role="navigation">
+			<div class="container">
+				<span class="glyphicon glyphicon-play"></span>
+				<ol class="list-inline navbar-right">
+					<li>|</li>
+					<li data-ng-show="!user.name"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="user.name"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{user.name}} <a href="/hello"> Вийти </a></li>
+				</ol>
+			</div>
+		</nav>
+
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/angular.min.js"></script>
+		<script src="/js/ui-bootstrap-tpls-0.11.0.js"></script>
+		<script src="/js/angular-sanitize.min.js"></script>
+		<script src='/js/textAngular-sanitize.min.js'></script>
+		<script src='/js/textAngular.min.js'></script>
+		<script src="/db/config.json.js"></script>
+		<script src="/js/cuwy1.directives.js"></script>
+		<script type="text/javascript">
+			cuwyApp.controller('LogoutCtrl', [ '$scope', '$http',
+					function($scope, $http) {
+						console.log("LogoutCtrl");
+						$http({
+							method : 'GET',
+							url : "/user"
+						}).success(function(data, status, headers, config) {
+							$scope.user = data;
+							console.log($scope.user);
+							console.log("--------------");
+						}).error(function(data, status, headers, config) {
+						});
+					} ]);
+		</script>
+
+	</div>
+</body>
+</html>

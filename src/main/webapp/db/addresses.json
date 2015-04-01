@@ -1,0 +1,1408 @@
+[ {
+  "countryId" : 1,
+  "countryName" : "Україна",
+  "districtsHol" : [ {
+    "countryId" : 1,
+    "districtId" : 1,
+    "districtName" : "Хмельницька",
+    "regionsHol" : [ {
+      "regionId" : 1,
+      "districtId" : 1,
+      "regionName" : "Хмельницький"
+    }, {
+      "regionId" : 4,
+      "districtId" : 1,
+      "regionName" : "Ярмолинецький"
+    }, {
+      "regionId" : 5,
+      "districtId" : 1,
+      "regionName" : "Чемеровецький"
+    }, {
+      "regionId" : 6,
+      "districtId" : 1,
+      "regionName" : "Старокостянтинівський"
+    }, {
+      "regionId" : 7,
+      "districtId" : 1,
+      "regionName" : "Деражнянський"
+    }, {
+      "regionId" : 8,
+      "districtId" : 1,
+      "regionName" : "Полонський"
+    }, {
+      "regionId" : 9,
+      "districtId" : 1,
+      "regionName" : "Кам`янець-Подільський"
+    }, {
+      "regionId" : 10,
+      "districtId" : 1,
+      "regionName" : "Волочиський"
+    }, {
+      "regionId" : 13,
+      "districtId" : 1,
+      "regionName" : "Дунаєвецький"
+    }, {
+      "regionId" : 14,
+      "districtId" : 1,
+      "regionName" : "Красилівський"
+    }, {
+      "regionId" : 15,
+      "districtId" : 1,
+      "regionName" : "Теофіпольський"
+    }, {
+      "regionId" : 16,
+      "districtId" : 1,
+      "regionName" : "Славутський"
+    }, {
+      "regionId" : 19,
+      "districtId" : 1,
+      "regionName" : "Шепетівський"
+    }, {
+      "regionId" : 20,
+      "districtId" : 1,
+      "regionName" : "Городоцький"
+    }, {
+      "regionId" : 21,
+      "districtId" : 1,
+      "regionName" : "Віньковецький"
+    }, {
+      "regionId" : 23,
+      "districtId" : 1,
+      "regionName" : "Новоушицький"
+    }, {
+      "regionId" : 24,
+      "districtId" : 1,
+      "regionName" : "Летичівський"
+    }, {
+      "regionId" : 25,
+      "districtId" : 1,
+      "regionName" : "Ізяславський"
+    }, {
+      "regionId" : 29,
+      "districtId" : 1,
+      "regionName" : "Старосинявський"
+    }, {
+      "regionId" : 31,
+      "districtId" : 1,
+      "regionName" : "Білогірський"
+    }, {
+      "regionId" : 76,
+      "districtId" : 1,
+      "regionName" : "Нетішинський"
+    }, {
+      "regionId" : 137,
+      "districtId" : 1,
+      "regionName" : "Новоушицькийз"
+    }, {
+      "regionId" : 149,
+      "districtId" : 1,
+      "regionName" : "Хмельницкий р-н с. олешківці"
+    }, {
+      "regionId" : 150,
+      "districtId" : 1,
+      "regionName" : "Хмельницкий р-н і"
+    }, {
+      "regionId" : 151,
+      "districtId" : 1,
+      "regionName" : "Хмельницкийі"
+    }, {
+      "regionId" : 153,
+      "districtId" : 1,
+      "regionName" : "Дунаевецький"
+    }, {
+      "regionId" : 154,
+      "districtId" : 1,
+      "regionName" : "НОВО -УШИЦЬКИЙ"
+    }, {
+      "regionId" : 155,
+      "districtId" : 1,
+      "regionName" : "ВіньковецькийОС"
+    }, {
+      "regionId" : 159,
+      "districtId" : 1,
+      "regionName" : "Шепетівськй"
+    }, {
+      "regionId" : 160,
+      "districtId" : 1,
+      "regionName" : "Староконстантинівський"
+    }, {
+      "regionId" : 161,
+      "districtId" : 1,
+      "regionName" : "Деражянський"
+    }, {
+      "regionId" : 162,
+      "districtId" : 1,
+      "regionName" : "Городцький"
+    }, {
+      "regionId" : 163,
+      "districtId" : 1,
+      "regionName" : "Каменецьподільський"
+    }, {
+      "regionId" : 164,
+      "districtId" : 1,
+      "regionName" : "Камянець-Подільський"
+    }, {
+      "regionId" : 165,
+      "districtId" : 1,
+      "regionName" : "Кам.-Подільський"
+    }, {
+      "regionId" : 166,
+      "districtId" : 1,
+      "regionName" : "Ст.-Костянтинівський"
+    }, {
+      "regionId" : 176,
+      "districtId" : 1,
+      "regionName" : "Кам-Под"
+    }, {
+      "regionId" : 177,
+      "districtId" : 1,
+      "regionName" : "Шепетівка"
+    }, {
+      "regionId" : 178,
+      "districtId" : 1,
+      "regionName" : "Тернопільська"
+    }, {
+      "regionId" : 181,
+      "districtId" : 1,
+      "regionName" : "Камянець-ПодільськийХ"
+    }, {
+      "regionId" : 182,
+      "districtId" : 1,
+      "regionName" : "Кам"
+    }, {
+      "regionId" : 194,
+      "districtId" : 1,
+      "regionName" : "Ізясловський"
+    }, {
+      "regionId" : 196,
+      "districtId" : 1,
+      "regionName" : "Дережнянськи"
+    }, {
+      "regionId" : 197,
+      "districtId" : 1,
+      "regionName" : "Летичів"
+    }, {
+      "regionId" : 200,
+      "districtId" : 1,
+      "regionName" : "Тео"
+    }, {
+      "regionId" : 202,
+      "districtId" : 1,
+      "regionName" : "Ст Констянтинівський"
+    }, {
+      "regionId" : 206,
+      "districtId" : 1,
+      "regionName" : "Хмельницкий р-н с. Грузевицяі"
+    }, {
+      "regionId" : 207,
+      "districtId" : 1,
+      "regionName" : "Хмельницький  с.Грузевиця"
+    }, {
+      "regionId" : 208,
+      "districtId" : 1,
+      "regionName" : "Хмельницький,с.Грузевиця"
+    }, {
+      "regionId" : 211,
+      "districtId" : 1,
+      "regionName" : "Славуцький"
+    }, {
+      "regionId" : 212,
+      "districtId" : 1,
+      "regionName" : "Ярмолинецька"
+    }, {
+      "regionId" : 214,
+      "districtId" : 1,
+      "regionName" : "Ярмоленецький"
+    }, {
+      "regionId" : 215,
+      "districtId" : 1,
+      "regionName" : "Шепетівська"
+    }, {
+      "regionId" : 220,
+      "districtId" : 1,
+      "regionName" : "Московська"
+    }, {
+      "regionId" : 221,
+      "districtId" : 1,
+      "regionName" : "Віньковецьки"
+    }, {
+      "regionId" : 222,
+      "districtId" : 1,
+      "regionName" : "Дережнянський"
+    }, {
+      "regionId" : 225,
+      "districtId" : 1,
+      "regionName" : "-"
+    }, {
+      "regionId" : 227,
+      "districtId" : 1,
+      "regionName" : "Вол"
+    }, {
+      "regionId" : 228,
+      "districtId" : 1,
+      "regionName" : "Житомирська"
+    }, {
+      "regionId" : 229,
+      "districtId" : 1,
+      "regionName" : "Житомирський"
+    }, {
+      "regionId" : 231,
+      "districtId" : 1,
+      "regionName" : "Чернівецька"
+    }, {
+      "regionId" : 232,
+      "districtId" : 1,
+      "regionName" : "Вінницький"
+    }, {
+      "regionId" : 233,
+      "districtId" : 1,
+      "regionName" : "Староконстянтинівський"
+    }, {
+      "regionId" : 236,
+      "districtId" : 1,
+      "regionName" : "Чемерівецький"
+    }, {
+      "regionId" : 248,
+      "districtId" : 1,
+      "regionName" : "Славутськи"
+    }, {
+      "regionId" : 249,
+      "districtId" : 1,
+      "regionName" : "Поонський"
+    }, {
+      "regionId" : 250,
+      "districtId" : 1,
+      "regionName" : "Дережняннський"
+    }, {
+      "regionId" : 252,
+      "districtId" : 1,
+      "regionName" : "Дунаївецький"
+    }, {
+      "regionId" : 254,
+      "districtId" : 1,
+      "regionName" : "Аолочиський"
+    }, {
+      "regionId" : 260,
+      "districtId" : 1,
+      "regionName" : "Изяславський"
+    }, {
+      "regionId" : 266,
+      "districtId" : 1,
+      "regionName" : "Дунаївецьий"
+    }, {
+      "regionId" : 273,
+      "districtId" : 1,
+      "regionName" : "Влочиський"
+    }, {
+      "regionId" : 283,
+      "districtId" : 1,
+      "regionName" : "Путильський"
+    }, {
+      "regionId" : 288,
+      "districtId" : 1,
+      "regionName" : "Поло"
+    }, {
+      "regionId" : 291,
+      "districtId" : 1,
+      "regionName" : "СтаросинявськийТелі"
+    }, {
+      "regionId" : 292,
+      "districtId" : 1,
+      "regionName" : "Хм"
+    }, {
+      "regionId" : 293,
+      "districtId" : 1,
+      "regionName" : "Біло"
+    }, {
+      "regionId" : 297,
+      "districtId" : 1,
+      "regionName" : "Ду"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 4,
+    "districtName" : "Чернівецька",
+    "regionsHol" : [ {
+      "regionId" : 11,
+      "districtId" : 4,
+      "regionName" : "Хоптинський"
+    }, {
+      "regionId" : 35,
+      "districtId" : 4,
+      "regionName" : "Чернівецький"
+    }, {
+      "regionId" : 46,
+      "districtId" : 4,
+      "regionName" : "Заставнівський"
+    }, {
+      "regionId" : 64,
+      "districtId" : 4,
+      "regionName" : "Новодністровський"
+    }, {
+      "regionId" : 93,
+      "districtId" : 4,
+      "regionName" : "Сторожинецький"
+    }, {
+      "regionId" : 103,
+      "districtId" : 4,
+      "regionName" : "Сокирянський"
+    }, {
+      "regionId" : 104,
+      "districtId" : 4,
+      "regionName" : "Новоселицький"
+    }, {
+      "regionId" : 139,
+      "districtId" : 4,
+      "regionName" : "Носовський"
+    }, {
+      "regionId" : 140,
+      "districtId" : 4,
+      "regionName" : "Глибоцький"
+    }, {
+      "regionId" : 148,
+      "districtId" : 4,
+      "regionName" : "Заставнецький"
+    }, {
+      "regionId" : 169,
+      "districtId" : 4,
+      "regionName" : "СокирянськийСер"
+    }, {
+      "regionId" : 170,
+      "districtId" : 4,
+      "regionName" : "-"
+    }, {
+      "regionId" : 185,
+      "districtId" : 4,
+      "regionName" : "Староженецький"
+    }, {
+      "regionId" : 188,
+      "districtId" : 4,
+      "regionName" : "Вижницький"
+    }, {
+      "regionId" : 192,
+      "districtId" : 4,
+      "regionName" : "Кіцманський"
+    }, {
+      "regionId" : 209,
+      "districtId" : 4,
+      "regionName" : "Кельменецький"
+    }, {
+      "regionId" : 234,
+      "districtId" : 4,
+      "regionName" : "Чернівецька"
+    }, {
+      "regionId" : 256,
+      "districtId" : 4,
+      "regionName" : "Герцаївський"
+    }, {
+      "regionId" : 259,
+      "districtId" : 4,
+      "regionName" : "Кельменський"
+    }, {
+      "regionId" : 270,
+      "districtId" : 4,
+      "regionName" : "Винницький"
+    }, {
+      "regionId" : 295,
+      "districtId" : 4,
+      "regionName" : "Хотинський"
+    }, {
+      "regionId" : 300,
+      "districtId" : 4,
+      "regionName" : "Вижницьки"
+    }, {
+      "regionId" : 304,
+      "districtId" : 4,
+      "regionName" : "Кильменецький"
+    }, {
+      "regionId" : 311,
+      "districtId" : 4,
+      "regionName" : "Кельминецький"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 5,
+    "districtName" : "Вінницька",
+    "regionsHol" : [ {
+      "regionId" : 12,
+      "districtId" : 5,
+      "regionName" : "Вінницький"
+    }, {
+      "regionId" : 27,
+      "districtId" : 5,
+      "regionName" : "Могилів-Подільський"
+    }, {
+      "regionId" : 32,
+      "districtId" : 5,
+      "regionName" : "Шаргородський"
+    }, {
+      "regionId" : 33,
+      "districtId" : 5,
+      "regionName" : "Бершадський"
+    }, {
+      "regionId" : 48,
+      "districtId" : 5,
+      "regionName" : "Хмільницький"
+    }, {
+      "regionId" : 78,
+      "districtId" : 5,
+      "regionName" : "Барський"
+    }, {
+      "regionId" : 83,
+      "districtId" : 5,
+      "regionName" : "Липовецький"
+    }, {
+      "regionId" : 90,
+      "districtId" : 5,
+      "regionName" : "Тульчинський"
+    }, {
+      "regionId" : 115,
+      "districtId" : 5,
+      "regionName" : "Жмеринський"
+    }, {
+      "regionId" : 116,
+      "districtId" : 5,
+      "regionName" : "Літинський"
+    }, {
+      "regionId" : 124,
+      "districtId" : 5,
+      "regionName" : "Тиврівський"
+    }, {
+      "regionId" : 144,
+      "districtId" : 5,
+      "regionName" : "Тростянецький"
+    }, {
+      "regionId" : 152,
+      "districtId" : 5,
+      "regionName" : "НЕМИРІВСЬКИЙ"
+    }, {
+      "regionId" : 158,
+      "districtId" : 5,
+      "regionName" : "-"
+    }, {
+      "regionId" : 183,
+      "districtId" : 5,
+      "regionName" : "Житомирський"
+    }, {
+      "regionId" : 184,
+      "districtId" : 5,
+      "regionName" : "Жмеренецький"
+    }, {
+      "regionId" : 193,
+      "districtId" : 5,
+      "regionName" : "Теплицький"
+    }, {
+      "regionId" : 201,
+      "districtId" : 5,
+      "regionName" : "Калинівський"
+    }, {
+      "regionId" : 239,
+      "districtId" : 5,
+      "regionName" : "Іллінецький"
+    }, {
+      "regionId" : 240,
+      "districtId" : 5,
+      "regionName" : "Чернівецький"
+    }, {
+      "regionId" : 286,
+      "districtId" : 5,
+      "regionName" : "Козятинський"
+    }, {
+      "regionId" : 298,
+      "districtId" : 5,
+      "regionName" : "Гайсинський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 6,
+    "districtName" : "Івано-Франківська",
+    "regionsHol" : [ {
+      "regionId" : 66,
+      "districtId" : 6,
+      "regionName" : "Івано-Франківський"
+    }, {
+      "regionId" : 86,
+      "districtId" : 6,
+      "regionName" : "Верховинський"
+    }, {
+      "regionId" : 95,
+      "districtId" : 6,
+      "regionName" : "Долинський"
+    }, {
+      "regionId" : 121,
+      "districtId" : 6,
+      "regionName" : "Коломийський"
+    }, {
+      "regionId" : 126,
+      "districtId" : 6,
+      "regionName" : "Косівський"
+    }, {
+      "regionId" : 127,
+      "districtId" : 6,
+      "regionName" : "Тисменецький"
+    }, {
+      "regionId" : 175,
+      "districtId" : 6,
+      "regionName" : "Городенківський"
+    }, {
+      "regionId" : 179,
+      "districtId" : 6,
+      "regionName" : "Богоричинський"
+    }, {
+      "regionId" : 306,
+      "districtId" : 6,
+      "regionName" : "Снятинський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 7,
+    "districtName" : "Житомирська",
+    "regionsHol" : [ {
+      "regionId" : 22,
+      "districtId" : 7,
+      "regionName" : "Житомирський"
+    }, {
+      "regionId" : 89,
+      "districtId" : 7,
+      "regionName" : "Овруцький"
+    }, {
+      "regionId" : 91,
+      "districtId" : 7,
+      "regionName" : "Новоград -Волинський"
+    }, {
+      "regionId" : 96,
+      "districtId" : 7,
+      "regionName" : "Олевський"
+    }, {
+      "regionId" : 112,
+      "districtId" : 7,
+      "regionName" : "Бердичівський"
+    }, {
+      "regionId" : 118,
+      "districtId" : 7,
+      "regionName" : "Народицький"
+    }, {
+      "regionId" : 131,
+      "districtId" : 7,
+      "regionName" : "Коростенський"
+    }, {
+      "regionId" : 157,
+      "districtId" : 7,
+      "regionName" : "-"
+    }, {
+      "regionId" : 191,
+      "districtId" : 7,
+      "regionName" : "Любарський"
+    }, {
+      "regionId" : 210,
+      "districtId" : 7,
+      "regionName" : "Романівський"
+    }, {
+      "regionId" : 274,
+      "districtId" : 7,
+      "regionName" : "Баранівський"
+    }, {
+      "regionId" : 281,
+      "districtId" : 7,
+      "regionName" : "Андрушівський"
+    }, {
+      "regionId" : 290,
+      "districtId" : 7,
+      "regionName" : "Чуднівський"
+    }, {
+      "regionId" : 312,
+      "districtId" : 7,
+      "regionName" : "Черняхівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 9,
+    "districtName" : "Тернопільська",
+    "regionsHol" : [ {
+      "regionId" : 30,
+      "districtId" : 9,
+      "regionName" : "Тернопільський"
+    }, {
+      "regionId" : 36,
+      "districtId" : 9,
+      "regionName" : "Козівський"
+    }, {
+      "regionId" : 51,
+      "districtId" : 9,
+      "regionName" : "Гусятинський"
+    }, {
+      "regionId" : 81,
+      "districtId" : 9,
+      "regionName" : "Чортківський"
+    }, {
+      "regionId" : 82,
+      "districtId" : 9,
+      "regionName" : "Борщівський"
+    }, {
+      "regionId" : 87,
+      "districtId" : 9,
+      "regionName" : "Чортківський"
+    }, {
+      "regionId" : 105,
+      "districtId" : 9,
+      "regionName" : "Підволочиський"
+    }, {
+      "regionId" : 113,
+      "districtId" : 9,
+      "regionName" : "Теребовлянський"
+    }, {
+      "regionId" : 123,
+      "districtId" : 9,
+      "regionName" : "Зборовський"
+    }, {
+      "regionId" : 129,
+      "districtId" : 9,
+      "regionName" : "Шумський"
+    }, {
+      "regionId" : 180,
+      "districtId" : 9,
+      "regionName" : "Переболянський"
+    }, {
+      "regionId" : 186,
+      "districtId" : 9,
+      "regionName" : "Креміницький"
+    }, {
+      "regionId" : 251,
+      "districtId" : 9,
+      "regionName" : "Тернопольський"
+    }, {
+      "regionId" : 275,
+      "districtId" : 9,
+      "regionName" : "Заліщицький"
+    }, {
+      "regionId" : 280,
+      "districtId" : 9,
+      "regionName" : "Лановецький"
+    }, {
+      "regionId" : 308,
+      "districtId" : 9,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 11,
+    "districtName" : "Донецька",
+    "regionsHol" : [ {
+      "regionId" : 41,
+      "districtId" : 11,
+      "regionName" : "Артемівський"
+    }, {
+      "regionId" : 265,
+      "districtId" : 11,
+      "regionName" : "Червоногвардійський"
+    }, {
+      "regionId" : 296,
+      "districtId" : 11,
+      "regionName" : "Донецький"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 12,
+    "districtName" : "Київська",
+    "regionsHol" : [ {
+      "regionId" : 43,
+      "districtId" : 12,
+      "regionName" : "Київський"
+    }, {
+      "regionId" : 120,
+      "districtId" : 12,
+      "regionName" : "Подільський"
+    }, {
+      "regionId" : 142,
+      "districtId" : 12,
+      "regionName" : "Яготинський"
+    }, {
+      "regionId" : 143,
+      "districtId" : 12,
+      "regionName" : "Бровари"
+    }, {
+      "regionId" : 156,
+      "districtId" : 12,
+      "regionName" : "Києво-Святошинський"
+    }, {
+      "regionId" : 174,
+      "districtId" : 12,
+      "regionName" : "Деснянський"
+    }, {
+      "regionId" : 204,
+      "districtId" : 12,
+      "regionName" : "-"
+    }, {
+      "regionId" : 237,
+      "districtId" : 12,
+      "regionName" : "Фастівський"
+    }, {
+      "regionId" : 243,
+      "districtId" : 12,
+      "regionName" : "Згурівський"
+    }, {
+      "regionId" : 276,
+      "districtId" : 12,
+      "regionName" : "Білоцерківський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 15,
+    "districtName" : "Рівненська",
+    "regionsHol" : [ {
+      "regionId" : 53,
+      "districtId" : 15,
+      "regionName" : "Рівненський"
+    }, {
+      "regionId" : 98,
+      "districtId" : 15,
+      "regionName" : "Костопільський"
+    }, {
+      "regionId" : 114,
+      "districtId" : 15,
+      "regionName" : "Острізький"
+    }, {
+      "regionId" : 128,
+      "districtId" : 15,
+      "regionName" : "Горщанський"
+    }, {
+      "regionId" : 167,
+      "districtId" : 15,
+      "regionName" : "Сарнинський"
+    }, {
+      "regionId" : 272,
+      "districtId" : 15,
+      "regionName" : "Острозький"
+    }, {
+      "regionId" : 287,
+      "districtId" : 15,
+      "regionName" : "Млинівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 16,
+    "districtName" : "Запорізька",
+    "regionsHol" : [ {
+      "regionId" : 54,
+      "districtId" : 16,
+      "regionName" : "Запорізький"
+    }, {
+      "regionId" : 238,
+      "districtId" : 16,
+      "regionName" : "-"
+    }, {
+      "regionId" : 241,
+      "districtId" : 16,
+      "regionName" : "_"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 17,
+    "districtName" : "Харківська",
+    "regionsHol" : [ {
+      "regionId" : 55,
+      "districtId" : 17,
+      "regionName" : "Харківський"
+    }, {
+      "regionId" : 224,
+      "districtId" : 17,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 18,
+    "districtName" : "Дніпропетровська",
+    "regionsHol" : [ {
+      "regionId" : 56,
+      "districtId" : 18,
+      "regionName" : "Марганецький"
+    }, {
+      "regionId" : 100,
+      "districtId" : 18,
+      "regionName" : "Дніпропетровський"
+    }, {
+      "regionId" : 258,
+      "districtId" : 18,
+      "regionName" : "Дніпродзержинський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 19,
+    "districtName" : "Закарпатська",
+    "regionsHol" : [ {
+      "regionId" : 40,
+      "districtId" : 19,
+      "regionName" : "Береговський"
+    }, {
+      "regionId" : 57,
+      "districtId" : 19,
+      "regionName" : "Тячівський"
+    }, {
+      "regionId" : 71,
+      "districtId" : 19,
+      "regionName" : "Ужгородський"
+    }, {
+      "regionId" : 117,
+      "districtId" : 19,
+      "regionName" : "Чопський"
+    }, {
+      "regionId" : 244,
+      "districtId" : 19,
+      "regionName" : "Виноградовський"
+    }, {
+      "regionId" : 245,
+      "districtId" : 19,
+      "regionName" : "Закарпатський"
+    }, {
+      "regionId" : 294,
+      "districtId" : 19,
+      "regionName" : "Мукачевський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 20,
+    "districtName" : "Волинська",
+    "regionsHol" : [ {
+      "regionId" : 58,
+      "districtId" : 20,
+      "regionName" : "Ковальський"
+    }, {
+      "regionId" : 67,
+      "districtId" : 20,
+      "regionName" : "Волинський"
+    }, {
+      "regionId" : 122,
+      "districtId" : 20,
+      "regionName" : "Іваничівський"
+    }, {
+      "regionId" : 147,
+      "districtId" : 20,
+      "regionName" : "-"
+    }, {
+      "regionId" : 168,
+      "districtId" : 20,
+      "regionName" : "Луцький"
+    }, {
+      "regionId" : 278,
+      "districtId" : 20,
+      "regionName" : "Рожищенський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 21,
+    "districtName" : "Чернігівська",
+    "regionsHol" : [ {
+      "regionId" : 60,
+      "districtId" : 21,
+      "regionName" : "Чернігівський"
+    }, {
+      "regionId" : 111,
+      "districtId" : 21,
+      "regionName" : "Ріпкінський"
+    }, {
+      "regionId" : 189,
+      "districtId" : 21,
+      "regionName" : "Козелецький"
+    }, {
+      "regionId" : 242,
+      "districtId" : 21,
+      "regionName" : "Бахмацький"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 22,
+    "districtName" : "Одеська",
+    "regionsHol" : [ {
+      "regionId" : 80,
+      "districtId" : 22,
+      "regionName" : "Одеський"
+    }, {
+      "regionId" : 195,
+      "districtId" : 22,
+      "regionName" : "Комінтерновський"
+    }, {
+      "regionId" : 205,
+      "districtId" : 22,
+      "regionName" : "Артійський"
+    }, {
+      "regionId" : 230,
+      "districtId" : 22,
+      "regionName" : "Белгород Днестровский"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 23,
+    "districtName" : "Черкаська",
+    "regionsHol" : [ {
+      "regionId" : 84,
+      "districtId" : 23,
+      "regionName" : "Черкаський"
+    }, {
+      "regionId" : 130,
+      "districtId" : 23,
+      "regionName" : "Городищинський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 24,
+    "districtName" : "Львівська",
+    "regionsHol" : [ {
+      "regionId" : 85,
+      "districtId" : 24,
+      "regionName" : "Сокальський"
+    }, {
+      "regionId" : 135,
+      "districtId" : 24,
+      "regionName" : "Дрогобицький"
+    }, {
+      "regionId" : 172,
+      "districtId" : 24,
+      "regionName" : "Львівський"
+    }, {
+      "regionId" : 216,
+      "districtId" : 24,
+      "regionName" : "-"
+    }, {
+      "regionId" : 219,
+      "districtId" : 24,
+      "regionName" : "Миколаївський"
+    }, {
+      "regionId" : 305,
+      "districtId" : 24,
+      "regionName" : "Золочівський"
+    }, {
+      "regionId" : 310,
+      "districtId" : 24,
+      "regionName" : "Яворівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 30,
+    "districtName" : "Сумська",
+    "regionsHol" : [ {
+      "regionId" : 125,
+      "districtId" : 30,
+      "regionName" : "Сумський"
+    }, {
+      "regionId" : 307,
+      "districtId" : 30,
+      "regionName" : "Ромнинський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 32,
+    "districtName" : "Миколаївська",
+    "regionsHol" : [ {
+      "regionId" : 132,
+      "districtId" : 32,
+      "regionName" : "Березанський"
+    }, {
+      "regionId" : 235,
+      "districtId" : 32,
+      "regionName" : "Первомайський"
+    }, {
+      "regionId" : 262,
+      "districtId" : 32,
+      "regionName" : "Кривоозерський"
+    }, {
+      "regionId" : 299,
+      "districtId" : 32,
+      "regionName" : "Миколаївський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 36,
+    "districtName" : "Полтавська",
+    "regionsHol" : [ {
+      "regionId" : 138,
+      "districtId" : 36,
+      "regionName" : "Лубенський"
+    }, {
+      "regionId" : 246,
+      "districtId" : 36,
+      "regionName" : "Котелевський"
+    }, {
+      "regionId" : 247,
+      "districtId" : 36,
+      "regionName" : "Полтавський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 38,
+    "districtName" : "Херсонська",
+    "regionsHol" : [ {
+      "regionId" : 146,
+      "districtId" : 38,
+      "regionName" : "Херсонський"
+    }, {
+      "regionId" : 285,
+      "districtId" : 38,
+      "regionName" : "Генічеський"
+    }, {
+      "regionId" : 302,
+      "districtId" : 38,
+      "regionName" : "Білозірський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 39,
+    "districtName" : "АР Крим",
+    "regionsHol" : [ {
+      "regionId" : 171,
+      "districtId" : 39,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 42,
+    "districtName" : "Рівенська",
+    "regionsHol" : [ {
+      "regionId" : 190,
+      "districtId" : 42,
+      "regionName" : "Острізький"
+    }, {
+      "regionId" : 198,
+      "districtId" : 42,
+      "regionName" : "Костопільський"
+    }, {
+      "regionId" : 264,
+      "districtId" : 42,
+      "regionName" : "Рівенський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 44,
+    "districtName" : "Хмельнчицька",
+    "regionsHol" : [ {
+      "regionId" : 203,
+      "districtId" : 44,
+      "regionName" : "Кам`янець Подільський"
+    }, {
+      "regionId" : 269,
+      "districtId" : 44,
+      "regionName" : "Старокостянтинівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 45,
+    "districtName" : "Луцька",
+    "regionsHol" : [ {
+      "regionId" : 213,
+      "districtId" : 45,
+      "regionName" : "Луцький"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 47,
+    "districtName" : "Луганська",
+    "regionsHol" : [ {
+      "regionId" : 218,
+      "districtId" : 47,
+      "regionName" : "Антрацитний"
+    }, {
+      "regionId" : 309,
+      "districtId" : 47,
+      "regionName" : "Ровеньки"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 49,
+    "districtName" : "Автономна республіка Крим",
+    "regionsHol" : [ {
+      "regionId" : 226,
+      "districtId" : 49,
+      "regionName" : "Кіровський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 53,
+    "districtName" : "ХмельницькаОлексійович",
+    "regionsHol" : [ {
+      "regionId" : 261,
+      "districtId" : 53,
+      "regionName" : "Старокостянтинівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 54,
+    "districtName" : "ВасильХмельницька",
+    "regionsHol" : [ {
+      "regionId" : 263,
+      "districtId" : 54,
+      "regionName" : "Дунаєвецький"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 56,
+    "districtName" : "Старокостянтинівська",
+    "regionsHol" : [ {
+      "regionId" : 268,
+      "districtId" : 56,
+      "regionName" : "Старокостянтинівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 58,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 277,
+      "districtId" : 58,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 59,
+    "districtName" : "Рівненськ",
+    "regionsHol" : [ {
+      "regionId" : 279,
+      "districtId" : 59,
+      "regionName" : "Радивилівський"
+    } ]
+  }, {
+    "countryId" : 1,
+    "districtId" : 62,
+    "districtName" : "=",
+    "regionsHol" : [ {
+      "regionId" : 301,
+      "districtId" : 62,
+      "regionName" : "-"
+    } ]
+  } ]
+}, {
+  "countryId" : 2,
+  "countryName" : "Росія",
+  "districtsHol" : [ {
+    "countryId" : 2,
+    "districtId" : 3,
+    "districtName" : "Московська",
+    "regionsHol" : [ {
+      "regionId" : 3,
+      "districtId" : 3,
+      "regionName" : "Московський"
+    }, {
+      "regionId" : 63,
+      "districtId" : 3,
+      "regionName" : "Сергієво-Посадський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 14,
+    "districtName" : "Свердловська",
+    "regionsHol" : [ {
+      "regionId" : 50,
+      "districtId" : 14,
+      "regionName" : "Первоуральский"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 26,
+    "districtName" : "Володимирська",
+    "regionsHol" : [ {
+      "regionId" : 94,
+      "districtId" : 26,
+      "regionName" : "Ковровський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 28,
+    "districtName" : "Тюменська",
+    "regionsHol" : [ {
+      "regionId" : 106,
+      "districtId" : 28,
+      "regionName" : "Жовтневий"
+    }, {
+      "regionId" : 282,
+      "districtId" : 28,
+      "regionName" : "Тюменська"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 29,
+    "districtName" : "Волгоградська",
+    "regionsHol" : [ {
+      "regionId" : 107,
+      "districtId" : 29,
+      "regionName" : "Волгоградський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 40,
+    "districtName" : "Орловська",
+    "regionsHol" : [ {
+      "regionId" : 173,
+      "districtId" : 40,
+      "regionName" : "Орловський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 46,
+    "districtName" : "Красноярський край",
+    "regionsHol" : [ {
+      "regionId" : 217,
+      "districtId" : 46,
+      "regionName" : "Красноярський край"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 48,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 223,
+      "districtId" : 48,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 50,
+    "districtName" : "Алтайський край",
+    "regionsHol" : [ {
+      "regionId" : 253,
+      "districtId" : 50,
+      "regionName" : "-"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 51,
+    "districtName" : "Магаданська",
+    "regionsHol" : [ {
+      "regionId" : 255,
+      "districtId" : 51,
+      "regionName" : "Магаданський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 52,
+    "districtName" : "Білогородська",
+    "regionsHol" : [ {
+      "regionId" : 257,
+      "districtId" : 52,
+      "regionName" : "Білогородський"
+    } ]
+  }, {
+    "countryId" : 2,
+    "districtId" : 61,
+    "districtName" : "Ханти-Мантійський автономний округ",
+    "regionsHol" : [ {
+      "regionId" : 289,
+      "districtId" : 61,
+      "regionName" : "Сургутський"
+    } ]
+  } ]
+}, {
+  "countryId" : 3,
+  "countryName" : "Молдова",
+  "districtsHol" : [ {
+    "countryId" : 3,
+    "districtId" : 25,
+    "districtName" : "Придністровська",
+    "regionsHol" : [ {
+      "regionId" : 88,
+      "districtId" : 25,
+      "regionName" : "Дубосарський"
+    } ]
+  } ]
+}, {
+  "countryId" : 4,
+  "countryName" : "Білорусія",
+  "districtsHol" : [ {
+    "countryId" : 4,
+    "districtId" : 33,
+    "districtName" : "Брестська",
+    "regionsHol" : [ {
+      "regionId" : 133,
+      "districtId" : 33,
+      "regionName" : "Барановський"
+    } ]
+  } ]
+}, {
+  "countryId" : 5,
+  "countryName" : "Арменія",
+  "districtsHol" : [ {
+    "countryId" : 5,
+    "districtId" : 34,
+    "districtName" : "Єреванська",
+    "regionsHol" : [ {
+      "regionId" : 134,
+      "districtId" : 34,
+      "regionName" : "Єреванський"
+    } ]
+  } ]
+}, {
+  "countryId" : 6,
+  "countryName" : "Білорусь",
+  "districtsHol" : [ {
+    "countryId" : 6,
+    "districtId" : 41,
+    "districtName" : "Брестська",
+    "regionsHol" : [ {
+      "regionId" : 187,
+      "districtId" : 41,
+      "regionName" : "-"
+    } ]
+  } ]
+}, {
+  "countryId" : 7,
+  "countryName" : "Румунія",
+  "districtsHol" : [ {
+    "countryId" : 7,
+    "districtId" : 43,
+    "districtName" : "Бухарестська",
+    "regionsHol" : [ {
+      "regionId" : 199,
+      "districtId" : 43,
+      "regionName" : "Бухарестський"
+    } ]
+  } ]
+}, {
+  "countryId" : 8,
+  "countryName" : "Литва",
+  "districtsHol" : [ {
+    "countryId" : 8,
+    "districtId" : 55,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 267,
+      "districtId" : 55,
+      "regionName" : "-"
+    } ]
+  } ]
+}, {
+  "countryId" : 9,
+  "countryName" : "Азербайджан",
+  "districtsHol" : [ {
+    "countryId" : 9,
+    "districtId" : 57,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 271,
+      "districtId" : 57,
+      "regionName" : "-"
+    } ]
+  } ]
+}, {
+  "countryId" : 10,
+  "countryName" : "Турція",
+  "districtsHol" : [ {
+    "countryId" : 10,
+    "districtId" : 60,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 284,
+      "districtId" : 60,
+      "regionName" : "-"
+    } ]
+  } ]
+}, {
+  "countryId" : 11,
+  "countryName" : "Естонія",
+  "districtsHol" : [ {
+    "countryId" : 11,
+    "districtId" : 63,
+    "districtName" : "-",
+    "regionsHol" : [ {
+      "regionId" : 303,
+      "districtId" : 63,
+      "regionName" : "-"
+    } ]
+  } ]
+} ]

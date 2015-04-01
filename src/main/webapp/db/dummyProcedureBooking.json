@@ -1,0 +1,96 @@
+{
+  "name" : "urology anesthesia ETH EA",
+  "nameLong" : "ХОЛ::Анестезія урологія::ЕТН ЕА - Ендотрахеальний наркоз - епідуральна анестезія",
+  "drugsBooking" : [ {
+    "generic" : "Этамзилат",
+    "trade" : "Дицинон",
+    "doseConcentrationNumber" : 250.5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : null,
+    "trade" : null,
+    "doseConcentrationNumber" : 0.0,
+    "doseConcentrationUnit" : null,
+    "doseNumber" : 0,
+    "doseUnit" : null,
+    "number" : 0,
+    "numberUnits" : null,
+    "replacement" : null
+  }, {
+    "generic" : "Ропівакаін",
+    "trade" : "Наропін",
+    "doseConcentrationNumber" : 7.5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 5,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Дексаметазон",
+    "trade" : "Дексаметазон",
+    "doseConcentrationNumber" : 4.0,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Гелофузін",
+    "trade" : "Гелофузін",
+    "doseConcentrationNumber" : 0.0,
+    "doseConcentrationUnit" : null,
+    "doseNumber" : 400,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "фл",
+    "replacement" : [ {
+      "generic" : null,
+      "trade" : "Гековен",
+      "doseConcentrationNumber" : 0.0,
+      "doseConcentrationUnit" : null,
+      "doseNumber" : 0,
+      "doseUnit" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    } ]
+  } ],
+  "consumptionMaterialsBooking" : [ {
+    "name" : "Крапельниця",
+    "materialType" : null,
+    "number" : 2,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Шприци",
+    "materialType" : "2, 5, 10, 20 мл",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Марля 3м",
+    "materialType" : null,
+    "number" : 0,
+    "numberUnits" : "фл",
+    "replacement" : [ {
+      "name" : "бінт",
+      "materialType" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    }, {
+      "name" : "спирт",
+      "materialType" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    } ]
+  } ]
+}

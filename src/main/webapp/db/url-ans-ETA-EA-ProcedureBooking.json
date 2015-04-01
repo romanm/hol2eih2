@@ -1,0 +1,286 @@
+{
+  "name" : "urology anesthesia ETH EA",
+  "nameLong" : "ХОЛ::Анестезія урологія::ЕТН ЕА - Ендотрахеальний наркоз - епідуральна анестезія",
+  "drugsBooking" : [ {
+    "generic" : "Ропівакаін",
+    "trade" : "Наропін",
+    "doseConcentrationNumber" : 7.5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 5,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "фл",
+    "replacement" : null
+  }, {
+    "generic" : "Бупівакаїн",
+    "trade" : "Лонгокаїн",
+    "doseConcentrationNumber" : 2.5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 200,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "фл",
+    "replacement" : null
+  }, {
+    "generic" : "Этамзилат",
+    "trade" : "Дицинон",
+    "doseConcentrationNumber" : 250,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Дексаметазон",
+    "trade" : "Дексаметазон",
+    "doseConcentrationNumber" : 4,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Гідрокортизон",
+    "trade" : "Гідрокортизон",
+    "doseConcentrationNumber" : 20,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Гемаксам",
+    "trade" : "Гемаксам",
+    "doseConcentrationNumber" : 50,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 5,
+    "doseUnit" : "мл",
+    "number" : 4,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Еуфілін",
+    "trade" : "Еуфілін",
+    "doseConcentrationNumber" : 20,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 5,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Корглікон",
+    "trade" : "Корглікон",
+    "doseConcentrationNumber" : 0.6,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Кордіамін",
+    "trade" : "Кордіамін",
+    "doseConcentrationNumber" : 250,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Фуросемід",
+    "trade" : "Фуросемід",
+    "doseConcentrationNumber" : 1,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Атропін",
+    "trade" : "Атропін",
+    "doseConcentrationNumber" : 1,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Прозерин",
+    "trade" : "Прозерин",
+    "doseConcentrationNumber" : 0.5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 2,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Мезатон",
+    "trade" : "Мезатон",
+    "doseConcentrationNumber" : 10,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Бензогексоній",
+    "trade" : "Бензогексоній",
+    "doseConcentrationNumber" : 25,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 1,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Но-шпа",
+    "trade" : "Но-шпа",
+    "doseConcentrationNumber" : 20,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 2,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Аміодарон",
+    "trade" : "Аміодарон",
+    "doseConcentrationNumber" : 50,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 3,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Осетрон",
+    "trade" : "Осетрон",
+    "doseConcentrationNumber" : 2,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 4,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : "Ебрантил",
+    "trade" : "Ебрантил",
+    "doseConcentrationNumber" : 5,
+    "doseConcentrationUnit" : "мг/мл",
+    "doseNumber" : 5,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "амп",
+    "replacement" : null
+  }, {
+    "generic" : null,
+    "trade" : "Стерофундін",
+    "doseConcentrationNumber" : 0.0,
+    "doseConcentrationUnit" : null,
+    "doseNumber" : 400,
+    "doseUnit" : "мл",
+    "number" : 4,
+    "numberUnits" : "фл",
+    "replacement" : [ {
+      "generic" : null,
+      "trade" : "р-н Хартмана",
+      "doseConcentrationNumber" : 0.0,
+      "doseConcentrationUnit" : null,
+      "doseNumber" : 0,
+      "doseUnit" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    } ]
+  }, {
+    "generic" : "Гелофузін",
+    "trade" : "Гелофузін",
+    "doseConcentrationNumber" : 0.0,
+    "doseConcentrationUnit" : null,
+    "doseNumber" : 400,
+    "doseUnit" : "мл",
+    "number" : 1,
+    "numberUnits" : "фл",
+    "replacement" : [ {
+      "generic" : null,
+      "trade" : "Гековен",
+      "doseConcentrationNumber" : 0.0,
+      "doseConcentrationUnit" : null,
+      "doseNumber" : 0,
+      "doseUnit" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    } ]
+  } ],
+  "consumptionMaterialsBooking" : [ {
+    "name" : "Крапельниця",
+    "materialType" : null,
+    "number" : 2,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Шприци",
+    "materialType" : "2, 5, 10, 20 мл",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Катетер в/в",
+    "materialType" : "1.2-1.4",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Санаційний катетер",
+    "materialType" : "№16",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Наклейка на",
+    "materialType" : "в/в катетер",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Рукавички",
+    "materialType" : "№ 8.5, 8, №7, № 6.5",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Повязка «медіпор»",
+    "materialType" : "6*10",
+    "number" : 1,
+    "numberUnits" : "шт",
+    "replacement" : null
+  }, {
+    "name" : "Марля 3м",
+    "materialType" : null,
+    "number" : 1,
+    "numberUnits" : "фл",
+    "replacement" : [ {
+      "name" : "бінт",
+      "materialType" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    }, {
+      "name" : "спирт",
+      "materialType" : null,
+      "number" : 0,
+      "numberUnits" : null,
+      "replacement" : null
+    } ]
+  } ]
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="HomeHolCtrl">
+<head>
+	<meta charset="UTF-8">
+	<title>ХОЛ</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<a href="http://stfalcon.github.io/euromaidan/" class="em-ribbon" 
+	style="position: absolute; left:0; top:0; width: 90px; height: 90px; 
+	background: url('http://stfalcon.github.io/euromaidan/img/em-ribbon.png'); z-index: 2013; 
+	border: 0;" title="Розмісти стрічку з символікою України і ЄС на своєму сайті!" target="_blank"></a>
+	<div align="center">
+		<h1>Хмельницька обласна лікарня</h1>
+		<h5>Електронна історія хвороби</h5>
+	</div> 
+	<div class="container">
+		<div class="row no-print">
+			<div class="col-xs-8">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+				</ol>
+			</div>
+			<div class="col-xs-4"
+				style="text-align: right; background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+
+					<li>|</li>
+					<li data-ng-show="!user.name"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="user.name"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{user.name}} <a href="/hello"> Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h3 ng-repeat="departmentHol in departmentsHol"
+				ng-if="departmentHol.department_profile_id == 3 "
+				>
+					<a href="/hol/admission/patient">
+						{{departmentHol.department_name}}
+					</a>
+				</h3>
+				<h4 ng-repeat="departmentHol in departmentsHol"
+				ng-if="departmentHol.department_profile_id == 4 "
+				>
+					<a href="/hol/department.html?dep={{departmentHol.department_id}}">
+						{{departmentHol.department_name}}
+					</a>
+				</h4>
+				<hr/>
+				<h4>
+				<a href="hol/admin">
+				Адміністратор
+				</a>
+				</h4>
+			</div>
+			<div class="col-md-4">
+	<h4 ng-repeat="departmentHol in departmentsHol"
+	ng-if="departmentHol.department_profile_id == 2 "
+	>
+		<a href="/hol/department.html?dep={{departmentHol.department_id}}">
+			{{departmentHol.department_name}}
+		</a>
+	</h4>
+			</div>
+			<div class="col-md-4">
+	<h4 ng-repeat="departmentHol in departmentsHol"
+	ng-if="departmentHol.department_profile_id == 1 "
+	>
+		<a href="/hol/department.html?dep={{departmentHol.department_id}}">
+			{{departmentHol.department_name}}
+		</a>
+	</h4>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<h4 style="text-align: right;">
+		<a href="http://hol.in.ua/"> Зовнішня Інтернет сторінка
+			Хмельницької обласної лікарні </a>
+	</h4>
+
+	<nav class="navbar navbar-default navbar-fixed-bottom"
+		role="navigation">
+		<div class="container">
+			<span class="glyphicon glyphicon-play"></span>
+			<ol class="list-inline navbar-right">
+				<li>|</li>
+				<li data-ng-show="!user.name"><span
+					class="glyphicon glyphicon-log-in"></span> <a href="/login">
+						Ввійти </a></li>
+				<li data-ng-show="user.name"><span
+					class="glyphicon glyphicon-log-out"></span> :{{user.name}} <a
+					href="/hello"> Вийти </a></li>
+			</ol>
+		</div>
+	</nav>
+	
+	<script src="/js/jquery-2.1.1.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.11.0.js"></script>
+	<script src="/js/angular-sanitize.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script type="text/javascript">
+	cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', function ($scope, $http) {
+		console.log("HomeHolCtrl");
+		console.log(configHol.departments.length);
+		$scope.departmentsHol = configHol.departments;
+		$http({ method : 'GET', url : "/user"
+		}).success(function(data, status, headers, config) {
+			$scope.user = data;
+			console.log($scope.user.name);
+			console.log("--------------");
+		}).error(function(data, status, headers, config) {
+		});
+	} ] );
+	</script>
+
+</body>
+</html>
