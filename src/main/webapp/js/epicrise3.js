@@ -7,10 +7,25 @@ var history2File = "/db/epicrise_id_" + parameters.hid;
 cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
 
 	console.log("EpicriseCtrl");
+	
+
+	$scope.docLength = 123456;
+	$scope.myTimer = function () {
+		var newDocLength = getDocLength();
+		var diffDocLength = Math.abs($scope.docLength-newDocLength);
+		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
+		if(diffDocLength > 100){
+			$scope.saveWorkDoc();
+			setDocLength();
+		}
+	}
+	$scope.myVar=setInterval(function(){$scope.myTimer()},5000);
+	
 	$scope.epicriseTemplate = epicriseTemplate;
 	$scope.seekTag = "";
 	$scope.epicrise = {};
 	$scope.dt = new Date();
+
 	console.log($scope.epicriseTemplate);
 
 	initDeclareController($scope, $http, $sce, $filter);
@@ -18,26 +33,36 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	console.log(history2File);
 	$http({ method : 'GET', url : history2File
 	}).success(function(data, status, headers, config) {
+		console.log("success");
 		$scope.epicrise = data;
+		setDocLength();
 		initEpicriseType();
 		$scope.patientHistory = $scope.epicrise.patientHistory;
 		if(!$scope.patientHistory){
-			$http({ method : 'GET', url : historyFile
-			}).success(function(data, status, headers, config) {
-				$scope.patientHistory = data;
-			}).error(function(data, status, headers, config) {
-			});
+			console.log(historyFile);
+			readHol1();
 		}
 	}).error(function(data, status, headers, config) {
+		console.log("error");
 		readHol1();
 	});
+	
+	getDocLength = function(){
+		return JSON.stringify($scope.epicrise).length;
+	}
+	setDocLength = function(){
+		$scope.docLength = getDocLength();
+		console.log($scope.docLength);
+	}
 
 	initEpicriseType = function(){
-		if($scope.epicrise.epicriseGroups)
+		//if($scope.epicrise.epicriseGroups)
+		console.log($scope.epicrise.epicriseGroups);
 		$scope.epicrise.epicriseGroups.forEach(function(groupElement) {
 			setGroupElementType(groupElement);
 		});
 	}
+
 	readHol1 = function(){
 		$http({ method : 'GET', url : historyFile
 		}).success(function(data, status, headers, config) {
@@ -46,13 +71,16 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}).error(function(data, status, headers, config) {
 		});
 	}
+
 	initEpicrise = function(){
 		$scope.epicrise.departmentHistoryOut = new Date();
 		$scope.epicrise.epicriseGroups = [];
+		console.log($scope.epicrise.epicriseGroups);
 		var rsp = {name:"Рекомендовано/смерть/перевід"};
-		console.log(1);
+		console.log($scope.patientHistory.historyTreatmentAnalysises);
 		$scope.patientHistory.historyTreatmentAnalysises.forEach(function(hol1Element) {
 			var groupElement = createGroupElement(hol1Element.historyTreatmentAnalysisName);
+			console.log(groupElement);
 			addTextHtmlValue (groupElement, hol1Element.historyTreatmentAnalysisText);
 			if( rsp.name == groupElement.name){
 				rsp = groupElement;
@@ -68,6 +96,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicrise.epicriseGroups.push(rsp);
 		var addGroup = {name:"Лікування, обстеження, аналізи, рекомендації ...", type : 'isOnDemand'};
 		$scope.epicrise.epicriseGroups.splice(2,0,addGroup);
+		setDocLength();
 	}
 
 	addTextHtmlValue = function(groupElement, textHtmlValue){
@@ -168,7 +197,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	$scope.editOpenClose = function(h1Index){
-		var oldOpen = $scope.epicrise.epicriseGroups[h1Index].open;
+		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
+		if(groupElement){
+			setGroupElementType(groupElement);
+		}
+		console.log("Autosave - "+JSON.stringify($scope.epicrise).length)
+		var oldOpen = groupElement.open;
 		if(!$scope.epicrise.epicriseGroups[h1Index].value){
 			addTextHtmlValue($scope.epicrise.epicriseGroups[h1Index], "");
 		}

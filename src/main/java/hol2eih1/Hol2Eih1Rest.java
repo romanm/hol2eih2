@@ -138,6 +138,7 @@ not notig
 		}
 		logger.info("\n Start /db/history_id_"+historyId);
 		HistoryHolDb shortPatientHistory = getShortPatientHistoryById(historyId);
+		logger.info("shortPatientHistory = "+shortPatientHistory);
 		shortPatientHistory.setUser(userPrincipal);
 		getOperation(shortPatientHistory);
 		return shortPatientHistory;
@@ -149,6 +150,8 @@ not notig
 		shortPatientHistory.setOperationHistorys(operationHistorys);
 	}
 	private HistoryHolDb getShortPatientHistoryById(int historyId) {
+		System.out.println(""+historyId);
+		logger.debug(""+historyId);
 		HistoryHolDb historyHolDb = cuwyDbService1.getHistoryHolDbById(historyId);
 		logger.debug(""+historyHolDb);
 		addShortPatientHistory(historyHolDb);
@@ -164,6 +167,9 @@ not notig
 		historyHolDb.setPatientDepartmentMovements(patientDepartmentMovements);
 		List<HistoryTreatmentAnalysis> historyTreatmentAnalysises
 		= cuwyDbService1.getHistoryTreatmentAnalysises(historyId);
+		logger.debug("-------------------------------");
+		logger.debug(""+historyTreatmentAnalysises);
+		logger.debug("-------------------------------");
 		historyHolDb.setHistoryTreatmentAnalysises(historyTreatmentAnalysises);
 		DiagnosisOnAdmission diagnosisOnAdmission
 		= cuwyDbService1.getDiagnosisOnAdmission(historyId);

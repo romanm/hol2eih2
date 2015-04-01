@@ -1,5 +1,12 @@
 cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
 	console.log("addPatientCtrl");
+
+	$scope.myVar=setInterval(function(){myTimer()},5000);
+	$scope.docLength = 1;
+	$scope.myTimer = function () {
+		conslole.log("---------");
+	}
+
 	$scope.configHol = configHol;
 	console.log($scope.configHol);
 	$scope.benefits = ["Чорнобилець І категорії"

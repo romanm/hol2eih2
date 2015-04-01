@@ -224,8 +224,11 @@
 						</label>
 					</div>
 					<div data-ng-show="h1.value.withDate">
-						<a data-ng-click="changeBlockDate(dt, h1Index)"> Поновити дату
-							розділу виписки {{dt | date:'dd.MM.yyyy'}} </a>
+						<div class="pip">
+							{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
+						</div>
+						<a data-ng-click="changeBlockDate(dt, h1Index)"> Повернутись
+							до дати {{dt | date:'dd.MM.yyyy'}} </a>
 						<datepicker
 							data-ng-model="h1.value.historyTreatmentAnalysisDatetime"
 							min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
