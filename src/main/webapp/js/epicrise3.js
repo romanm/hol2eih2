@@ -112,6 +112,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	setGroupElementType = function(groupElement){
+		if(epicriseTemplate.epicriseBlockConfig[groupElement.name]){
+			if(epicriseTemplate.epicriseBlockConfig[groupElement.name].isLabor){
+				groupElement.type="isLabor";
+			}
+		}
 		if(!groupElement.type){
 			groupElement.type="isTextHtml";
 			if(epicriseTemplate.epicriseBlockConfig[groupElement.h1Name]){
