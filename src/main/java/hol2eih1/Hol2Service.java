@@ -39,8 +39,7 @@ public class Hol2Service {
 		final String hidStr = (String) epicrise.get("hid");
 		logger.debug("hid = "+hidStr);
 		final Integer hid = Integer.parseInt(hidStr);
-		final Map<String, Object> epicrise2 = hol2H2Jdbc.getEpicriseId(hid);
-		logger.debug("epicrise2 = "+epicrise2);
+		final Map<String, Object> epicrise2 = readEpicriseId(hid);
 		if(epicrise2 == null){
 			hol2H2Jdbc.insertEpicrise(hid,epicrise);
 		}else{
@@ -48,6 +47,11 @@ public class Hol2Service {
 			hol2H2Jdbc.updateEpicrise(hid,epicrise);
 		}
 		return null;
+	}
+	Map<String, Object> readEpicriseId(final Integer hid) {
+		final Map<String, Object> epicrise2 = hol2H2Jdbc.getEpicriseId(hid);
+		logger.debug("epicrise2 = "+epicrise2);
+		return epicrise2;
 	}
 
 	public Map<String, Object> readEpicrise(Integer historyId) {

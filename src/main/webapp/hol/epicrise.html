@@ -47,11 +47,13 @@
 			</div>
 			<div class="col-xs-4" style="text-align: right;background-color: #f5f5f5;">
 				<ol class="list-inline navbar-right">
-					<li><span class="glyphicon glyphicon-floppy-disk"></span> <a
-						data-ng-click="saveWorkDoc()" href="#"
+					<li><span data-ng-show="autoSaveCount > 0"
+						title="Кільськість автозбережень - {{autoSaveCount}}">
+							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
+						<a data-ng-click="saveWorkDocClick()" href="#"
 						title="Запис {{numberOfChange}} незбережених змін"> Запис
-							{{numberOfChange}} </a>
-						<span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+							{{numberOfChange}} </a> <span
+						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
 					<li>|</li>
 					<li><span class="glyphicon glyphicon-eye-open"></span> <a
@@ -63,7 +65,8 @@
 						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
 					<li data-ng-show="patientHistory.user"><span
 						class="glyphicon glyphicon-log-out"></span>
-						:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
 				</ol>
 			</div>
 		</div>

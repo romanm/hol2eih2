@@ -6,6 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryHolDb {
+	private boolean epicrise2saved;
+	
+	public boolean isEpicrise2saved() {
+		return epicrise2saved;
+	}
+	public void setEpicrise2saved(boolean epicrise2saved) {
+		this.epicrise2saved = epicrise2saved;
+	}
 	private int requiredFieldFullProcent;
 	private int historyId, historyNo, historyUrgent, patientId, directId, historyDepartmentIn,
 	historyDepartmentId,

@@ -9,13 +9,19 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	console.log("EpicriseCtrl");
 	
 
-	$scope.docLength = 123456;
+	$scope.docLength = 0;
+	$scope.autoSaveCount = 0;
 	$scope.autoSaveTimer = function () {
+		if($scope.docLength == 0){
+			setDocLength();
+			return;
+		}
 		var newDocLength = getDocLength();
 		var diffDocLength = Math.abs($scope.docLength-newDocLength);
 		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
 		if(diffDocLength > 100){
-			$scope.saveWorkDoc();
+			saveWorkDocEpicrise();
+			$scope.autoSaveCount++;
 			setDocLength();
 		}
 	}
@@ -35,7 +41,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}).success(function(data, status, headers, config) {
 		console.log("success");
 		$scope.epicrise = data;
-		setDocLength();
 		initEpicriseType();
 		$scope.patientHistory = $scope.epicrise.patientHistory;
 		if(!$scope.patientHistory){
@@ -47,9 +52,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		readHol1();
 	});
 	
+
 	getDocLength = function(){
 		return JSON.stringify($scope.epicrise).length;
 	}
+
 	setDocLength = function(){
 		$scope.docLength = getDocLength();
 		console.log($scope.docLength);
@@ -57,7 +64,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	initEpicriseType = function(){
 		//if($scope.epicrise.epicriseGroups)
-		console.log($scope.epicrise.epicriseGroups);
 		$scope.epicrise.epicriseGroups.forEach(function(groupElement) {
 			setGroupElementType(groupElement);
 		});
@@ -96,7 +102,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicrise.epicriseGroups.push(rsp);
 		var addGroup = {name:"Лікування, обстеження, аналізи, рекомендації ...", type : 'isOnDemand'};
 		$scope.epicrise.epicriseGroups.splice(2,0,addGroup);
-		setDocLength();
 	}
 
 	addTextHtmlValue = function(groupElement, textHtmlValue){
@@ -187,7 +192,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicrise.epicriseGroups[middlePosition].open = true;
 	}
 
-	$scope.saveWorkDoc = function(){
+	$scope.saveWorkDocClick = function(){
+		saveWorkDocEpicrise();
+		$scope.autoSaveCount = 0;
+	}
+
+	saveWorkDocEpicrise = function(){
 		console.log("-----------------");
 		$scope.epicrise.hid = parameters.hid;
 		$scope.epicrise.patientHistory = $scope.patientHistory;

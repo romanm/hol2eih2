@@ -130,9 +130,8 @@ not notig
 		session.setAttribute("hno", historyId);
 		logger.debug(""+session);
 		logger.debug(""+userPrincipal);
-		final UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken) userPrincipal;
-		showUser(user);
-		if(null == user){
+		showUser((UsernamePasswordAuthenticationToken) userPrincipal);
+		if(null == userPrincipal){
 			setLoginRedirectValue(session, "history", historyId);
 			return null;
 		}
@@ -171,6 +170,14 @@ not notig
 		logger.debug(""+historyTreatmentAnalysises);
 		logger.debug("-------------------------------");
 		historyHolDb.setHistoryTreatmentAnalysises(historyTreatmentAnalysises);
+		if(historyTreatmentAnalysises.size() == 0) {
+			final Map<String, Object> epicrise2 = hol2Service.readEpicriseId(historyId);
+			logger.debug("epicrise2 = "+epicrise2);
+			historyHolDb.setEpicrise2saved(epicrise2 != null);
+			if(epicrise2 == null){
+//				Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
+			}
+		}
 		DiagnosisOnAdmission diagnosisOnAdmission
 		= cuwyDbService1.getDiagnosisOnAdmission(historyId);
 		historyHolDb.setDiagnosisOnAdmission(diagnosisOnAdmission);
