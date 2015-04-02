@@ -67,8 +67,9 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	$scope.gotoField = function(rf){
 		var g = $scope.requiredFields[rf].group;
 		$scope.newHistoryTemplate[g].open = true;
-		$('#'+rf).focus();
+//		$('#'+rf).focus();
 //		document.getElementById(rf).focus();
+		document.querySelector("#"+rf).focus();
 	}
 	
 

@@ -10,7 +10,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	
 
 	$scope.docLength = 123456;
-	$scope.myTimer = function () {
+	$scope.autoSaveTimer = function () {
 		var newDocLength = getDocLength();
 		var diffDocLength = Math.abs($scope.docLength-newDocLength);
 		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
@@ -19,7 +19,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			setDocLength();
 		}
 	}
-	$scope.myVar=setInterval(function(){$scope.myTimer()},5000);
+	$scope.autoSaveInterval = setInterval(function(){$scope.autoSaveTimer()},5000);
 	
 	$scope.epicriseTemplate = epicriseTemplate;
 	$scope.seekTag = "";
