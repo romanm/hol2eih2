@@ -178,18 +178,18 @@ public class HistoryHolDb {
 	public void setOperationHistorys(List<Map<String, Object>> operationHistorys) {
 		this.operationHistorys = operationHistorys;
 	}
-	Integer tmpId;
 	private Principal user;
 	public Principal getUser() {
 		return user;
 	}
+	public void setUser(Principal user) {
+		this.user = user;
+	}
+	private Integer tmpId;
 	public void setTmpId(Integer tmpId) {
 		this.tmpId = tmpId;
 	}
 	public Integer getTmpId() {
 		return tmpId;
-	}
-	public void setUser(Principal user) {
-		this.user = user;
 	}
 }

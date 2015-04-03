@@ -19,13 +19,18 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	var historyFile = "/db/history_id_"+parameters.hno;
 	console.log(historyFile);
 	
-	$http({
-		method : 'GET',
-		url : historyFile
+	$http({ method : 'GET', url : historyFile
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
+		$scope.patientHistory.movePatientDepartment = {};
 	}).error(function(data, status, headers, config) {
 	});
+
+	$scope.writeDepartment = function(department){
+		console.log(department);
+		$scope.patientHistory.movePatientDepartment.departmentName = 
+			department.department_name;
+	}
 
 	$scope.menuMovePatient = [
 		['<span class="glyphicon glyphicon-transfer"></span> Переведеня', function ($itemScope) {

@@ -91,21 +91,19 @@ initDeclareController = function($scope, $http, $sce, $filter){
 	$scope.param.hno = parameters.hno;
 	console.log($scope.param);
 
-	saveWorkDoc = function(url, $scope, $http){
-		var docToSave = $scope.epicrise;
-		console.log(url);
-		console.log(docToSave);
-//		$http({ method : 'GET', data : docToSave, url : url
+	postObject = function(url, docToSave, $scope, $http){
 		$http({ method : 'POST', data : docToSave, url : url
 		}).success(function(data, status, headers, config){
 			console.log(data);
 		}).error(function(data, status, headers, config) {
 			$scope.error = data;
-			console.log(data);
-			console.log(status);
-			console.log(headers);
-			console.log(config);
 		});
+	}
+	saveWorkDoc = function(url, $scope, $http){
+		var docToSave = $scope.epicrise;
+		console.log(url);
+		console.log(docToSave);
+		postObject(url, docToSave, $scope, $http);
 	}
 
 	$scope.calculateDay = function(birthDateStr, todayDate) {

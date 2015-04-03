@@ -77,44 +77,54 @@
 						<span ng-if="patient.collapsed" class="glyphicon glyphicon-chevron-right"></span>
 						<span ng-if="!patient.collapsed" class="glyphicon glyphicon-chevron-down"></span>
 					</button>
-					<div class="row well" collapse="patient.collapseMovePatient" data-ng-controller="departmentCtrl">
-	<div class="col-xs-5">
-		<div class="form-group has-success has-feedback required">
-			<label class="control-label sr-only" for="direct">Відділення госпіталізації</label>
-			<input type="text" class="form-control input-sm" placeholder="Відділення госпіталізації" 
-			id="department" name="department" ng-model="patientEditing.departmentName" required=""
-			ng-blur="validField2(newPatientForm.department)"
-			tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>"
-			/>
-			<span class="glyphicon form-control-feedback"></span>
-			<span class="control-label ng-hide" ng-show="validateForm.department.fieldHasError">
-			Відділення госпіталізації є обов'язковим і не може бути порожнім!</span>
-		</div>
-	</div>
-	<div class="col-xs-1">
-		<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-			<span class="caret"></span>
-		</button>
-		<div class="dropdown-menu  dropdown-menu-right" role="menu">
-			<table>
-				<tr><td>
-				<ul>
-					<li ng-repeat="departmentHol in departmentsHol" ng-if="departmentHol.department_profile_id == 2">
-						<a ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-					</li>
-				</ul>
-				</td><td>
-				<ul>
-					<li ng-repeat="departmentHol in departmentsHol" ng-if="departmentHol.department_profile_id == 1">
-						<a ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-					</li>
-				</ul>
-				</td></tr>
-			</table>
-		</div>
-	</div>
-					</div>
-					<!-- 
+					<div class="row well" collapse="patient.collapseMovePatient"
+								data-ng-controller="departmentCtrl">
+						<div class="col-xs-5">
+							<div class="form-group has-success has-feedback required">
+								<label class="control-label sr-only" for="direct">Відділення
+									госпіталізації</label> <input type="text"
+									class="form-control input-sm"
+									placeholder="Відділення госпіталізації" id="department"
+									name="department" ng-model="patientEditing.departmentName"
+									required="" ng-blur="validField2(newPatientForm.department)"
+									tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+								<span class="glyphicon form-control-feedback"></span> <span
+									class="control-label ng-hide"
+									ng-show="validateForm.department.fieldHasError">
+									Відділення госпіталізації є обов'язковим і не може бути
+									порожнім!</span>
+							</div>
+						</div>
+						<div class="col-xs-1">
+							<button type="button"
+								class="btn btn-sm btn-default dropdown-toggle"
+								data-toggle="dropdown">
+								<span class="caret"></span>
+							</button>
+							<div class="dropdown-menu  dropdown-menu-right" role="menu">
+								<table>
+									<tr>
+										<td>
+											<ul>
+												<li ng-repeat="departmentHol in departmentsHol"
+													ng-if="departmentHol.department_profile_id == 2"><a
+													ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+												</li>
+											</ul>
+										</td>
+										<td>
+											<ul>
+												<li ng-repeat="departmentHol in departmentsHol"
+													ng-if="departmentHol.department_profile_id == 1"><a
+													ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div> <!-- 
 					<div collapse="patient.collapsed" class="well well-lg">
 					 -->
 					<div collapse="patient.collapsed" class="well">

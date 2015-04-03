@@ -43,6 +43,9 @@ public class Hol2Eih1Rest {
 
 	@ExceptionHandler(value = Hol2Exception.class)
 	public String heightError(Hol2Exception ex) {
+		logger.debug("heightError");
+		logger.debug(""+ex);
+		logger.debug("heightError");
 		return "error";
 	}
 	
@@ -69,7 +72,16 @@ not notig
 		return "login";
 	}
 	 * */
-//	@RequestMapping(value = "/save/epicrise", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
+		public  @ResponseBody Map<String, Object> movePatientDepartment(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
+		logger.debug(""+patientHistory);
+		final Object movePatientDepartment = patientHistory.get("movePatientDepartment");
+		logger.debug(""+movePatientDepartment);
+		return patientHistory;
+	}
+
+	//	@RequestMapping(value = "/save/epicrise", method = RequestMethod.POST)
 //	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.GET)
 	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveEpicrise(@RequestBody Map<String, Object> epicrise, Principal userPrincipal) {
