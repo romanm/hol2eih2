@@ -2,6 +2,8 @@ package hol2eih1;
 
 public class AppConfig {
 
+	final static String configJsFileName = "config.json.js";
+
 	//hol
 //	final static String applicationFolderPfad	= "/home/hol2/server/hol2/";
 //	final static String urlDb = "jdbc:h2:file:/home/hol2/db-h2/db-hol2-eih/db-hol2-eih";

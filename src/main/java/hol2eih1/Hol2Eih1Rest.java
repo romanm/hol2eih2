@@ -1,5 +1,7 @@
-package hol2eih1;
+package hol2eih1;	
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
@@ -8,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.cuwy1.holDb.model.ConfigHol;
+import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHol;
 import org.cuwy1.holDb.model.DiagnosisOnAdmission;
 import org.cuwy1.holDb.model.HistoryHolDb;
@@ -32,6 +36,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 @Controller
 public class Hol2Eih1Rest {
@@ -224,4 +231,39 @@ not notig
 		}
 	}
 
+	//-----build json db files--------------------------------------------------
+
+	
+
+	@RequestMapping(value = "/config/create_file", method = RequestMethod.GET)
+	public @ResponseBody ConfigHol createConfigFile() {
+		ConfigHol configHol = new ConfigHol();
+		List<CountryHol> readCountries = cuwyDbService1.readCountries();
+		List<DepartmentHol> departmentHol = cuwyDbService1.getDepartmentsHol();
+		List<Map<String, Object>> directsHol = cuwyDbService1.getDirectsHol();
+		List<Map<String, Object>> treatmentAnalysis = cuwyDbService1.getTreatmentAnalysis();
+		final List<Map<String, Object>> firstNames = cuwyDbService1.getFirstNames();
+		configHol.setCountries(readCountries);
+		configHol.setDepartments(departmentHol);
+		configHol.setDirects(directsHol);
+		configHol.setTreatmentAnalysis(treatmentAnalysis);
+		configHol.setFirstNames(firstNames);
+//		writeToJsonDbFile(readCountries, addressesJsonFileName);
+		writeToPrettyJsDbFile("var configHol = ", configHol, AppConfig.configJsFileName);
+		return configHol;
+	}
+	private void writeToPrettyJsDbFile(String variable, Object objectForJson, String fileName) {
+		File file = new File(AppConfig.applicationFolderPfad + AppConfig.innerDbFolderPfad + fileName);
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectWriter writerWithDefaultPrettyPrinter = mapper.writerWithDefaultPrettyPrinter();
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(file);
+//			writerWithDefaultPrettyPrinter.writeValueAsBytes(variable.getBytes());
+			writerWithDefaultPrettyPrinter.writeValue(fileOutputStream, objectForJson);
+		} catch ( IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//-----build json db files-----------------------------------------------END
+	
 }

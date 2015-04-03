@@ -50,7 +50,7 @@
 						Ввійти </a></li>
 				<li data-ng-show="patientHistory.user"><span
 					class="glyphicon glyphicon-log-out"></span>
-					:{{patientHistory.user.name}} <a href="/hello"> Вийти </a></li>
+					:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
 			</ul>
 		</div>
 	</div>
@@ -71,19 +71,20 @@
 					{{patientHistory.patientHolDb.patientSurname}}
 					{{patientHistory.patientHolDb.patientPersonalName}}
 					{{patientHistory.patientHolDb.patientPatronymic}}</h4>
-				<div>
-					Хвора: 
-					<span class="pip">
-					{{patientHistory.patientHolDb.patientSurname}}
-					{{patientHistory.patientHolDb.patientPersonalName}}
-					{{patientHistory.patientHolDb.patientPatronymic}} 
-					</span>
-					<span
-						ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
-					р. (*{{patientHistory.patientHolDb.patientDob |
-					date:'dd.MM.yyyy'}})
-				</div>
-				<div>
+					<div>
+						<span
+							data-ng-show="patientHistory.patientHolDb.patientGender == 1">
+							Хворий: </span> <span
+							data-ng-show="patientHistory.patientHolDb.patientGender != 1">
+							Хвора: </span> <span class="pip">
+							{{patientHistory.patientHolDb.patientSurname}}
+							{{patientHistory.patientHolDb.patientPersonalName}}
+							{{patientHistory.patientHolDb.patientPatronymic}} </span> <span
+							ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
+						р. (*{{patientHistory.patientHolDb.patientDob |
+						date:'dd.MM.yyyy'}})
+					</div>
+					<div>
 					Адреса: <span ng-if="patientHistory.patientHolDb.patientStreet">
 						вул.{{patientHistory.patientHolDb.patientStreet}},
 						буд.{{patientHistory.patientHolDb.patientHouse}},
@@ -311,7 +312,7 @@
 						Ввійти </a></li>
 				<li data-ng-show="patientHistory.user"><span
 					class="glyphicon glyphicon-log-out"></span>
-					:{{patientHistory.user.name}} <a href="/hello"> Вийти </a></li>
+					:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
 			</ol>
 		</div>
 	</nav>

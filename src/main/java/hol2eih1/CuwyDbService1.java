@@ -37,6 +37,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -246,12 +247,19 @@ public class CuwyDbService1 {
 		}
 	}
 	public DepartmentHol getDepartmentsHol(int id) {
-//		return null;
 		return jdbcTemplate.queryForObject(
 				"SELECT * FROM department WHERE department_id = ?", 
 				new Object[] { id }, new DepartmentHolRowMapper());
-		/*
-		 * */
+	}
+	public List<Map<String, Object>> getFirstNames() {
+		String sql = "select * from ("
+				+ " select count(patient_name) cnt, patient_name, patient_gender "
+				+ " from patient group by patient_name order by cnt desc) pn"
+				+ " where cnt >4 and length(patient_name) > 1"
+				;
+		logger.debug(sql);
+		List<Map<String, Object>> firstNames = jdbcTemplate.queryForList(sql);
+		return firstNames;
 	}
 	public List<Map<String, Object>> getTreatmentAnalysis() {
 		String sql = "SELECT "
@@ -1220,5 +1228,17 @@ public class CuwyDbService1 {
 		}
 	}
 
-	
+	public void setAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+		String sql = "SELECT concat('dep-',d.department_id,'_per-',p.personal_id) role, p.personal_username username"
+				+ " FROM personal_department pd, personal p, department d "
+				+ " WHERE pd.personal_id = p.personal_id AND d.department_id=pd.department_id";
+		List<Map<String, Object>> userRoleList = jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> map : userRoleList) {
+			final String username = (String) map.get("username");
+			final String role = (String) map.get("role");
+			auth.inMemoryAuthentication().withUser(username).password(username).roles(role);
+		}
+		logger.debug(""+auth);
+	}
+
 }
