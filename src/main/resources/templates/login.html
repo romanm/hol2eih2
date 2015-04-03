@@ -45,7 +45,7 @@
 				<form th:action="@{/login}" method="post">
 					<div>
 						<label> Ім'я користувача : <input type="text"
-							name="username" />
+							id="username" name="username" />
 						</label>
 					</div>
 					<div>
@@ -89,21 +89,7 @@
 		<script src='/js/textAngular.min.js'></script>
 		<script src="/db/config.json.js"></script>
 		<script src="/js/cuwy1.directives.js"></script>
-		<script type="text/javascript">
-			cuwyApp.controller('LoginCtrl', [ '$scope', '$http',
-					function($scope, $http) {
-						console.log("LogoutCtrl");
-						$http({
-							method : 'GET',
-							url : "/user"
-						}).success(function(data, status, headers, config) {
-							$scope.user = data;
-							console.log($scope.user);
-							console.log("--------------");
-						}).error(function(data, status, headers, config) {
-						});
-					} ]);
-		</script>
+		<script src="/js/cuwy1.controller.js"></script>
 	
 </body>
 </html>

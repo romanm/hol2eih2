@@ -30,7 +30,7 @@
 						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
 					<li data-ng-show="user.name"><span
 						class="glyphicon glyphicon-log-out"></span>
-						:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+						:{{user.name}} <a href="/hol/logout.html"> Вийти </a></li>
 				</ol>
 			</div>
 		</div>
@@ -42,12 +42,22 @@
 			<h1>
 				Користувач <span class="pip"> {{user.name}} </span> !
 			</h1>
+			<div ng-repeat="departmentHol in departmentsHol"
+			ng-if="departmentHol.department_id == departmentId">
+			<h3>
+			Відділення:
+				<span data-ng-show="departmentHol.department_id == departmentId"
+					class="glyphicon glyphicon-asterisk"></span> <a
+					href="/hol/department.html?dep={{departmentHol.department_id}}">
+					{{departmentHol.department_name}} </a>
+			</h3>
+			<hr/>
+		</div>
 			<h2>Ви дійсно хочете вийти з електронної історії хвороби?</h2>
 			<form action="/logout" method="post">
 				Так <input type="submit" value=" Вийти " />
 			</form>
 		</div>
-
 
 		<nav class="navbar navbar-default navbar-fixed-bottom"
 			role="navigation">
@@ -74,21 +84,7 @@
 		<script src='/js/textAngular.min.js'></script>
 		<script src="/db/config.json.js"></script>
 		<script src="/js/cuwy1.directives.js"></script>
-		<script type="text/javascript">
-			cuwyApp.controller('LogoutCtrl', [ '$scope', '$http',
-					function($scope, $http) {
-						console.log("LogoutCtrl");
-						$http({
-							method : 'GET',
-							url : "/user"
-						}).success(function(data, status, headers, config) {
-							$scope.user = data;
-							console.log($scope.user);
-							console.log("--------------");
-						}).error(function(data, status, headers, config) {
-						});
-					} ]);
-		</script>
+		<script src="/js/cuwy1.controller.js"></script>
 
 	</div>
 </body>

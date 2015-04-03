@@ -1,16 +1,44 @@
+cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce', 
+		function ($scope, $http, $filter, $sce) {
+	console.log("LoginCtrl");
+	$http({
+		method : 'GET',
+		url : "/user"
+	}).success(function(data, status, headers, config) {
+		$scope.user = data;
+		console.log($scope.user);
+		console.log("--------------");
+		console.log(document.querySelector("#username"));
+		document.querySelector("#username").focus();
+	}).error(function(data, status, headers, config) {
+	});
+} ]);
 
-cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', function ($scope, $http) {
+cuwyApp.controller('LogoutCtrl', [ '$scope', '$http', '$filter', '$sce', 
+		function ($scope, $http, $filter, $sce) {
+	console.log("LogoutCtrl");
+	$http({
+		method : 'GET',
+		url : "/user"
+	}).success(function(data, status, headers, config) {
+		$scope.user = data;
+		console.log($scope.user);
+		console.log("--------------");
+		initAppConfig($scope, $http, $sce, $filter);
+	}).error(function(data, status, headers, config) {
+	});
+} ]);
+
+cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', '$filter', '$sce', 
+	function ($scope, $http, $filter, $sce) {
 	console.log("HomeHolCtrl");
-	console.log(configHol.departments.length);
 	$scope.departmentsHol = configHol.departments;
 	$http({ method : 'GET', url : "/user"
 	}).success(function(data, status, headers, config) {
 		$scope.user = data;
 		console.log($scope.user.name);
 		console.log($scope.user);
-		$scope.departmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
-		console.log($scope.departmentId);
-		console.log("--------------");
+		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
 } ] );

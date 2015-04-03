@@ -50,9 +50,6 @@ public class Hol2Eih1Rest {
 
 	@ExceptionHandler(value = Hol2Exception.class)
 	public String heightError(Hol2Exception ex) {
-		logger.debug("heightError");
-		logger.debug(""+ex);
-		logger.debug("heightError");
 		return "error";
 	}
 	
@@ -232,8 +229,6 @@ not notig
 	}
 
 	//-----build json db files--------------------------------------------------
-
-	
 
 	@RequestMapping(value = "/config/create_file", method = RequestMethod.GET)
 	public @ResponseBody ConfigHol createConfigFile() {

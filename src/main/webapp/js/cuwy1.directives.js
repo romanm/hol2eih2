@@ -84,6 +84,13 @@ Date.prototype.addMonths2 = function (num) {
 'use strict';
 var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngular']);
 
+initAppConfig = function($scope, $http, $sce, $filter){
+	$scope.departmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
+	console.log($scope.departmentId);
+	console.log(configHol.departments.length);
+	$scope.departmentsHol = configHol.departments;
+}
+
 initDeclareController = function($scope, $http, $sce, $filter){
 	console.log("--------initDeclareController--------------------");
 	$scope.param = {};

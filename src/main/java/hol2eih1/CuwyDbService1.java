@@ -371,16 +371,16 @@ public class CuwyDbService1 {
 	 * */
 
 	private class DepartmentHistoryMapSet<T> implements RowMapper<T>,PreparedStatementSetter{
-		public static final String selectDepartmentHistory = "select * from department_history where history_id = ?";
-		public static final String insertPatientDepartmentMovement = "insert into department_history "
+		public static final String selectDepartmentHistory = "SELECT * FROM department_history WHERE history_id = ?";
+		public static final String insertPatientDepartmentMovement = "INSERT INTO department_history "
 				+ "(history_id, department_id, personal_department_id_in, personal_department_id_out"
 				+ ", department_history_in, department_history_out"
-				+ ") values (?,?,?,?"
+				+ ") VALUES (?,?,?,?"
 				+ ",?,?)";
-		public static final String insertDepartmentHistory = "insert into department_history "
+		public static final String insertDepartmentHistory = "INSERT INTO department_history "
 				+ "(history_id, department_id, personal_department_id_in, personal_department_id_out"
 				+ ", department_history_bed_day, department_history_in, department_history_out"
-				+ ") values (?,?,?,?"
+				+ ") VALUES (?,?,?,?"
 				+ ",?,?,?)";
 		public DepartmentHistoryMapSet() {
 		}

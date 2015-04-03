@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="refresh" th:if="${session.htmlPage} == null"
-	th:attr="content='0; url=/hol/home.html'" />
-<meta http-equiv="refresh" th:if="${session.htmlPage} != null"
-	th:attr="content='0; url=/hol/'+${session.htmlPage}+'.html?'
-+((${session.htmlPage} == 'department') ? 'dep' : ((${session.htmlPage} == 'epicrise') ? 'hid' : 'hno'))+'='+${session.hno}" />
+	<meta http-equiv="refresh" th:if="${session.htmlPage} == null"
+		th:attr="content='0; url=/hol/home.html'" />
+	<meta http-equiv="refresh" th:if="${session.htmlPage} != null"
+		th:attr="content='0; url=/hol/'+${session.htmlPage}+'.html?'
+		+((${session.htmlPage} == 'department') ? 'dep' : ((${session.htmlPage} == 'epicrise') ? 'hid' : 'hno'))+'='+${session.hno}" />
 </head>
-<!-- 
-content="22; url=/hol/addPatient.html" 
-th:attr="content='0; url='${param.url}"
-<head> <meta http-equiv="refresh" content="0; url=../login" /> </head>
- -->
 <body>
+redirect
+<!-- 
 	<span th:text="${session.htmlPage}"></span> htmlPage
 	<span th:text="${session.htmlPage} == null"></span>
-	<p>-----</p>
 	<span th:text="${session.hno}"></span> redirect
 	<span th:text="${param.error}"></span> url=
 	<span th:text="${param.url}"></span> session=
 	<span th:text="${session}"></span>
+ -->
 </body>
 </html>
