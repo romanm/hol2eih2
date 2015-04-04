@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.cuwy1.holDb.model.ConfigHol;
 import org.cuwy1.holDb.model.CountryHol;
+import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
 import org.cuwy1.holDb.model.DiagnosisOnAdmission;
 import org.cuwy1.holDb.model.HistoryHolDb;
@@ -78,10 +81,20 @@ not notig
 	 * */
 
 	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
-		public  @ResponseBody Map<String, Object> movePatientDepartment(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
+	public  @ResponseBody DepartmentHistory movePatientDepartment(@RequestBody DepartmentHistory departmentHistory, Principal userPrincipal) {
+		logger.debug("/db/movePatientDepartment = " );
+		cuwyDbService1.insertDepartmentHistory(departmentHistory);
+		logger.debug("/db/movePatientDepartment ---------------------- END " );
+		return departmentHistory;
+	}
+	@RequestMapping(value = "/db/movePatientDepartment2", method = RequestMethod.POST)
+	public  @ResponseBody Map<String, Object> movePatientDepartment2(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
 		logger.debug(""+patientHistory);
 		final Object movePatientDepartment = patientHistory.get("movePatientDepartment");
 		logger.debug(""+movePatientDepartment);
+		DepartmentHistory departmentHistory = new DepartmentHistory();
+		departmentHistory.setDepartmentHistoryId(0);
+		cuwyDbService1.insertDepartmentHistory(departmentHistory);
 		return patientHistory;
 	}
 

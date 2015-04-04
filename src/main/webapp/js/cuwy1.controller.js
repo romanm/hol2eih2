@@ -47,12 +47,19 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 	
 	$scope.movePatientDepartment = function(){
 		console.log("movePatientDepartment");
-		$scope.patientHistory.movePatientDepartment = {};
-		$scope.patientHistory.movePatientDepartment.departmentName = $scope.patientEditing.departmentName;
-		$scope.patientHistory.movePatientDepartment.departmentId = $scope.patientEditing.departmentId;
-		console.log($scope.patientHistory.movePatientDepartment);
 		console.log($scope.patientHistory);
-		postObject("/db/movePatientDepartment", $scope.patientHistory, $scope, $http);
+		console.log($scope.patientHistory.user);
+		
+		var departmentHistory = {};
+		var personalId = $scope.patientHistory.user.authorities[0].authority.split("_")[2].split("-")[1];
+		var departmentHistoryIn = new Date();
+		departmentHistory.historyId = $scope.patientHistory.historyId;
+		departmentHistory.departmentId = $scope.patientEditing.departmentId;
+		departmentHistory.personalId = personalId;
+		departmentHistory.departmentHistoryIn = departmentHistoryIn;
+
+		console.log(departmentHistory);
+		postObject("/db/movePatientDepartment", departmentHistory, $scope, $http);
 	}
 
 	$scope.writeDepartment = function(department){

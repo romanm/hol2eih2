@@ -5,19 +5,28 @@ import java.sql.Timestamp;
 public class DepartmentHistory {
 	private int historyId, departmentId, departmentHistoryId
 	, personalDepartmentIdIn, personalDepartmentIdOut
-	, departmentHistoryBedDay;
+	, departmentHistoryBedDay
+	, personalId;
 	private Timestamp departmentHistoryIn, departmentHistoryOut;
 	@Override
 	public String toString() {
 		return String.format(
 				"\n DepartmentHistory: {"
-				+ "historyId = '%s', departmentId = '%s', departmentHistoryId = '%s'"
-				+ "\n, personalDepartmentIdIn = '%s', personalDepartmentIdOut = '%s', departmentHistoryBedDay = '%s', departmentHistoryIn = '%s'"
-				+ ", departmentHistoryOut = '%s'"
-				+ "}",
-				historyId, departmentId, departmentHistoryId, personalDepartmentIdIn, personalDepartmentIdOut
-				, departmentHistoryBedDay, departmentHistoryIn, departmentHistoryOut
+						+ "historyId = '%s', departmentId = '%s', departmentHistoryId = '%s'"
+						+ "\n, personalDepartmentIdIn = '%s', personalDepartmentIdOut = '%s'"
+						+ "\n, departmentHistoryBedDay = '%s', departmentHistoryIn = '%s'"
+						+ ", departmentHistoryOut = '%s'"
+						+ ", personalId = '%s'"
+						+ "}",
+						historyId, departmentId, departmentHistoryId, personalDepartmentIdIn, personalDepartmentIdOut
+						, departmentHistoryBedDay, departmentHistoryIn, departmentHistoryOut, personalId
 				);
+	}
+	public int getPersonalId() {
+		return personalId;
+	}
+	public void setPersonalId(int personalId) {
+		this.personalId = personalId;
 	}
 	public int getHistoryId() {
 		return historyId;

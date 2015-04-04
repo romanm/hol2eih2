@@ -23,6 +23,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
 		$scope.patientHistory.movePatientDepartment = {};
+		console.log($scope.patientHistory);
 		console.log($scope.patientHistory.patientHolDb);
 	}).error(function(data, status, headers, config) {
 	});
