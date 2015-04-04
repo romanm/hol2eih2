@@ -6,6 +6,15 @@ import java.util.Map;
 public class ConfigHol {
 	private List<CountryHol> countries;
 	private List<DepartmentHol> departments;
+	private List<DiagnosHol> diagnosesHol;
+	public List<DiagnosHol> getDiagnosesHol() {
+		return diagnosesHol;
+	}
+
+	public void setDiagnosesHol(List<DiagnosHol> diagnosesHol) {
+		this.diagnosesHol = diagnosesHol;
+	}
+
 	private List<Map<String, Object>> directs, treatmentAnalysis, firstNames;
 	
 	public List<Map<String, Object>> getFirstNames() {

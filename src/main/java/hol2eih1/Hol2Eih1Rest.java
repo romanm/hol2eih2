@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +14,7 @@ import org.cuwy1.holDb.model.ConfigHol;
 import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
+import org.cuwy1.holDb.model.DiagnosHol;
 import org.cuwy1.holDb.model.DiagnosisOnAdmission;
 import org.cuwy1.holDb.model.HistoryHolDb;
 import org.cuwy1.holDb.model.HistoryTreatmentAnalysis;
@@ -49,7 +48,6 @@ public class Hol2Eih1Rest {
 	private static final Logger logger = LoggerFactory.getLogger(Hol2Eih1Rest.class);
 	@Autowired private CuwyDbService1 cuwyDbService1;
 	@Autowired private Hol2Service hol2Service;
-	
 
 	@ExceptionHandler(value = Hol2Exception.class)
 	public String heightError(Hol2Exception ex) {
@@ -132,7 +130,6 @@ not notig
 		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
 		return departmentHol;
 	}
-//	@RequestMapping(value = "/hol2/history_id_{historyId}", method = RequestMethod.GET)
 	@RequestMapping(value = "/db/epicrise_id_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getHol2PatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
 		logger.info("\n Start /db/epicrise_id_"+historyId);
@@ -153,7 +150,7 @@ not notig
 		session.setAttribute("htmlPage", htmlPage);
 		session.setAttribute("hno", historyId);
 	}
-//	@RequestMapping(value = "/hol/history_id_{historyId}", method = RequestMethod.GET)
+
 	@RequestMapping(value = "/db/history_id_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody HistoryHolDb getHolPatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
 		session.setAttribute("hno", historyId);
@@ -171,12 +168,12 @@ not notig
 		getOperation(shortPatientHistory);
 		return shortPatientHistory;
 	}
-	
-	
+
 	private void getOperation(HistoryHolDb shortPatientHistory) {
 		List<Map<String, Object>> operationHistorys = cuwyDbService1.getOperationHistorys(shortPatientHistory);
 		shortPatientHistory.setOperationHistorys(operationHistorys);
 	}
+
 	private HistoryHolDb getShortPatientHistoryById(int historyId) {
 		System.out.println(""+historyId);
 		logger.debug(""+historyId);
@@ -207,9 +204,12 @@ not notig
 //				Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
 			}
 		}
-		DiagnosisOnAdmission diagnosisOnAdmission
-		= cuwyDbService1.getDiagnosisOnAdmission(historyId);
-		historyHolDb.setDiagnosisOnAdmission(diagnosisOnAdmission);
+		final List<DiagnosisOnAdmission> diagnosis = cuwyDbService1.getDiagnosis(historyId);
+		historyHolDb.setDiagnosis(diagnosis);
+		
+//		DiagnosisOnAdmission diagnosisOnAdmission
+//		= cuwyDbService1.getDiagnosisOnAdmission(historyId);
+//		historyHolDb.setDiagnosisOnAdmission(diagnosisOnAdmission);
 		PatientHolDb patientHolDb = cuwyDbService1.getPatientHolDb(historyHolDb.getPatientId());
 		historyHolDb.setPatientHolDb(patientHolDb);
 		logger.debug(""+historyHolDb);
@@ -246,16 +246,18 @@ not notig
 	@RequestMapping(value = "/config/create_file", method = RequestMethod.GET)
 	public @ResponseBody ConfigHol createConfigFile() {
 		ConfigHol configHol = new ConfigHol();
-		List<CountryHol> readCountries = cuwyDbService1.readCountries();
-		List<DepartmentHol> departmentHol = cuwyDbService1.getDepartmentsHol();
-		List<Map<String, Object>> directsHol = cuwyDbService1.getDirectsHol();
-		List<Map<String, Object>> treatmentAnalysis = cuwyDbService1.getTreatmentAnalysis();
+		final List<CountryHol> readCountries = cuwyDbService1.readCountries();
+		final List<DepartmentHol> departmentsHol = cuwyDbService1.getDepartmentsHol();
+		final List<Map<String, Object>> directsHol = cuwyDbService1.getDirectsHol();
+		final List<Map<String, Object>> treatmentAnalysis = cuwyDbService1.getTreatmentAnalysis();
 		final List<Map<String, Object>> firstNames = cuwyDbService1.getFirstNames();
+		final List<DiagnosHol> diagnosesHol = cuwyDbService1.getDiagnosesHol();
 		configHol.setCountries(readCountries);
-		configHol.setDepartments(departmentHol);
+		configHol.setDepartments(departmentsHol);
 		configHol.setDirects(directsHol);
 		configHol.setTreatmentAnalysis(treatmentAnalysis);
 		configHol.setFirstNames(firstNames);
+		configHol.setDiagnosesHol(diagnosesHol);
 //		writeToJsonDbFile(readCountries, addressesJsonFileName);
 		writeToPrettyJsDbFile("var configHol = ", configHol, AppConfig.configJsFileName);
 		return configHol;

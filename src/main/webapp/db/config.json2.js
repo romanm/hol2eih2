@@ -14629,269 +14629,203 @@ var configHol = {
     "department_id" : 1,
     "department_profile_id" : 1,
     "department_name" : "Алергологiчне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 2,
     "department_profile_id" : 2,
     "department_name" : "Гінекологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 3,
     "department_profile_id" : 1,
     "department_name" : "Гастроентерологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 4,
     "department_profile_id" : 1,
     "department_name" : "Гематологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 5,
     "department_profile_id" : 1,
     "department_name" : "Детоксикації",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 6,
     "department_profile_id" : 1,
     "department_name" : "ЕГ реанімація доросла",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 7,
     "department_profile_id" : 1,
     "department_name" : "ЕГПВ та Н",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 8,
     "department_profile_id" : 1,
     "department_name" : "Ендокринологія",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 9,
     "department_profile_id" : 2,
     "department_name" : "Кардіохірургічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 10,
     "department_profile_id" : 2,
     "department_name" : "Кардіореанімація",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 11,
     "department_profile_id" : 1,
     "department_name" : "Неврологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 12,
     "department_profile_id" : 2,
     "department_name" : "Нейрохірургічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 13,
     "department_profile_id" : 1,
     "department_name" : "Нефрологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 14,
     "department_profile_id" : 2,
     "department_name" : "Опікове",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 15,
     "department_profile_id" : 2,
     "department_name" : "Ортопедичне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 16,
     "department_profile_id" : 2,
     "department_name" : "Офтальмологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 17,
     "department_profile_id" : 1,
     "department_name" : "Післяпологове",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 18,
     "department_profile_id" : 1,
     "department_name" : "Патологія вагітних",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 19,
     "department_profile_id" : 3,
     "department_name" : "Приймальне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 20,
     "department_profile_id" : 2,
     "department_name" : "Проктологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 21,
     "department_profile_id" : 1,
     "department_name" : "Пульмонологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 22,
     "department_profile_id" : 1,
     "department_name" : "Реанімаційне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 23,
     "department_profile_id" : 1,
     "department_name" : "Ревматологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 24,
     "department_profile_id" : 2,
     "department_name" : "Судинної хірургії",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 25,
     "department_profile_id" : 2,
     "department_name" : "Торакальної хірургії",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 26,
     "department_profile_id" : 2,
     "department_name" : "Урологічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 27,
     "department_profile_id" : 2,
     "department_name" : "Хірургічне",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 28,
     "department_profile_id" : 2,
     "department_name" : "Щелепно-лицьової хірургії",
-    "department_active" : true,
-    "user" : null
+    "department_active" : true
   }, {
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
     "department_id" : 29,
     "department_profile_id" : 4,
     "department_name" : "Поліклініка",
-    "department_active" : true,
-    "user" : null
-  } ],
-  "diagnosesHol" : [ {
-    "diagnosId" : 1,
-    "diagnosName" : "Діагноз направляючого закладу",
-    "diagnosNameShort" : "Д-з напр.закл."
-  }, {
-    "diagnosId" : 2,
-    "diagnosName" : "Діагноз при госпіталізації",
-    "diagnosNameShort" : "Д-з при госп."
-  }, {
-    "diagnosId" : 3,
-    "diagnosName" : "Діагноз клінічний",
-    "diagnosNameShort" : "Д-з клін."
-  }, {
-    "diagnosId" : 4,
-    "diagnosName" : "Діагноз заключний клінічний основний",
-    "diagnosNameShort" : "Д-з з.к.осн."
-  }, {
-    "diagnosId" : 5,
-    "diagnosName" : "Діагноз заключний клінічний ускладнення основного",
-    "diagnosNameShort" : "Д-з з.к.ускл."
-  }, {
-    "diagnosId" : 6,
-    "diagnosName" : "Діагноз заключний клінічний супутній",
-    "diagnosNameShort" : "Д-з з.к.суп."
-  }, {
-    "diagnosId" : 7,
-    "diagnosName" : "Діагноз патологоанатомічний основний",
-    "diagnosNameShort" : "Д-з п.осн."
-  }, {
-    "diagnosId" : 8,
-    "diagnosName" : "Діагноз патологоанатомічний ускладнення основного",
-    "diagnosNameShort" : "Д-з п.ускл."
-  }, {
-    "diagnosId" : 9,
-    "diagnosName" : "Діагноз патологоанатомічний супутній",
-    "diagnosNameShort" : "Д-з п.суп."
+    "department_active" : true
   } ],
   "directs" : [ {
     "direct_id" : 1,
@@ -15204,854 +15138,5 @@ var configHol = {
     "treatment_analysis_id" : 42,
     "treatment_analysis_name" : "ДУПЛЕКСНЕ СКАНУВАННЯ АРТЕРІЙ ТА ВЕН ВЕРХНІХ КІНЦІВОК",
     "treatment_analysis_type" : false
-  } ],
-  "firstNames" : [ {
-    "cnt" : 1447,
-    "patient_name" : "Володимир",
-    "patient_gender" : true
-  }, {
-    "cnt" : 1431,
-    "patient_name" : "Олександр",
-    "patient_gender" : true
-  }, {
-    "cnt" : 1278,
-    "patient_name" : "Микола",
-    "patient_gender" : true
-  }, {
-    "cnt" : 1091,
-    "patient_name" : "Галина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 973,
-    "patient_name" : "Василь",
-    "patient_gender" : true
-  }, {
-    "cnt" : 920,
-    "patient_name" : "Анатолій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 919,
-    "patient_name" : "Сергій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 875,
-    "patient_name" : "Людмила",
-    "patient_gender" : false
-  }, {
-    "cnt" : 865,
-    "patient_name" : "Валентина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 863,
-    "patient_name" : "Тетяна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 810,
-    "patient_name" : "Марія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 765,
-    "patient_name" : "Віктор",
-    "patient_gender" : true
-  }, {
-    "cnt" : 685,
-    "patient_name" : "Наталія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 679,
-    "patient_name" : "Іван",
-    "patient_gender" : true
-  }, {
-    "cnt" : 641,
-    "patient_name" : "Надія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 625,
-    "patient_name" : "Олена",
-    "patient_gender" : false
-  }, {
-    "cnt" : 596,
-    "patient_name" : "Ольга",
-    "patient_gender" : false
-  }, {
-    "cnt" : 586,
-    "patient_name" : "Ганна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 546,
-    "patient_name" : "Світлана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 502,
-    "patient_name" : "Ніна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 501,
-    "patient_name" : "Петро",
-    "patient_gender" : true
-  }, {
-    "cnt" : 489,
-    "patient_name" : "Михайло",
-    "patient_gender" : true
-  }, {
-    "cnt" : 481,
-    "patient_name" : "Андрій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 459,
-    "patient_name" : "Юрій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 433,
-    "patient_name" : "Оксана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 407,
-    "patient_name" : "Віталій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 376,
-    "patient_name" : "Ігор",
-    "patient_gender" : true
-  }, {
-    "cnt" : 374,
-    "patient_name" : "Олег",
-    "patient_gender" : true
-  }, {
-    "cnt" : 369,
-    "patient_name" : "Ірина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 364,
-    "patient_name" : "Любов",
-    "patient_gender" : false
-  }, {
-    "cnt" : 340,
-    "patient_name" : "Дмитро",
-    "patient_gender" : true
-  }, {
-    "cnt" : 307,
-    "patient_name" : "Валерій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 278,
-    "patient_name" : "Лідія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 266,
-    "patient_name" : "Леонід",
-    "patient_gender" : true
-  }, {
-    "cnt" : 238,
-    "patient_name" : "Катерина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 238,
-    "patient_name" : "Лариса",
-    "patient_gender" : false
-  }, {
-    "cnt" : 235,
-    "patient_name" : "Олексій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 226,
-    "patient_name" : "Віра",
-    "patient_gender" : false
-  }, {
-    "cnt" : 208,
-    "patient_name" : "Алла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 197,
-    "patient_name" : "Антоніна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 194,
-    "patient_name" : "Юлія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 178,
-    "patient_name" : "Вадим",
-    "patient_gender" : true
-  }, {
-    "cnt" : 175,
-    "patient_name" : "Раїса",
-    "patient_gender" : false
-  }, {
-    "cnt" : 174,
-    "patient_name" : "Павло",
-    "patient_gender" : true
-  }, {
-    "cnt" : 173,
-    "patient_name" : "Руслан",
-    "patient_gender" : true
-  }, {
-    "cnt" : 170,
-    "patient_name" : "Інна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 162,
-    "patient_name" : "Роман",
-    "patient_gender" : true
-  }, {
-    "cnt" : 160,
-    "patient_name" : "Григорій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 147,
-    "patient_name" : "Валентин",
-    "patient_gender" : true
-  }, {
-    "cnt" : 143,
-    "patient_name" : "Станіслав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 136,
-    "patient_name" : "Лілія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 135,
-    "patient_name" : "Тамара",
-    "patient_gender" : false
-  }, {
-    "cnt" : 124,
-    "patient_name" : "Зінаїда",
-    "patient_gender" : false
-  }, {
-    "cnt" : 123,
-    "patient_name" : "Вікторія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 118,
-    "patient_name" : "Степан",
-    "patient_gender" : true
-  }, {
-    "cnt" : 117,
-    "patient_name" : "Євген",
-    "patient_gender" : true
-  }, {
-    "cnt" : 116,
-    "patient_name" : "Євгена",
-    "patient_gender" : false
-  }, {
-    "cnt" : 114,
-    "patient_name" : "Богдан",
-    "patient_gender" : true
-  }, {
-    "cnt" : 109,
-    "patient_name" : "Наталя",
-    "patient_gender" : false
-  }, {
-    "cnt" : 107,
-    "patient_name" : "Борис",
-    "patient_gender" : true
-  }, {
-    "cnt" : 104,
-    "patient_name" : "Анастасія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 104,
-    "patient_name" : "Максим",
-    "patient_gender" : true
-  }, {
-    "cnt" : 103,
-    "patient_name" : "Марина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 101,
-    "patient_name" : "Вячеслав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 92,
-    "patient_name" : "Леся",
-    "patient_gender" : false
-  }, {
-    "cnt" : 90,
-    "patient_name" : "Зоя",
-    "patient_gender" : false
-  }, {
-    "cnt" : 89,
-    "patient_name" : "Аліна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 88,
-    "patient_name" : "Євгенія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 86,
-    "patient_name" : "Софія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 85,
-    "patient_name" : "Ярослав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 82,
-    "patient_name" : "Анна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 78,
-    "patient_name" : "Антон",
-    "patient_gender" : true
-  }, {
-    "cnt" : 67,
-    "patient_name" : "Владислав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 62,
-    "patient_name" : "Олександра",
-    "patient_gender" : false
-  }, {
-    "cnt" : 62,
-    "patient_name" : "Неля",
-    "patient_gender" : false
-  }, {
-    "cnt" : 60,
-    "patient_name" : "Альона",
-    "patient_gender" : false
-  }, {
-    "cnt" : 57,
-    "patient_name" : "Денис",
-    "patient_gender" : true
-  }, {
-    "cnt" : 55,
-    "patient_name" : "Жанна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 54,
-    "patient_name" : "Федір",
-    "patient_gender" : true
-  }, {
-    "cnt" : 53,
-    "patient_name" : "Майя",
-    "patient_gender" : false
-  }, {
-    "cnt" : 50,
-    "patient_name" : "Артем",
-    "patient_gender" : true
-  }, {
-    "cnt" : 48,
-    "patient_name" : "Станіслава",
-    "patient_gender" : false
-  }, {
-    "cnt" : 47,
-    "patient_name" : "Неоніла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 43,
-    "patient_name" : "Леоніда",
-    "patient_gender" : false
-  }, {
-    "cnt" : 42,
-    "patient_name" : "Емілія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 41,
-    "patient_name" : "Поліна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 40,
-    "patient_name" : "Георгій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 40,
-    "patient_name" : "Віта",
-    "patient_gender" : false
-  }, {
-    "cnt" : 40,
-    "patient_name" : "Броніслав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 39,
-    "patient_name" : "Йосип",
-    "patient_gender" : true
-  }, {
-    "cnt" : 38,
-    "patient_name" : "Клавдія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 37,
-    "patient_name" : "Діана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 37,
-    "patient_name" : "Руслана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 35,
-    "patient_name" : "Євдокія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 34,
-    "patient_name" : "Олеся",
-    "patient_gender" : false
-  }, {
-    "cnt" : 33,
-    "patient_name" : "Костянтин",
-    "patient_gender" : true
-  }, {
-    "cnt" : 32,
-    "patient_name" : "Євгеній",
-    "patient_gender" : true
-  }, {
-    "cnt" : 32,
-    "patient_name" : "Ілля",
-    "patient_gender" : true
-  }, {
-    "cnt" : 31,
-    "patient_name" : "Генадій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 31,
-    "patient_name" : "Таїса",
-    "patient_gender" : false
-  }, {
-    "cnt" : 29,
-    "patient_name" : "Іванна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 28,
-    "patient_name" : "Ніла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 28,
-    "patient_name" : "Яна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 28,
-    "patient_name" : "Броніслава",
-    "patient_gender" : false
-  }, {
-    "cnt" : 27,
-    "patient_name" : "Сніжана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 25,
-    "patient_name" : "Таміла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 25,
-    "patient_name" : "В`ячеслав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 25,
-    "patient_name" : "Едуард",
-    "patient_gender" : true
-  }, {
-    "cnt" : 25,
-    "patient_name" : "Ростислав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 23,
-    "patient_name" : "Ілона",
-    "patient_gender" : false
-  }, {
-    "cnt" : 23,
-    "patient_name" : "Артур",
-    "patient_gender" : true
-  }, {
-    "cnt" : 23,
-    "patient_name" : "Анжела",
-    "patient_gender" : false
-  }, {
-    "cnt" : 21,
-    "patient_name" : "Геннадій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 21,
-    "patient_name" : "Франц",
-    "patient_gender" : true
-  }, {
-    "cnt" : 20,
-    "patient_name" : "Тарас",
-    "patient_gender" : true
-  }, {
-    "cnt" : 19,
-    "patient_name" : "Константин",
-    "patient_gender" : true
-  }, {
-    "cnt" : 19,
-    "patient_name" : "Назар",
-    "patient_gender" : true
-  }, {
-    "cnt" : 18,
-    "patient_name" : "Таісія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 18,
-    "patient_name" : "Леонтій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 18,
-    "patient_name" : "Ксенія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 18,
-    "patient_name" : "Маріна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 16,
-    "patient_name" : "Яніна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 16,
-    "patient_name" : "Діна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 16,
-    "patient_name" : "Мирослав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 16,
-    "patient_name" : "Дар`я",
-    "patient_gender" : false
-  }, {
-    "cnt" : 16,
-    "patient_name" : "лл",
-    "patient_gender" : false
-  }, {
-    "cnt" : 15,
-    "patient_name" : "Семен",
-    "patient_gender" : true
-  }, {
-    "cnt" : 14,
-    "patient_name" : "Аделя",
-    "patient_gender" : false
-  }, {
-    "cnt" : 14,
-    "patient_name" : "Ярослава",
-    "patient_gender" : false
-  }, {
-    "cnt" : 13,
-    "patient_name" : "Ліна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 13,
-    "patient_name" : "Маргарита",
-    "patient_gender" : false
-  }, {
-    "cnt" : 13,
-    "patient_name" : "Ангеліна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Ульяна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Валерія",
-    "patient_gender" : true
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Тимур",
-    "patient_gender" : true
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Вероніка",
-    "patient_gender" : false
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Єлізавета",
-    "patient_gender" : false
-  }, {
-    "cnt" : 12,
-    "patient_name" : "Люба",
-    "patient_gender" : false
-  }, {
-    "cnt" : 11,
-    "patient_name" : "Казимир",
-    "patient_gender" : true
-  }, {
-    "cnt" : 11,
-    "patient_name" : "Владислава",
-    "patient_gender" : false
-  }, {
-    "cnt" : 11,
-    "patient_name" : "Яків",
-    "patient_gender" : true
-  }, {
-    "cnt" : 11,
-    "patient_name" : "Ларіса",
-    "patient_gender" : false
-  }, {
-    "cnt" : 11,
-    "patient_name" : "Болеслав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Ліда",
-    "patient_gender" : false
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Аркадій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Людмиила",
-    "patient_gender" : false
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Дарина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Стефанія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 10,
-    "patient_name" : "Анеля",
-    "patient_gender" : false
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Кирило",
-    "patient_gender" : true
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Богдана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Мар`яна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Розалія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Зіновій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Дарія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 9,
-    "patient_name" : "Ванда",
-    "patient_gender" : false
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Мирослава",
-    "patient_gender" : false
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Павліна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Маряна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Назарій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Аліса",
-    "patient_gender" : false
-  }, {
-    "cnt" : 8,
-    "patient_name" : "Роза",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Евген",
-    "patient_gender" : true
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Каріна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Генефа",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Франя",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Агафія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Варвара",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Давид",
-    "patient_gender" : true
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Евгена",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Святослав",
-    "patient_gender" : true
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Елла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Мальвіна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Ядвіга",
-    "patient_gender" : false
-  }, {
-    "cnt" : 7,
-    "patient_name" : "Олександ",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Цезарія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Регіна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Міла",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Ліана",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Ананій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Олексаандр",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Юзефа",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Альберт",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Фелікс",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Зіна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Зоряна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Слава",
-    "patient_gender" : true
-  }, {
-    "cnt" : 6,
-    "patient_name" : "Пилип",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Марта",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Матвій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Мирон",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Орися",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Олекандр",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Макар",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Карл",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Ліля",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Параска",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Христина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Дем`ян",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Тимофій",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Парасковія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Єва",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Олексанр",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Пелагея",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Віталіна",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Мар`ян",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Мілентина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Захар",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Алім",
-    "patient_gender" : true
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Анісія",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Єфросина",
-    "patient_gender" : false
-  }, {
-    "cnt" : 5,
-    "patient_name" : "Микита",
-    "patient_gender" : true
   } ]
 }

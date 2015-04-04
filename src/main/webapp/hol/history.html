@@ -221,11 +221,19 @@
 						{{patientHistory.diagnosisOnAdmission.icdCode}},
 						{{patientHistory.diagnosisOnAdmission.icdName}} </b>
 				</div>
-				<hr class="shortPatienHistory" />
-				<div ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
-					<div ng-if="patientHistory.operationHistorys">
+					<div>
+						Діагноз:
+						<div data-ng-repeat="diagnos in patientHistory.diagnosis">
+							<b title="{{diagnosesHol[diagnos.diagnosId-1].diagnosName}}">
+								{{diagnosesHol[diagnos.diagnosId-1].diagnosNameShort}} </b>
+							{{diagnos.icdCode}} {{diagnos.icdName}}
+						</div>
+					</div>
+					<hr class="shortPatienHistory" />
+				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
+					<div data-ng-if="patientHistory.operationHistorys">
 						<h3>Операції</h3>
-						<div ng-repeat="operation in patientHistory.operationHistorys">
+						<div data-ng-repeat="operation in patientHistory.operationHistorys">
 							{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
 							{{operation.operation_history_end | date:'HH:mm'}} <span
 								title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>

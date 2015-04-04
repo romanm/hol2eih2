@@ -23,8 +23,16 @@ public class HistoryHolDb {
 	private boolean perevid = false;
 	private List<PatientDepartmentMovement> patientDepartmentMovements;
 	private List<HistoryTreatmentAnalysis> historyTreatmentAnalysises;
-	private DiagnosisOnAdmission diagnosisOnAdmission;
+	private List<DiagnosisOnAdmission> diagnosis;
 	private List<Map<String, Object>> operationHistorys;
+	private DiagnosisOnAdmission diagnosisOnAdmission;
+
+	public List<DiagnosisOnAdmission> getDiagnosis() {
+		return diagnosis;
+	}
+	public void setDiagnosis(List<DiagnosisOnAdmission> diagnosis) {
+		this.diagnosis = diagnosis;
+	}
 
 	@Override
 	public String toString() {

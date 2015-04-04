@@ -17,6 +17,7 @@ import java.util.Map;
 import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
+import org.cuwy1.holDb.model.DiagnosHol;
 import org.cuwy1.holDb.model.DiagnosisOnAdmission;
 import org.cuwy1.holDb.model.DistrictHol;
 import org.cuwy1.holDb.model.HistoryHolDb;
@@ -236,7 +237,16 @@ public class CuwyDbService1 {
 		}
 	}
 
-	class DepartmentHolRowMapper implements RowMapper {
+	class DiagnosHolRowMapper implements RowMapper<DiagnosHol> {
+		@Override
+		public DiagnosHol mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return new DiagnosHol(rs.getInt("diagnos_id"), 
+					rs.getString("diagnos_name"),
+					rs.getString("diagnos_name_short")
+					);
+		}
+	}
+	class DepartmentHolRowMapper implements RowMapper<DepartmentHol> {
 		@Override
 		public DepartmentHol mapRow(ResultSet rs, int rowNum)
 				throws SQLException {
@@ -252,6 +262,7 @@ public class CuwyDbService1 {
 				"SELECT * FROM department WHERE department_id = ?", 
 				new Object[] { id }, new DepartmentHolRowMapper());
 	}
+
 	public List<Map<String, Object>> getFirstNames() {
 		String sql = "select * from ("
 				+ " select count(patient_name) cnt, patient_name, patient_gender "
@@ -279,6 +290,11 @@ public class CuwyDbService1 {
 		return jdbcTemplate.query(
 				"SELECT * FROM department", 
 				new DepartmentHolRowMapper());
+	}
+	public List<DiagnosHol> getDiagnosesHol() {
+		return jdbcTemplate.query(
+				"SELECT * FROM diagnos", 
+				new DiagnosHolRowMapper());
 	}
 
 	public List<PatientDiagnosisHol> getDepartmentsHolPatientsDiagnose(Integer departmentId) {
@@ -654,12 +670,35 @@ public class CuwyDbService1 {
 			});
 	}
 
+	public List<DiagnosisOnAdmission> getDiagnosis(int historyId) {
+		final List<DiagnosisOnAdmission> query = jdbcTemplate.query(
+				sqlDiagnosis, new Object[] { historyId }, 
+				new RowMapper<DiagnosisOnAdmission>(){
+			@Override
+			public DiagnosisOnAdmission mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				DiagnosisOnAdmission diagnosisOnAdmission = new DiagnosisOnAdmission();
+				diagnosisOnAdmission.setHistoryDiagnosDate(rs.getTimestamp("history_diagnos_date"));
+				diagnosisOnAdmission.setIcdCode(rs.getString("icd_code"));
+				diagnosisOnAdmission.setIcdName(rs.getString("icd_name"));
+				diagnosisOnAdmission.setDiagnosId(rs.getInt("diagnos_id"));
+				diagnosisOnAdmission.setHistoryId(rs.getInt("history_id"));
+				diagnosisOnAdmission.setIcdId(rs.getInt("icd_id"));
+				diagnosisOnAdmission.setIcdStart(rs.getInt("icd_start"));
+				diagnosisOnAdmission.setIcdEnd(rs.getInt("icd_end"));
+				diagnosisOnAdmission.setPersonalDepartmentId(rs.getInt("personal_department_id"));
+				return diagnosisOnAdmission;
+			}
+		});
+		return query;
+	}
+	String sqlDiagnosis = "SELECT * FROM history_diagnos hd, icd i"
+			+ " WHERE i.icd_id = hd.icd_id AND history_id=?";
+//		+ " WHERE 2 = hd.diagnos_id AND i.icd_id = hd.icd_id AND history_id=?";
 	public DiagnosisOnAdmission getDiagnosisOnAdmission(int historyId) {
-		String sql = "SELECT * FROM history_diagnos hd, icd i"
-				+ " WHERE 2 = hd.diagnos_id AND i.icd_id = hd.icd_id AND history_id=?";
-		logger.info("\n"+sql.replaceFirst("\\?", ""+historyId));
+		logger.info("\n"+sqlDiagnosis.replaceFirst("\\?", ""+historyId));
 		return jdbcTemplate.queryForObject(
-				sql, new Object[] { historyId }, 
+				sqlDiagnosis, new Object[] { historyId }, 
 				new RowMapper<DiagnosisOnAdmission>(){
 					@Override
 					public DiagnosisOnAdmission mapRow(ResultSet rs, int rowNum)
