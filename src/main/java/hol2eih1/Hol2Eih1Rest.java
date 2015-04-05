@@ -18,6 +18,7 @@ import org.cuwy1.holDb.model.DiagnosHol;
 import org.cuwy1.holDb.model.DiagnosisOnAdmission;
 import org.cuwy1.holDb.model.HistoryHolDb;
 import org.cuwy1.holDb.model.HistoryTreatmentAnalysis;
+import org.cuwy1.holDb.model.Icd10UaClass;
 import org.cuwy1.holDb.model.PatientDepartmentMovement;
 import org.cuwy1.holDb.model.PatientDiagnosisHol;
 import org.cuwy1.holDb.model.PatientHolDb;
@@ -61,22 +62,15 @@ public class Hol2Eih1Rest {
 		logger.debug(""+userPrincipal);
 		if(null != userPrincipal){
 		}
-//		return "redirect?url=department";
-//		return "/hol/home.html";
 		return "redirect";
 	}
-	/*
-not notig
-	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public String login(@RequestParam("url") String url, Principal userPrincipal) {
-//		public String login(@RequestParam Map<String,String> allRequestParams, Principal userPrincipal) {
-//		logger.debug(""+allRequestParams);
-		logger.debug(""+url);
-		logger.info("\n Start /login");
-		logger.debug(""+userPrincipal);
-		return "login";
+	
+	@RequestMapping(value = "/seekIcd10Tree/{query}", method = RequestMethod.GET)
+	public @ResponseBody Icd10UaClass seekIcd10Tree(@PathVariable String query) {
+		logger.warn(" /seekIcd10Db/{query} query = "+query);
+		Icd10UaClass icd10UaGroups = cuwyDbService1.seekIcd10UaGroups(query);
+		return icd10UaGroups;
 	}
-	 * */
 
 	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
 	public  @ResponseBody DepartmentHistory movePatientDepartment(@RequestBody DepartmentHistory departmentHistory, Principal userPrincipal) {

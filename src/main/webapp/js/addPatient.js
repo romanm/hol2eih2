@@ -1,11 +1,11 @@
 cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
 	console.log("addPatientCtrl");
 
-	$scope.myVar=setInterval(function(){myTimer()},5000);
 	$scope.docLength = 1;
-	$scope.myTimer = function () {
-		conslole.log("---------");
+	myTimer = function () {
+		console.log("---------");
 	}
+	setInterval(function(){myTimer()},5000);
 
 	$scope.configHol = configHol;
 	console.log($scope.configHol);
@@ -76,9 +76,12 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	//----------------adress---------------------------------------------------
 	$scope.changeIcd10Name = function(){
 		console.log("changeIcd10Name");
-		if($scope.patientHistory.diagnosisOnAdmission.icdName){
-			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosisOnAdmission.icdName.length > 0);
+		if($scope.patientHistory.diagnosis[0].icdName){
+			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosis[0].icdName.length > 0);
 		}
+//		if($scope.patientHistory.diagnosisOnAdmission.icdName){
+////			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosisOnAdmission.icdName.length > 0);
+//		}
 		if(!$scope.collapseIcd10Liste){
 			seekIcd10Tree();
 		}
@@ -209,8 +212,10 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		});
 		["icdId"].forEach(function(key) {
 			$scope.requiredFields[key].isFull 
-			= !(typeof $scope.patientHistory.diagnosisOnAdmission[key] === 'undefined')
-			&& $scope.patientHistory.diagnosisOnAdmission[key] > 0;
+			= !(typeof $scope.patientHistory.diagnosis[0][key] === 'undefined')
+			&& $scope.patientHistory.diagnosis[0][key] > 0;
+//			= !(typeof $scope.patientHistory.diagnosisOnAdmission[key] === 'undefined')
+//			&& $scope.patientHistory.diagnosisOnAdmission[key] > 0;
 		});
 		requiredFullProcent();
 	}
