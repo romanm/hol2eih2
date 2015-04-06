@@ -2,8 +2,9 @@ package org.cuwy1.holDb.model;
 
 import java.sql.Timestamp;
 
-public class DiagnosisOnAdmission {
-	private String icdCode, icdName;
+public class DiagnosIcd10 {
+	private String icdCode, icdName, historyDiagnosAdditional;
+
 	private int historyId, diagnosId, icdStart, icdEnd, icdId, personalDepartmentId;
 	private Timestamp historyDiagnosDate;
 	
@@ -14,10 +15,19 @@ public class DiagnosisOnAdmission {
 				+ "icdCode = '%s', icdName = '%s', diagnosId = '%s'"
 				+ "\n, icdStart = '%s', icdEnd = '%s', icdId = '%s', personalDepartmentId = '%s'"
 				+ ", historyDiagnosDate = '%s'"
+				+ ", historyDiagnosAdditional = '%s'"
 				+ "}",
 				icdCode, icdName, diagnosId, icdStart, icdEnd, icdId, personalDepartmentId
 				, historyDiagnosDate
+				, historyDiagnosAdditional
 				);
+	}
+	public String getHistoryDiagnosAdditional() {
+		return historyDiagnosAdditional;
+	}
+
+	public void setHistoryDiagnosAdditional(String historyDiagnosAdditional) {
+		this.historyDiagnosAdditional = historyDiagnosAdditional;
 	}
 	
 	public String getIcdCode() {

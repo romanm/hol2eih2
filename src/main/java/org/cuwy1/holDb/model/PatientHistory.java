@@ -29,7 +29,7 @@ public class PatientHistory {
 	private String patient_job;
 	private List<PatientDepartmentMovement> patientDepartmentMovements;
 	private List<HistoryTreatmentAnalysis> historyTreatmentAnalysises;
-	private DiagnosisOnAdmission diagnosisOnAdmission;
+	private DiagnosIcd10 diagnosisOnAdmission;
 
 	public boolean isPatient_gender() {
 		return patient_gender;
@@ -149,10 +149,10 @@ public class PatientHistory {
 			List<HistoryTreatmentAnalysis> historyTreatmentAnalysises) {
 		this.historyTreatmentAnalysises = historyTreatmentAnalysises;
 	}
-	public DiagnosisOnAdmission getDiagnosisOnAdmission() {
+	public DiagnosIcd10 getDiagnosisOnAdmission() {
 		return diagnosisOnAdmission;
 	}
-	public void setDiagnosisOnAdmission(DiagnosisOnAdmission diagnosisOnAdmission) {
+	public void setDiagnosisOnAdmission(DiagnosIcd10 diagnosisOnAdmission) {
 		this.diagnosisOnAdmission = diagnosisOnAdmission;
 	}
 	public int getPatientId() {

@@ -2,6 +2,7 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	console.log("addPatientCtrl");
 
 	$scope.docLength = 1;
+	
 	myTimer = function () {
 		console.log("---------");
 	}
@@ -26,7 +27,7 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		"medinfo":{"name":"Медична інформація"}
 	};
 //	$scope.newHistoryTemplate["adress"].open = true;
-//	$scope.newHistoryTemplate["diagnos"].open = true;
+	$scope.newHistoryTemplate["diagnos"].open = true;
 
 	$scope.patientHistory = {};
 	$scope.patientEditing = {};
@@ -50,20 +51,6 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	var historyFile = "/db/history_id_"+parameters.hno;
 	console.log(historyFile);
 
-	
-	seekIcd10Tree = function(){
-		console.log("seekIcd10Tree");
-		console.log($scope.patientHistory.diagnosisOnAdmission.icdName);
-		var seerIcd10TreeUrl = "/seekIcd10Tree/"+$scope.patientHistory.diagnosisOnAdmission.icdName;
-		$http({
-			method : 'GET',
-			url : seerIcd10TreeUrl
-		}).success(function(data, status, headers, config) {
-			$scope.icd10Root = data;
-			console.log($scope.icd10Root);
-		}).error(function(data, status, headers, config) {
-		});
-	};
 	$scope.gotoField = function(rf){
 		var g = $scope.requiredFields[rf].group;
 		$scope.newHistoryTemplate[g].open = true;
@@ -71,21 +58,11 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 //		document.getElementById(rf).focus();
 		document.querySelector("#"+rf).focus();
 	}
-	
+
+	$scope.diagnosEditIndex = 0;
+	initseekIcd10Tree($scope, $http, $sce, $filter);
 
 	//----------------adress---------------------------------------------------
-	$scope.changeIcd10Name = function(){
-		console.log("changeIcd10Name");
-		if($scope.patientHistory.diagnosis[0].icdName){
-			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosis[0].icdName.length > 0);
-		}
-//		if($scope.patientHistory.diagnosisOnAdmission.icdName){
-////			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosisOnAdmission.icdName.length > 0);
-//		}
-		if(!$scope.collapseIcd10Liste){
-			seekIcd10Tree();
-		}
-	}
 	$scope.changePatientJob = function(){
 		console.log("changePatientJob");
 		checkRequiredFieldPIP();
@@ -144,17 +121,19 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		$scope.collapseDepartmentListe = true;
 		checkRequiredFieldDiagnos();
 	}
+
 	$scope.setIcd10= function(icd10){
-		console.log($scope.patientHistory.diagnosisOnAdmission);
-		console.log($scope.patientHistory.diagnosisOnAdmission.icdName);
+		console.log($scope.patientHistory.diagnosis[0]);
+		console.log($scope.patientHistory.diagnosis[0].icdName);
 		console.log(icd10);
-		$scope.patientHistory.diagnosisOnAdmission.icdCode = icd10.icdCode;
-		$scope.patientHistory.diagnosisOnAdmission.icdEnd = icd10.icdEnd;
-		$scope.patientHistory.diagnosisOnAdmission.icdId = icd10.icdId;
-		$scope.patientHistory.diagnosisOnAdmission.icdName = icd10.icdName;
-		$scope.patientHistory.diagnosisOnAdmission.icdStart = icd10.icdStart;
+		$scope.patientHistory.diagnosis[0].icdCode = icd10.icdCode;
+		$scope.patientHistory.diagnosis[0].icdEnd = icd10.icdEnd;
+		$scope.patientHistory.diagnosis[0].icdId = icd10.icdId;
+		$scope.patientHistory.diagnosis[0].icdName = icd10.icdName;
+		$scope.patientHistory.diagnosis[0].icdStart = icd10.icdStart;
 		checkRequiredFieldDiagnos();
 	}
+
 	$scope.setRegion = function(region){
 		$scope.patientEditing.regionName = region.regionName;
 		$scope.patientHistory.patientHolDb.regionId = region.regionId;
@@ -301,7 +280,7 @@ cuwyApp.controller('addPatientCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		});
 	}else{
 		$scope.patientHistory.patientHolDb = {};
-		$scope.patientHistory.diagnosisOnAdmission = {};
+		$scope.patientHistory.diagnosis = [{}];
 		$scope.patientHistory.patientDepartmentMovements = [{}];
 		console.log($scope.patientHistory.patientHolDb.countryId);
 		$scope.setCountry($scope.configHol.countries[0]);

@@ -23,14 +23,14 @@ public class HistoryHolDb {
 	private boolean perevid = false;
 	private List<PatientDepartmentMovement> patientDepartmentMovements;
 	private List<HistoryTreatmentAnalysis> historyTreatmentAnalysises;
-	private List<DiagnosisOnAdmission> diagnosis;
+	private List<DiagnosIcd10> diagnosis;
 	private List<Map<String, Object>> operationHistorys;
-	private DiagnosisOnAdmission diagnosisOnAdmission;
+	private DiagnosIcd10 diagnosisOnAdmission;
 
-	public List<DiagnosisOnAdmission> getDiagnosis() {
+	public List<DiagnosIcd10> getDiagnosis() {
 		return diagnosis;
 	}
-	public void setDiagnosis(List<DiagnosisOnAdmission> diagnosis) {
+	public void setDiagnosis(List<DiagnosIcd10> diagnosis) {
 		this.diagnosis = diagnosis;
 	}
 
@@ -87,11 +87,11 @@ public class HistoryHolDb {
 		this.historyTreatmentAnalysises = historyTreatmentAnalysises;
 	}
 
-	public DiagnosisOnAdmission getDiagnosisOnAdmission() {
+	public DiagnosIcd10 getDiagnosisOnAdmission() {
 		return diagnosisOnAdmission;
 	}
 
-	public void setDiagnosisOnAdmission(DiagnosisOnAdmission diagnosisOnAdmission) {
+	public void setDiagnosisOnAdmission(DiagnosIcd10 diagnosisOnAdmission) {
 		this.diagnosisOnAdmission = diagnosisOnAdmission;
 	}
 

@@ -18,7 +18,7 @@ import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
 import org.cuwy1.holDb.model.DiagnosHol;
-import org.cuwy1.holDb.model.DiagnosisOnAdmission;
+import org.cuwy1.holDb.model.DiagnosIcd10;
 import org.cuwy1.holDb.model.DistrictHol;
 import org.cuwy1.holDb.model.HistoryHolDb;
 import org.cuwy1.holDb.model.HistoryTreatmentAnalysis;
@@ -465,10 +465,10 @@ public class CuwyDbService1 {
 
 	class DiagnosisOnAdmissionPSSetter implements PreparedStatementSetter{
 
-		private DiagnosisOnAdmission diagnosisOnAdmission;
+		private DiagnosIcd10 diagnosisOnAdmission;
 
 		public DiagnosisOnAdmissionPSSetter(
-				DiagnosisOnAdmission diagnosisOnAdmission) {
+				DiagnosIcd10 diagnosisOnAdmission) {
 			this.diagnosisOnAdmission = diagnosisOnAdmission;
 		}
 
@@ -670,40 +670,42 @@ public class CuwyDbService1 {
 			});
 	}
 
-	public List<DiagnosisOnAdmission> getDiagnosis(int historyId) {
-		final List<DiagnosisOnAdmission> query = jdbcTemplate.query(
+	public List<DiagnosIcd10> getDiagnosis(int historyId) {
+		logger.info("\n"+sqlDiagnosis.replaceFirst("\\?", ""+historyId));
+		final List<DiagnosIcd10> diagnosIcd10List = jdbcTemplate.query(
 				sqlDiagnosis, new Object[] { historyId }, 
-				new RowMapper<DiagnosisOnAdmission>(){
+				new RowMapper<DiagnosIcd10>(){
 			@Override
-			public DiagnosisOnAdmission mapRow(ResultSet rs, int rowNum)
+			public DiagnosIcd10 mapRow(ResultSet rs, int rowNum)
 					throws SQLException {
-				DiagnosisOnAdmission diagnosisOnAdmission = new DiagnosisOnAdmission();
-				diagnosisOnAdmission.setHistoryDiagnosDate(rs.getTimestamp("history_diagnos_date"));
-				diagnosisOnAdmission.setIcdCode(rs.getString("icd_code"));
-				diagnosisOnAdmission.setIcdName(rs.getString("icd_name"));
-				diagnosisOnAdmission.setDiagnosId(rs.getInt("diagnos_id"));
-				diagnosisOnAdmission.setHistoryId(rs.getInt("history_id"));
-				diagnosisOnAdmission.setIcdId(rs.getInt("icd_id"));
-				diagnosisOnAdmission.setIcdStart(rs.getInt("icd_start"));
-				diagnosisOnAdmission.setIcdEnd(rs.getInt("icd_end"));
-				diagnosisOnAdmission.setPersonalDepartmentId(rs.getInt("personal_department_id"));
-				return diagnosisOnAdmission;
+				DiagnosIcd10 diagnosIcd10 = new DiagnosIcd10();
+				diagnosIcd10.setHistoryDiagnosDate(rs.getTimestamp("history_diagnos_date"));
+				diagnosIcd10.setIcdCode(rs.getString("icd_code"));
+				diagnosIcd10.setIcdName(rs.getString("icd_name"));
+				diagnosIcd10.setHistoryDiagnosAdditional(rs.getString("history_diagnos_additional"));
+				diagnosIcd10.setDiagnosId(rs.getInt("diagnos_id"));
+				diagnosIcd10.setHistoryId(rs.getInt("history_id"));
+				diagnosIcd10.setIcdId(rs.getInt("icd_id"));
+				diagnosIcd10.setIcdStart(rs.getInt("icd_start"));
+				diagnosIcd10.setIcdEnd(rs.getInt("icd_end"));
+				diagnosIcd10.setPersonalDepartmentId(rs.getInt("personal_department_id"));
+				return diagnosIcd10;
 			}
 		});
-		return query;
+		return diagnosIcd10List;
 	}
 	String sqlDiagnosis = "SELECT * FROM history_diagnos hd, icd i"
-			+ " WHERE i.icd_id = hd.icd_id AND history_id=?";
+			+ " WHERE i.icd_id = hd.icd_id AND history_id = ? ORDER BY diagnos_id";
 //		+ " WHERE 2 = hd.diagnos_id AND i.icd_id = hd.icd_id AND history_id=?";
-	public DiagnosisOnAdmission getDiagnosisOnAdmission(int historyId) {
+	public DiagnosIcd10 getDiagnosisOnAdmission(int historyId) {
 		logger.info("\n"+sqlDiagnosis.replaceFirst("\\?", ""+historyId));
 		return jdbcTemplate.queryForObject(
 				sqlDiagnosis, new Object[] { historyId }, 
-				new RowMapper<DiagnosisOnAdmission>(){
+				new RowMapper<DiagnosIcd10>(){
 					@Override
-					public DiagnosisOnAdmission mapRow(ResultSet rs, int rowNum)
+					public DiagnosIcd10 mapRow(ResultSet rs, int rowNum)
 							throws SQLException {
-						DiagnosisOnAdmission diagnosisOnAdmission = new DiagnosisOnAdmission();
+						DiagnosIcd10 diagnosisOnAdmission = new DiagnosIcd10();
 						diagnosisOnAdmission.setHistoryDiagnosDate(rs.getTimestamp("history_diagnos_date"));
 						diagnosisOnAdmission.setIcdCode(rs.getString("icd_code"));
 						diagnosisOnAdmission.setIcdName(rs.getString("icd_name"));
@@ -744,7 +746,7 @@ public class CuwyDbService1 {
 			+ "(?,now(),?,?"
 			+ ",?,?,?"
 			+ ")";
-	public void insertDiagnosisOnAdmission(final DiagnosisOnAdmission diagnosisOnAdmission) {
+	public void insertDiagnosisOnAdmission(final DiagnosIcd10 diagnosisOnAdmission) {
 		System.out.println(diagnosisOnAdmission);
 		jdbcTemplate.update(sqlinsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
 	}

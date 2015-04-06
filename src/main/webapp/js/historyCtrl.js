@@ -6,7 +6,6 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	$scope.operationTree = operationTree;
 	$scope.departmentsHol = configHol.departments;
 	$scope.diagnosesHol = configHol.diagnosesHol;
-	console.log(configHol.diagnosesHol);
 
 	$scope.patientEditing = {}
 	$scope.patient = {
@@ -19,18 +18,25 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 
 	console.log(window.location.pathname);
 	$scope.hno = parameters.hno;
-	var historyFile = "/db/history_id_"+parameters.hno;
-	console.log(historyFile);
-	
-	$http({ method : 'GET', url : historyFile
-	}).success(function(data, status, headers, config) {
-		$scope.patientHistory = data;
-		$scope.patientHistory.movePatientDepartment = {};
-		console.log($scope.patientHistory);
-		console.log($scope.patientHistory.patientHolDb);
-	}).error(function(data, status, headers, config) {
-	});
 
+	readInitHistory($scope, $http, $sce, $filter);
+
+	$scope.diagnosEditIndex = 0;
+	initseekIcd10Tree($scope, $http, $sce, $filter);
+
+	$scope.saveWorkDoc = function(){
+		console.log("----");
+		console.log($scope.patientHistory);
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
+		console.log("----");
+	}
+
+	
 	$scope.writeDepartment = function(department){
 		console.log(department);
 		$scope.patientHistory.movePatientDepartment.departmentName = 

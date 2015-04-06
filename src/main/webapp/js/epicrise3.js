@@ -8,7 +8,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	console.log("EpicriseCtrl");
 	
-
+	$scope.diagnosesHol = configHol.diagnosesHol;
+	
 	$scope.docLength = 0;
 	$scope.autoSaveCount = 0;
 	$scope.autoSaveTimer = function () {
@@ -35,6 +36,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	console.log($scope.epicriseTemplate);
 
 	initDeclareController($scope, $http, $sce, $filter);
+	initseekIcd10Tree($scope, $http, $sce, $filter);
+	
+	readInitHistory($scope, $http, $sce, $filter);
 
 	console.log(history2File);
 	$http({ method : 'GET', url : history2File
@@ -42,7 +46,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log("success");
 		$scope.epicrise = data;
 		initEpicriseType();
-		$scope.patientHistory = $scope.epicrise.patientHistory;
+//		$scope.patientHistory = $scope.epicrise.patientHistory;
 		if(!$scope.patientHistory){
 			console.log(historyFile);
 			readHol1();
@@ -112,7 +116,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	setGroupElementType = function(groupElement){
-		if(epicriseTemplate.epicriseBlockConfig[groupElement.name]){
+		if(groupElement.name == "Діагнози"){
+			groupElement.type="isDiagnos";
+		}else if(epicriseTemplate.epicriseBlockConfig[groupElement.name]){
 			if(epicriseTemplate.epicriseBlockConfig[groupElement.name].isLabor){
 				groupElement.type="isLabor";
 			}
@@ -212,7 +218,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	$scope.editOpenClose = function(h1Index){
+		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
+		console.log(groupElement);
 		if(groupElement){
 			setGroupElementType(groupElement);
 		}

@@ -62,6 +62,7 @@ cuwyApp.controller('icd10Ctrl', [ '$scope', '$http',function ($scope, $http) {
 				});
 			});
 		});
+		$scope.setIcd10(icd10Class);
 	}
 
 	console.log("cuwyAppCtrl");

@@ -91,6 +91,93 @@ initAppConfig = function($scope, $http, $sce, $filter){
 	$scope.departmentsHol = configHol.departments;
 }
 
+initseekIcd10Tree = function($scope, $http, $sce, $filter){
+
+	$scope.setIcd10 = function(icd10){
+		console.log(icd10);
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex]);
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName);
+		setHistoryDiagnos($scope.diagnosEditIndex, icd10);
+		console.log($scope.diagnosEditIndex);
+		if($scope.diagnosEditIndex == 2){
+			setHistoryDiagnos(3, icd10);
+		}
+	}
+
+	setHistoryDiagnos = function(diagnosEditIndex, icd10){
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdCode = icd10.icdCode;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdEnd = icd10.icdEnd;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdId = icd10.icdId;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdName = icd10.icdName;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdStart = icd10.icdStart;
+	}
+	
+	seekIcd10Tree = function(){
+		console.log("seekIcd10Tree");
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName);
+		var seerIcd10TreeUrl = "/seekIcd10Tree/"+$scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName;
+		$http({ method : 'GET', url : seerIcd10TreeUrl
+		}).success(function(data, status, headers, config) {
+			$scope.icd10Root = data;
+			console.log($scope.icd10Root);
+		}).error(function(data, status, headers, config) {
+		});
+	};
+
+	$scope.changeIcd10Name = function(){
+		console.log("changeIcd10Name");
+		console.log($scope.diagnosEditIndex);
+		if($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName){
+			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName.length > 0);
+		}
+		if(!$scope.collapseIcd10Liste){
+			seekIcd10Tree();
+		}
+	}
+
+}
+
+readInitHistory = function($scope, $http, $sce, $filter){
+	var historyFile = "/db/history_id_"+parameters.hno;
+	if(parameters.hid){
+		historyFile = "/db/history_id_"+parameters.hid;
+	}
+
+	console.log(historyFile);
+	$scope.collapseIcd10Liste = true;
+
+	$scope.setDiagnosEditIndex = function($index){
+		console.log("setDiagnosEditIndex");
+		if( $scope.diagnosEditIndex != $index){
+			$scope.collapseIcd10Liste = false;
+		}else{
+			$scope.collapseIcd10Liste = !$scope.collapseIcd10Liste;
+		}
+		$scope.diagnosEditIndex = $index;
+		console.log($scope.diagnosEditIndex);
+		console.log($scope.collapseIcd10Liste);
+	}
+	initHistory = function(){
+		$scope.diagnosTypeIndex = {};
+		var dl = $scope.patientHistory.diagnosis.length;
+		for (var i = 0; i < dl; i++) {
+			var ds = $scope.patientHistory.diagnosis[i];
+			$scope.diagnosTypeIndex[ds.diagnosId] = i;
+		}
+		console.log($scope.diagnosTypeIndex);
+		console.log($scope.patientHistory.diagnosis);
+		console.log($scope.diagnosesHol);
+	};
+
+	$http({ method : 'GET', url : historyFile
+	}).success(function(data, status, headers, config) {
+		$scope.patientHistory = data;
+		$scope.patientHistory.movePatientDepartment = {};
+		initHistory();
+	}).error(function(data, status, headers, config) {
+	});
+	
+}
 initDeclareController = function($scope, $http, $sce, $filter){
 	console.log("--------initDeclareController--------------------");
 	$scope.param = {};

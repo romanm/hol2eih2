@@ -15,7 +15,7 @@ import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
 import org.cuwy1.holDb.model.DiagnosHol;
-import org.cuwy1.holDb.model.DiagnosisOnAdmission;
+import org.cuwy1.holDb.model.DiagnosIcd10;
 import org.cuwy1.holDb.model.HistoryHolDb;
 import org.cuwy1.holDb.model.HistoryTreatmentAnalysis;
 import org.cuwy1.holDb.model.Icd10UaClass;
@@ -79,6 +79,7 @@ public class Hol2Eih1Rest {
 		logger.debug("/db/movePatientDepartment ---------------------- END " );
 		return departmentHistory;
 	}
+
 	@RequestMapping(value = "/db/movePatientDepartment2", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> movePatientDepartment2(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
 		logger.debug(""+patientHistory);
@@ -92,6 +93,7 @@ public class Hol2Eih1Rest {
 
 	//	@RequestMapping(value = "/save/epicrise", method = RequestMethod.POST)
 //	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.GET)
+	
 	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveEpicrise(@RequestBody Map<String, Object> epicrise, Principal userPrincipal) {
 		logger.info("\n Start /db/saveepicrise");
@@ -145,22 +147,35 @@ public class Hol2Eih1Rest {
 		session.setAttribute("hno", historyId);
 	}
 
+	@RequestMapping(value = "/db/savehistory", method = RequestMethod.POST)
+	public  @ResponseBody Map<String, Object> saveHistory(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
+		logger.info("\n Start /db/savehistory"+historyHolDb.keySet());
+		final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) historyHolDb.get("diagnosis");
+		logger.info(""+diagnosis);
+		return historyHolDb;
+	}
+	
 	@RequestMapping(value = "/db/history_id_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody HistoryHolDb getHolPatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
+		logger.info("\n Start /db/history_id_"+historyId);
 		session.setAttribute("hno", historyId);
+		logger.debug(""+historyId);
+		HistoryHolDb historyHolDb = cuwyDbService1.getHistoryHolDbById(historyId);
+		PatientHolDb patientHolDb = cuwyDbService1.getPatientHolDb(historyHolDb.getPatientId());
+		historyHolDb.setPatientHolDb(patientHolDb);
+		logger.debug(""+historyHolDb);
 		logger.debug(""+session);
 		logger.debug(""+userPrincipal);
 		showUser((UsernamePasswordAuthenticationToken) userPrincipal);
 		if(null == userPrincipal){
 			setLoginRedirectValue(session, "history", historyId);
-			return null;
+		}else{
+			addShortPatientHistory(historyHolDb);
+			logger.debug(""+historyHolDb);
+			historyHolDb.setUser(userPrincipal);
+			getOperation(historyHolDb);
 		}
-		logger.info("\n Start /db/history_id_"+historyId);
-		HistoryHolDb shortPatientHistory = getShortPatientHistoryById(historyId);
-		logger.info("shortPatientHistory = "+shortPatientHistory);
-		shortPatientHistory.setUser(userPrincipal);
-		getOperation(shortPatientHistory);
-		return shortPatientHistory;
+		return historyHolDb;
 	}
 
 	private void getOperation(HistoryHolDb shortPatientHistory) {
@@ -168,15 +183,6 @@ public class Hol2Eih1Rest {
 		shortPatientHistory.setOperationHistorys(operationHistorys);
 	}
 
-	private HistoryHolDb getShortPatientHistoryById(int historyId) {
-		System.out.println(""+historyId);
-		logger.debug(""+historyId);
-		HistoryHolDb historyHolDb = cuwyDbService1.getHistoryHolDbById(historyId);
-		logger.debug(""+historyHolDb);
-		addShortPatientHistory(historyHolDb);
-		logger.debug(""+historyHolDb);
-		return historyHolDb;
-	}
 	private void addShortPatientHistory(HistoryHolDb historyHolDb) {
 		System.out.println("---------addShortPatientHistory-----------");
 		int historyId = historyHolDb.getHistoryId();
@@ -186,9 +192,7 @@ public class Hol2Eih1Rest {
 		historyHolDb.setPatientDepartmentMovements(patientDepartmentMovements);
 		List<HistoryTreatmentAnalysis> historyTreatmentAnalysises
 		= cuwyDbService1.getHistoryTreatmentAnalysises(historyId);
-		logger.debug("-------------------------------");
 		logger.debug(""+historyTreatmentAnalysises);
-		logger.debug("-------------------------------");
 		historyHolDb.setHistoryTreatmentAnalysises(historyTreatmentAnalysises);
 		if(historyTreatmentAnalysises.size() == 0) {
 			final Map<String, Object> epicrise2 = hol2Service.readEpicriseId(historyId);
@@ -198,14 +202,12 @@ public class Hol2Eih1Rest {
 //				Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
 			}
 		}
-		final List<DiagnosisOnAdmission> diagnosis = cuwyDbService1.getDiagnosis(historyId);
+		final List<DiagnosIcd10> diagnosis = cuwyDbService1.getDiagnosis(historyId);
 		historyHolDb.setDiagnosis(diagnosis);
 		
 //		DiagnosisOnAdmission diagnosisOnAdmission
 //		= cuwyDbService1.getDiagnosisOnAdmission(historyId);
 //		historyHolDb.setDiagnosisOnAdmission(diagnosisOnAdmission);
-		PatientHolDb patientHolDb = cuwyDbService1.getPatientHolDb(historyHolDb.getPatientId());
-		historyHolDb.setPatientHolDb(patientHolDb);
 		logger.debug(""+historyHolDb);
 	}
 	@RequestMapping("/user")
@@ -217,7 +219,6 @@ public class Hol2Eih1Rest {
 		showUser(user);
 		return user;
 	}
-
 
 	private void showUser(UsernamePasswordAuthenticationToken user) {
 		if(null != user){
