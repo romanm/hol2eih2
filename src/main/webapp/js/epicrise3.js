@@ -12,7 +12,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	
 	$scope.docLength = 0;
 	$scope.autoSaveCount = 0;
-	$scope.autoSaveTimer = function () {
+	autoSaveTimer = function () {
 		if($scope.docLength == 0){
 			setDocLength();
 			return;
@@ -26,7 +26,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			setDocLength();
 		}
 	}
-	$scope.autoSaveInterval = setInterval(function(){$scope.autoSaveTimer()},5000);
+	setInterval(function(){autoSaveTimer()},5000);
 	
 	$scope.epicriseTemplate = epicriseTemplate;
 	$scope.seekTag = "";
@@ -37,7 +37,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	initDeclareController($scope, $http, $sce, $filter);
 	initseekIcd10Tree($scope, $http, $sce, $filter);
-	
 	readInitHistory($scope, $http, $sce, $filter);
 
 	console.log(history2File);
@@ -46,6 +45,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log("success");
 		$scope.epicrise = data;
 		initEpicriseType();
+		$scope.epicrise.epicriseGroups[0].open = true
 //		$scope.patientHistory = $scope.epicrise.patientHistory;
 		if(!$scope.patientHistory){
 			console.log(historyFile);

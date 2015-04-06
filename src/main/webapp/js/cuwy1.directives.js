@@ -155,7 +155,6 @@ readInitHistory = function($scope, $http, $sce, $filter){
 		historyFile = "/db/history_id_"+parameters.hid;
 	}
 
-	console.log(historyFile);
 	$scope.collapseIcd10Liste = true;
 
 	$scope.setDiagnosEditIndex = function($index){
@@ -177,8 +176,6 @@ readInitHistory = function($scope, $http, $sce, $filter){
 			$scope.diagnosTypeIndex[ds.diagnosId] = i;
 		}
 		console.log($scope.diagnosTypeIndex);
-		console.log($scope.patientHistory.diagnosis);
-		console.log($scope.diagnosesHol);
 	};
 
 	$http({ method : 'GET', url : historyFile
@@ -191,11 +188,10 @@ readInitHistory = function($scope, $http, $sce, $filter){
 	
 }
 initDeclareController = function($scope, $http, $sce, $filter){
-	console.log("--------initDeclareController--------------------");
 	$scope.param = {};
 	$scope.param.hid = parameters.hid;
 	$scope.param.hno = parameters.hno;
-	console.log($scope.param);
+	console.log("--------initDeclareController--------------------param = " + $scope.param);
 
 	postObject = function(url, docToSave, $scope, $http){
 		$http({ method : 'POST', data : docToSave, url : url

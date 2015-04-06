@@ -4,6 +4,10 @@
 	}
 }
 
+[ng\:cloak], [ng-cloak], .ng-cloak {
+	display: none !important;
+}
+
 .pip {font-size:125%; 
 font-weight: bold;
 text-decoration: underline;}

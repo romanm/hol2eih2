@@ -3,13 +3,15 @@
 <head>
 <title>Виписка - {{patientHistory.patientHolDb.patientSurname}}</title>
 <meta charset="utf-8" />
-<link rel="stylesheet" href="/css/bootstrap.css"></link>
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
 <link rel="stylesheet" href="/css/datepicker.css"></link>
-<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
 <link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
 </head>
 
-<body data-key-cuwytrap="">
+<body ng-cloak class="ng-cloak" data-key-cuwytrap="">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-5" style="text-align: right;">
@@ -188,11 +190,14 @@
 							</span>
 						</div>
 						<!-- лабораторні данні редактор -->
+						
 					<div data-ng-show="h1.type == 'isDiagnos'">
-						<span data-ng-repeat="diagnosHol in diagnosesHol"> <b
-							title="{{diagnosHol.diagnosName}}"> <a
-								data-ng-click="setDiagnosEditIndex($index)">{{diagnosHol.diagnosNameShort}}</a></b>
-							<span
+						<span data-ng-repeat="diagnosHol in diagnosesHol"
+							data-ng-show="$index < 6"> <b
+							title="{{diagnosHol.diagnosName}}"><a
+								data-ng-click="setDiagnosEditIndex($index)">{{diagnosHol.diagnosNameShort}}</a>
+						</b> 
+						<span class="glyphicon glyphicon-folder-open" data-ng-show="diagnosEditIndex == $index"></span><span
 							data-ng-show="!(diagnosTypeIndex[diagnosHol.diagnosId] >= 0)">,
 						</span><span data-ng-show="diagnosTypeIndex[diagnosHol.diagnosId] >= 0">:
 								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
@@ -206,7 +211,7 @@
 						</span>
 
 
-<div class="well" collapse="collapseIcd10Liste">
+						<div class="well" collapse="collapseIcd10Liste">
 
 	<form class="form-inline" role="form">
 		<div class="form-group">
@@ -217,7 +222,6 @@
 				<input type="text" class="form-control" id="icd10"
 					data-ng-change="changeIcd10Name()" name="icd10"
 					data-ng-model="patientHistory.diagnosis[diagnosEditIndex].icdName" />
-				
 						</div>
 						<div class="input-group">
 							<label for="icd10Add">Додаток до діагнозу:</label>
@@ -227,8 +231,6 @@
 						</div>
 					</div>
 				</form>
-
-
 
 				<div class="row">
 					<div class="col-xs-6">
@@ -449,14 +451,16 @@
 
 </body>
 
-	<script src="/js/jquery-2.1.1.min.js"></script>
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
 	<script src="/js/rangy-core.js"></script>
-	<script src="/js/angular.min.js"></script>
-	<script src="/js/angular-sanitize.min.js"></script>
-	<script src="/js/ui-bootstrap-tpls-0.11.0.js"></script>
-	<script src="/js/bootstrap-datepicker.js"></script>
-	<script src='/js/textAngular-sanitize.js'></script>
-	<script src='/js/textAngular.js'></script>
+	<script src="/js/a/angular.min.js"></script>
+	<script src="/js/a/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
 	<script src="/db/config.json.js"></script>
 	<script src="/db/operationTree.json.js"></script>
 	<script src="/db/icd10uaGroups.json.js"></script>
@@ -465,4 +469,5 @@
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/epicriseTemplate.json.js"></script>
 	<script src="/js/epicrise3.js"></script>
+
 </html>

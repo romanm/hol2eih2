@@ -15,8 +15,6 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	};
 
 	initDeclareController($scope, $http, $sce, $filter);
-
-	console.log(window.location.pathname);
 	$scope.hno = parameters.hno;
 
 	readInitHistory($scope, $http, $sce, $filter);
