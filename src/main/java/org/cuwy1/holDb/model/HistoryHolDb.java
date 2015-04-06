@@ -11,6 +11,7 @@ public class HistoryHolDb {
 	public boolean isEpicrise2saved() {
 		return epicrise2saved;
 	}
+	public HistoryHolDb(){}
 	public void setEpicrise2saved(boolean epicrise2saved) {
 		this.epicrise2saved = epicrise2saved;
 	}

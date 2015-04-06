@@ -85,8 +85,20 @@ Date.prototype.addMonths2 = function (num) {
 var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngular']);
 
 initAppConfig = function($scope, $http, $sce, $filter){
-	$scope.departmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
-	console.log($scope.departmentId);
+	if(!$scope.user){
+		console.log($scope.patientHistory);
+		console.log($scope.department);
+		if($scope.patientHistory){
+			$scope.user = $scope.patientHistory.user;
+		}else if($scope.department){
+			$scope.user = $scope.department.user;
+		}
+	}
+	console.log($scope.user);
+	$scope.userPersonalId = $scope.user.authorities[0].authority.split("_")[2].split("-")[1];
+	$scope.userDepartmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
+	console.log($scope.userPersonalId);
+	console.log($scope.userDepartmentId);
 	console.log(configHol.departments.length);
 	$scope.departmentsHol = configHol.departments;
 }

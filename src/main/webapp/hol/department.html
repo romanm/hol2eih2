@@ -13,10 +13,9 @@
 </head>
 
 <body>
-
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-	<div class="container">
-		<div class="navbar-header">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
 				<ol class="breadcrumb">
 					<li><a href="/hol/home.html"><span
 							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
@@ -36,7 +35,7 @@
 				</ul>
 			</div>
 		</div>
-</nav>
+	</nav>
 
 	<h1>{{department.department_name}}</h1>
 	<h1>{{department.department_name}}</h1>
@@ -58,8 +57,25 @@
 				<input ng-model="query" type="text" class="form-control" 
 				placeholder="Перші букви/цифри пошуку" auto-focus=""/>
 			</div>
-
-			<ul class="patients">
+Кількість хворих в відділенні {{department.department_name}} = {{department.patientesDiagnosisHol.length}}
+<div 
+data-ng-show="parameters.dep !=userDepartmentId">
+<hr/>
+<div ng-repeat="departmentHol in departmentsHol"
+			ng-if="departmentHol.department_id == userDepartmentId">
+		<h3>
+			<span class="pip"> {{user.name}}</span> Зареєстрований в  Відділення: <span
+				data-ng-show="departmentHol.department_id == departmentId"
+				class="glyphicon glyphicon-asterisk"></span> <a
+				href="/hol/department.html?dep={{departmentHol.department_id}}">
+				{{departmentHol.department_name}} </a>
+		</h3>
+		<hr/>
+		</div>
+</div>
+			<ul class="patients"
+			data-ng-show="parameters.dep==userDepartmentId"
+			>
 				<li> <b> №, ПІБ, Поступив, Діагноз </b> </li>
 				<li ng-repeat="patient in department.patientesDiagnosisHol | filter:query"
 					ng-context-menu="menuPatientList"

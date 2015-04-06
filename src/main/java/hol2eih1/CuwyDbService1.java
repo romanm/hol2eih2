@@ -504,7 +504,7 @@ public class CuwyDbService1 {
 			ps.setInt(10, historyHolDb.getHistoryId());
 		}
 	}
-	class HistoryHolDbRowMapper<T> implements RowMapper<T>{
+	class HistoryHolDbRowMapper implements RowMapper<HistoryHolDb>{
 		private Map<Integer, HistoryHolDb> mapHistoryOfPatient;
 
 		public HistoryHolDbRowMapper() { }
@@ -515,7 +515,7 @@ public class CuwyDbService1 {
 		}
 
 		@Override
-		public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public HistoryHolDb mapRow(ResultSet rs, int rowNum) throws SQLException {
 			HistoryHolDb historyHolDb = new HistoryHolDb();
 			historyHolDb.setHistoryId(rs.getInt("history_id"));
 			historyHolDb.setHistoryNo(rs.getInt("history_no"));
@@ -525,7 +525,7 @@ public class CuwyDbService1 {
 			historyHolDb.setHistoryIn(rs.getTimestamp("history_in"));
 			if(mapHistoryOfPatient != null)
 				mapHistoryOfPatient.put(historyHolDb.getPatientId(), historyHolDb);
-			return (T) historyHolDb;
+			return historyHolDb;
 		}
 		
 	}
@@ -866,7 +866,7 @@ public class CuwyDbService1 {
 
 	}
 
-	private class PatientHolDbRowMapper<T> implements RowMapper<T>{
+	private class PatientHolDbRowMapper implements RowMapper<PatientHolDb>{
 		private Map<Integer, HistoryHolDb> mapHistoryOfPatient;
 		public PatientHolDbRowMapper(){ }
 		public PatientHolDbRowMapper(
@@ -874,7 +874,7 @@ public class CuwyDbService1 {
 			this.mapHistoryOfPatient = mapHistoryOfPatient;
 		}
 		@Override
-		public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public PatientHolDb mapRow(ResultSet rs, int rowNum) throws SQLException {
 			PatientHolDb patientHolDb = new PatientHolDb();
 			patientHolDb.setCountryId(rs.getInt("country_id"));
 			patientHolDb.setDistrictId(rs.getInt("district_id"));
@@ -906,7 +906,7 @@ public class CuwyDbService1 {
 				HistoryHolDb historyHolDb = mapHistoryOfPatient.get(patientHolDb.getPatientId());
 				historyHolDb.setPatientHolDb(patientHolDb);
 			}
-			return (T) patientHolDb;
+			return patientHolDb;
 		}
 	}
 /*

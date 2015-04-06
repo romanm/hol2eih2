@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div ng-repeat="departmentHol in departmentsHol"
-			ng-if="departmentHol.department_id == departmentId">
+			ng-if="departmentHol.department_id == userDepartmentId">
 			<h3>
 			Відділення:
 				<span data-ng-show="departmentHol.department_id == departmentId"

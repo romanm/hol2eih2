@@ -50,12 +50,12 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 		console.log($scope.patientHistory);
 		console.log($scope.patientHistory.user);
 		
-		var departmentHistory = {};
-		var personalId = $scope.patientHistory.user.authorities[0].authority.split("_")[2].split("-")[1];
+		initAppConfig($scope, $http, $sce, $filter);
 		var departmentHistoryIn = new Date();
+		var departmentHistory = {};
 		departmentHistory.historyId = $scope.patientHistory.historyId;
 		departmentHistory.departmentId = $scope.patientEditing.departmentId;
-		departmentHistory.personalId = personalId;
+		departmentHistory.personalId = $scope.personalId;
 		departmentHistory.departmentHistoryIn = departmentHistoryIn;
 
 		console.log(departmentHistory);
@@ -79,7 +79,8 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 
 departmentFile = "/hol/department_"+parameters.dep;
 
-cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', function ($scope, $http) {
+cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', 
+	function ($scope, $http, $filter, $sce) {
 	$scope.departmentsHol = configHol.departments;
 	$scope.patientEditing = {}
 
@@ -149,6 +150,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', function ($scope, $htt
 		url : departmentFile
 	}).success(function(data, status, headers, config) {
 		$scope.department = data;
+		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
 
