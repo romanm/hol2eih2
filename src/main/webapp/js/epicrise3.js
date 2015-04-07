@@ -219,6 +219,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	$scope.editOpenClose = function(h1Index){
 		console.log(h1Index);
+		console.log($scope.epicriseTemplate.head1s);
+		console.log($scope.epicriseTemplate.head1s[h1Index]);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
 		console.log(groupElement);
 		if(groupElement){

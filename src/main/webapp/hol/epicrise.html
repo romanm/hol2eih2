@@ -171,14 +171,17 @@
 									auto-focus="" placeholder=" пошук групи " auto-focus="" />
 							</div>
 							<span
+								data-ng-repeat="tag in epicriseTemplate.head1s[2].tagsGroup">
+								<!-- 
 								data-ng-repeat="tag in epicriseTemplate.head1s[h1Index].tagsGroup">
+								 -->
 								<span class="label"
 								data-ng-class="{'label-warning':seekTag == tag || ('все' === tag && '' === seekTag ), 'label-default':seekTag != tag}"
 								data-ng-click="setSeekTag(tag)"
 								>{{tag}}</span>
 								&nbsp;
 							</span> 
-								<span class="label"
+							<!-- 
 								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[h1Index].tags[0]
 								 || ('все' === epicriseTemplate.head1s[h1Index].tags[0] && '' === seekTag )
 								 , 'label-default':seekTag != epicriseTemplate.head1s[h1Index].tags[0]}"
@@ -186,6 +189,15 @@
 								>{{epicriseTemplate.head1s[h1Index].tags[0]}}</span>
 							<br/>
 							<span data-ng-repeat="h2 in epicriseTemplate.head1s[h1Index].addGroup | filter : seekTag | filter : seekGroup">
+							 -->
+								<span class="label"
+								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[2].tags[0]
+								 || ('все' === epicriseTemplate.head1s[2].tags[0] && '' === seekTag )
+								 , 'label-default':seekTag != epicriseTemplate.head1s[2].tags[0]}"
+								data-ng-click="setSeekTag(tag)"
+								>{{epicriseTemplate.head1s[2].tags[0]}}</span>
+							<br/>
+							<span data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
 								<a data-ng-click="addGroup(h2)"> {{h2.name}} </a> |
 							</span>
 						</div>
