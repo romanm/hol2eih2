@@ -748,7 +748,11 @@ public class CuwyDbService1 {
 	public void insertDiagnosisOnAdmission(final Map<String, Object> map) {
 		jdbcTemplate.update(sqlInsertHistoryDiagnos, new InsAppDiagnosHistory(map, sqlInsertHistoryDiagnos));
 	}
-	String sqlUpdateHistoryDiagnos = "UPDATE history_diagnos SET "
+	String sqlUpdateHistoryDiagnos = "UPDATE history_diagnos hd, icd i SET"
+			+ " hd.history_diagnos_additional = ?,"
+			+ " hd.icd_id=i.icd_id, hd.icd_start=i.icd_start, hd.icd_end=i.icd_end "
+			+ " WHERE i.icd_id = ? AND hd.history_diagnos_id = ? ";
+	String sqlUpdateHistoryDiagnos2 = "UPDATE history_diagnos SET "
 			+ " history_diagnos_additional = ?"
 			+ " WHERE history_diagnos_id = ?";
 	String sqlInsertHistoryDiagnos = "INSERT INTO history_diagnos "
@@ -772,7 +776,8 @@ public class CuwyDbService1 {
 				setHistoryDiagnosAdditional(map, ps,7);
 			}else{
 				setHistoryDiagnosAdditional(map, ps,1);
-				ps.setInt(2, (int) map.get("historyDiagnosId"));
+				ps.setInt(2, (int) map.get("icdId"));
+				ps.setInt(3, (int) map.get("historyDiagnosId"));
 			}
 		}
 
