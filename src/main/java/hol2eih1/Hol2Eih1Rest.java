@@ -153,14 +153,17 @@ public class Hol2Eih1Rest {
 		final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) historyHolDb.get("diagnosis");
 		logger.info(" diagnosis "+diagnosis);
 		for (Map<String, Object> map : diagnosis) {
+			map.put("userPersonalId", historyHolDb.get("userPersonalId"));
+			map.put("historyId", historyHolDb.get("historyId"));
 			System.out.println(map);
 			Integer historyDiagnosId = (Integer) map.get("historyDiagnosId");
 			if(null == historyDiagnosId){
-				map.put("historyId", historyHolDb.get("historyId"));
-				map.put("userPersonalId", historyHolDb.get("userPersonalId"));
 				cuwyDbService1.insertDiagnosisOnAdmission(map);
 			}else{
-				
+				Integer diagnosId = (Integer) map.get("diagnosId");
+				if(diagnosId >2 || diagnosId<5) {
+					cuwyDbService1.updateDiagnosisOnAdmission(map);
+				}
 			}
 		}
 		logger.info(" diagnosis ");

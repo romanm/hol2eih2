@@ -230,8 +230,8 @@
 					 -->
 						<span data-ng-repeat="diagnosHol in diagnosesHol"> <b
 							title="{{diagnosHol.diagnosName}}"> <span
-								data-ng-show="$index < 2 || $index > 4">{{diagnosHol.diagnosNameShort}}</span>
-								<a data-ng-show="$index > 1 && $index < 5"
+								data-ng-show="$index < 2 || $index > 5">{{diagnosHol.diagnosNameShort}}</span>
+								<a data-ng-show="$index > 1 && $index < 6"
 								data-ng-click="setDiagnosEditIndex($index)">{{diagnosHol.diagnosNameShort}}</a></b>
 							<span class="glyphicon glyphicon-folder-open"
 							data-ng-show="diagnosEditIndex == $index"></span> <span

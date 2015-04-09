@@ -108,6 +108,7 @@ public class CuwyDbService1 {
 				new Icd2TreeMapper(icd10UaRoot));
 		return icd10UaRoot;
 	}
+	
 	class OperationSubGroupMapper<T> implements RowMapper<T>{
 		private Map<Integer, OperationGroup> operationGroupMap;
 		private Map<Integer, OperationSubGroup> operationSubGroupMap;
@@ -741,22 +742,26 @@ public class CuwyDbService1 {
 				}
 			});
 	}
-
-	String sqlinsertHistoryDiagnos = "INSERT INTO history_diagnos "
+	public void updateDiagnosisOnAdmission(Map<String, Object> map) {
+		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
+	}
+	public void insertDiagnosisOnAdmission(final Map<String, Object> map) {
+		jdbcTemplate.update(sqlInsertHistoryDiagnos, new InsAppDiagnosHistory(map, sqlInsertHistoryDiagnos));
+	}
+	String sqlUpdateHistoryDiagnos = "UPDATE history_diagnos SET "
+			+ " history_diagnos_additional = ?"
+			+ " WHERE history_diagnos_id = ?";
+	String sqlInsertHistoryDiagnos = "INSERT INTO history_diagnos "
 			+ "(history_id, history_diagnos_date, diagnos_id, personal_department_id"
 			+ ", icd_id, icd_start, icd_end, history_diagnos_additional"
 			+ ") VALUES "
 			+ "(?,now(),?,?"
 			+ ",?,?,?,?"
 			+ ")";
-	public void insertDiagnosisOnAdmission(final Map<String, Object> map) {
-		final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
-		logger.debug(""+personalId);
-		final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
-		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
-		jdbcTemplate.update(sqlinsertHistoryDiagnos, new PreparedStatementSetter() {
-			@Override
-			public void setValues(PreparedStatement ps) throws SQLException {
+	private final class InsAppDiagnosHistory implements PreparedStatementSetter {
+		@Override
+		public void setValues(PreparedStatement ps) throws SQLException {
+			if(isInsert){
 				ps.setInt(1, (int) map.get("historyId"));
 //				ps.setTimestamp(2, new Timestamp(new Date().getTime()));
 				ps.setInt(2, (int) map.get("diagnosId"));
@@ -764,19 +769,39 @@ public class CuwyDbService1 {
 				ps.setInt(4, (int) map.get("icdId"));
 				ps.setInt(5, (int) map.get("icdStart"));
 				ps.setInt(6, (int) map.get("icdEnd"));
-				final Object historyDiagnosAdditional = map.get("historyDiagnosAdditional");
-				logger.debug(""+historyDiagnosAdditional);
-				if(null == historyDiagnosAdditional){
-					ps.setNull(7, Types.CHAR);
-				}else{
-					ps.setString(7, (String) historyDiagnosAdditional);
-				}
+				setHistoryDiagnosAdditional(map, ps,7);
+			}else{
+				setHistoryDiagnosAdditional(map, ps,1);
+				ps.setInt(2, (int) map.get("historyDiagnosId"));
 			}
-		});
+		}
+
+		private final Map<String, Object> map;
+		private final Integer personalDepartmentIdIn;
+		private boolean isInsert;
+		private InsAppDiagnosHistory(Map<String, Object> map,
+				String sql) {
+			this.isInsert = sql.indexOf("INSERT INTO") > 0;
+			this.map = map;
+			final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
+			final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
+			this.personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
+		}
+
+		private void setHistoryDiagnosAdditional(final Map<String, Object> map, PreparedStatement ps, final int i)
+				throws SQLException {
+			final Object historyDiagnosAdditional = map.get("historyDiagnosAdditional");
+			logger.debug(""+historyDiagnosAdditional);
+			if(null == historyDiagnosAdditional){
+				ps.setNull(i, Types.CHAR);
+			}else{
+				ps.setString(i, (String) historyDiagnosAdditional);
+			}
+		}
 	}
 	public void insertDiagnosisOnAdmission(final DiagnosIcd10 diagnosisOnAdmission) {
 		System.out.println(diagnosisOnAdmission);
-		jdbcTemplate.update(sqlinsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
+		jdbcTemplate.update(sqlInsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
 	}
 	String sqlinsertDepartmentHistory = "";
 	public void insertDepartmentHistory(final DepartmentHistory departmentHistory) {
@@ -1340,6 +1365,7 @@ public class CuwyDbService1 {
 		}
 		logger.debug(""+auth);
 	}
+
 
 
 }
