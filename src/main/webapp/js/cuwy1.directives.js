@@ -96,6 +96,9 @@ initAppConfig = function($scope, $http, $sce, $filter){
 	}
 	console.log($scope.user);
 	$scope.userPersonalId = $scope.user.authorities[0].authority.split("_")[2].split("-")[1];
+	if($scope.patientHistory){
+		$scope.patientHistory.userPersonalId = $scope.userPersonalId;
+	}
 	$scope.userDepartmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
 	console.log($scope.userPersonalId);
 	console.log($scope.userDepartmentId);
@@ -105,23 +108,35 @@ initAppConfig = function($scope, $http, $sce, $filter){
 
 initseekIcd10Tree = function($scope, $http, $sce, $filter){
 
+	$scope.seekGroupIcd10 = function(icd10Class, diagnosEditIndex){
+		var icd10GroupCode = icd10Class.icdCode.substring(0,icd10Class.icdCode.indexOf('.'));
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdName =  icd10GroupCode;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].icdCode = icd10GroupCode;
+		console.log($scope.patientHistory.diagnosis[diagnosEditIndex]);
+		seekIcd10Tree();
+	}
 	$scope.setIcd10 = function(icd10){
-		console.log(icd10);
-		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex]);
-		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName);
 		setHistoryDiagnos($scope.diagnosEditIndex, icd10);
-		console.log($scope.diagnosEditIndex);
+		/*
 		if($scope.diagnosEditIndex == 2){
 			setHistoryDiagnos(3, icd10);
 		}
+		 * */
 	}
 
 	setHistoryDiagnos = function(diagnosEditIndex, icd10){
+		for (var i = $scope.patientHistory.diagnosis.length; i <= diagnosEditIndex; i++) {
+			$scope.patientHistory.diagnosis.push({});
+		}
+		console.log($scope.patientHistory.diagnosis.length);
 		$scope.patientHistory.diagnosis[diagnosEditIndex].icdCode = icd10.icdCode;
 		$scope.patientHistory.diagnosis[diagnosEditIndex].icdEnd = icd10.icdEnd;
 		$scope.patientHistory.diagnosis[diagnosEditIndex].icdId = icd10.icdId;
 		$scope.patientHistory.diagnosis[diagnosEditIndex].icdName = icd10.icdName;
 		$scope.patientHistory.diagnosis[diagnosEditIndex].icdStart = icd10.icdStart;
+		$scope.patientHistory.diagnosis[diagnosEditIndex].diagnosId = diagnosEditIndex+1;
+		console.log($scope.patientHistory.diagnosis[diagnosEditIndex]);
+		initHistory();
 	}
 	
 	seekIcd10Tree = function(){
@@ -171,6 +186,7 @@ readInitHistory = function($scope, $http, $sce, $filter){
 	initHistory = function(){
 		$scope.diagnosTypeIndex = {};
 		var dl = $scope.patientHistory.diagnosis.length;
+		console.log(dl);
 		for (var i = 0; i < dl; i++) {
 			var ds = $scope.patientHistory.diagnosis[i];
 			$scope.diagnosTypeIndex[ds.diagnosId] = i;
@@ -183,6 +199,7 @@ readInitHistory = function($scope, $http, $sce, $filter){
 		$scope.patientHistory = data;
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
+		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
 	

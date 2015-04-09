@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="cuwyApp" ng-controller="EpicriseCtrl">
+<html ng-app="cuwyApp" ng-controller="EpicriseCtrl"
+ ng-cloak class="ng-cloak"
+>
 <head>
 <title>Виписка - {{patientHistory.patientHolDb.patientSurname}}</title>
 <meta charset="utf-8" />
@@ -11,7 +13,7 @@
 
 </head>
 
-<body ng-cloak class="ng-cloak" data-key-cuwytrap="">
+<body data-key-cuwytrap="">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-5" style="text-align: right;">
@@ -205,11 +207,13 @@
 						
 					<div data-ng-show="h1.type == 'isDiagnos'">
 						<span data-ng-repeat="diagnosHol in diagnosesHol"
-							data-ng-show="$index < 6"> <b
-							title="{{diagnosHol.diagnosName}}"><a
+							data-ng-show="$index < 6"><b
+							title="{{diagnosHol.diagnosName}}"> <span
+								data-ng-show="$index < 2">
+									{{diagnosHol.diagnosNameShort}} </span> <a data-ng-show="$index > 1"
 								data-ng-click="setDiagnosEditIndex($index)">{{diagnosHol.diagnosNameShort}}</a>
-						</b> 
-						<span class="glyphicon glyphicon-folder-open" data-ng-show="diagnosEditIndex == $index"></span><span
+						</b> <span class="glyphicon glyphicon-folder-open"
+							data-ng-show="diagnosEditIndex == $index"></span><span
 							data-ng-show="!(diagnosTypeIndex[diagnosHol.diagnosId] >= 0)">,
 						</span><span data-ng-show="diagnosTypeIndex[diagnosHol.diagnosId] >= 0">:
 								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
@@ -219,8 +223,7 @@
 								data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
 									{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
 							</span>
-						</span> <br data-ng-if="diagnosTypeIndex[diagnosHol.diagnosId]" />
-						</span>
+						</span> <br data-ng-if="diagnosTypeIndex[diagnosHol.diagnosId]" /> </span>
 
 
 						<div class="well" collapse="collapseIcd10Liste">

@@ -151,7 +151,19 @@ public class Hol2Eih1Rest {
 	public  @ResponseBody Map<String, Object> saveHistory(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/savehistory"+historyHolDb.keySet());
 		final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) historyHolDb.get("diagnosis");
-		logger.info(""+diagnosis);
+		logger.info(" diagnosis "+diagnosis);
+		for (Map<String, Object> map : diagnosis) {
+			System.out.println(map);
+			Integer historyDiagnosId = (Integer) map.get("historyDiagnosId");
+			if(null == historyDiagnosId){
+				map.put("historyId", historyHolDb.get("historyId"));
+				map.put("userPersonalId", historyHolDb.get("userPersonalId"));
+				cuwyDbService1.insertDiagnosisOnAdmission(map);
+			}else{
+				
+			}
+		}
+		logger.info(" diagnosis ");
 		return historyHolDb;
 	}
 	

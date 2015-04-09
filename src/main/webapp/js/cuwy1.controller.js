@@ -79,9 +79,11 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 
 departmentFile = "/hol/department_"+parameters.dep;
 
-cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', 
+cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 	function ($scope, $http, $filter, $sce) {
+	console.log('DepartmentCtrl');
 	$scope.departmentsHol = configHol.departments;
+	$scope.hol1host = configHol.hol1host;
 	$scope.patientEditing = {}
 
 	$scope.parameters = parameters;

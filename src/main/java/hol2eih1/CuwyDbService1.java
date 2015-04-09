@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Component;
@@ -683,6 +685,7 @@ public class CuwyDbService1 {
 				diagnosIcd10.setIcdCode(rs.getString("icd_code"));
 				diagnosIcd10.setIcdName(rs.getString("icd_name"));
 				diagnosIcd10.setHistoryDiagnosAdditional(rs.getString("history_diagnos_additional"));
+				diagnosIcd10.setHistoryDiagnosId(rs.getInt("history_diagnos_id"));
 				diagnosIcd10.setDiagnosId(rs.getInt("diagnos_id"));
 				diagnosIcd10.setHistoryId(rs.getInt("history_id"));
 				diagnosIcd10.setIcdId(rs.getInt("icd_id"));
@@ -741,11 +744,36 @@ public class CuwyDbService1 {
 
 	String sqlinsertHistoryDiagnos = "INSERT INTO history_diagnos "
 			+ "(history_id, history_diagnos_date, diagnos_id, personal_department_id"
-			+ ",icd_id,icd_start,icd_end"
+			+ ", icd_id, icd_start, icd_end, history_diagnos_additional"
 			+ ") VALUES "
 			+ "(?,now(),?,?"
-			+ ",?,?,?"
+			+ ",?,?,?,?"
 			+ ")";
+	public void insertDiagnosisOnAdmission(final Map<String, Object> map) {
+		final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
+		logger.debug(""+personalId);
+		final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
+		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
+		jdbcTemplate.update(sqlinsertHistoryDiagnos, new PreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, (int) map.get("historyId"));
+//				ps.setTimestamp(2, new Timestamp(new Date().getTime()));
+				ps.setInt(2, (int) map.get("diagnosId"));
+				ps.setInt(3, (int) personalDepartmentIdIn);
+				ps.setInt(4, (int) map.get("icdId"));
+				ps.setInt(5, (int) map.get("icdStart"));
+				ps.setInt(6, (int) map.get("icdEnd"));
+				final Object historyDiagnosAdditional = map.get("historyDiagnosAdditional");
+				logger.debug(""+historyDiagnosAdditional);
+				if(null == historyDiagnosAdditional){
+					ps.setNull(7, Types.CHAR);
+				}else{
+					ps.setString(7, (String) historyDiagnosAdditional);
+				}
+			}
+		});
+	}
 	public void insertDiagnosisOnAdmission(final DiagnosIcd10 diagnosisOnAdmission) {
 		System.out.println(diagnosisOnAdmission);
 		jdbcTemplate.update(sqlinsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
@@ -1312,5 +1340,6 @@ public class CuwyDbService1 {
 		}
 		logger.debug(""+auth);
 	}
+
 
 }

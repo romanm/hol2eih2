@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="cuwyApp" ng-controller="DepartmentCtrl">
+<html ng-app="cuwyApp" ng-controller="DepartmentCtrl"
+ ng-cloak class="ng-cloak"
+>
 <head>
-	<title>ХОЛ::{{department.department_name}}</title>
 	<meta charset="utf-8" />
 
 <link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
@@ -11,17 +12,15 @@
 
 <link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 <style type="text/css">
-		[ng\:cloak], [ng-cloak], .ng-cloak {
-			display: none !important;
-		}
 		body {
 			padding-top: 60px;
 			padding-bottom: 60px;
 		}
 	</style>
+	<title>ХОЛ::{{department.department_name}}</title>
 </head>
 
-<body ng-cloak class="ng-cloak">
+<body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -269,7 +268,7 @@ data-ng-show="parameters.dep !=userDepartmentId">
 		<div class="col-md-4 well">
 			<div class="navbar-right"> 
 			<small>
-			<a href="http://localhost/department/{{parameters.dep}}">
+			<a href="http://{{hol1host}}/department/{{parameters.dep}}">
 			<span class="glyphicon glyphicon-link"></span> HOL1 </a> 
 			</small>
 			</div>

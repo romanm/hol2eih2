@@ -5,23 +5,33 @@ import java.sql.Timestamp;
 public class DiagnosIcd10 {
 	private String icdCode, icdName, historyDiagnosAdditional;
 
-	private int historyId, diagnosId, icdStart, icdEnd, icdId, personalDepartmentId;
+	private int historyDiagnosId, historyId, diagnosId, icdStart, icdEnd, icdId, personalDepartmentId;
+
 	private Timestamp historyDiagnosDate;
 	
 	@Override
 	public String toString() {
 		return String.format(
 				"\n DiagnosisOnAdmission: {"
+				+ "historyDiagnosId = '%s', historyId = '%s'"
 				+ "icdCode = '%s', icdName = '%s', diagnosId = '%s'"
 				+ "\n, icdStart = '%s', icdEnd = '%s', icdId = '%s', personalDepartmentId = '%s'"
 				+ ", historyDiagnosDate = '%s'"
 				+ ", historyDiagnosAdditional = '%s'"
 				+ "}",
+				historyDiagnosId, historyId, 
 				icdCode, icdName, diagnosId, icdStart, icdEnd, icdId, personalDepartmentId
 				, historyDiagnosDate
 				, historyDiagnosAdditional
 				);
 	}
+	public int getHistoryDiagnosId() {
+		return historyDiagnosId;
+	}
+	public void setHistoryDiagnosId(int historyDiagnosId) {
+		this.historyDiagnosId = historyDiagnosId;
+	}
+
 	public String getHistoryDiagnosAdditional() {
 		return historyDiagnosAdditional;
 	}
