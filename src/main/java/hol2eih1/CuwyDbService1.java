@@ -742,26 +742,22 @@ public class CuwyDbService1 {
 				}
 			});
 	}
-	public void updateDiagnosisOnAdmission(Map<String, Object> map) {
+	public void updateHistoryDiagnosis(Map<String, Object> map) {
 		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
 	}
-	public void insertDiagnosisOnAdmission(final Map<String, Object> map) {
+	public void insertHistoryDiagnosis(final Map<String, Object> map) {
 		jdbcTemplate.update(sqlInsertHistoryDiagnos, new InsAppDiagnosHistory(map, sqlInsertHistoryDiagnos));
 	}
 	String sqlUpdateHistoryDiagnos = "UPDATE history_diagnos hd, icd i SET"
 			+ " hd.history_diagnos_additional = ?,"
 			+ " hd.icd_id=i.icd_id, hd.icd_start=i.icd_start, hd.icd_end=i.icd_end "
 			+ " WHERE i.icd_id = ? AND hd.history_diagnos_id = ? ";
-	String sqlUpdateHistoryDiagnos2 = "UPDATE history_diagnos SET "
-			+ " history_diagnos_additional = ?"
-			+ " WHERE history_diagnos_id = ?";
 	String sqlInsertHistoryDiagnos = "INSERT INTO history_diagnos "
 			+ "(history_id, history_diagnos_date, diagnos_id, personal_department_id"
 			+ ", icd_id, icd_start, icd_end, history_diagnos_additional"
 			+ ") VALUES "
 			+ "(?,now(),?,?"
-			+ ",?,?,?,?"
-			+ ")";
+			+ ",?,?,?,?)";
 	private final class InsAppDiagnosHistory implements PreparedStatementSetter {
 		@Override
 		public void setValues(PreparedStatement ps) throws SQLException {
@@ -784,9 +780,9 @@ public class CuwyDbService1 {
 		private final Map<String, Object> map;
 		private final Integer personalDepartmentIdIn;
 		private boolean isInsert;
-		private InsAppDiagnosHistory(Map<String, Object> map,
-				String sql) {
-			this.isInsert = sql.indexOf("INSERT INTO") > 0;
+		private InsAppDiagnosHistory(Map<String, Object> map, String sql) {
+			logger.debug(sql.indexOf("INSERT INTO") +"  " + sql);
+			this.isInsert = sql.indexOf("INSERT INTO") >= 0;
 			this.map = map;
 			final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
 			final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);

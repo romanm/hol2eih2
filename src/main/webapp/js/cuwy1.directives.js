@@ -108,41 +108,41 @@ initAppConfig = function($scope, $http, $sce, $filter){
 
 initseekIcd10Tree = function($scope, $http, $sce, $filter){
 
-	$scope.seekGroupIcd10 = function(icd10Class, diagnosEditIndex){
+	$scope.seekGroupIcd10 = function(icd10Class){
 		var icd10GroupCode = icd10Class.icdCode.substring(0,icd10Class.icdCode.indexOf('.'));
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdName =  icd10GroupCode;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdCode = icd10GroupCode;
-		console.log($scope.patientHistory.diagnosis[diagnosEditIndex]);
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName =  icd10GroupCode;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdCode = icd10GroupCode;
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex]);
 		seekIcd10Tree();
 	}
 	$scope.setIcd10 = function(icd10){
-		setHistoryDiagnos($scope.diagnosEditIndex, icd10);
+		setHistoryDiagnos(icd10);
 		/*
-		if($scope.diagnosEditIndex == 2){
-			setHistoryDiagnos(3, icd10);
+		if($scope.diagnosisIndex == 2){
+			setHistoryDiagnos(icd10);
 		}
 		 * */
 	}
 
-	setHistoryDiagnos = function(diagnosEditIndex, icd10){
-		for (var i = $scope.patientHistory.diagnosis.length; i <= diagnosEditIndex; i++) {
+	setHistoryDiagnos = function(icd10){
+		for (var i = $scope.patientHistory.diagnosis.length; i <= $scope.diagnosisIndex; i++) {
 			$scope.patientHistory.diagnosis.push({});
 		}
 		console.log($scope.patientHistory.diagnosis.length);
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdCode = icd10.icdCode;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdEnd = icd10.icdEnd;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdId = icd10.icdId;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdName = icd10.icdName;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].icdStart = icd10.icdStart;
-		$scope.patientHistory.diagnosis[diagnosEditIndex].diagnosId = diagnosEditIndex+1;
-		console.log($scope.patientHistory.diagnosis[diagnosEditIndex]);
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdCode = icd10.icdCode;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdEnd = icd10.icdEnd;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdId = icd10.icdId;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName = icd10.icdName;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdStart = icd10.icdStart;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].diagnosId = $scope.diagnosHolEdit.diagnosId;
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex]);
 		initHistory();
 	}
 	
 	seekIcd10Tree = function(){
 		console.log("seekIcd10Tree");
-		console.log($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName);
-		var seerIcd10TreeUrl = "/seekIcd10Tree/"+$scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName;
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName);
+		var seerIcd10TreeUrl = "/seekIcd10Tree/"+$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName;
 		$http({ method : 'GET', url : seerIcd10TreeUrl
 		}).success(function(data, status, headers, config) {
 			$scope.icd10Root = data;
@@ -153,9 +153,9 @@ initseekIcd10Tree = function($scope, $http, $sce, $filter){
 
 	$scope.changeIcd10Name = function(){
 		console.log("changeIcd10Name");
-		console.log($scope.diagnosEditIndex);
-		if($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName){
-			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosis[$scope.diagnosEditIndex].icdName.length > 0);
+		console.log($scope.diagnosisIndex);
+		if($scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName){
+			$scope.collapseIcd10Liste = !($scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName.length > 0);
 		}
 		if(!$scope.collapseIcd10Liste){
 			seekIcd10Tree();
@@ -172,26 +172,31 @@ readInitHistory = function($scope, $http, $sce, $filter){
 
 	$scope.collapseIcd10Liste = true;
 
-	$scope.setDiagnosEditIndex = function($index){
-		console.log("setDiagnosEditIndex");
-		if( $scope.diagnosEditIndex != $index){
+	$scope.setDiagnosIndex = function($index){
+		if($scope.diagnosisIndex != $index){
 			$scope.collapseIcd10Liste = false;
 		}else{
 			$scope.collapseIcd10Liste = !$scope.collapseIcd10Liste;
 		}
-		$scope.diagnosEditIndex = $index;
-		console.log($scope.diagnosEditIndex);
-		console.log($scope.collapseIcd10Liste);
+		console.log($scope.diagnosTypeIndex);
+		$scope.diagnosHolEdit = $scope.diagnosesHol[$index];
+		console.log($scope.diagnosHolEdit);
+		$scope.diagnosisIndex = $scope.diagnosTypeIndex[$scope.diagnosHolEdit.diagnosId];
+		console.log($scope.diagnosisIndex);
+		if(!$scope.diagnosisIndex){
+			$scope.diagnosisIndex = $scope.diagnosTypeIndex[$scope.diagnosHolEdit.diagnosId] = $scope.patientHistory.diagnosis.length;
+			$scope.patientHistory.diagnosis.push({});
+		}
 	}
+
 	initHistory = function(){
 		$scope.diagnosTypeIndex = {};
 		var dl = $scope.patientHistory.diagnosis.length;
-		console.log(dl);
 		for (var i = 0; i < dl; i++) {
 			var ds = $scope.patientHistory.diagnosis[i];
-			$scope.diagnosTypeIndex[ds.diagnosId] = i;
+			if(ds)
+				$scope.diagnosTypeIndex[ds.diagnosId] = i;
 		}
-		console.log($scope.diagnosTypeIndex);
 	};
 
 	$http({ method : 'GET', url : historyFile

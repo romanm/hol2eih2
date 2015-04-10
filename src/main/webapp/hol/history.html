@@ -229,12 +229,12 @@
 						Діагноз:
 					 -->
 						<span data-ng-repeat="diagnosHol in diagnosesHol"> <b
-							title="{{diagnosHol.diagnosName}}"> <span
+							title="{{diagnosHol.diagnosName}}"><span
 								data-ng-show="$index < 2 || $index > 5">{{diagnosHol.diagnosNameShort}}</span>
 								<a data-ng-show="$index > 1 && $index < 6"
-								data-ng-click="setDiagnosEditIndex($index)">{{diagnosHol.diagnosNameShort}}</a></b>
+								data-ng-click="setDiagnosIndex($index)">{{diagnosHol.diagnosNameShort}}</a></b>
 							<span class="glyphicon glyphicon-folder-open"
-							data-ng-show="diagnosEditIndex == $index"></span> <span
+							data-ng-show="diagnosisIndex == $index"></span> <span
 							data-ng-show="!(diagnosTypeIndex[diagnosHol.diagnosId] >= 0)">
 								, </span><span
 							data-ng-show="diagnosTypeIndex[diagnosHol.diagnosId] >= 0">:
@@ -253,13 +253,10 @@
 					<form class="form-inline" role="form">
 							<div class="form-group">
 								<div class="input-group required-simple">
-									<div class="input-group-addon">
-									{{diagnosesHol[diagnosEditIndex].diagnosNameShort}}
-									{{diagnosEditIndex}}
-									: МКБ</div>
+									<div class="input-group-addon">{{diagnosHolEdit.diagnosNameShort}} : МКБ</div>
 									<input type="text" class="form-control" id="icd10"
 										data-ng-change="changeIcd10Name()" name="icd10"
-										data-ng-model="patientHistory.diagnosis[diagnosEditIndex].icdName" />
+										data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
 										<!-- 
 									<div class="input-group-btn">
 										<button class="btn btn-default"
@@ -274,7 +271,7 @@
 								<label for="icd10Add">Додаток до діагнозу:</label>
 									<textarea class="form-control" rows="3" cols="50"
 									id="icd10Add" name="icd10Add"
-										data-ng-model="patientHistory.diagnosis[diagnosEditIndex].historyDiagnosAdditional"></textarea>
+										data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
 								</div>
 							</div>
 						</form>
@@ -285,11 +282,11 @@
 					<div class="col-xs-6">
 						<ul>
 							<li
-								data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosEditIndex].icdName">
+								data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
 								<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
 									{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
 								data-ng-show="icd10Class1.icdCode.indexOf('.') > 1 "
-								data-ng-click="seekGroupIcd10(icd10Class1, diagnosEditIndex)">
+								data-ng-click="seekGroupIcd10(icd10Class1)">
 									{{icd10Class1.icdCode.substring(0,icd10Class1.icdCode.indexOf('.'))
 									}}</a><a data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
 								data-ng-click="setIcd10(icd10Class1)">{{icd10Class1.icdCode.indexOf('.')
@@ -297,24 +294,23 @@
 									icd10Class1.icdCode.substring(icd10Class1.icdCode.indexOf('.')):icd10Class1.icdCode
 									}}, {{icd10Class1.icdName}} </a>
 								<ul
-									data-ng-show="patientHistory.diagnosis[diagnosEditIndex].icdName.length > 2">
+									data-ng-show="patientHistory.diagnosis[diagnosisIndex].icdName.length > 2">
 											<li
-												data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosEditIndex].icdName">
+												data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
 												<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
 													{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
 												data-ng-show="icd10Class2.icdCode.indexOf('.') > 1 "
-												data-ng-click="seekGroupIcd10(icd10Class2, diagnosEditIndex)">
+												data-ng-click="seekGroupIcd10(icd10Class2)">
 													{{icd10Class2.icdCode.substring(0,icd10Class2.icdCode.indexOf('.'))
 													}}</a><a
 												data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
 												data-ng-click="setIcd10(icd10Class2)"
-												>{{icd10Class2.icdCode.indexOf('.')
-									> 1?
+												>{{icd10Class2.icdCode.indexOf('.') > 1?
 									icd10Class2.icdCode.substring(icd10Class2.icdCode.indexOf('.')):icd10Class2.icdCode
 									}}, {{icd10Class2.icdName}} </a>
 												<ul>
 													<li
-														data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosEditIndex].icdName">
+														data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
 														<span
 														data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
 															{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
@@ -323,7 +319,7 @@
 															{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
 														<ul>
 															<li
-																data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosEditIndex].icdName">
+																data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
 																{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
 																data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
 																	{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
