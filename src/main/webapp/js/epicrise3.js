@@ -206,6 +206,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.saveWorkDocClick = function(){
 		saveWorkDocEpicrise();
 		$scope.autoSaveCount = 0;
+		console.log("----");
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
 	}
 
 	saveWorkDocEpicrise = function(){

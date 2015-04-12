@@ -173,6 +173,7 @@ readInitHistory = function($scope, $http, $sce, $filter){
 	$scope.collapseIcd10Liste = true;
 
 	$scope.setDiagnosIndex = function($index){
+		
 		if($scope.diagnosisIndex != $index){
 			$scope.collapseIcd10Liste = false;
 		}else{
