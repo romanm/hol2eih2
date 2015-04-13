@@ -133,15 +133,23 @@
 					{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 					</span>
 					</span>
-					<!-- dz -->
-					<span data-ng-show="h1.name == 'Діагнози'"> <span>
-							Діагноз при госпіталізації: <b
-							tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosisOnAdmission.historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
-								{{patientHistory.diagnosisOnAdmission.icdCode}},
-								{{patientHistory.diagnosisOnAdmission.icdName}} </b>
-					</span>
-					</span>
-					<!-- текстові html данні -->
+					<!-- dz 
+						Діагноз при госпіталізації:
+					-->
+				<span data-ng-show="h1.name == 'Діагнози'"> <span
+					data-ng-show="diagnosTypeIndex[3]"
+					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
+						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdCode}} -
+						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdName}} <small>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate
+							| date:'dd.MM HH:mm'}} </small>
+				</span> <span data-ng-show="!diagnosTypeIndex[3]"
+					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
+						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdCode}} -
+						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdName}} <small>({{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate
+							| date:'dd.MM HH:mm'}})</small>
+				</span>
+				</span>
+				<!-- текстові html данні -->
 					<span ng-bind-html="h1.value.textHtml"
 						data-ng-show="!h1.value.laborValues"></span>
 					<!-- лабораторні данні -->
