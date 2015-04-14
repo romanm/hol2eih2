@@ -172,6 +172,11 @@ readInitHistory = function($scope, $http, $sce, $filter){
 
 	$scope.collapseIcd10Liste = true;
 
+	$scope.openOpDialog = function($index){
+		console.log($index);
+		$scope.collapseOpDialog = !$scope.collapseOpDialog;
+		console.log($scope.collapseOpDialog);
+	}
 	$scope.setDiagnosIndex = function($index){
 		
 		if($scope.diagnosisIndex != $index){

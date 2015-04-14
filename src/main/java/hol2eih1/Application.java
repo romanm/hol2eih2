@@ -6,8 +6,6 @@ import javax.sql.DataSource;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.ContextResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer;
@@ -17,8 +15,6 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 
 @SpringBootApplication
 public class Application {
-
-	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) throws Throwable {
 		SpringApplication.run(Application.class, args);

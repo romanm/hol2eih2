@@ -1,8 +1,27 @@
 cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("OpCtrl");
+//	$scope.collapseOpDialog = true;
+	$scope.collapseOpDialog = false;
+	$scope.operationTree = operationTree;
+	console.log($scope.operationTree);
 	readInitHistory($scope, $http, $sce, $filter);
+
+	$scope.openOpGroup = function(id2open){
+		console.log(id2open);
+		if($scope.id2open != id2open)
+			$scope.id2open = id2open;
+		else
+			$scope.id2open = -1;
+	}
+
+	$scope.setOp = function(op2set, editedOperation){
+		console.log(op2set);
+		console.log(editedOperation);
+	}
+
 } ]);
+
 cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("LoginCtrl");
