@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
@@ -38,7 +41,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Component;
 
@@ -52,34 +54,17 @@ public class CuwyDbService1 {
 	
 	private JdbcTemplate jdbcTemplate;
 	public JdbcTemplate getJdbcTemplate() { return jdbcTemplate; }
-
-	public CuwyDbService1(){
+	
+	public CuwyDbService1() throws NamingException{
+			final DataSource dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/hol1mySqlDataSource");
+			logger.debug("\n------------CuwyDbService1-------------\n"
+					+ "dataSource="+dataSource+
+							"\n------------CuwyDbService1-------------");
+			this.jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		final BasicDataSource basicDataSource = new BasicDataSource();
-		basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		basicDataSource.setUrl("jdbc:mysql://localhost/hol?useUnicode=true&characterEncoding=utf-8");
-		basicDataSource.setUsername("hol");
-		basicDataSource.setPassword("hol");
-		basicDataSource.setMaxIdle(4);
-//		final int maxActive = basicDataSource.getMaxActive();
-		final long maxConnLifetimeMillis = basicDataSource.getMaxConnLifetimeMillis();
-		final int maxIdle = basicDataSource.getMaxIdle();
-		final int minIdle = basicDataSource.getMinIdle();
-		final int initialSize = basicDataSource.getInitialSize();
-		logger.debug("\n------------basicDataSource-------------\n"
-				+ "maxConnLifetimeMillis="+maxConnLifetimeMillis+""
-						+ "/minIdle="+minIdle
-						+ "/maxIdle="+maxIdle+"/initialSize="+initialSize+"\n------------basicDataSource-------------");
-		this.jdbcTemplate = new JdbcTemplate(basicDataSource);
-		/*
-
-		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
-		dataSource.setUrl("jdbc:mysql://localhost/hol?useUnicode=true&characterEncoding=utf-8");
-		dataSource.setUsername("hol");
-		dataSource.setPassword("hol");
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		 * */
+		logger.debug("\n------------CuwyDbService1-------------\n"
+				+ "jdbcTemplate="+jdbcTemplate+
+				"\n------------CuwyDbService1-------------");
 	}
 
 	public Icd10UaClass getIcd10UaChilds(Icd10UaClass icd10Class) {
