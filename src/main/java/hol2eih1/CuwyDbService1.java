@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,7 @@ public class CuwyDbService1 {
 	public JdbcTemplate getJdbcTemplate() { return jdbcTemplate; }
 
 	public CuwyDbService1(){
+		
 		final BasicDataSource basicDataSource = new BasicDataSource();
 		basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		basicDataSource.setUrl("jdbc:mysql://localhost/hol?useUnicode=true&characterEncoding=utf-8");
@@ -70,6 +72,7 @@ public class CuwyDbService1 {
 						+ "/maxIdle="+maxIdle+"/initialSize="+initialSize+"\n------------basicDataSource-------------");
 		this.jdbcTemplate = new JdbcTemplate(basicDataSource);
 		/*
+
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
 		dataSource.setUrl("jdbc:mysql://localhost/hol?useUnicode=true&characterEncoding=utf-8");
@@ -1324,8 +1327,8 @@ public class CuwyDbService1 {
 	}
 
 	public List<Map<String, Object>> getOperationHistorys(HistoryHolDb shortPatientHistory) {
-		String sql = "SELECT og.operation_group_name, osg.operation_subgroup_name, o.operation_name, oh.* "
-				+ "\n"
+		String sql = "SELECT og.operation_group_name, osg.operation_subgroup_name"
+				+ ", o.operation_name, o.operation_code, oh.* \n"
 				+ " FROM operation_history oh, operation_group og, operation_subgroup osg, operation o "
 				+ "\n"
 				+ " WHERE og.operation_group_id=oh.operation_group_id "

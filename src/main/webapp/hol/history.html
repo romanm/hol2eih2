@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="cuwyApp" ng-controller="HistoryCtrl" ng-cloak class="ng-cloak">
 <head>
-	<title>ХОЛ::
+	<title>ІХ::
 	{{patientHistory.patientDepartmentMovements
 				[patientHistory.patientDepartmentMovements.length -1]
 				.departmentName}}
@@ -437,18 +437,16 @@
 					
 					
 					
-					
-					
-					
-					
-					
-					
 					</div>
 					<hr class="shortPatienHistory" />
 				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
 					<div data-ng-if="patientHistory.operationHistorys">
-						<h3>Операції</h3>
-						<div data-ng-repeat="operation in patientHistory.operationHistorys">
+							<h3>
+								<small> <span class="glyphicon glyphicon-pushpin"></span>
+								</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
+									Операції </a>
+							</h3>
+							<div data-ng-repeat="operation in patientHistory.operationHistorys">
 							{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
 							{{operation.operation_history_end | date:'HH:mm'}} <span
 								title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
@@ -494,6 +492,9 @@
 				<li><span class="glyphicon glyphicon-transfer"></span> <a
 					ng-click="patientHistory.collapseMovePatient = !patientHistory.collapseMovePatient ">
 						Переведеня </a></li>
+				<li><span class="glyphicon glyphicon-pushpin"></span> <a
+					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
+				</a></li>
 				<li><span class="glyphicon glyphicon-share"></span> <a
 					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
 						Виписка </a> | <small> <a
@@ -501,7 +502,7 @@
 							<span class="glyphicon glyphicon-link"></span>HOL1
 					</a>
 				</small></li>
-			</ol>
+				</ol>
 			<div class="navbar-right"> 
 				<a href="http://localhost/history/{{patientHistory.historyId}}"> 
 				<span class="glyphicon glyphicon-link"></span>
@@ -533,6 +534,9 @@
 				<li><span class="glyphicon glyphicon-transfer"></span> <a
 					ng-click="patientHistory.collapseMovePatient = !patientHistory.collapseMovePatient ">
 						Переведеня </a></li>
+				<li><span class="glyphicon glyphicon-pushpin"></span> <a
+					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
+				</a></li>
 				<li><span class="glyphicon glyphicon-share"></span> <a
 					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
 						Виписка </a></li>

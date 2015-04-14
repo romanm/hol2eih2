@@ -1,3 +1,8 @@
+cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
+		function ($scope, $http, $filter, $sce) {
+	console.log("OpCtrl");
+	readInitHistory($scope, $http, $sce, $filter);
+} ]);
 cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("LoginCtrl");
