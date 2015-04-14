@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="OpCtrl"
+ ng-cloak class="ng-cloak"
+>
+<head>
+<title>Операція - {{patientHistory.patientHolDb.patientSurname}}</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+</head>
+
+<body data-key-cuwytrap="">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-5" style="text-align: right;">
+				Хмельницька Обласна Лікарня<br> м.Хмельницький, вул.Пілотська,
+				1 <span class="navbar-left no-print"> </span>
+			</div>
+			<div class="col-xs-1" style="text-align: center;">
+				<img alt="trizub" src="/img/gerb_small.png">
+			</div>
+			<div class="col-xs-5">
+				+380 382 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <span
+					class="navbar-right no-print"> </span>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+
+		<div class="row no-print">
+			<div class="col-xs-7">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+					<li><a
+						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
+		[patientHistory.patientDepartmentMovements.length -1]
+		.departmentId}}">
+							відділення:
+							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+							-1].departmentName}} </a></li>
+					<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
+							ІХ № <u>{{patientHistory.historyNo}}</u> :: Операція
+					</a></li>
+				</ol>
+			</div>
+			<div class="col-xs-5"
+				style="text-align: right; background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+					<li><span data-ng-show="autoSaveCount > 0"
+						title="Кільськість автозбережень - {{autoSaveCount}}">
+							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
+						<a data-ng-click="saveWorkDocClick()" href="#"
+						title="Запис {{numberOfChange}} незбережених змін"> Запис
+							{{numberOfChange}} </a> <span
+						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+					<li>|</li>
+					<li><span class="glyphicon glyphicon-eye-open"></span> <a
+						href="/hol/history.html?hno={{patientHistory.historyId}}">
+							Перегляд </a></li>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+
+		<div>
+			<span data-ng-show="patientHistory.patientHolDb.patientGender == 1">
+				Хворий: </span> <span
+				data-ng-show="patientHistory.patientHolDb.patientGender != 1">
+				Хвора: </span> <span class="pip">
+				{{patientHistory.patientHolDb.patientSurname}}
+				{{patientHistory.patientHolDb.patientPersonalName}}
+				{{patientHistory.patientHolDb.patientPatronymic}}</span> <span
+				ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
+			р. (*{{patientHistory.patientHolDb.patientDob | date:'dd.MM.yyyy'}})
+		</div>
+
+		<div
+			data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
+			<div data-ng-if="patientHistory.operationHistorys">
+				<h3>
+					<small> <span class="glyphicon glyphicon-pushpin"></span>
+					</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
+						Операції </a>
+				</h3>
+				<div data-ng-repeat="operation in patientHistory.operationHistorys">
+					{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
+					{{operation.operation_history_end | date:'HH:mm'}} <span
+						title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">
+						<a data-ng-click="openOpDialog($index)">
+							{{operation.operation_code}} - {{operation.operation_name}} . </a>
+					</span> <span>{{operation.operation_additional}}</span>
+						collapseOpDialog= {{collapseOpDialog}}
+					<div class="well" collapse="collapseOpDialog">
+						<div class="row no-print">
+							<form class="form-inline" role="form">
+								<div class="col-xs-6">
+									<div class="form-group">
+										<div class="input-group required-simple">
+											<div class="input-group-addon">Назва операції</div>
+											<input type="text" class="form-control" id="opName"
+												name="opName" data-ng-model="operation.operation_name" />
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6">
+								<textarea rows="2" cols="22">
+								test tet area
+								</textarea>
+								</div>
+							</form>
+						</div>
+						<div class="row no-print">
+							<div class="col-xs-8">
+								<ul>
+									<li
+										data-ng-repeat="op1 in operationTree | filter:operation.operation_name">
+										<span class="glyphicon glyphicon-folder-close"></span>
+										{{op1.operationGroupName}}
+										<ul data-ng-show="operation.operation_name.length > 2">
+											<li
+												data-ng-repeat="op2 in op1.operationSubGroupChilds | filter:operation.operation_name">
+												<span
+												class="glyphicon glyphicon-folder-{{id2open==op2.operationSubgroupId?'open':'close'}}"
+												data-ng-click="openOpGroup(op2.operationSubgroupId)"></span>
+												<span
+												title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
+													{{op2.operationSubgroupName}} </span>
+												<ul>
+													<li
+														data-ng-repeat="op3 in op2.operationChilds | filter:operation.operation_name">
+														<a data-ng-click="setOp(op3, operation)">
+															{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
+															{{op3.operationName}} </span>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div class="col-xs-4">tree</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<nav class="navbar navbar-default navbar-fixed-bottom"
+			role="navigation">
+			<div class="container">
+				<span class="glyphicon glyphicon-play"></span> <span
+					class="glyphicon glyphicon-floppy-disk"></span> <a
+					data-ng-click="saveWorkDoc()" href="#"
+					title="Запис {{numberOfChange}} незбережених змін"> Запис
+					{{numberOfChange}} </a> <span
+					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
+
+
+				<ol class="list-inline navbar-right">
+					<li><span class="glyphicon glyphicon-eye-open"></span> <a
+						href="/hol/history.html?hno={{param.hid}}"> Перегляд </a></li>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
+				</ol>
+			</div>
+		</nav>
+</body>
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/rangy-core.js"></script>
+	<script src="/js/a/angular.min.js"></script>
+	<script src="/js/a/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/db/operationTree.json.js"></script>
+	<script src="/db/icd10uaGroups.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/cuwy1.controller.js"></script>
+	<script src="/js/icd10Editor1Ctrl.js"></script>
+
+</html>
