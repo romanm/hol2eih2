@@ -146,6 +146,15 @@
 															{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
 															{{op3.operationName}} </span>
 													</li>
+													<li data-ng-show="id2open==op2.operationSubgroupId"
+														style="border-top-style: double;"><span
+														data-ng-click="openOpGroup(op2.operationSubgroupId)"
+														class="glyphicon glyphicon-resize-full"></span></li>
+													<li data-ng-show="id2open==op2.operationSubgroupId"
+														data-ng-repeat="op3 in op2.operationChilds"><a
+														data-ng-click="setOp(op3, operation)">
+															{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
+															{{op3.operationName}} </span></li>
 												</ul>
 											</li>
 										</ul>
@@ -162,9 +171,9 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom"
 			role="navigation">
 			<div class="container">
-				<span class="glyphicon glyphicon-play"></span> <span
-					class="glyphicon glyphicon-floppy-disk"></span> <a
-					data-ng-click="saveWorkDoc()" href="#"
+				<span><span class="glyphicon glyphicon-console"></span>
+					&#160; &nbsp; </span><span class="glyphicon glyphicon-floppy-disk"></span>
+				<a data-ng-click="saveWorkDoc()" href="#"
 					title="Запис {{numberOfChange}} незбережених змін"> Запис
 					{{numberOfChange}} </a> <span
 					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
