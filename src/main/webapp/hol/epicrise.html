@@ -446,13 +446,16 @@
 		<div class="container">
 			<span><span class="glyphicon glyphicon-console"></span>
 					&#160; &nbsp; </span>
-			<ol class="list-inline navbar-right">
-				<li><span class="glyphicon glyphicon-floppy-disk"></span> <a
+			
+			<span class="glyphicon glyphicon-floppy-disk"></span> <a
 					data-ng-click="saveWorkDocClick()" href="#"
 					title="Запис {{numberOfChange}} незбережених змін"> Запис
 						{{numberOfChange}} </a> <span
 					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
-						ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+						ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
+			
+			<ol class="list-inline navbar-right">
+				
 				<li>|</li>
 				<li><span class="glyphicon glyphicon-eye-open"></span> <a
 					href="/hol/history.html?hno={{param.hid}}">

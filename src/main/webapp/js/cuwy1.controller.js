@@ -4,10 +4,9 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 //	$scope.collapseOpDialog = true;
 	$scope.collapseOpDialog = false;
 	$scope.operationTree = operationTree;
-	console.log($scope.operationTree);
 	readInitHistory($scope, $http, $sce, $filter);
 
-	$scope.openOpGroup = function(id2open){
+	$scope.openOpGroup = function(deep,id2open){
 		console.log(id2open);
 		if($scope.id2open != id2open)
 			$scope.id2open = id2open;
