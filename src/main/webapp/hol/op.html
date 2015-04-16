@@ -126,22 +126,17 @@
 						<div class="row no-print">
 							<div class="col-xs-7">
 								<a data-ng-click="openOpGroup(0)"> <span
-									class="glyphicon glyphicon-folder-{{id2open==0?'open':'close'}}"></span>
+									class="glyphicon glyphicon-folder-{{isFolderOpen(0)?'open':'close'}}"></span>
 								</a>
 								<ul>
 									<li
 										data-ng-repeat="op1 in filteredOperationTree">
-										{{operationTreePath[1]==op1.operationGroupId }} / {{openFolder}} /
-										{{operationTreePath[1]==op1.operationGroupId && openFolder}}
 										<a data-ng-click="openOpGroup(1,op1)"> <span
 											class="glyphicon glyphicon-folder-{{isFolderOpen(1,op1) ? 'open':'close'}}"></span>
 									</a> {{op1.operationGroupName}}
 									<ul data-ng-show="operation.operation_name.length > 2">
 										<li
 											data-ng-repeat="op2 in op1.filterSubGroups">
-										{{op2.operationSubgroupId}} =={{operationTreePath[2]}} /
-										{{operationTreePath[2]==op2.operationSubgroupId}} / {{openFolder}} /
-										{{operationTreePath[2]==op2.operationSubgroupId && openFolder}}
 											<a data-ng-click="openOpGroup(2,op2)">
 												<span
 												class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
@@ -171,14 +166,41 @@
 											data-ng-click="openOpGroup(1,op1)"
 											class="glyphicon glyphicon-resize-full"></span></li>
 										<li data-ng-show="isFolderOpen(1,op1)"
-										data-ng-repeat="op2 in op1.operationSubGroupChilds"
-										><a
+											data-ng-repeat="op2 in op1.operationSubGroupChilds"><a
 											data-ng-click="openOpGroup(2,op2)"> <span
 												class="glyphicon glyphicon-folder-{{id2open==op2.operationSubgroupId?'open':'close'}}"></span>
 										</a> <span
 											title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
 												{{op2.operationSubgroupName}} </span></li>
-									</ul>
+										</ul>
+									</li>
+									<li data-ng-show="isFolderOpen(0)"
+											style="border-top-style: double;"><span
+											data-ng-click="openOpGroup(0)"
+											class="glyphicon glyphicon-resize-full"></span></li>
+									<li data-ng-show="isFolderOpen(0)"
+										data-ng-repeat="op1 in operationTree"><a
+										data-ng-click="openOpGroup(1,op1)"> <span
+											class="glyphicon glyphicon-folder-{{isFolderOpen(1,op1)?'open':'close'}}"></span>
+									</a> <span title="{{op1.operationGroupId}}">
+											{{op1.operationGroupName}} </span></li>
+									<li data-ng-show="isFolderOpen(1,openOperationGroup)"
+											style="border-top-style: double;"><span
+											data-ng-click="openOpGroup(1,openOperationGroup)"
+											class="glyphicon glyphicon-resize-full"></span></li>
+									<li data-ng-show="isFolderOpen(1,openOperationGroup)">
+										<a data-ng-click="openOpGroup(1,openOperationGroup)"> <span
+											class="glyphicon glyphicon-folder-{{isFolderOpen(1,openOperationGroup)?'open':'close'}}"></span>
+									</a> <span title="{{openOperationGroup.operationGroupId}}">
+											{{openOperationGroup.operationGroupName}} </span>
+										<ul>
+											<li data-ng-repeat="op2 in openOperationGroup.operationSubGroupChilds"><a
+												data-ng-click="openOpGroup(2,op2)"> <span
+													class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
+											</a> <span
+												title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
+													{{op2.operationSubgroupName}} </span></li>
+										</ul>
 									</li>
 								</ul>
 							</div>
