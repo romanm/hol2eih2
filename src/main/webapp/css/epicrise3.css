@@ -8,6 +8,7 @@
 	display: none !important;
 }
 
+.bold {font-weight: bold;}
 .pip {font-size:125%; 
 font-weight: bold;
 text-decoration: underline;}

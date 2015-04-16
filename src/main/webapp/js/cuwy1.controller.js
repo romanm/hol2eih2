@@ -6,6 +6,7 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$scope.operationTree = operationTree;
 	readInitHistory($scope, $http, $sce, $filter);
 	operationDirective($scope, $http, $sce, $filter);
+	operation2Directive($scope, $http, $sce, $filter);
 
 	$http({ method : 'GET', url : $scope.historyFile
 	}).success(function(data, status, headers, config) {
