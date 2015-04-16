@@ -5,14 +5,18 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$scope.collapseOpDialog = false;
 	$scope.operationTree = operationTree;
 	readInitHistory($scope, $http, $sce, $filter);
+	operationDirective($scope, $http, $sce, $filter);
 
-	$scope.openOpGroup = function(deep,id2open){
-		console.log(id2open);
-		if($scope.id2open != id2open)
-			$scope.id2open = id2open;
-		else
-			$scope.id2open = -1;
-	}
+	$http({ method : 'GET', url : $scope.historyFile
+	}).success(function(data, status, headers, config) {
+		$scope.patientHistory = data;
+		$scope.patientHistory.movePatientDepartment = {};
+		initHistory();
+		initAppConfig($scope, $http, $sce, $filter);
+		manageOpeSeekInterval(0);
+		makeFilteredOperationTree();
+	}).error(function(data, status, headers, config) {
+	});
 
 	$scope.setOp = function(op2set, editedOperation){
 		console.log(op2set);

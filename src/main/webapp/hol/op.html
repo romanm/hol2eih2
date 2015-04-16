@@ -125,50 +125,55 @@
 						</div>
 						<div class="row no-print">
 							<div class="col-xs-7">
-								<a data-ng-click="openOpGroup(0,0)"> <span
+								<a data-ng-click="openOpGroup(0)"> <span
 									class="glyphicon glyphicon-folder-{{id2open==0?'open':'close'}}"></span>
 								</a>
 								<ul>
 									<li
-										data-ng-repeat="op1 in operationTree | filter:operation.operation_name">
-										<a data-ng-click="openOpGroup(1,op1.operationGroupId)"> <span
-											class="glyphicon glyphicon-folder-{{id2open==op1.operationGroupId?'open':'close'}}"></span>
+										data-ng-repeat="op1 in filteredOperationTree">
+										{{operationTreePath[1]==op1.operationGroupId }} / {{openFolder}} /
+										{{operationTreePath[1]==op1.operationGroupId && openFolder}}
+										<a data-ng-click="openOpGroup(1,op1)"> <span
+											class="glyphicon glyphicon-folder-{{isFolderOpen(1,op1) ? 'open':'close'}}"></span>
 									</a> {{op1.operationGroupName}}
 									<ul data-ng-show="operation.operation_name.length > 2">
 										<li
-											data-ng-repeat="op2 in op1.operationSubGroupChilds | filter:operation.operation_name">
-											<a data-ng-click="openOpGroup(2,op2.operationSubgroupId)">
+											data-ng-repeat="op2 in op1.filterSubGroups">
+										{{op2.operationSubgroupId}} =={{operationTreePath[2]}} /
+										{{operationTreePath[2]==op2.operationSubgroupId}} / {{openFolder}} /
+										{{operationTreePath[2]==op2.operationSubgroupId && openFolder}}
+											<a data-ng-click="openOpGroup(2,op2)">
 												<span
-												class="glyphicon glyphicon-folder-{{id2open==op2.operationSubgroupId?'open':'close'}}"></span>
+												class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
 										</a> <span
 											title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
 												{{op2.operationSubgroupName}} </span>
 											<ul>
 												<li
-													data-ng-repeat="op3 in op2.operationChilds | filter:operation.operation_name">
+													data-ng-repeat="op3 in op2.filterOperations">
 													<a data-ng-click="setOp(op3, operation)">
 														{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
 														{{op3.operationName}} </span>
 												</li>
-												<li data-ng-show="id2open==op2.operationSubgroupId"
+												<li data-ng-show="isFolderOpen(2,op2)"
 													style="border-top-style: double;"><span
-													data-ng-click="openOpGroup(2,op2.operationSubgroupId)"
+													data-ng-click="openOpGroup(2,op2)"
 													class="glyphicon glyphicon-resize-full"></span></li>
-												<li data-ng-show="id2open==op2.operationSubgroupId"
+												<li data-ng-show="isFolderOpen(2,op2)"
 													data-ng-repeat="op3 in op2.operationChilds"><a
 													data-ng-click="setOp(op3, operation)">
 														{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
 														{{op3.operationName}} </span></li>
 											</ul>
 										</li>
-										<li data-ng-show="id2open==op1.operationGroupId"
+										<li data-ng-show="isFolderOpen(1,op1)"
 											style="border-top-style: double;"><span
-											data-ng-click="openOpGroup(1,op1.operationGroupId)"
+											data-ng-click="openOpGroup(1,op1)"
 											class="glyphicon glyphicon-resize-full"></span></li>
-										<li data-ng-show="id2open==op1.operationGroupId"
+										<li data-ng-show="isFolderOpen(1,op1)"
 										data-ng-repeat="op2 in op1.operationSubGroupChilds"
 										><a
-											data-ng-click="openOpGroup(2,op2.operationSubgroupId)"> <span
+											data-ng-click="openOpGroup(2,op2)"> <span
 												class="glyphicon glyphicon-folder-{{id2open==op2.operationSubgroupId?'open':'close'}}"></span>
 										</a> <span
 											title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
@@ -178,12 +183,7 @@
 								</ul>
 							</div>
 							<div class="col-xs-5">
-								<ul>
-									<li
-										data-ng-repeat="op1 in operationTree">
-										{{op1.operationGroupName}}
-									</li>
-								</ul>
+								tree
 							</div>
 						</div>
 					</div>
@@ -232,6 +232,7 @@
 	<script src="/db/operationTree.json.js"></script>
 	<script src="/db/icd10uaGroups.json.js"></script>
 	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/operation.directive.js"></script>
 	<script src="/js/cuwy1.controller.js"></script>
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 

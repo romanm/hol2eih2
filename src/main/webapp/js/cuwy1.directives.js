@@ -165,18 +165,13 @@ initseekIcd10Tree = function($scope, $http, $sce, $filter){
 }
 
 readInitHistory = function($scope, $http, $sce, $filter){
-	var historyFile = "/db/history_id_"+parameters.hno;
+	$scope.historyFile = "/db/history_id_"+parameters.hno;
 	if(parameters.hid){
-		historyFile = "/db/history_id_"+parameters.hid;
+		$scope.historyFile = "/db/history_id_"+parameters.hid;
 	}
 
 	$scope.collapseIcd10Liste = true;
 
-	$scope.openOpDialog = function($index){
-		console.log($index);
-		$scope.collapseOpDialog = !$scope.collapseOpDialog;
-		console.log($scope.collapseOpDialog);
-	}
 	$scope.setDiagnosIndex = function($index){
 		
 		if($scope.diagnosisIndex != $index){
@@ -205,16 +200,8 @@ readInitHistory = function($scope, $http, $sce, $filter){
 		}
 	};
 
-	$http({ method : 'GET', url : historyFile
-	}).success(function(data, status, headers, config) {
-		$scope.patientHistory = data;
-		$scope.patientHistory.movePatientDepartment = {};
-		initHistory();
-		initAppConfig($scope, $http, $sce, $filter);
-	}).error(function(data, status, headers, config) {
-	});
-	
 }
+
 initDeclareController = function($scope, $http, $sce, $filter){
 	$scope.param = {};
 	$scope.param.hid = parameters.hid;

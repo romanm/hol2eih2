@@ -19,6 +19,15 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 
 	readInitHistory($scope, $http, $sce, $filter);
 
+	$http({ method : 'GET', url : $scope.historyFile
+	}).success(function(data, status, headers, config) {
+		$scope.patientHistory = data;
+		$scope.patientHistory.movePatientDepartment = {};
+		initHistory();
+		initAppConfig($scope, $http, $sce, $filter);
+	}).error(function(data, status, headers, config) {
+	});
+
 	$scope.diagnosEditIndex = 0;
 	initseekIcd10Tree($scope, $http, $sce, $filter);
 
