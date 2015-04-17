@@ -89,6 +89,7 @@ operationDirective = function($scope, $http, $sce, $filter){
 //		console.log($scope.filteredOperationTree);
 	}
 	controlOpeSeek = function(){
+		console.log(lastSeekOp);
 		if(lastSeekOp.length != editedOperation.operation_name.length)
 			makeFilteredOperationTree();
 	}

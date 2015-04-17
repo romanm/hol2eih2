@@ -55,7 +55,7 @@
 					<li><span data-ng-show="autoSaveCount > 0"
 						title="Кільськість автозбережень - {{autoSaveCount}}">
 							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
-						<a data-ng-click="saveWorkDocClick()" href="#"
+						<a data-ng-click="saveOperation()" href="#"
 						title="Запис {{numberOfChange}} незбережених змін"> Запис
 							{{numberOfChange}} </a> <span
 						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
@@ -217,7 +217,7 @@
 			<div class="container">
 				<span><span class="glyphicon glyphicon-console"></span>
 					&#160; &nbsp; </span><span class="glyphicon glyphicon-floppy-disk"></span>
-				<a data-ng-click="saveWorkDoc()" href="#"
+				<a data-ng-click="saveOperation()" href="#"
 					title="Запис {{numberOfChange}} незбережених змін"> Запис
 					{{numberOfChange}} </a> <span
 					data-ng-show="patientHistory.requiredFieldFullProcent > 0">

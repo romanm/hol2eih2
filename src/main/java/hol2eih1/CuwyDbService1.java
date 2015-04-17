@@ -745,6 +745,32 @@ public class CuwyDbService1 {
 				}
 			});
 	}
+	
+	private final class InsAppOperationHistory extends InsAddMap implements PreparedStatementSetter {
+		public InsAppOperationHistory(Map<String, Object> map, String sql) {
+			super(map, sql);
+		}
+
+		@Override
+		public void setValues(PreparedStatement ps) throws SQLException {
+			if(isInsert){
+
+			}else{
+
+			}
+		}
+	}
+	
+	String sqlInsertOperationHistory = "INSERT INTO operation_history";
+	String sqlUpdateOperationHistory = "UPDATE operation_history";
+	public void insertOperationHistory(Map<String, Object> map) {
+		logger.debug(sqlInsertOperationHistory);
+		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppOperationHistory(map, sqlInsertOperationHistory));
+	}
+	public void updateOperationHistory(Map<String, Object> map) {
+		logger.debug(sqlUpdateOperationHistory);
+		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
+	}
 	public void updateHistoryDiagnosis(Map<String, Object> map) {
 		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
 	}
@@ -761,7 +787,8 @@ public class CuwyDbService1 {
 			+ ") VALUES "
 			+ "(?,now(),?,?"
 			+ ",?,?,?,?)";
-	private final class InsAppDiagnosHistory implements PreparedStatementSetter {
+	
+	private final class InsAppDiagnosHistory extends InsAddMap implements PreparedStatementSetter {
 		@Override
 		public void setValues(PreparedStatement ps) throws SQLException {
 			if(isInsert){
@@ -772,37 +799,44 @@ public class CuwyDbService1 {
 				ps.setInt(4, (int) map.get("icdId"));
 				ps.setInt(5, (int) map.get("icdStart"));
 				ps.setInt(6, (int) map.get("icdEnd"));
-				setHistoryDiagnosAdditional(map, ps,7);
+				setFieldWithNull( ps,7,"historyDiagnosAdditional");
 			}else{
-				setHistoryDiagnosAdditional(map, ps,1);
+				setFieldWithNull( ps,1,"historyDiagnosAdditional");
 				ps.setInt(2, (int) map.get("icdId"));
 				ps.setInt(3, (int) map.get("historyDiagnosId"));
 			}
 		}
 
-		private final Map<String, Object> map;
 		private final Integer personalDepartmentIdIn;
-		private boolean isInsert;
 		private InsAppDiagnosHistory(Map<String, Object> map, String sql) {
-			logger.debug(sql.indexOf("INSERT INTO") +"  " + sql);
-			this.isInsert = sql.indexOf("INSERT INTO") >= 0;
-			this.map = map;
+			super(map, sql);
 			final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
 			final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
 			this.personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
 		}
+	}
 
-		private void setHistoryDiagnosAdditional(final Map<String, Object> map, PreparedStatement ps, final int i)
+	private abstract class InsAddMap{
+		private InsAddMap(Map<String, Object> map, String sql) {
+			logger.debug(sql.indexOf("INSERT INTO") +"  " + sql);
+			this.isInsert = sql.indexOf("INSERT INTO") >= 0;
+			this.map = map;
+		}
+		
+		protected final Map<String, Object> map;
+		protected boolean isInsert;
+		protected void setFieldWithNull( PreparedStatement ps, final int i, String key)
 				throws SQLException {
-			final Object historyDiagnosAdditional = map.get("historyDiagnosAdditional");
-			logger.debug(""+historyDiagnosAdditional);
-			if(null == historyDiagnosAdditional){
+			final Object fieldWithNull = map.get(key);
+			logger.debug(""+fieldWithNull);
+			if(null == fieldWithNull){
 				ps.setNull(i, Types.CHAR);
 			}else{
-				ps.setString(i, (String) historyDiagnosAdditional);
+				ps.setString(i, (String) fieldWithNull);
 			}
 		}
 	}
+
 	public void insertDiagnosisOnAdmission(final DiagnosIcd10 diagnosisOnAdmission) {
 		System.out.println(diagnosisOnAdmission);
 		jdbcTemplate.update(sqlInsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
@@ -1369,6 +1403,10 @@ public class CuwyDbService1 {
 		}
 		logger.debug(""+auth);
 	}
+
+	
+
+	
 
 
 

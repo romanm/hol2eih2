@@ -1,6 +1,14 @@
 operation2Directive = function($scope, $http, $sce, $filter){
 	console.log("operation2Directive");
 
+	$scope.setOp = function(op2set, editedOperation){
+		console.log(op2set);
+		console.log(editedOperation);
+		editedOperation.operation_code = op2set.operationCode;
+		editedOperation.operation_name = op2set.operationName;
+		editedOperation.operation_subgroup_id = op2set.operationSubgroupId;
+	}
+
 	$scope.activeTabName = "seek";
 	$scope.activateTabName = function(newActiveTabName){
 		$scope.activeTabName = newActiveTabName;
@@ -15,7 +23,6 @@ operation2Directive = function($scope, $http, $sce, $filter){
 	}
 	$scope.openGroupFolder = function(groupFolder){
 		$scope.openedGroupFolder = groupFolder;
-		console.log($scope.openedGroupFolder);
 		$scope.isGroupFolderOpen = true;
 		$scope.isRootFolderOpen = false;
 	}

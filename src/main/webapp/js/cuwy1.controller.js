@@ -11,6 +11,7 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$http({ method : 'GET', url : $scope.historyFile
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
+		console.log($scope.patientHistory.operationHistorys);
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
 		initAppConfig($scope, $http, $sce, $filter);
@@ -19,12 +20,16 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	}).error(function(data, status, headers, config) {
 	});
 
-	$scope.setOp = function(op2set, editedOperation){
-		console.log(op2set);
-		console.log(editedOperation);
+	$scope.saveOperation = function(){
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/saveoperation"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
 	}
 
-} ]);
+	} ]);
 
 cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
