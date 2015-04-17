@@ -3,10 +3,12 @@ operation2Directive = function($scope, $http, $sce, $filter){
 
 	$scope.setOp = function(op2set, editedOperation){
 		console.log(op2set);
-		console.log(editedOperation);
-		editedOperation.operation_code = op2set.operationCode;
+		console.log("1 "+editedOperation.operation_id );
+		editedOperation.operation_id = op2set.operationId;
 		editedOperation.operation_name = op2set.operationName;
 		editedOperation.operation_subgroup_id = op2set.operationSubgroupId;
+		console.log("2 "+editedOperation.operation_id );
+		console.log(editedOperation);
 	}
 
 	$scope.activeTabName = "seek";

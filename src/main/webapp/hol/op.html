@@ -97,14 +97,30 @@
 						Операції </a>
 				</h3>
 				<div data-ng-repeat="operation in patientHistory.operationHistorys">
-					{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
-					{{operation.operation_history_end | date:'HH:mm'}} <span
+					<div>
+						Початок операції - {{operation.operation_history_start |
+						date:'dd.MM.yyyy HH:mm'}} -
+						<datepicker data-ng-model="operation.operation_history_start"
+							data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
+							show-weeks="true" class="well well-sm"></datepicker>
+					</div>
+					<div>тривалість операції {{operation.operation_history_end | date:'HH:mm'}}</div>
+					<div>
+						<label for="intNumber">Тривалість операцій --
+							{{(operation.operation_duranion_minute - operation.operation_duranion_minute%60)/60}}
+							:
+							{{operation.operation_duranion_minute%60}}
+							</label> <input id="intNumber"
+							 data-ng-model="operation.operation_duranion_minute"
+							type="range" min="1" max="400" />
+					</div>
+					<span
 						title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">
 						<a data-ng-click="openOpDialog($index)">
 							{{operation.operation_code}} - {{operation.operation_name}} . </a>
 					</span> <span>{{operation.operation_additional}}</span>
 					<div class="well" collapse="collapseOpDialog">
-						<div class="row no-print">
+						<div class="row no-print">s
 							<form class="form-inline" role="form">
 								<div class="col-xs-6">
 									<div class="form-group">
@@ -116,8 +132,8 @@
 									</div>
 								</div>
 								<div class="col-xs-6">
-								<textarea rows="2" cols="22">
-								test tet area
+									<textarea rows="2" cols="33"
+										data-ng-model="operation.operation_additional">
 								</textarea>
 								</div>
 							</form>
@@ -127,8 +143,7 @@
 								<ul class="nav nav-tabs">
 									<li role="presentation"
 										data-ng-class="{'active':activeTabName == 'seek'}"
-										class="active"><a
-										data-ng-click="activateTabName('seek')"><span
+										class="active"><a data-ng-click="activateTabName('seek')"><span
 											class="glyphicon glyphicon-search"></span></a></li>
 									<li role="presentation"
 										data-ng-class="{'active':activeTabName == 'folder'}"><a
@@ -153,7 +168,7 @@
 															data-ng-click="setOp(op3, operation)">
 																{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
 																{{op3.operationName}} </span></li>
-																<!-- 
+														<!-- 
 														<li data-ng-show="isFolderOpen(2,op2)"
 															data-ng-repeat="op3 in op2.operationChilds"><a
 															data-ng-click="setOp(op3, operation)">
@@ -181,8 +196,7 @@
 											data-ng-click="closeGroupFolder()"> <span
 												class="glyphicon glyphicon-folder-open"></span>
 										</a> <span title="{{openedGroupFolder.operationGroupId}}">
-												{{openedGroupFolder.operationGroupName}} 
-												</span>
+												{{openedGroupFolder.operationGroupName}} </span>
 											<ul>
 												<li
 													data-ng-repeat="op2 in openedGroupFolder.operationSubGroupChilds"><a
@@ -202,9 +216,9 @@
 											</ul></li>
 									</ul>
 								</div>
-								
+
 							</div>
-							
+
 						</div>
 					</div>
 				</div>

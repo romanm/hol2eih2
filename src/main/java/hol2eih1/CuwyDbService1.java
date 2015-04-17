@@ -756,20 +756,29 @@ public class CuwyDbService1 {
 			if(isInsert){
 
 			}else{
-
+				final String string = (String) map.get("operation_additional");
+				logger.debug(string);
+				ps.setString(1, string);
+				ps.setInt(2, (int) map.get("operation_id"));
+				ps.setInt(3, (int) map.get("history_id"));
 			}
 		}
 	}
-	
+
 	String sqlInsertOperationHistory = "INSERT INTO operation_history";
-	String sqlUpdateOperationHistory = "UPDATE operation_history";
+	String sqlUpdateOperationHistory = "UPDATE operation_history oh, operation_subgroup os, operation o SET "
+			+ " oh.operation_additional = ? "
+	+ ", oh.operation_id = o.operation_id "
+	+ ", oh.operation_subgroup_id = os.operation_subgroup_id "
+	+ ", oh.operation_group_id = os.operation_group_id "
+	+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND oh.history_id = ? ";
 	public void insertOperationHistory(Map<String, Object> map) {
 		logger.debug(sqlInsertOperationHistory);
-		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppOperationHistory(map, sqlInsertOperationHistory));
+		jdbcTemplate.update(sqlInsertOperationHistory, new InsAppOperationHistory(map, sqlInsertOperationHistory));
 	}
 	public void updateOperationHistory(Map<String, Object> map) {
 		logger.debug(sqlUpdateOperationHistory);
-		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
+		jdbcTemplate.update(sqlUpdateOperationHistory, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
 	}
 	public void updateHistoryDiagnosis(Map<String, Object> map) {
 		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
