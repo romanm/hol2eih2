@@ -1277,6 +1277,29 @@ public class CuwyDbService1 {
 		return countPatientsProMonth;
 	}
 
+	public List<Map<String, Object>> getAnesthetistListe() {
+		String sql = "SELECT * FROM personal WHERE personal_anesthetist";
+		logger.info("\n"+sql);
+		List<Map<String, Object>> surgeryListe 
+		= jdbcTemplate.queryForList(sql);
+		return surgeryListe;
+	}
+
+	public List<Map<String, Object>> getSurgeryListe() {
+		String sql = "SELECT * FROM personal WHERE personal_surgeon";
+		logger.info("\n"+sql);
+		List<Map<String, Object>> surgeryListe 
+		= jdbcTemplate.queryForList(sql);
+		return surgeryListe;
+	}
+	
+	public List<Map<String, Object>> getOperationResultListe() {
+		String sql = "select * from operation_result";
+		logger.info("\n"+sql);
+		List<Map<String, Object>> operationResultListe 
+		= jdbcTemplate.queryForList(sql);
+		return operationResultListe;
+	}
 	public List<Map<String, Object>> getComplicationListe() {
 		String sql = "SELECT * FROM operation_complication";
 		logger.info("\n"+sql);
@@ -1355,13 +1378,17 @@ public class CuwyDbService1 {
 	}
 
 	public List<Map<String, Object>> getOperationHistorys(HistoryHolDb shortPatientHistory) {
-		String sql = "SELECT og.operation_group_name, osg.operation_subgroup_name"
-				+ ", o.operation_name, o.operation_code, oh.* \n"
-				+ " FROM operation_history oh, operation_group og, operation_subgroup osg, operation o "
-				+ "\n"
-				+ " WHERE og.operation_group_id=oh.operation_group_id "
-				+ " AND osg.operation_subgroup_id=oh.operation_subgroup_id "
-				+ " AND o.operation_id=oh.operation_id and oh.history_id = ?";
+		String sql = "SELECT og.operation_group_name, osg.operation_subgroup_name, o.operation_name, ore.operation_result_name,"
+				+ "  oc.operation_complication_name,  d.department_name, ps.surgery_name, pa.surgery_name anesthetist_name, o.operation_code, oh.* "
+				+ "   FROM operation_history oh, operation_group og, operation_subgroup osg, operation o, operation_complication oc, department d, operation_result ore"
+				+ "    ,(select concat(personal_name,' ',personal_surname,' ',personal_patronymic) surgery_name, personal_id from personal) ps"
+				+ "   ,(select concat(personal_name,' ',personal_surname,' ',personal_patronymic) surgery_name, personal_id from personal) pa"
+				+ "     WHERE"
+				+ "      oh.operation_result_id = ore.operation_result_id AND "
+				+ "      oh.anesthetist_id = pa.personal_id AND "
+				+ "       oh.personal_id = ps.personal_id AND  oh.department_id =  d.department_id AND  oh.operation_complication_id=oc.operation_complication_id"
+				+ "     AND  og.operation_group_id=oh.operation_group_id  AND osg.operation_subgroup_id=oh.operation_subgroup_id "
+				+ "      AND o.operation_id=oh.operation_id and oh.history_id = ?";
 		logger.info("\n"+sql.replaceFirst("\\?", ""+shortPatientHistory.getHistoryId()));
 		List<Map<String, Object>> lmso
 			= jdbcTemplate.queryForList(sql, new Object[] { shortPatientHistory.getHistoryId()});
@@ -1412,6 +1439,8 @@ public class CuwyDbService1 {
 		}
 		logger.debug(""+auth);
 	}
+
+	
 
 	
 

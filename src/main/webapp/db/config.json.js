@@ -1,6 +1,4 @@
 var configHol = {
-  "hol1host":"localhost",
-  "hol1host-2":"192.168.68.62",
   "countries" : [ {
     "countryId" : 1,
     "countryName" : "Україна",
@@ -16055,5 +16053,211 @@ var configHol = {
     "cnt" : 5,
     "patient_name" : "Микита",
     "patient_gender" : true
+  } ],
+  "complicationListe" : [ {
+    "operation_complication_id" : 1,
+    "operation_complication_name" : "Абсцес черевної порожнини"
+  }, {
+    "operation_complication_id" : 2,
+    "operation_complication_name" : "Абсцес печінки"
+  }, {
+    "operation_complication_id" : 3,
+    "operation_complication_name" : "Абсцес післяопераційного рубця"
+  }, {
+    "operation_complication_id" : 4,
+    "operation_complication_name" : "Анастомозіт"
+  }, {
+    "operation_complication_id" : 5,
+    "operation_complication_name" : "Анафілактичний шок"
+  }, {
+    "operation_complication_id" : 6,
+    "operation_complication_name" : "Повітряна емболія"
+  }, {
+    "operation_complication_id" : 7,
+    "operation_complication_name" : "Чужерідне тіло, випадково залишене під час операції"
+  }, {
+    "operation_complication_id" : 8,
+    "operation_complication_name" : "Кровотеча з гострих виразок"
+  }, {
+    "operation_complication_id" : 9,
+    "operation_complication_name" : "Лігатурна фістула післяопераційного рубця"
+  }, {
+    "operation_complication_id" : 10,
+    "operation_complication_name" : "Нагноєння рани"
+  }, {
+    "operation_complication_id" : 11,
+    "operation_complication_name" : "Незакрита післяопераційна фістула"
+  }, {
+    "operation_complication_id" : 12,
+    "operation_complication_name" : "Неспроможність анастамоза кишківника"
+  }, {
+    "operation_complication_id" : 13,
+    "operation_complication_name" : "Неспроможність культі дванадцятипалої кишки"
+  }, {
+    "operation_complication_id" : 14,
+    "operation_complication_name" : "Неспроможність стравохідно-шлункового анастамозу"
+  }, {
+    "operation_complication_id" : 15,
+    "operation_complication_name" : "Неспроможність швів культі шлунка"
+  }, {
+    "operation_complication_id" : 16,
+    "operation_complication_name" : "Гостра серцево-судинна недостатність"
+  }, {
+    "operation_complication_id" : 17,
+    "operation_complication_name" : "Гострі виразки шлунково-кишкового тракту"
+  }, {
+    "operation_complication_id" : 18,
+    "operation_complication_name" : "Відторгнення пересадженого лоскуту шкіри"
+  }, {
+    "operation_complication_id" : 19,
+    "operation_complication_name" : "Перитоніт"
+  }, {
+    "operation_complication_id" : 20,
+    "operation_complication_name" : "Пілефлебит "
+  }, {
+    "operation_complication_id" : 21,
+    "operation_complication_name" : "Підшкірна післяопераційна емфізема"
+  }, {
+    "operation_complication_id" : 22,
+    "operation_complication_name" : "Післяінфекційний абсцес"
+  }, {
+    "operation_complication_id" : 23,
+    "operation_complication_name" : "Післяопераційна пневмонія"
+  }, {
+    "operation_complication_id" : 24,
+    "operation_complication_name" : "Післяопераційна гематома"
+  }, {
+    "operation_complication_id" : 25,
+    "operation_complication_name" : "Післяопераційна кровотеча"
+  }, {
+    "operation_complication_id" : 26,
+    "operation_complication_name" : "Післяопераційний (операційний) шок"
+  }, {
+    "operation_complication_id" : 27,
+    "operation_complication_name" : "Розходження швів операційної рани"
+  }, {
+    "operation_complication_id" : 28,
+    "operation_complication_name" : "Реактивний панкреатит"
+  }, {
+    "operation_complication_id" : 29,
+    "operation_complication_name" : "Реактивний плеврит"
+  }, {
+    "operation_complication_id" : 30,
+    "operation_complication_name" : "Сепсис"
+  }, {
+    "operation_complication_id" : 31,
+    "operation_complication_name" : "Випадкове проколення кровоносної судини"
+  }, {
+    "operation_complication_id" : 32,
+    "operation_complication_name" : "Випадкове проколення нерва"
+  }, {
+    "operation_complication_id" : 33,
+    "operation_complication_name" : "Випадкове проколення органу"
+  }, {
+    "operation_complication_id" : 34,
+    "operation_complication_name" : "Злукова хвороба з кишковою непрохідністю після операції"
+  }, {
+    "operation_complication_id" : 35,
+    "operation_complication_name" : "Тромбофлебит після операції"
+  }, {
+    "operation_complication_id" : 36,
+    "operation_complication_name" : "Тромбоемболія легеневої артерії після операції"
+  }, {
+    "operation_complication_id" : 37,
+    "operation_complication_name" : "Недостатність анального сфіктеру після операції"
+  }, {
+    "operation_complication_id" : 38,
+    "operation_complication_name" : "Післяопераційна рубцева стріктура анального каналу  "
+  }, {
+    "operation_complication_id" : 39,
+    "operation_complication_name" : "Омертвіння колостоми"
+  }, {
+    "operation_complication_id" : 40,
+    "operation_complication_name" : "Стеноз колостоми"
+  }, {
+    "operation_complication_id" : 41,
+    "operation_complication_name" : "Омертвіння низведеної кишки в анальний отвір"
+  }, {
+    "operation_complication_id" : 42,
+    "operation_complication_name" : "Загострення хронічного пієлонефриту після операції"
+  }, {
+    "operation_complication_id" : 43,
+    "operation_complication_name" : "Кровотеча після аденомектомії"
+  }, {
+    "operation_complication_id" : 44,
+    "operation_complication_name" : "Орхоепідідіміт після аденомектомії"
+  }, {
+    "operation_complication_id" : 45,
+    "operation_complication_name" : "Нетримання сечі після операції"
+  }, {
+    "operation_complication_id" : 46,
+    "operation_complication_name" : "Довго незаживающа фістула після операції"
+  }, {
+    "operation_complication_id" : 47,
+    "operation_complication_name" : "Післяопераційне реактивне запалення - металоз "
+  }, {
+    "operation_complication_id" : 48,
+    "operation_complication_name" : "Лізіс трансплантанта шкіри"
+  }, {
+    "operation_complication_id" : 49,
+    "operation_complication_name" : "Некроз шкірно-фасціального лоскуту"
+  }, {
+    "operation_complication_id" : 50,
+    "operation_complication_name" : "Нагноєння донорської рани"
+  }, {
+    "operation_complication_id" : 51,
+    "operation_complication_name" : "Неспроможність швів культі бронха"
+  }, {
+    "operation_complication_id" : 52,
+    "operation_complication_name" : "Післяопераційний гнійний плеврит, емпіема плеври"
+  }, {
+    "operation_complication_id" : 53,
+    "operation_complication_name" : "Лікворея"
+  }, {
+    "operation_complication_id" : 54,
+    "operation_complication_name" : "Крововилив в порожнину черепа після видалення внутрішньої гематоми"
+  }, {
+    "operation_complication_id" : 55,
+    "operation_complication_name" : "Крововилив в порожнину черепа після видалення пухлини"
+  }, {
+    "operation_complication_id" : 56,
+    "operation_complication_name" : "Абсцес мозгу"
+  }, {
+    "operation_complication_id" : 57,
+    "operation_complication_name" : "Менінгоенцефаліт"
+  }, {
+    "operation_complication_id" : 58,
+    "operation_complication_name" : "Відторгнення ауто-імунного гомотрансплантанту"
+  }, {
+    "operation_complication_id" : 59,
+    "operation_complication_name" : "Остемієліт"
+  }, {
+    "operation_complication_id" : 60,
+    "operation_complication_name" : "Тромбоемболія мозкових судин"
+  }, {
+    "operation_complication_id" : 61,
+    "operation_complication_name" : "Випадання скловидного тіла"
+  }, {
+    "operation_complication_id" : 62,
+    "operation_complication_name" : "Крововилив під кон’юктиву очного яблука"
+  }, {
+    "operation_complication_id" : 99,
+    "operation_complication_name" : "Інші післяопераційні ускладнення"
+  } ],
+  "operationResultListe" : [ {
+    "operation_result_id" : 1,
+    "operation_result_name" : "Виписаний(а) з одужанням"
+  }, {
+    "operation_result_id" : 2,
+    "operation_result_name" : "Виписаний(а) з поліпшенням"
+  }, {
+    "operation_result_id" : 3,
+    "operation_result_name" : "Виписаний(а) з погіршенням"
+  }, {
+    "operation_result_id" : 4,
+    "operation_result_name" : "Виписаний(а) без змін"
+  }, {
+    "operation_result_id" : 5,
+    "operation_result_name" : "Помер"
   } ]
 }

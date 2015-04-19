@@ -1,8 +1,6 @@
 operationDirective = function($scope, $http, $sce, $filter){
 	console.log("operationDirective");
-	var checkSeekInterval;
 	var lastSeekOp = "";
-	var editedOperation ;
 	$scope.operationTreePath = [0];
 	$scope.openFolder = false;
 	$scope.openFolderId = -1;
@@ -67,46 +65,4 @@ operationDirective = function($scope, $http, $sce, $filter){
 		console.log($scope.operationTreePath);
 	}
 
-	makeFilteredOperationTree = function(){
-		lastSeekOp = editedOperation.operation_name;
-		console.log(lastSeekOp+' - '+(new Date().toLocaleTimeString()));
-		$scope.filteredOperationTree = [];
-		$filter('filter')($scope.operationTree, lastSeekOp).forEach(function(f1o) {
-			$scope.filteredOperationTree.push(f1o);
-			var last1 = $scope.filteredOperationTree[$scope.filteredOperationTree.length - 1];
-			$filter('filter')(f1o.operationSubGroupChilds, lastSeekOp).forEach(function(f2o,i2) {
-				if(0 == i2)
-					last1.filterSubGroups = [];
-				last1.filterSubGroups.push(f2o);
-				var last2 = last1.filterSubGroups[last1.filterSubGroups.length - 1];
-				$filter('filter')(f2o.operationChilds, lastSeekOp).forEach(function(f3o,i3) {
-					if(0 == i3)
-						last2.filterOperations = [];
-					last2.filterOperations.push(f3o);
-				})
-			})
-		})
-//		console.log($scope.filteredOperationTree);
 	}
-	controlOpeSeek = function(){
-		console.log(lastSeekOp);
-		if(lastSeekOp.length != editedOperation.operation_name.length)
-			makeFilteredOperationTree();
-	}
-
-	manageOpeSeekInterval = function(index){
-		if($scope.collapseOpDialog){
-			clearInterval(checkSeekInterval);
-		}else{
-			checkSeekInterval = setInterval(controlOpeSeek, 1000);
-			editedOperation = $scope.patientHistory.operationHistorys[index];
-			lastSeekOp = editedOperation.operation_name;
-		}
-	}
-
-	$scope.openOpDialog = function($index){
-		$scope.collapseOpDialog = !$scope.collapseOpDialog;
-		manageOpeSeekInterval($index);
-	}
-
-}

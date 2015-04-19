@@ -1,8 +1,6 @@
 cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("OpCtrl");
-//	$scope.collapseOpDialog = true;
-	$scope.collapseOpDialog = false;
 	$scope.operationTree = operationTree;
 	readInitHistory($scope, $http, $sce, $filter);
 	operationDirective($scope, $http, $sce, $filter);
@@ -11,7 +9,6 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$http({ method : 'GET', url : $scope.historyFile
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
-		console.log($scope.patientHistory.operationHistorys);
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
 		initAppConfig($scope, $http, $sce, $filter);

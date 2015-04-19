@@ -54,7 +54,7 @@ public class Hol2Eih1Rest {
 	public String heightError(Hol2Exception ex) {
 		return "error";
 	}
-	
+
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String home(@RequestParam Map<String,String> allRequestParams, Principal userPrincipal) {
 		logger.info("\n Start /");
@@ -274,6 +274,26 @@ public class Hol2Eih1Rest {
 		}
 	}
 
+	//-----read json object-----------------------------------------------------
+	@RequestMapping(value="/hol/anesthetists", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> json_anesthetists_liste() {
+		logger.info("\n Start /hol/anesthetists");
+		final List<Map<String, Object>> anesthetistListe = cuwyDbService1.getAnesthetistListe();
+		return anesthetistListe;
+	}
+	@RequestMapping(value="/hol/surgerys", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> json_surgerys_liste() {
+		logger.info("\n Start /hol/surgerys");
+		final List<Map<String, Object>> surgeryListe = cuwyDbService1.getSurgeryListe();
+		return surgeryListe;
+	}
+	@RequestMapping(value="/hol/operation-complication", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> json_complication_liste() {
+		logger.info("\n Start /hol/operation-complication");
+		final List<Map<String, Object>> complicationListe = cuwyDbService1.getComplicationListe();
+		return complicationListe;
+	}
+	//-----read json object--------------------------------------------------END
 	//-----build json db files--------------------------------------------------
 
 	@RequestMapping(value = "/config/create_file", method = RequestMethod.GET)
@@ -285,12 +305,16 @@ public class Hol2Eih1Rest {
 		final List<Map<String, Object>> treatmentAnalysis = cuwyDbService1.getTreatmentAnalysis();
 		final List<Map<String, Object>> firstNames = cuwyDbService1.getFirstNames();
 		final List<DiagnosHol> diagnosesHol = cuwyDbService1.getDiagnosesHol();
+		final List<Map<String, Object>> complicationListe = cuwyDbService1.getComplicationListe();
+		final List<Map<String, Object>> operationResultListe = cuwyDbService1.getOperationResultListe();
 		configHol.setCountries(readCountries);
 		configHol.setDepartments(departmentsHol);
 		configHol.setDirects(directsHol);
 		configHol.setTreatmentAnalysis(treatmentAnalysis);
 		configHol.setFirstNames(firstNames);
 		configHol.setDiagnosesHol(diagnosesHol);
+		configHol.setComplicationListe(complicationListe);
+		configHol.setOperationResultListe(operationResultListe);
 //		writeToJsonDbFile(readCountries, addressesJsonFileName);
 		writeToPrettyJsDbFile("var configHol = ", configHol, AppConfig.configJsFileName);
 		return configHol;

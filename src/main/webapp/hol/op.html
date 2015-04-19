@@ -96,137 +96,226 @@
 					</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
 						Операції </a>
 				</h3>
-				<div data-ng-repeat="operation in patientHistory.operationHistorys">
-					<div>
-						Початок операції - {{operation.operation_history_start |
-						date:'dd.MM.yyyy HH:mm'}} -
-						<datepicker data-ng-model="operation.operation_history_start"
-							data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
-							show-weeks="true" class="well well-sm"></datepicker>
-					</div>
-					<div>тривалість операції {{operation.operation_history_end | date:'HH:mm'}}</div>
-					<div>
-						<label for="intNumber">Тривалість операцій --
-							{{(operation.operation_duranion_minute - operation.operation_duranion_minute%60)/60}}
-							:
-							{{operation.operation_duranion_minute%60}}
-							</label> <input id="intNumber"
-							 data-ng-model="operation.operation_duranion_minute"
-							type="range" min="1" max="400" />
-					</div>
+				<div>
 					<span
 						title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">
-						<a data-ng-click="openOpDialog($index)">
-							{{operation.operation_code}} - {{operation.operation_name}} . </a>
-					</span> <span>{{operation.operation_additional}}</span>
-					<div class="well" collapse="collapseOpDialog">
-						<div class="row no-print">s
-							<form class="form-inline" role="form">
-								<div class="col-xs-6">
-									<div class="form-group">
-										<div class="input-group required-simple">
-											<div class="input-group-addon">Назва операції</div>
-											<input type="text" class="form-control" id="opName"
-												name="opName" data-ng-model="operation.operation_name" />
-										</div>
+						<a data-ng-click="openOpDialog()">
+							{{!operation.operation_code?'Код операції':''}}
+							{{operation.operation_code}}<span
+							data-ng-show="collapseDialog == 'op'"
+							class="glyphicon glyphicon-folder-open"></span></a> - {{operation.operation_name}} . <span>{{operation.operation_additional}}</span>
+					</span> <a data-ng-click="openDialog('beginOp')">
+						{{operation.operation_history_start | date:'dd.MM.yyyy'}}<span
+						data-ng-show="collapseDialog == 'beginOp'"
+						class="glyphicon glyphicon-folder-open"></span></a> тривалість <a data-ng-click="openDialog('durationOp')">({{operation.operation_history_end
+						| date:'HH год mm хв.'}})<span
+						data-ng-show="collapseDialog == 'durationOp'"
+						class="glyphicon glyphicon-folder-open"></span></a>
+				</div>
+
+				<div class="well" collapse="collapseDialog != 'durationOp'">
+					<label for="intNumber">Тривалість операцій --
+						{{(operation_duration_min - operation_duration_min%60)/60 < 10?
+						'0':''}}{{(operation_duration_min -
+						operation_duration_min%60)/60}} :
+						{{operation_duration_min%60<10?'0':''}}{{operation_duration_min%60}}
+					</label> <input id="intNumber"
+						data-ng-mouseup="setOperationDuration(operation_duration_min)"
+						data-ng-model="operation_duration_min" type="range" min="1"
+						max="400" />
+				</div>
+				<div class="well" collapse="collapseDialog != 'beginOp'">
+					<datepicker data-ng-model="operation.operation_history_start"
+						data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
+						show-weeks="true" class="well well-sm"></datepicker>
+				</div>
+				<div class="well" collapse="collapseDialog != 'op'">
+					<div class="row no-print">
+						<form class="form-inline" role="form">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<div class="input-group required-simple">
+										<div class="input-group-addon">Назва операції</div>
+										<input type="text" class="form-control" id="opName"
+											name="opName" data-ng-model="operation.operation_name" />
 									</div>
 								</div>
-								<div class="col-xs-6">
-									<textarea rows="2" cols="33"
-										data-ng-model="operation.operation_additional">
+							</div>
+							<div class="col-xs-6">
+								<textarea rows="2" cols="33"
+									data-ng-model="operation.operation_additional">
 								</textarea>
-								</div>
-							</form>
-						</div>
-						<div class="row no-print">
-							<div class="col-xs-12">
-								<ul class="nav nav-tabs">
-									<li role="presentation"
-										data-ng-class="{'active':activeTabName == 'seek'}"
-										class="active"><a data-ng-click="activateTabName('seek')"><span
-											class="glyphicon glyphicon-search"></span></a></li>
-									<li role="presentation"
-										data-ng-class="{'active':activeTabName == 'folder'}"><a
-										data-ng-click="activateTabName('folder')"><span
-											class="glyphicon glyphicon-folder-{{activeTabName == 'folder' ? 'open':'close'}}"></span></a></li>
-								</ul>
-								<div data-ng-show="activeTabName == 'seek'">
-									<ul>
-										<li data-ng-repeat="op1 in filteredOperationTree"><a
-											data-ng-click="openOpGroup(1,op1)"> <span
-												class="glyphicon glyphicon-folder-{{isFolderOpen(1,op1) ? 'open':'close'}}"></span>
-										</a> {{op1.operationGroupName}}
-											<ul>
-												<li data-ng-repeat="op2 in op1.filterSubGroups"><a
-													data-ng-click="openOpGroup(2,op2)"> <span
-														class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
-												</a> <span
-													title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
-														{{op2.operationSubgroupName}} </span>
-													<ul>
-														<li data-ng-repeat="op3 in op2.filterOperations"><a
-															data-ng-click="setOp(op3, operation)">
-																{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
-																{{op3.operationName}} </span></li>
-														<!-- 
+							</div>
+						</form>
+					</div>
+					<div class="row no-print">
+						<div class="col-xs-12">
+							<ul class="nav nav-tabs">
+								<li role="presentation"
+									data-ng-class="{'active':activeTabName == 'seek'}"
+									class="active"><a data-ng-click="activateTabName('seek')"><span
+										class="glyphicon glyphicon-search"></span></a></li>
+								<li role="presentation"
+									data-ng-class="{'active':activeTabName == 'folder'}"><a
+									data-ng-click="activateTabName('folder')"><span
+										class="glyphicon glyphicon-folder-{{activeTabName == 'folder' ? 'open':'close'}}"></span></a></li>
+							</ul>
+							<div data-ng-show="activeTabName == 'seek'">
+								<ul>
+									<li data-ng-repeat="op1 in filteredOperationTree"><a
+										data-ng-click="openOpGroup(1,op1)"> <span
+											class="glyphicon glyphicon-folder-{{isFolderOpen(1,op1) ? 'open':'close'}}"></span>
+									</a> {{op1.operationGroupName}}
+										<ul>
+											<li data-ng-repeat="op2 in op1.filterSubGroups"><a
+												data-ng-click="openOpGroup(2,op2)"> <span
+													class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
+											</a> <span
+												title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
+													{{op2.operationSubgroupName}} </span>
+												<ul>
+													<li data-ng-repeat="op3 in op2.filterOperations"><a
+														data-ng-click="setOp(op3, operation)">
+															{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
+															{{op3.operationName}} </span></li>
+													<!-- 
 														<li data-ng-show="isFolderOpen(2,op2)"
 															data-ng-repeat="op3 in op2.operationChilds"><a
 															data-ng-click="setOp(op3, operation)">
 																{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
 																{{op3.operationName}} </span></li>
 																 -->
-													</ul></li>
-											</ul></li>
-									</ul>
-								</div>
-								<div data-ng-show="activeTabName == 'folder'">
-									<a data-ng-click="clickRootFolder()"> <span
-										class="glyphicon glyphicon-folder-{{isRootFolderOpen?'open':'close'}}"></span>
-									</a>
-									<ul>
-										<!-- open operation group  -->
-										<li data-ng-show="isRootFolderOpen"
-											data-ng-repeat="op1 in operationTree"><a
-											data-ng-click="openGroupFolder(op1)"> <span
-												class="glyphicon glyphicon-folder-close"></span>
-										</a> <span title="{{op1.operationGroupId}}"
-											data-ng-class="{'bold':openedGroupFolder.operationGroupId == op1.operationGroupId}">
-												{{op1.operationGroupName}} </span></li>
-										<li data-ng-show="isGroupFolderOpen"><a
-											data-ng-click="closeGroupFolder()"> <span
-												class="glyphicon glyphicon-folder-open"></span>
-										</a> <span title="{{openedGroupFolder.operationGroupId}}">
-												{{openedGroupFolder.operationGroupName}} </span>
-											<ul>
-												<li
-													data-ng-repeat="op2 in openedGroupFolder.operationSubGroupChilds"><a
-													data-ng-click="openOpGroup(2,op2)"> <span
-														class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
-												</a> <span
-													title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
-														{{op2.operationSubgroupName}} </span>
-
-													<ul>
-														<li data-ng-show="isFolderOpen(2,op2)"
-															data-ng-repeat="op3 in op2.operationChilds"><a
-															data-ng-click="setOp(op3, operation)">
-																{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
-																{{op3.operationName}} </span></li>
-													</ul></li>
-											</ul></li>
-									</ul>
-								</div>
-
+												</ul></li>
+										</ul></li>
+								</ul>
 							</div>
-
+							<div data-ng-show="activeTabName == 'folder'">
+								<a data-ng-click="clickRootFolder()"> <span
+									class="glyphicon glyphicon-folder-{{isRootFolderOpen?'open':'close'}}"></span>
+								</a>
+								<ul>
+									<!-- open operation group  -->
+									<li data-ng-show="isRootFolderOpen"
+										data-ng-repeat="op1 in operationTree"><a
+										data-ng-click="openGroupFolder(op1)"> <span
+											class="glyphicon glyphicon-folder-close"></span>
+									</a> <span title="{{op1.operationGroupId}}"
+										data-ng-class="{'bold':openedGroupFolder.operationGroupId == op1.operationGroupId}">
+											{{op1.operationGroupName}} </span></li>
+									<li data-ng-show="isGroupFolderOpen"><a
+										data-ng-click="closeGroupFolder()"> <span
+											class="glyphicon glyphicon-folder-open"></span>
+									</a> <span title="{{openedGroupFolder.operationGroupId}}">
+											{{openedGroupFolder.operationGroupName}} </span>
+										<ul>
+											<li
+												data-ng-repeat="op2 in openedGroupFolder.operationSubGroupChilds"><a
+												data-ng-click="openOpGroup(2,op2)"> <span
+													class="glyphicon glyphicon-folder-{{isFolderOpen(2,op2) ?'open':'close'}}"></span>
+											</a> <span
+												title="{{op2.operationGroupId}}/{{op2.operationSubgroupId}}">
+													{{op2.operationSubgroupName}} </span>
+												<ul>
+													<li data-ng-show="isFolderOpen(2,op2)"
+														data-ng-repeat="op3 in op2.operationChilds"><a
+														data-ng-click="setOp(op3, operation)">
+															{{op3.operationCode}} </a>:<span title="{{op3.operationId}}">
+															{{op3.operationName}} </span></li>
+												</ul></li>
+										</ul></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div>Діагноз при операції</div>
+				<div>
+					<span><a data-ng-click="openDialog('department')">Відділення:<span
+							data-ng-show="collapseDialog == 'department'"
+							class="glyphicon glyphicon-folder-open"></span></a>
+						{{operation.department_name}}</span>, <span> <a
+						data-ng-click="openDialog('surgery')">Хірург:<span
+							data-ng-show="collapseDialog == 'surgery'"
+							class="glyphicon glyphicon-folder-open"></span></a>
+						{{operation.surgery_name}}
+					</span>, <span><a data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
+							data-ng-show="collapseDialog == 'anesthetist'"
+							class="glyphicon glyphicon-folder-open"></span>
+					</a> </span> {{operation.anesthetist_name}} <span>Анестезія</span>
+				</div>
+				<div>
+					<span><a data-ng-click="openDialog('opresult')">
+							Результат:<span data-ng-show="collapseDialog == 'opresult'"
+							class="glyphicon glyphicon-folder-open"></span>
+					</a> {{operation.operation_result_name}} </span>, <span> <a
+						data-ng-click="openDialog('complication')"> Ускладнення:<span
+							data-ng-show="collapseDialog == 'complication'"
+							class="glyphicon glyphicon-folder-open"></span></a>
+						{{operation.operation_complication_id}}.
+						{{operation.operation_complication_name}}
+					</span>
+				</div>
+				<div class="well" collapse="collapseDialog != 'opresult'">
+					<ul>
+						<li data-ng-repeat="or in operationResultListe"><a
+							data-ng-click="setOperationResult(or)"> {{or.operation_result_name}} </a></li>
+					</ul>
+				</div>
+				<div class="well" collapse="collapseDialog != 'anesthetist'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekAnesthetist" type="text" class="form-control"
+							placeholder=" пошук анестезіолога " />
+					</div>
+					<ul>
+						<li data-ng-repeat="a in anesthetists | filter : seekAnesthetist"><a
+							data-ng-click="setAnesthetist(a)"> {{a.personal_surname}}
+								{{a.personal_name}} {{a.personal_patronymic}} </a></li>
+					</ul>
+				</div>
+				<div class="well" collapse="collapseDialog != 'surgery'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekSurgery" type="text" class="form-control"
+							placeholder=" пошук хірурга " />
+					</div>
+					<ul>
+						<li data-ng-repeat="s in surgerys | filter : seekSurgery"><a
+							data-ng-click="setSurgery(s)"> {{s.personal_surname}}
+								{{s.personal_name}} {{s.personal_patronymic}} </a></li>
+					</ul>
+				</div>
+				<div class="well" collapse="collapseDialog != 'department'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekDepartment" type="text" class="form-control"
+							placeholder=" пошук відділення " />
+					</div>
+					<ul>
+						<li
+							data-ng-repeat="d in departments | filter:{department_profile_id:2} | filter : seekDepartment"><a
+							data-ng-click="setDepartment(d)"> {{d.department_id}}.
+								{{d.department_name}} </a></li>
+					</ul>
+				</div>
+				<div class="well" collapse="collapseDialog != 'complication'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekComplication" type="text" class="form-control"
+							placeholder=" пошук ускладнень " />
+					</div>
+					<ul>
+						<li data-ng-repeat="opc in opComplications| filter : seekComplication"><a
+							data-ng-click="setComplication(opc)">
+								{{opc.operation_complication_id}}.
+								{{opc.operation_complication_name}} </a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 
-		<nav class="navbar navbar-default navbar-fixed-bottom"
+	<nav class="navbar navbar-default navbar-fixed-bottom"
 			role="navigation">
 			<div class="container">
 				<span><span class="glyphicon glyphicon-console"></span>
