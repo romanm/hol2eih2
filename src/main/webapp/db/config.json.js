@@ -1,4 +1,6 @@
 var configHol = {
+"hol1host":"localhost",
+ "hol1host-2":"192.168.68.62",
   "countries" : [ {
     "countryId" : 1,
     "countryName" : "Україна",

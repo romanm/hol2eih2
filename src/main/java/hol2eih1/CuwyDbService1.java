@@ -55,13 +55,35 @@ public class CuwyDbService1 {
 	private JdbcTemplate jdbcTemplate;
 	public JdbcTemplate getJdbcTemplate() { return jdbcTemplate; }
 	
+	String sqlHistoryInDepartmentProYearMonths
+	= "SELECT d.department_id ,YEAR(history_in) ,MONTH(history_in) , h.* \n"
+			+ " FROM history h, department d \n"
+			+ " WHERE YEAR(history_in) = 2014 AND (MONTH(history_in) > 1 OR MONTH(history_in) < 4) AND d.department_id = 5 \n"
+			+ " AND d.department_id = h.history_department_in";
+
+	String sqlMoveQuartal = "SELECT pip, department_history_in, department_history_out, department_history_bed_day, pDs, cDs FROM "
+			+ "\n (SELECT p.patient_id,CONCAT(p.patient_name,' ',p.patient_surname,' ',p.patient_patronnymic) pip FROM patient p) p "
+			+ "\n, (SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in , dh.department_history_out , dh.department_history_bed_day "
+			+ "\n FROM history h, department_history dh "
+			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
+			+ "\n AND dh.department_id = 5 AND dh.history_id = h.history_id) historyInDepartmentProYearMonths "
+			+ "\n LEFT JOIN ( SELECT  hd.history_id pHistoryId, CONCAT(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) pDs "
+			+ "\n FROM history_diagnos hd, icd icd where hd.diagnos_id = 2  AND icd.icd_id = hd.icd_id) dsPostupiv ON pHistoryId = historyInDepartmentProYearMonths.history_id "
+			+ "\n LEFT JOIN ( SELECT  hd.history_id cHistoryId, CONCAT(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) cDs "
+			+ "\n FROM history_diagnos hd, icd icd where hd.diagnos_id = 3  AND icd.icd_id = hd.icd_id) dsClin ON cHistoryId = historyInDepartmentProYearMonths.history_id "
+			+ "\n WHERE p.patient_id = historyInDepartmentProYearMonths.patient_id "
+			+ "\n ORDER BY historyInDepartmentProYearMonths.department_history_in";
+	
 	public CuwyDbService1() throws NamingException{
 			final DataSource dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/hol1mySqlDataSource");
 			logger.debug("\n------------CuwyDbService1-------------\n"
 					+ "dataSource="+dataSource+
 							"\n------------CuwyDbService1-------------");
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
-		
+		System.out.println("------------sqlHistoryInDepartmentProYearMonths-----------------------");
+		System.out.println(sqlHistoryInDepartmentProYearMonths);
+		System.out.println("------------sqlMoveQuartal-----------------------");
+		System.out.println(sqlMoveQuartal);
 		logger.debug("\n------------CuwyDbService1-------------\n"
 				+ "jdbcTemplate="+jdbcTemplate+
 				"\n------------CuwyDbService1-------------");
@@ -1441,7 +1463,6 @@ public class CuwyDbService1 {
 	}
 
 	
-
 	
 
 	
