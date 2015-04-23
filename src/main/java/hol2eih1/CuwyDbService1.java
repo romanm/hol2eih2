@@ -61,18 +61,23 @@ public class CuwyDbService1 {
 			+ " WHERE YEAR(history_in) = 2014 AND (MONTH(history_in) > 1 OR MONTH(history_in) < 4) AND d.department_id = 5 \n"
 			+ " AND d.department_id = h.history_department_in";
 
-	String sqlMoveQuartal = "SELECT pip, department_history_in, department_history_out, department_history_bed_day, pDs, cDs FROM "
-			+ "\n (SELECT p.patient_id,CONCAT(p.patient_name,' ',p.patient_surname,' ',p.patient_patronnymic) pip FROM patient p) p "
-			+ "\n, (SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in , dh.department_history_out , dh.department_history_bed_day "
-			+ "\n FROM history h, department_history dh "
+	String sqlMoveQuartal = "SELECT  pip, d_id, d_name, dr_name, r_id, r_name, d_in, d_out, b_d, pDs, cds_code, cDs "
+			+ "\n FROM (SELECT p.patient_id,concat(p.patient_surname,' ',p.patient_name,' ',p.patient_patronnymic) pip "
+			+ "\n , r.region_name r_name, r.region_id r_id, d.district_name d_name, d.district_id d_id "
+			+ "\n FROM patient p, region r, district d WHERE r.region_id=p.region_id and r.district_id=d.district_id) p, "
+			+ "\n (SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in d_in , dh.department_history_out  d_out "
+			+ "\n , if(dh.department_history_bed_day = 0,1,dh.department_history_bed_day) b_d , dr.direct_name dr_name "
+			+ "\n FROM history h, department_history dh, direct dr "
 			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
-			+ "\n AND dh.department_id = 5 AND dh.history_id = h.history_id) historyInDepartmentProYearMonths "
-			+ "\n LEFT JOIN ( SELECT  hd.history_id pHistoryId, CONCAT(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) pDs "
-			+ "\n FROM history_diagnos hd, icd icd where hd.diagnos_id = 2  AND icd.icd_id = hd.icd_id) dsPostupiv ON pHistoryId = historyInDepartmentProYearMonths.history_id "
-			+ "\n LEFT JOIN ( SELECT  hd.history_id cHistoryId, CONCAT(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) cDs "
-			+ "\n FROM history_diagnos hd, icd icd where hd.diagnos_id = 3  AND icd.icd_id = hd.icd_id) dsClin ON cHistoryId = historyInDepartmentProYearMonths.history_id "
-			+ "\n WHERE p.patient_id = historyInDepartmentProYearMonths.patient_id "
-			+ "\n ORDER BY historyInDepartmentProYearMonths.department_history_in";
+			+ "\n AND dh.department_id = 22 AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id) historyInDepartmentProYearMonths "
+			+ "\n LEFT JOIN ( SELECT  hd.history_id pHistoryId, concat(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) pDs "
+			+ "\n FROM history_diagnos hd, icd icd "
+			+ "\n WHERE hd.diagnos_id = 2  AND icd.icd_id = hd.icd_id) dsPostupiv ON pHistoryId = historyInDepartmentProYearMonths.history_id "
+			+ "\n  LEFT JOIN ( SELECT  hd.history_id cHistoryId , substring_index(icd.icd_code,'.',1) cds_code "
+			+ "\n , concat(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) cDs "
+			+ "\n FROM history_diagnos hd, icd icd "
+			+ "\n WHERE hd.diagnos_id = 3  AND icd.icd_id = hd.icd_id) dsClin ON cHistoryId = historyInDepartmentProYearMonths.history_id "
+			+ "\n WHERE p.patient_id = historyInDepartmentProYearMonths.patient_id ORDER BY historyInDepartmentProYearMonths.d_in ";
 	
 	public CuwyDbService1() throws NamingException{
 			final DataSource dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/hol1mySqlDataSource");
