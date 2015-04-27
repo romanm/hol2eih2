@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +107,31 @@ public class Hol2Eih1Rest {
 		epicrise = hol2Service.saveEpicrise(epicrise);
 		System.out.println("-------------------------------");
 		return epicrise;
+	}
+	
+	@RequestMapping(value = "/hol/quartalReport_{departmentId}", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> quartalReport(@PathVariable Integer departmentId
+			, Principal userPrincipal, HttpSession session) throws IOException {
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo(departmentId);
+		map.put("dsMistoSelo", dsMistoSelo);
+		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
+		map.put("dsNapravlenya", dsNapravlenya);
+		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
+		departmentHol.setUser(userPrincipal);
+		map.put("department", departmentHol);
+		return map;
+	}
+	@RequestMapping(value = "/hol/jornalMovePatient_{departmentId}", method = RequestMethod.GET)
+	public @ResponseBody DepartmentHol jornalMovePatient(@PathVariable Integer departmentId
+			, Principal userPrincipal, HttpSession session) throws IOException {
+		logger.info("\n Start /hol/department_"+departmentId);
+		logger.info("\n Start /hol/department_"+session);
+		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
+		final List<Map<String, Object>> jornalMovePatient = cuwyDbService1.jornalMovePatient(departmentId);
+		departmentHol.setJornalMovePatient(jornalMovePatient);
+		departmentHol.setUser(userPrincipal);
+		return departmentHol;
 	}
 	
 	@RequestMapping(value = "/hol/department_{departmentId}", method = RequestMethod.GET)

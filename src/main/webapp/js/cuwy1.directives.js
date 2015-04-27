@@ -12,6 +12,35 @@ function isMiddleWeek(index, countPatientsProWeeks){
 }
 
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
+String.prototype.splice = function(idx, rem, s) {
+	return (this.slice(0,idx) + s + this.slice(idx + Math.abs(rem)));
+};
+
+String.prototype.to_mmssMsec = function() {
+	var mm_int = parseInt(this) / (60*1000);
+	var mm = (mm_int < 10 ? "0":"") + mm_int + ":";
+	if(this.length > 4){
+		return mm + this.slice(0, this.length - 3) + ":"+this.slice(this.length - 3);
+	}else if(this.length == 4){
+		return mm + "0" + this.slice(0,1) + ":"+this.slice(1);
+	}else{
+		return mm + "00:"+this;
+	}
+};
+
+function pad (str, max) {
+	str = str.toString();
+	return str.length < max ? pad("0" + str, max) : str;
+}
+
+to_mmssMsec = function(i) {
+	var ms_int = i % 1000;
+	var s_int = (i - ms_int) / 1000;
+	var ss_int = s_int % 60;
+	var m_int = (s_int - ss_int) / 60;
+	var mmssms = pad(m_int,2) + ":" + pad(ss_int,2) + ":" + pad(ms_int,3);
+	return mmssms;
+};
 
 Date.prototype.getMonthUa = function (month){
 	var monthsUa = ["Січень", "Лютий"

@@ -2,15 +2,24 @@ package org.cuwy1.holDb.model;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 public class DepartmentHol {
+	private List<Map<String, Object>> jornalMovePatient;
 	private List<DepartmentHol> departmentsHol;
 	private List<PatientDiagnosisHol> patientesDiagnosisHol;
 	
-	private int department_id,department_profile_id;
+	private int department_id, department_profile_id;
 	private String department_name;
 	private boolean department_active;
 	private Principal user;
+	public List<Map<String, Object>> getJornalMovePatient() {
+		return jornalMovePatient;
+	}
+
+	public void setJornalMovePatient(List<Map<String, Object>> jornalMovePatient) {
+		this.jornalMovePatient = jornalMovePatient;
+	}
 
 	public DepartmentHol(int department_id, String department_name, boolean department_active, int department_profile_id) {
 		this.department_id = department_id;

@@ -107,6 +107,52 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 
 }]);
 
+cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filter', '$sce',
+		function ($scope, $interval, $http, $filter, $sce) {
+	console.log('quartalReportCtrl');
+	
+	var startLoadTime = new Date();
+	
+	loadDurationTimer = function () {
+		var loadDurationMs = new Date().getTime() - startLoadTime.getTime();
+		$scope.loadDurationS_MS = to_mmssMsec(loadDurationMs);
+	}
+	loadDurationTimer();
+	
+	var checkLoadTimeInterval = $interval(function(){loadDurationTimer()},1023);
+
+	$http({
+		method : 'GET',
+		url : "/hol/quartalReport_"+parameters.dep
+	}).success(function(data, status, headers, config) {
+		$scope.department = data.department;
+		$scope.data = data;
+		console.log($scope.data);
+		clearInterval(checkLoadTimeInterval);
+		if(angular.isDefined(checkLoadTimeInterval)){
+			$interval.cancel(checkLoadTimeInterval);
+			checkLoadTimeInterval=undefined;
+		}
+		$scope.loadDurationMs = new Date().getTime() - startLoadTime.getTime();
+		//initAppConfig($scope, $http, $sce, $filter);
+	}).error(function(data, status, headers, config) {
+	});
+}]);
+cuwyApp.controller('JornalMovePatientCtrl', [ '$scope', '$http', '$filter', '$sce',
+		function ($scope, $http, $filter, $sce) {
+	console.log('JornalMovePatientCtrl');
+	$http({
+		method : 'GET',
+		url : "/hol/jornalMovePatient_"+parameters.dep
+	}).success(function(data, status, headers, config) {
+		$scope.department = data;
+		$scope.jornalMovePatient = data.jornalMovePatient;
+		console.log($scope.department);
+		//initAppConfig($scope, $http, $sce, $filter);
+	}).error(function(data, status, headers, config) {
+	});
+}]);
+
 departmentFile = "/hol/department_"+parameters.dep;
 
 cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',

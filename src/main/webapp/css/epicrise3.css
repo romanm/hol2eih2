@@ -9,9 +9,19 @@
 }
 
 .bold {font-weight: bold;}
+.normal {font-weight: normal;}
+.italic {font-style: italic;}
+.underline { text-decoration: underline;}
 .pip {font-size:125%; 
 font-weight: bold;
 text-decoration: underline;}
+tr.border_top td {
+	border-top:1pt solid black;
+}
+tr.border_bottom td ,
+tr.border_bottom th {
+	border-bottom:2pt solid black;
+}
 
 .required-tooltip {font-size:150%;color: red;}
 		.required:after {
