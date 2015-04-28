@@ -113,13 +113,15 @@ public class Hol2Eih1Rest {
 	public @ResponseBody Map<String, Object> quartalReport(@PathVariable Integer departmentId
 			, Principal userPrincipal, HttpSession session) throws IOException {
 		final HashMap<String, Object> map = new HashMap<String, Object>();
-		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo(departmentId);
-		map.put("dsMistoSelo", dsMistoSelo);
-		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
-		map.put("dsNapravlenya", dsNapravlenya);
 		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
 		departmentHol.setUser(userPrincipal);
 		map.put("department", departmentHol);
+		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo2(departmentId);
+		map.put("dsMistoSelo", dsMistoSelo);
+//		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
+//		map.put("dsNapravlenya", dsNapravlenya);
+		final List<Map<String, Object>> dsReferral = cuwyDbService1.dsReferral(departmentId);
+		map.put("dsReferral", dsReferral);
 		return map;
 	}
 	@RequestMapping(value = "/hol/jornalMovePatient_{departmentId}", method = RequestMethod.GET)
