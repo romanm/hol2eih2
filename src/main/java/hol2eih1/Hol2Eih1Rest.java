@@ -116,12 +116,18 @@ public class Hol2Eih1Rest {
 		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
 		departmentHol.setUser(userPrincipal);
 		map.put("department", departmentHol);
-		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo2(departmentId);
+//		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo2(departmentId);
+		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlMistoSelo);
 		map.put("dsMistoSelo", dsMistoSelo);
 //		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
 //		map.put("dsNapravlenya", dsNapravlenya);
-		final List<Map<String, Object>> dsReferral = cuwyDbService1.dsReferral(departmentId);
+//		final List<Map<String, Object>> dsReferral = cuwyDbService1.dsReferral(departmentId);
+		final List<Map<String, Object>> dsReferral = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlGroupReferral);
 		map.put("dsReferral", dsReferral);
+		final List<Map<String, Object>> dsDeadOrvipisany = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlDeadOrvipisany_cDs_group);
+		map.put("dsDeadOrvipisany", dsDeadOrvipisany);
+		final List<Map<String, Object>> dsPerevedeni = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlPerevedeni2hol_cDs_group);
+		map.put("dsPerevedeni", dsPerevedeni);
 		return map;
 	}
 	@RequestMapping(value = "/hol/jornalMovePatient_{departmentId}", method = RequestMethod.GET)

@@ -59,6 +59,35 @@ body {
 	</h1>
 
 	<div class="container">
+	
+	<table class="table-striped">
+			<caption>
+				<h3>Діагноз -- Виписаний / Помер</h3>
+			</caption>
+			<thead>
+				<tr>
+					<th>Nr({{data.dsDeadOrvipisany.length}})</th>
+					<th>Код&nbsp;</th>
+					<th>Кількисть</th>
+					<th>Направлений</th>
+					<th>Койкодень</th>
+					<th>Диагноз</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="border_top"
+					data-ng-repeat="dsDeadOrvipisany in data.dsDeadOrvipisany">
+					<td>{{$index+1}})&nbsp;</td>
+					<td>{{dsDeadOrvipisany.cds_code}}</td>
+					<td>{{dsDeadOrvipisany.cnt_deadVipisan}}</td>
+					<td title="{{dsDeadOrvipisany.deadVipisan}}">
+					{{dsDeadOrvipisany.deadVipisan==1?" Виписаний ":" Помер "}}</td>
+					<td>{{dsDeadOrvipisany.sum_b_d}}</td>
+					<td>{{dsDeadOrvipisany.cDs}}</td>
+				</tr>
+			</tbody>
+		</table>
+	
 		<table class="table-striped">
 			<caption>
 				<h3>Діагноз -- направлення</h3>
