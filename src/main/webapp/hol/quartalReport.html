@@ -18,7 +18,7 @@ body {
 	padding-bottom: 60px;
 }
 </style>
-<title>ХОЛ::{{department.department_name}}::квартальний звіт</title>
+<title>ХОЛ::{{department.department_name}}::таблиці квартального звіту</title>
 </head>
 
 <body>
@@ -59,8 +59,36 @@ body {
 	</h1>
 
 	<div class="container">
-	
-	<table class="table-striped">
+
+		
+		<table class="table-striped">
+			<caption>
+				<h3>Діагноз -- Переведені в інші відділення</h3>
+			</caption>
+			<thead>
+				<tr>
+					<th>Nr({{data.dsPerevedeni.length}})</th>
+					<th>Код&nbsp;</th>
+					<th>Кількисть</th>
+
+					<th>Койкодень</th>
+					<th>Диагноз</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="border_top"
+					data-ng-repeat="dsPerevedeni in data.dsPerevedeni">
+					<td>{{$index+1}})&nbsp;</td>
+					<td>{{dsPerevedeni.cds_code}}</td>
+					<td>{{dsPerevedeni.cnt_cds_code}}</td>
+
+					<td>{{dsPerevedeni.sum_b_d}}</td>
+					<td>{{dsPerevedeni.cDs}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table-striped">
 			<caption>
 				<h3>Діагноз -- Виписаний / Помер</h3>
 			</caption>
@@ -150,33 +178,7 @@ body {
 			</tbody>
 		</table>
 		
-		<table class="table-striped">
-			<caption>
-				<h3>Діагноз -- направлення</h3>
-			</caption>
-			<thead>
-				<tr>
-					<th>Nr({{data.dsNapravlenya.length}})</th>
-					<th>Код&nbsp;</th>
-					<th>Кількисть</th>
-					<th>Направлений</th>
-					<th>Диагноз</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="border_top"
-					data-ng-repeat="dsNapravlenya in data.dsNapravlenya">
-					<td>{{$index+1}})&nbsp;</td>
-					<td>{{dsNapravlenya.cds_code}}</td>
-					<td>{{dsNapravlenya.cnt_direct_id}}</td>
-					<td>{{dsNapravlenya.direct_id}}.{{dsNapravlenya.dr_name}}</td>
-					<td>{{dsNapravlenya.cDs}}</td>
-				</tr>
-			</tbody>
-		</table>
-		
 	</div>
-
 
 	<script src="/js/jquery-2.1.3.min.js"></script>
 	<script src="/css/b/js/bootstrap.min.js"></script>

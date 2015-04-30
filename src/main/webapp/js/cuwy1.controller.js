@@ -128,7 +128,8 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 		$scope.department = data.department;
 		$scope.data = data;
 		console.log($scope.data);
-		clearInterval(checkLoadTimeInterval);
+		calcReport();
+		//		clearInterval(checkLoadTimeInterval);
 		if(angular.isDefined(checkLoadTimeInterval)){
 			$interval.cancel(checkLoadTimeInterval);
 			checkLoadTimeInterval=undefined;
@@ -137,6 +138,30 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 		//initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
+
+	$scope.getReportTableKey = function(){
+		return Object.keys($scope.data.reportTable);
+	}
+	calcReport = function(){
+		$scope.data.reportTable = {};
+		$scope.data.dsReferral.forEach(function(dsReferral) {
+			console.log(dsReferral);
+			if($scope.data.reportTable[dsReferral.cds_code] === undefined)
+				$scope.data.reportTable[dsReferral.cds_code] = {};
+			$scope.data.reportTable[dsReferral.cds_code].cDs = dsReferral.cDs;
+			if($scope.data.reportTable[dsReferral.cds_code]["dsReferral"] === undefined)
+				$scope.data.reportTable[dsReferral.cds_code]["dsReferral"] = [];
+			$scope.data.reportTable[dsReferral.cds_code]["dsReferral"].push(dsReferral);
+			if(dsReferral.referral == 99999 ){
+				$scope.data.reportTable[dsReferral.cds_code].transferIn = dsReferral.cnt_ref;
+			}else if(dsReferral.referral == 1){
+				$scope.data.reportTable[dsReferral.cds_code].withoutReferralIn = dsReferral.cnt_ref;
+			}else{
+				$scope.data.reportTable[dsReferral.cds_code].withReferralIn = dsReferral.cnt_ref;
+			}
+		});
+		console.log($scope.data.reportTable);
+	};
 }]);
 cuwyApp.controller('JornalMovePatientCtrl', [ '$scope', '$http', '$filter', '$sce',
 		function ($scope, $http, $filter, $sce) {
