@@ -140,25 +140,74 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 	});
 
 	$scope.getReportTableKey = function(){
-		return Object.keys($scope.data.reportTable);
+		if($scope.data)
+			return Object.keys($scope.data.reportTable);
+		else 
+			return [];
+	}
+	setCdsCode = function(cds_code){
+		if($scope.data.reportTable[cds_code] === undefined){
+			$scope.data.reportTable[cds_code] = {};
+			$scope.data.reportTable[cds_code].cnt = {};
+			$scope.data.reportTable[cds_code].bedday = {};
+		}
 	}
 	calcReport = function(){
 		$scope.data.reportTable = {};
 		$scope.data.dsReferral.forEach(function(dsReferral) {
-			console.log(dsReferral);
-			if($scope.data.reportTable[dsReferral.cds_code] === undefined)
-				$scope.data.reportTable[dsReferral.cds_code] = {};
-			$scope.data.reportTable[dsReferral.cds_code].cDs = dsReferral.cDs;
-			if($scope.data.reportTable[dsReferral.cds_code]["dsReferral"] === undefined)
-				$scope.data.reportTable[dsReferral.cds_code]["dsReferral"] = [];
-			$scope.data.reportTable[dsReferral.cds_code]["dsReferral"].push(dsReferral);
+			var cds_code = dsReferral.cds_code;
+			setCdsCode(cds_code);
+			$scope.data.reportTable[cds_code].cDs = dsReferral.cDs;
+			if($scope.data.reportTable[cds_code]["dsReferral"] === undefined)
+				$scope.data.reportTable[cds_code]["dsReferral"] = [];
+			$scope.data.reportTable[cds_code]["dsReferral"].push(dsReferral);
 			if(dsReferral.referral == 99999 ){
-				$scope.data.reportTable[dsReferral.cds_code].transferIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].cnt.transferIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].bedday.transferIn = dsReferral.sum_b_d;
 			}else if(dsReferral.referral == 1){
-				$scope.data.reportTable[dsReferral.cds_code].withoutReferralIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].cnt.withoutReferralIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].bedday.withoutReferralIn = dsReferral.sum_b_d;
 			}else{
-				$scope.data.reportTable[dsReferral.cds_code].withReferralIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].cnt.withReferralIn = dsReferral.cnt_ref;
+				$scope.data.reportTable[cds_code].bedday.withReferralIn = dsReferral.sum_b_d;
 			}
+		});
+		$scope.data.dsMistoSelo.forEach(function(dsMistoSelo) {
+			var cds_code = dsMistoSelo.cds_code;
+			setCdsCode(cds_code);
+			if($scope.data.reportTable[cds_code]["dsMistoSelo"] === undefined)
+				$scope.data.reportTable[cds_code]["dsMistoSelo"] = [];
+			$scope.data.reportTable[cds_code]["dsMistoSelo"].push(dsMistoSelo);
+			if(dsMistoSelo.locality_type == 1){
+				$scope.data.reportTable[cds_code].cnt.misto = dsMistoSelo.cnt_locality_type;
+				$scope.data.reportTable[cds_code].bedday.misto = dsMistoSelo.sum_b_d;
+			}else{
+				$scope.data.reportTable[cds_code].cnt.selo = dsMistoSelo.cnt_locality_type;
+				$scope.data.reportTable[cds_code].bedday.selo = dsMistoSelo.sum_b_d;
+			}
+		});
+		$scope.data.dsDeadOrvipisany.forEach(function(dsDeadOrvipisany) {
+			var cds_code = dsDeadOrvipisany.cds_code;
+			setCdsCode(cds_code);
+			if($scope.data.reportTable[cds_code]["dsDeadOrvipisany"] === undefined)
+				$scope.data.reportTable[cds_code]["dsDeadOrvipisany"] = [];
+			$scope.data.reportTable[cds_code]["dsDeadOrvipisany"].push(dsDeadOrvipisany);
+			if(dsDeadOrvipisany.deadVipisan == 0){
+				$scope.data.reportTable[cds_code].cnt.dead = dsDeadOrvipisany.cnt_deadVipisan;
+				$scope.data.reportTable[cds_code].bedday.dead = dsDeadOrvipisany.sum_b_d;
+			}else{
+				$scope.data.reportTable[cds_code].cnt.discharged = dsDeadOrvipisany.cnt_deadVipisan;
+				$scope.data.reportTable[cds_code].bedday.discharged = dsDeadOrvipisany.sum_b_d;
+			}
+		});
+		$scope.data.dsPerevedeni.forEach(function(dsPerevedeni) {
+			var cds_code = dsPerevedeni.cds_code;
+			setCdsCode(cds_code);
+			if($scope.data.reportTable[cds_code]["dsPerevedeni"] === undefined)
+				$scope.data.reportTable[cds_code]["dsPerevedeni"] = [];
+			$scope.data.reportTable[cds_code]["dsPerevedeni"].push(dsPerevedeni);
+			$scope.data.reportTable[cds_code].cnt.referralOut = dsPerevedeni.cnt_cds_code;
+			$scope.data.reportTable[cds_code].bedday.referralOut = dsPerevedeni.sum_b_d;
 		});
 		console.log($scope.data.reportTable);
 	};

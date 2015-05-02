@@ -1538,7 +1538,7 @@ public class CuwyDbService1 {
 			+ "\n ) sqlPerevedeni2hol WHERE sqlPerevedeni2hol.history_id = cDs.history_id"
 			+ "\n ) h GROUP BY cds_code ORDER BY cds_code";
 
-	static String sqlDeadOrvipisany ="SELECT h.history_id, result_id, IF(result_id<5,1,result_id) deadVipisan, (dh.department_history_bed_day + 1) b_d"
+	static String sqlDeadOrvipisany ="SELECT h.history_id, result_id, IF(result_id=5,0,result_id) deadVipisan, (dh.department_history_bed_day + 1) b_d"
 			+ "\n FROM history h ,  department_history dh LEFT JOIN department_history dhf "
 			+ "\n ON dh.history_id = dhf.history_id AND TIMESTAMPDIFF(SECOND,dh.department_history_out,dhf.department_history_in) = 1 "
 			+ "\n WHERE h.result_id<7 and h.history_id=dh.history_id AND dh.department_id = ? AND dhf.department_id IS NULL AND "
