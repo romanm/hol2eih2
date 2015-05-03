@@ -66,13 +66,20 @@ public class CuwyDbService1 {
 		System.out.println(sqlHistoryInDepartmentProYearMonths);
 		System.out.println("------------sqlMoveQuartal-----------------------");
 		System.out.println(sqlMoveQuartal);
-		logger.debug("\n sqlPatientAdress = \n"+sqlPatientAdress);
-		logger.debug("\n sqlGroupReferral = \n"+sqlGroupReferral);
-		logger.debug("\n sqlPerevedeni2hol = \n"+sqlPerevedeni2hol);
-		logger.debug("\n sqlDeadOrvipisany = \n"+sqlDeadOrvipisany);
-		logger.debug("\n sql_cDs = \n"+sql_cDs);
-		logger.debug("\n sqlDeadOrvipisany_cDs_group = \n"+sqlDeadOrvipisany_cDs_group);
-		logger.debug("\n sqlPerevedeni2hol_cDs_group = \n"+sqlPerevedeni2hol_cDs_group);
+		logger.debug("\n------------ sqlPatientAdress = \n"+sqlPatientAdress);
+		logger.debug("\n------------ sqlGroupReferral = \n"+sqlReferral_cDs_group);
+		logger.debug("\n------------ sqlPerevedeni2hol = \n"+sqlPerevedeni2hol);
+		logger.debug("\n------------ sqlDeadOrvipisany = \n"+sqlDeadOrvipisany);
+		logger.debug("\n------------ sqlReferral = \n"+sqlReferral);
+		logger.debug("\n------------ sql_cDs = \n"+sql_cDs);
+		logger.debug("\n------------ sql_pAd = \n"+sql_pAd);
+		logger.debug("\n------------ sqlDeadOrvipisany_cDs_group = \n"+sqlDeadOrvipisany_cDs_group);
+		logger.debug("\n------------ sqlDeadOrvipisany_pAd = \n"+sqlDeadOrvipisany_pAd);
+		logger.debug("\n------------ sqlPerevedeni2hol_cDs_group = \n"+sqlPerevedeni2hol_cDs_group);
+		logger.debug("\n------------ sqlPerevedeni2hol_pAd = \n"+sqlPerevedeni2hol_pAd);
+		logger.debug("\n------------ sqlReferral_cDs_group = \n"+sqlReferral_cDs_group);
+		logger.debug("\n------------ sqlReferral_pAd = \n"+sqlReferral_pAd);
+		logger.debug("\n------------ sqlMistoSelo = \n"+sqlMistoSelo);
 		logger.debug("\n------------CuwyDbService1-------------\n");
 	}
 
@@ -1451,17 +1458,8 @@ public class CuwyDbService1 {
 		return jmp;
 	}
 	
-	static String sqlHistoryInDepartmentProYearMonths
-	= "SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in d_in , dh.department_history_out  d_out "
-			+ "\n , (dh.department_history_bed_day + 1) b_d, dr.direct_id , dr.direct_name dr_name "
-			+ "\n ,dhf.department_id "
-			+ "\n ,if(dr.direct_id=1,1,if(dhf.department_id > 0,99999,0)) referral "
-			+ "\n  FROM history h, department_history dh "
-			+ "\n  LEFT JOIN department_history dhf on dh.history_id = dhf.history_id "
-			+ "\n and TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 "
-			+ "\n  , direct dr "
-			+ "\n   WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
-			+ "\n    AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
+	
+	
 	String sqlHistoryInDepartmentProYearMonths1
 	= "SELECT d.department_id ,YEAR(history_in) ,MONTH(history_in) , h.* \n"
 			+ " FROM history h, department d \n"
@@ -1493,14 +1491,25 @@ public class CuwyDbService1 {
 			+ "\n WHERE hd.diagnos_id = 3  AND icd.icd_id = hd.icd_id) dsClin ON cHistoryId = historyInDepartmentProYearMonths.history_id "
 			+ "\n WHERE p.patient_id = historyInDepartmentProYearMonths.patient_id ORDER BY historyInDepartmentProYearMonths.d_in ";
 
-	static String sqlGroupReferral = "SELECT cds_code, COUNT(referral) cnt_ref,referral, sum(b_d) sum_b_d,b_d, cDs "
-			+ "\n FROM ( SELECT substring_index(icd.icd_code,'.',1) cds_code , referral, b_d , concat(icd.icd_code, ' ',icd.icd_name) cDs "
-			+ "\n FROM ( \n"
-			+ sqlHistoryInDepartmentProYearMonths
-			+ "\n ) h, history_diagnos hd, icd "
-			+ "WHERE hd.diagnos_id = 3 AND hd.history_id = h.history_id AND icd.icd_id = hd.icd_id"
-			+ "\n ) h GROUP BY h.cds_code, referral ORDER BY h.cds_code, referral";
-
+	static String sqlHistoryInDepartmentProYearMonths
+	= "SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in d_in , dh.department_history_out  d_out "
+			+ "\n , (dh.department_history_bed_day + 1) b_d, dr.direct_id , dr.direct_name dr_name "
+			+ "\n ,dhf.department_id "
+			+ "\n ,IF(dr.direct_id=1,1,if(dhf.department_id > 0,99999,0)) referral "
+			+ "\n  FROM history h, department_history dh "
+			+ "\n  LEFT JOIN department_history dhf on dh.history_id = dhf.history_id "
+			+ "\n and TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 "
+			+ "\n  , direct dr "
+			+ "\n   WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
+			+ "\n    AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
+	static String sqlReferral = "\n SELECT h.history_id, h.patient_id, (dh.department_history_bed_day +1) b_d "
+			+ "\n ,IF(dr.direct_id=1,1,IF(dhf.department_id > 0,99999,0)) referral "
+			+ "\n ,h.history_no , dh.department_history_in d_in , dh.department_history_out d_out "
+			+ "\n , dr.direct_id , dr.direct_name dr_name ,dhf.department_id "
+			+ "\n FROM history h, department_history dh LEFT JOIN department_history dhf ON dh.history_id = dhf.history_id "
+			+ "\n AND TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 , direct dr "
+			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4 "
+			+ "\n AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
 	static String sqlMistoSelo = "SELECT hd.cds_code, COUNT(locality_type) cnt_locality_type, locality_type, SUM(b_d) sum_b_d , cDs "
 			+ "\n FROM ( "
 			+ "\n SELECT p.patient_id ,CONCAT(r.region_name, if(d.district_id=1,'', CONCAT(', ',d.district_name,' обл. ') )) r_name "
@@ -1508,28 +1517,32 @@ public class CuwyDbService1 {
 			+ "\n FROM patient p, region r, district d, locality l "
 			+ "\n WHERE r.region_id=p.region_id and r.district_id=d.district_id AND p.locality_id=l.locality_id"
 			+ "\n ) pa, ("
-			+ "\n SELECT h.patient_id ,h.history_id, h.history_no , dh.department_history_in d_in , dh.department_history_out  d_out "
-			+ "\n , (dh.department_history_bed_day +1) b_d, dr.direct_id , dr.direct_name dr_name ,dhf.department_id "
-			+ "\n ,IF(dr.direct_id=1,1,IF(dhf.department_id > 0,99999,0)) referral "
-			+ "\n FROM history h, department_history dh LEFT JOIN department_history dhf ON dh.history_id = dhf.history_id "
-			+ "\n AND TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 , direct dr "
-			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
-			+ "\n AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id"
+			+ sqlReferral
 			+ "\n ) h, ( "
 			+ "\n SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
 			+ "\n FROM history_diagnos hd, icd icd WHERE icd.icd_id = hd.icd_id  AND hd.diagnos_id = 3) hd "
 			+ "\n WHERE pa.patient_id = h.patient_id AND hd.history_id = h.history_id "
 			+ "\n GROUP BY hd.cds_code, locality_type ORDER BY hd.cds_code, locality_type ";
 
-	static String sql_cDs = "SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code  , CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
+	static String sql_pAd = "SELECT p.patient_id, p.district_id, p.region_id, p.locality_id, l.locality_type, r.region_name, d.district_name, l.locality_name "
+			+ "\n FROM patient p, locality l, region r, district d "
+			+ "\n WHERE p.locality_id = l.locality_id AND r.region_id = p.region_id AND d.district_id = p.district_id";
+
+	static String sql_cDs = "SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
 			+ "\n  FROM history_diagnos hd, icd WHERE hd.diagnos_id = 3 AND icd.icd_id = hd.icd_id";
 
-	static String sqlPerevedeni2hol ="SELECT h.history_id, result_id, dhf.department_id, (dh.department_history_bed_day + 1) b_d "
+	static String sqlPerevedeni2hol ="SELECT h.history_id, h.patient_id, result_id, dhf.department_id, (dh.department_history_bed_day + 1) b_d "
 			+ "\n FROM history h ,  department_history dh LEFT JOIN department_history dhf "
 			+ "\n ON dh.history_id = dhf.history_id AND TIMESTAMPDIFF(SECOND,dh.department_history_out,dhf.department_history_in) = 1 "
 			+ "\n WHERE h.history_id=dh.history_id and dh.department_id=? AND dhf.department_id IS NOT NULL AND "
 			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
 
+	static String sqlPerevedeni2hol_pAd = ""
+			+ "SELECT locality_type, region_id, count(region_id) cnt_region, sum(b_d) sum_b_d, region_name, district_name, locality_name"
+			+ "\n FROM (SELECT pAd.*, perevedeni2hol.b_d ,perevedeni2hol.department_id "
+			+ "\n FROM (\n" + sql_pAd + "\n ) pAd, (\n" + sqlPerevedeni2hol + "\n) perevedeni2hol"
+			+ " WHERE perevedeni2hol.patient_id = pAd.patient_id ) h "
+			+ "\n GROUP BY locality_type, district_id,region_id";
 	static String sqlPerevedeni2hol_cDs_group = "\n  SELECT cds_code, COUNT(cds_code) cnt_cds_code, SUM(b_d) sum_b_d, cDs FROM ( "
 			+ "\n SELECT cds_code, cDs, sqlPerevedeni2hol.* FROM ( "
 			+ sql_cDs
@@ -1538,12 +1551,20 @@ public class CuwyDbService1 {
 			+ "\n ) sqlPerevedeni2hol WHERE sqlPerevedeni2hol.history_id = cDs.history_id"
 			+ "\n ) h GROUP BY cds_code ORDER BY cds_code";
 
-	static String sqlDeadOrvipisany ="SELECT h.history_id, result_id, IF(result_id=5,0,result_id) deadVipisan, (dh.department_history_bed_day + 1) b_d"
-			+ "\n FROM history h ,  department_history dh LEFT JOIN department_history dhf "
+	static String sqlDeadOrvipisany ="SELECT h.history_id, h.patient_id, result_id, IF(result_id=5,0,result_id) deadVipisan, (dh.department_history_bed_day + 1) b_d"
+			+ "\n FROM history h, department_history dh LEFT JOIN department_history dhf "
 			+ "\n ON dh.history_id = dhf.history_id AND TIMESTAMPDIFF(SECOND,dh.department_history_out,dhf.department_history_in) = 1 "
 			+ "\n WHERE h.result_id<7 and h.history_id=dh.history_id AND dh.department_id = ? AND dhf.department_id IS NULL AND "
 			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
 	
+	static String sqlDeadOrvipisany_pAd = "SELECT locality_type, region_id, count(deadVipisan) cnt_deadVipisan, deadVipisan, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
+			+ "\n FROM ( SELECT pAd.*, sqlDeadOrvipisany.deadVipisan, sqlDeadOrvipisany.b_d "
+			+ "\n FROM (\n" +sql_pAd +"\n ) pAd, ( \n" +sqlDeadOrvipisany +"\n ) sqlDeadOrvipisany "
+			+"\n WHERE sqlDeadOrvipisany.patient_id = pAd.patient_id "
+			+ "\n ) h"
+			+ "\n GROUP BY locality_type, district_id, region_id, deadVipisan"
+			+ "\n ORDER BY locality_type, district_id, region_name";
+
 	static String sqlDeadOrvipisany_cDs_group = "\n SELECT cds_code, deadVipisan, COUNT(deadVipisan) cnt_deadVipisan, SUM(b_d) sum_b_d, cDs FROM ("
 			+ "\n SELECT cds_code, cDs, sqlDeadOrvipisany.* FROM (\n"
 			+sql_cDs
@@ -1554,6 +1575,20 @@ public class CuwyDbService1 {
 			+"\n ) h "
 			+"\n GROUP BY cds_code,deadVipisan "
 			+"\n ORDER BY cds_code";
+	static String sqlReferral_pAd = "SELECT locality_type, region_id, count(referral) cnt_referral, referral, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
+			+ "\n FROM (SELECT pAd.*, referral.b_d, referral.referral"
+			+ "\n FROM (\n" + sql_pAd + "\n ) pAd, (\n" + sqlReferral + "\n) referral"
+			+ "\n WHERE referral.patient_id = pAd.patient_id ) h "
+			+ "\n GROUP BY locality_type, district_id, region_id, referral"
+			+ "\n ORDER BY locality_type, district_id, region_name";
+	;
+	static String sqlReferral_cDs_group = "SELECT cds_code, COUNT(referral) cnt_ref, referral, SUM(b_d) sum_b_d,b_d, cDs "
+			+ "\n FROM ( SELECT substring_index(icd.icd_code,'.',1) cds_code, referral, b_d , concat(icd.icd_code, ' ',icd.icd_name) cDs "
+			+ "\n FROM ( \n"
+			+ sqlHistoryInDepartmentProYearMonths
+			+ "\n ) h, history_diagnos hd, icd "
+			+ "WHERE hd.diagnos_id = 3 AND hd.history_id = h.history_id AND icd.icd_id = hd.icd_id"
+			+ "\n ) h GROUP BY h.cds_code, referral ORDER BY h.cds_code, referral";
 	
 	//---------------epicrise---------------------------------------------------
 	public Map<String, Object> saveEpicrise(Map<String, Object> epicrise) {
