@@ -24,6 +24,21 @@ tr.border_bottom th {
 	border-bottom:2pt solid black;
 }
 
+.center, tr.center th , tr.center td {
+	text-align: center;
+}
+td.top {
+		vertical-align: top;
+}
+td.left {
+	text-align: left !important;
+}
+tr.rotate-----90 th,
+.rotate-90 {
+	-webkit-transform: rotate(-90deg);  /* to support Safari and Android browser */
+	-ms-transform: rotate(-90deg);  /* to support IE 9 */
+	transform: rotate(-90deg);
+}
 .required-tooltip {font-size:150%;color: red;}
 		.required:after {
 			content: "*"; position:absolute; color: red;

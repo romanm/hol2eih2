@@ -117,13 +117,15 @@ public class Hol2Eih1Rest {
 		departmentHol.setUser(userPrincipal);
 		map.put("department", departmentHol);
 //		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo2(departmentId);
-		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlMistoSelo);
+		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlMistoSelo_cDs_group);
 		map.put("dsMistoSelo", dsMistoSelo);
 //		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
 //		map.put("dsNapravlenya", dsNapravlenya);
 //		final List<Map<String, Object>> dsReferral = cuwyDbService1.dsReferral(departmentId);
 		final List<Map<String, Object>> dsReferral = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlReferral_cDs_group);
 		map.put("dsReferral", dsReferral);
+		final List<Map<String, Object>> adReferral = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlReferral_pAd);
+		map.put("adReferral", adReferral);
 		final List<Map<String, Object>> dsDeadOrvipisany = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlDeadOrvipisany_cDs_group);
 		map.put("dsDeadOrvipisany", dsDeadOrvipisany);
 		final List<Map<String, Object>> adDeadOrvipisany = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlDeadOrvipisany_pAd);

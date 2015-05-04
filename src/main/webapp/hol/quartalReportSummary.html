@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="quartalReportCtrl" ng-cloak
+	class="ng-cloak">
+<head>
+<meta charset="utf-8" />
+
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link rel="stylesheet" href="/css/rotate.css"></link>
+
+<link href="/img/favicon.ico" rel="shortcut icon"
+	type="image/vnd.microsoft.icon" />
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 60px;
+}
+</style>
+<title>ХОЛ::{{department.department_name}}::квартальний звіт</title>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+					<li><a
+						href="/hol/department.html?dep={{department.department_id}}
+		">{{department.department_name}}</a></li>
+					<li><a
+						href="/hol/quartalReport.html?dep={{department.department_id}}
+		">квартальний звіт</a></li>
+				</ol>
+			</div>
+			<div class="collapse navbar-collapse navbar-right">
+				<ul>
+					<li data-ng-show="!department.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="department.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{department.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<h1>
+		{{department.department_name}} <span
+			data-ng-show="!department"> Відділення <small>
+				<span class="glyphicon glyphicon-refresh gly-spin"> </span>
+		</small>
+		</span> <small> <sub> {{loadDurationS_MS}} </sub>
+		</small>
+	</h1>
+
+	<div class="container">
+
+		<table class="table-striped">
+			<caption>
+				<h3>Основні показники надання стаціонарної медичної допомоги
+					населенню за місцем проживання за I квартал 2015 р.</h3>
+			</caption>
+			<thead>
+				<tr>
+					<th>
+					Адреса
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+				data-ng-repeat="dsAdressKey in getAdReportTableKey()">
+					<td>
+					{{dsAdressKey}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	
+		<table class="table-striped">
+			<caption>
+				<h3>Основні показники роботи за нозологічними формами за I
+					квартал 2015 р.</h3>
+			</caption>
+			<thead>
+				<!-- 
+				<tr>
+					<th>№</th>
+					<th>Діагноз</th>
+					<th class="rotate-90">місто</th>
+					<th class="rotate-90">село</th>
+					<th class="rotate-90">З іншого відділення</th>
+					<th class="rotate-90">З направленням</th>
+					<th class="rotate-90" title="Без направлення">Без направлення</th>
+					<th class="rotate-90" title="Виписаний">Виписаний</th>
+					<th class="rotate-90" title="Переведений в ХОЛ">Переведений в
+						ХОЛ</th>
+					<th class="rotate-90">Помер</th>
+				</tr>
+				 -->
+				<tr class="center">
+					<th rowspan="2">№</th>
+					<th rowspan="2">Діагноз</th>
+					<th rowspan="2" class="rotate-90">місто</th>
+					<th rowspan="2" class="rotate-90">село</th>
+					<th colspan="3">Поступлення
+					</th>
+					<th colspan="3">Виписки
+					</th>
+				</tr>
+				<tr>
+					<th class="rotate90" title="З іншого відділення">З іншого від.</th>
+					<th class="rotate90" title="З направленням">З нап.</th>
+					<th class="rotate90" title="Без направлення">Без напр.</th>
+					<th class="rotate90" title="Виписаний">Випис.</th>
+					<th class="rotate90" title="Переведений в ХОЛ">Пер. в ХОЛ</th>
+					<th class="rotate90">Помер</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="center"
+					data-ng-repeat="dsPerevedeniKey in getDsReportTableKey()">
+					<td class="top">{{$index + 1}}</td>
+					<td class="left">{{dsPerevedeniKey}} /
+						{{data.dsReportTable[dsPerevedeniKey].cDs}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.misto}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.selo}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.transferIn}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.withReferralIn}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.withoutReferralIn}}</td>
+
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.referralOut}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.discharged}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.dead}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table-striped">
+			<caption>
+				<h3>Показники роботи за ліжкоднями за I квартал 2015 р.
+					відповідно нозологічних форм.</h3>
+			</caption>
+			<thead>
+				<tr class="center">
+					<th rowspan="2">№</th>
+					<th rowspan="2">Діагноз</th>
+					<th rowspan="2" class="rotate-90">місто</th>
+					<th rowspan="2" class="rotate-90">село</th>
+					<th colspan="3">Поступлення
+					</th>
+					<th colspan="3">Виписки
+					</th>
+				</tr>
+				<tr>
+					<th class="rotate90" title="З іншого відділення">З іншого від.</th>
+					<th class="rotate90" title="З направленням">З нап.</th>
+					<th class="rotate90" title="Без направлення">Без напр.</th>
+					<th class="rotate90" title="Виписаний">Випис.</th>
+					<th class="rotate90" title="Переведений в ХОЛ">Пер. в ХОЛ</th>
+					<th class="rotate90">Помер</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="center"
+					data-ng-repeat="dsPerevedeniKey in getDsReportTableKey()">
+					<td class="top">{{$index + 1}}</td>
+					<td class="left">{{dsPerevedeniKey}} /
+						{{data.dsReportTable[dsPerevedeniKey].cDs}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.misto}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.selo}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.transferIn}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.withReferralIn}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.withoutReferralIn}}</td>
+
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.referralOut}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.discharged}}</td>
+					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.dead}}</td>
+				</tr>
+			</tbody>
+		</table>
+		
+
+	</div>
+
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/rangy-core.js"></script>
+	<script src="/js/a/angular.min.js"></script>
+	<script src="/js/a/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/cuwy1.controller.js"></script>
+
+</body>
+</html>

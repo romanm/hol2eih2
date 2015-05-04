@@ -79,7 +79,7 @@ public class CuwyDbService1 {
 		logger.debug("\n------------ sqlPerevedeni2hol_pAd = \n"+sqlPerevedeni2hol_pAd);
 		logger.debug("\n------------ sqlReferral_cDs_group = \n"+sqlReferral_cDs_group);
 		logger.debug("\n------------ sqlReferral_pAd = \n"+sqlReferral_pAd);
-		logger.debug("\n------------ sqlMistoSelo = \n"+sqlMistoSelo);
+		logger.debug("\n------------ sqlMistoSelo_cDs_group = \n"+sqlMistoSelo_cDs_group);
 		logger.debug("\n------------CuwyDbService1-------------\n");
 	}
 
@@ -1430,7 +1430,7 @@ public class CuwyDbService1 {
 		return dsMistoSelo;
 	}
 	public List<Map<String, Object>> dsMistoSelo2(Integer departmentId) {
-		return queryForList(departmentId, sqlMistoSelo);
+		return queryForList(departmentId, sqlMistoSelo_cDs_group);
 	}
 
 
@@ -1510,21 +1510,10 @@ public class CuwyDbService1 {
 			+ "\n AND TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 , direct dr "
 			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4 "
 			+ "\n AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
-	static String sqlMistoSelo = "SELECT hd.cds_code, COUNT(locality_type) cnt_locality_type, locality_type, SUM(b_d) sum_b_d , cDs "
-			+ "\n FROM ( "
-			+ "\n SELECT p.patient_id ,CONCAT(r.region_name, if(d.district_id=1,'', CONCAT(', ',d.district_name,' обл. ') )) r_name "
-			+ "\n ,r.region_id r_id, d.district_name d_name, d.district_id d_id, l.locality_type "
-			+ "\n FROM patient p, region r, district d, locality l "
-			+ "\n WHERE r.region_id=p.region_id and r.district_id=d.district_id AND p.locality_id=l.locality_id"
-			+ "\n ) pa, ("
-			+ sqlReferral
-			+ "\n ) h, ( "
-			+ "\n SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
-			+ "\n FROM history_diagnos hd, icd icd WHERE icd.icd_id = hd.icd_id  AND hd.diagnos_id = 3) hd "
-			+ "\n WHERE pa.patient_id = h.patient_id AND hd.history_id = h.history_id "
-			+ "\n GROUP BY hd.cds_code, locality_type ORDER BY hd.cds_code, locality_type ";
 
-	static String sql_pAd = "SELECT p.patient_id, p.district_id, p.region_id, p.locality_id, l.locality_type, r.region_name, d.district_name, l.locality_name "
+	static String sql_pAd = "SELECT p.patient_id, p.district_id, p.region_id, p.locality_id, l.locality_type "
+			+ "\n , IF(l.locality_id=1 or l.locality_id=821,CONCAT('1_',locality_name),CONCAT('0_',region_name)) adress_code"
+			+ "\n , IF(l.locality_id=1 or l.locality_id=821,1,0) locality_type2, r.region_name, d.district_name, l.locality_name "
 			+ "\n FROM patient p, locality l, region r, district d "
 			+ "\n WHERE p.locality_id = l.locality_id AND r.region_id = p.region_id AND d.district_id = p.district_id";
 
@@ -1538,11 +1527,12 @@ public class CuwyDbService1 {
 			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
 
 	static String sqlPerevedeni2hol_pAd = ""
-			+ "SELECT locality_type, region_id, count(region_id) cnt_region, sum(b_d) sum_b_d, region_name, district_name, locality_name"
+			+ "SELECT locality_type, locality_type2, adress_code, region_id, count(region_id) cnt_region, sum(b_d) sum_b_d, region_name, district_name, locality_name"
 			+ "\n FROM (SELECT pAd.*, perevedeni2hol.b_d ,perevedeni2hol.department_id "
 			+ "\n FROM (\n" + sql_pAd + "\n ) pAd, (\n" + sqlPerevedeni2hol + "\n) perevedeni2hol"
 			+ " WHERE perevedeni2hol.patient_id = pAd.patient_id ) h "
-			+ "\n GROUP BY locality_type, district_id,region_id";
+			+ "\n GROUP BY locality_type2, district_id, region_id"
+			+ "\n ORDER BY adress_code";
 	static String sqlPerevedeni2hol_cDs_group = "\n  SELECT cds_code, COUNT(cds_code) cnt_cds_code, SUM(b_d) sum_b_d, cDs FROM ( "
 			+ "\n SELECT cds_code, cDs, sqlPerevedeni2hol.* FROM ( "
 			+ sql_cDs
@@ -1557,13 +1547,13 @@ public class CuwyDbService1 {
 			+ "\n WHERE h.result_id<7 and h.history_id=dh.history_id AND dh.department_id = ? AND dhf.department_id IS NULL AND "
 			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
 	
-	static String sqlDeadOrvipisany_pAd = "SELECT locality_type, region_id, count(deadVipisan) cnt_deadVipisan, deadVipisan, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
+	static String sqlDeadOrvipisany_pAd = "SELECT locality_type, locality_type2, adress_code, region_id, COUNT(deadVipisan) cnt_deadVipisan, deadVipisan, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
 			+ "\n FROM ( SELECT pAd.*, sqlDeadOrvipisany.deadVipisan, sqlDeadOrvipisany.b_d "
 			+ "\n FROM (\n" +sql_pAd +"\n ) pAd, ( \n" +sqlDeadOrvipisany +"\n ) sqlDeadOrvipisany "
 			+"\n WHERE sqlDeadOrvipisany.patient_id = pAd.patient_id "
 			+ "\n ) h"
-			+ "\n GROUP BY locality_type, district_id, region_id, deadVipisan"
-			+ "\n ORDER BY locality_type, district_id, region_name";
+			+ "\n GROUP BY locality_type2, district_id, region_id, deadVipisan"
+			+ "\n ORDER BY adress_code";
 
 	static String sqlDeadOrvipisany_cDs_group = "\n SELECT cds_code, deadVipisan, COUNT(deadVipisan) cnt_deadVipisan, SUM(b_d) sum_b_d, cDs FROM ("
 			+ "\n SELECT cds_code, cDs, sqlDeadOrvipisany.* FROM (\n"
@@ -1575,12 +1565,13 @@ public class CuwyDbService1 {
 			+"\n ) h "
 			+"\n GROUP BY cds_code,deadVipisan "
 			+"\n ORDER BY cds_code";
-	static String sqlReferral_pAd = "SELECT locality_type, region_id, count(referral) cnt_referral, referral, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
+	static String sqlReferral_pAd = "SELECT locality_type, locality_type2, adress_code, region_id, count(referral) cnt_referral, referral, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
 			+ "\n FROM (SELECT pAd.*, referral.b_d, referral.referral"
 			+ "\n FROM (\n" + sql_pAd + "\n ) pAd, (\n" + sqlReferral + "\n) referral"
 			+ "\n WHERE referral.patient_id = pAd.patient_id ) h "
 			+ "\n GROUP BY locality_type, district_id, region_id, referral"
-			+ "\n ORDER BY locality_type, district_id, region_name";
+//			+ "\n ORDER BY locality_type, district_id, region_name"
+			+ "\n ORDER BY adress_code";
 	;
 	static String sqlReferral_cDs_group = "SELECT cds_code, COUNT(referral) cnt_ref, referral, SUM(b_d) sum_b_d,b_d, cDs "
 			+ "\n FROM ( SELECT substring_index(icd.icd_code,'.',1) cds_code, referral, b_d , concat(icd.icd_code, ' ',icd.icd_name) cDs "
@@ -1589,7 +1580,21 @@ public class CuwyDbService1 {
 			+ "\n ) h, history_diagnos hd, icd "
 			+ "WHERE hd.diagnos_id = 3 AND hd.history_id = h.history_id AND icd.icd_id = hd.icd_id"
 			+ "\n ) h GROUP BY h.cds_code, referral ORDER BY h.cds_code, referral";
-	
+
+	static String sqlMistoSelo_cDs_group = "SELECT hd.cds_code, COUNT(locality_type) cnt_locality_type, locality_type, SUM(b_d) sum_b_d , cDs "
+			+ "\n FROM ( "
+			+ "\n SELECT p.patient_id ,CONCAT(r.region_name, if(d.district_id=1,'', CONCAT(', ',d.district_name,' обл. ') )) r_name "
+			+ "\n ,r.region_id r_id, d.district_name d_name, d.district_id d_id, l.locality_type "
+			+ "\n FROM patient p, region r, district d, locality l "
+			+ "\n WHERE r.region_id=p.region_id and r.district_id=d.district_id AND p.locality_id=l.locality_id"
+			+ "\n ) pa, ("
+			+ sqlReferral
+			+ "\n ) h, ( "
+			+ "\n SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
+			+ "\n FROM history_diagnos hd, icd icd WHERE icd.icd_id = hd.icd_id  AND hd.diagnos_id = 3) hd "
+			+ "\n WHERE pa.patient_id = h.patient_id AND hd.history_id = h.history_id "
+			+ "\n GROUP BY hd.cds_code, locality_type ORDER BY hd.cds_code, locality_type ";
+
 	//---------------epicrise---------------------------------------------------
 	public Map<String, Object> saveEpicrise(Map<String, Object> epicrise) {
 		saveEpicriseToFile(epicrise, 0);
