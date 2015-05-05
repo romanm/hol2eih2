@@ -54,30 +54,65 @@ body {
 			data-ng-show="!department"> Відділення <small>
 				<span class="glyphicon glyphicon-refresh gly-spin"> </span>
 		</small>
-		</span> <small> <sub> {{loadDurationS_MS}} </sub>
-		</small>
+		</span>
+		<small class="no-print"> <sub> {{loadDurationS_MS}} </sub></small>
 	</h1>
 
 	<div class="container">
-
 		<table class="table-striped">
 			<caption>
 				<h3>Основні показники надання стаціонарної медичної допомоги
 					населенню за місцем проживання за I квартал 2015 р.</h3>
 			</caption>
 			<thead>
+				<tr class="center">
+					<th rowspan="3">№</th>
+					<th rowspan="3">Адреса</th>
+					<th colspan="6">Поступлення</th>
+					<th colspan="6">Виписки</th>
+				</tr>
+				<tr class="center">
+					<th colspan="3">Кількість хворих</th>
+					<th colspan="3" title="Проведено ліжкоднів">ліжкодні</th>
+					<th colspan="3">Кількість хворих</th>
+					<th colspan="3" title="Проведено ліжкоднів">ліжкодні</th>
+				</tr>
 				<tr>
-					<th>
-					Адреса
-					</th>
+					<th class="rotate90" title="З іншого відділення">З іншого від.</th>
+					<th class="rotate90" title="З направленням">З нап.</th>
+					<th class="rotate90" title="Без направлення">Без напр.</th>
+					<th class="rotate90" title="З іншого відділення">З іншого від.</th>
+					<th class="rotate90" title="З направленням">З нап.</th>
+					<th class="rotate90" title="Без направлення">Без напр.</th>
+					<th class="rotate90" title="Виписаний">Випис.</th>
+					<th class="rotate90" title="Переведений в ХОЛ">Пер. в ХОЛ</th>
+					<th class="rotate90">Помер</th>
+					<th class="rotate90" title="Виписаний">Випис.</th>
+					<th class="rotate90" title="Переведений в ХОЛ">Пер. в ХОЛ</th>
+					<th class="rotate90">Помер</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr
-				data-ng-repeat="dsAdressKey in getAdReportTableKey()">
-					<td>
-					{{dsAdressKey}}
-					</td>
+				<tr class="center"
+					data-ng-repeat="adressKey in getAdReportTableKey()">
+					<td>{{$index + 1}}</td>
+					<td class="left">{{adressKey.split('_')[0] == 1 ? 'м.':''}}
+						{{adressKey.split('_')[1]}}</td>
+					<td>{{data.adressReportTable[adressKey].cnt.transferIn}}</td>
+					<td>{{data.adressReportTable[adressKey].cnt.withReferralIn}}</td>
+					<td>{{data.adressReportTable[adressKey].cnt.withoutReferralIn}}</td>
+
+					<td>{{data.adressReportTable[adressKey].bedday.transferIn}}</td>
+					<td>{{data.adressReportTable[adressKey].bedday.withReferralIn}}</td>
+					<td>{{data.adressReportTable[adressKey].bedday.withoutReferralIn}}</td>
+
+					<td>{{data.adressReportTable[adressKey].cnt.referralOut}}</td>
+					<td>{{data.adressReportTable[adressKey].cnt.discharged}}</td>
+					<td>{{data.adressReportTable[adressKey].cnt.dead}}</td>
+
+					<td>{{data.adressReportTable[adressKey].bedday.referralOut}}</td>
+					<td>{{data.adressReportTable[adressKey].bedday.discharged}}</td>
+					<td>{{data.adressReportTable[adressKey].bedday.dead}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -126,7 +161,7 @@ body {
 				<tr class="center"
 					data-ng-repeat="dsPerevedeniKey in getDsReportTableKey()">
 					<td class="top">{{$index + 1}}</td>
-					<td class="left">{{dsPerevedeniKey}} /
+					<td class="left">{{dsPerevedeniKey}} -
 						{{data.dsReportTable[dsPerevedeniKey].cDs}}</td>
 					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.misto}}</td>
 					<td>{{data.dsReportTable[dsPerevedeniKey].cnt.selo}}</td>
@@ -170,7 +205,7 @@ body {
 				<tr class="center"
 					data-ng-repeat="dsPerevedeniKey in getDsReportTableKey()">
 					<td class="top">{{$index + 1}}</td>
-					<td class="left">{{dsPerevedeniKey}} /
+					<td class="left">{{dsPerevedeniKey}} -
 						{{data.dsReportTable[dsPerevedeniKey].cDs}}</td>
 					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.misto}}</td>
 					<td>{{data.dsReportTable[dsPerevedeniKey].bedday.selo}}</td>

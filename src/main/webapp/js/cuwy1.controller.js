@@ -140,8 +140,9 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 	}).error(function(data, status, headers, config) {
 	});
 	$scope.getAdReportTableKey = function(){
-		if($scope.data)
-			return Object.keys($scope.data.adressReportTable);
+		if($scope.data){
+			return Object.keys($scope.data.adressReportTable).sort();
+		}
 		else 
 			return [];
 	}
@@ -168,6 +169,29 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 				$scope.data.adressReportTable[adress_code].cnt.withReferralIn = adReferral.cnt_referral;
 				$scope.data.adressReportTable[adress_code].bedday.withReferralIn = adReferral.sum_b_d;
 			}
+		});
+		$scope.data.adDeadOrvipisany.forEach(function(adDeadOrvipisany) {
+			var adress_code = adDeadOrvipisany.adress_code;
+			setAdressRegionCode(adress_code);
+			if($scope.data.adressReportTable[adress_code]["adDeadOrvipisany"] === undefined)
+				$scope.data.adressReportTable[adress_code]["adDeadOrvipisany"] = [];
+			$scope.data.adressReportTable[adress_code]["adDeadOrvipisany"].push(adDeadOrvipisany);
+			if(adDeadOrvipisany.deadVipisan == 0){
+				$scope.data.adressReportTable[adress_code].cnt.dead = adDeadOrvipisany.cnt_deadVipisan;
+				$scope.data.adressReportTable[adress_code].bedday.dead = adDeadOrvipisany.sum_b_d;
+			}else{
+				$scope.data.adressReportTable[adress_code].cnt.discharged = adDeadOrvipisany.cnt_deadVipisan;
+				$scope.data.adressReportTable[adress_code].bedday.discharged = adDeadOrvipisany.sum_b_d;
+			}
+		});
+		$scope.data.adPerevedeni.forEach(function(adPerevedeni) {
+			var adress_code = adPerevedeni.adress_code;
+			setAdressRegionCode(adress_code);
+			if($scope.data.adressReportTable[adress_code]["adPerevedeni"] === undefined)
+				$scope.data.adressReportTable[adress_code]["adPerevedeni"] = [];
+			$scope.data.adressReportTable[adress_code]["adPerevedeni"].push(adPerevedeni);
+			$scope.data.adressReportTable[adress_code].cnt.referralOut = adPerevedeni.cnt_adress_code;
+			$scope.data.adressReportTable[adress_code].bedday.referralOut = adPerevedeni.sum_b_d;
 		});
 		console.log($scope.data.adressReportTable);
 	}

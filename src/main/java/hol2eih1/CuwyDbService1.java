@@ -1502,6 +1502,7 @@ public class CuwyDbService1 {
 			+ "\n  , direct dr "
 			+ "\n   WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
 			+ "\n    AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
+
 	static String sqlReferral = "\n SELECT h.history_id, h.patient_id, (dh.department_history_bed_day +1) b_d "
 			+ "\n ,IF(dr.direct_id=1,1,IF(dhf.department_id > 0,99999,0)) referral "
 			+ "\n ,h.history_no , dh.department_history_in d_in , dh.department_history_out d_out "
@@ -1517,8 +1518,9 @@ public class CuwyDbService1 {
 			+ "\n FROM patient p, locality l, region r, district d "
 			+ "\n WHERE p.locality_id = l.locality_id AND r.region_id = p.region_id AND d.district_id = p.district_id";
 
-	static String sql_cDs = "SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
-			+ "\n  FROM history_diagnos hd, icd WHERE hd.diagnos_id = 3 AND icd.icd_id = hd.icd_id";
+	static String sql_cDs = "SELECT hd.history_id, substring_index(i1.icd_code,'.',1) cds_code, CONCAT(i1.icd_code, ' ',i1.icd_name) icd_name1, i2.icd_name cDs "
+			+ "\n  FROM history_diagnos hd, icd i1,icd i2 WHERE hd.diagnos_id = 3 AND i1.icd_id = hd.icd_id "
+			+ "\n AND substring_index(i1.icd_code,'.',1) = i2.icd_code";
 
 	static String sqlPerevedeni2hol ="SELECT h.history_id, h.patient_id, result_id, dhf.department_id, (dh.department_history_bed_day + 1) b_d "
 			+ "\n FROM history h ,  department_history dh LEFT JOIN department_history dhf "
@@ -1574,6 +1576,11 @@ public class CuwyDbService1 {
 			+ "\n ORDER BY adress_code";
 	;
 	static String sqlReferral_cDs_group = "SELECT cds_code, COUNT(referral) cnt_ref, referral, SUM(b_d) sum_b_d,b_d, cDs "
+			+ "\n  FROM ( \n " + sql_cDs + "\n ) cDs, ( \n " + sqlReferral + "\n ) referral "
+			+ "\n WHERE referral.history_id=cDs.history_id "
+			+ "\n GROUP BY cds_code, referral "
+			+ "\n ORDER BY cds_code, referral";
+	static String sqlReferral_cDs_group2 = "SELECT cds_code, COUNT(referral) cnt_ref, referral, SUM(b_d) sum_b_d,b_d, cDs "
 			+ "\n FROM ( SELECT substring_index(icd.icd_code,'.',1) cds_code, referral, b_d , concat(icd.icd_code, ' ',icd.icd_name) cDs "
 			+ "\n FROM ( \n"
 			+ sqlHistoryInDepartmentProYearMonths
@@ -1590,8 +1597,10 @@ public class CuwyDbService1 {
 			+ "\n ) pa, ("
 			+ sqlReferral
 			+ "\n ) h, ( "
-			+ "\n SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
-			+ "\n FROM history_diagnos hd, icd icd WHERE icd.icd_id = hd.icd_id  AND hd.diagnos_id = 3) hd "
+//			+ "\n SELECT hd.history_id, substring_index(icd.icd_code,'.',1) cds_code, CONCAT(icd.icd_code, ' ',icd.icd_name) cDs "
+//			+ "\n FROM history_diagnos hd, icd icd WHERE icd.icd_id = hd.icd_id  AND hd.diagnos_id = 3"
+			+ sql_cDs
+			+ "\n ) hd "
 			+ "\n WHERE pa.patient_id = h.patient_id AND hd.history_id = h.history_id "
 			+ "\n GROUP BY hd.cds_code, locality_type ORDER BY hd.cds_code, locality_type ";
 
