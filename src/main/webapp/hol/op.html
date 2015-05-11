@@ -44,9 +44,10 @@
 							відділення:
 							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 							-1].departmentName}} </a></li>
-					<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
-							ІХ № <u>{{patientHistory.historyNo}}</u> :: Операція
+					<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ № <u>{{patientHistory.historyNo}}</u>
 					</a></li>
+					<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
+							Операція </a></li>
 				</ol>
 			</div>
 			<div class="col-xs-5"
@@ -99,18 +100,22 @@
 				<div>
 					<span
 						title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">
-						<a data-ng-click="openOpDialog()">
+						<a href="#" data-ng-click="openOpDialog()">
 							{{!operation.operation_code?'Код операції':''}}
 							{{operation.operation_code}}<span
 							data-ng-show="collapseDialog == 'op'"
-							class="glyphicon glyphicon-folder-open"></span></a> - {{operation.operation_name}} . <span>{{operation.operation_additional}}</span>
-					</span> <a data-ng-click="openDialog('beginOp')">
-						{{operation.operation_history_start | date:'dd.MM.yyyy'}}<span
+							class="glyphicon glyphicon-folder-open"></span>
+					</a> - {{operation.operation_name}} . <span>{{operation.operation_additional}}</span>
+					</span> <a href="#" data-ng-click="openDialog('beginOp')">
+						{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
+						{{operation.operation_history_end | date:' - HH:mm'}} <span
 						data-ng-show="collapseDialog == 'beginOp'"
-						class="glyphicon glyphicon-folder-open"></span></a> тривалість <a data-ng-click="openDialog('durationOp')">({{operation.operation_history_end
-						| date:'HH год mm хв.'}})<span
+						class="glyphicon glyphicon-folder-open"></span>
+					</a> тривалість <a href="#" data-ng-click="openDialog('durationOp')">(
+						{{operation_duration_hhmm}} ) <span
 						data-ng-show="collapseDialog == 'durationOp'"
-						class="glyphicon glyphicon-folder-open"></span></a>
+						class="glyphicon glyphicon-folder-open"></span>
+					</a>
 				</div>
 
 				<div class="well" collapse="collapseDialog != 'durationOp'">
@@ -119,15 +124,40 @@
 						'0':''}}{{(operation_duration_min -
 						operation_duration_min%60)/60}} :
 						{{operation_duration_min%60<10?'0':''}}{{operation_duration_min%60}}
-					</label> <input id="intNumber"
+					</label>
+					<table width="100%"> <tr> <td>0</td> <td>1</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
+					<!-- 
 						data-ng-mouseup="setOperationDuration(operation_duration_min)"
-						data-ng-model="operation_duration_min" type="range" min="1"
-						max="400" />
+					 -->
+					<input id="intNumber"
+						data-ng-change="setOperationDuration(operation_duration_min)"
+						data-ng-model="operation_duration_min" type="range" step="5" min="0"
+						max="480" />
 				</div>
 				<div class="well" collapse="collapseDialog != 'beginOp'">
-					<datepicker data-ng-model="operation.operation_history_start"
-						data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
-						show-weeks="true" class="well well-sm"></datepicker>
+					<table>
+						<tr>
+							<th>Дата - початку операції</th>
+							<th>години</th>
+							<th>хвилини</th>
+						</tr>
+						<tr>
+							<td><datepicker
+									data-ng-model="operation.operation_history_start"
+									data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
+									show-weeks="true" class="well well-sm"></datepicker></td>
+							<td class="top"><select data-ng-model="ophStartHH"
+								data-ng-change="clickOphStartHH(ophStartHH)">
+									<option data-ng-repeat="hh in hoursList" value="{{hh}}"
+										data-ng-selected="ophStartHH == hh">{{hh}}</option>
+							</select></td>
+							<td class="top"><select data-ng-model="ophStartMM"
+								data-ng-change="clickOphStartMM(ophStartMM)">
+									<option data-ng-repeat="mm in minList" value="{{mm}}"
+										data-ng-selected="ophStartMM == mm">{{mm}}</option>
+							</select></td>
+						</tr>
+					</table>
 				</div>
 				<div class="well" collapse="collapseDialog != 'op'">
 					<div class="row no-print">
@@ -230,24 +260,24 @@
 				</div>
 				<div>Діагноз при операції</div>
 				<div>
-					<span><a data-ng-click="openDialog('department')">Відділення:<span
+					<span><a href="#" data-ng-click="openDialog('department')">Відділення:<span
 							data-ng-show="collapseDialog == 'department'"
 							class="glyphicon glyphicon-folder-open"></span></a>
-						{{operation.department_name}}</span>, <span> <a
+						{{operation.department_name}}</span>, <span> <a href="#"
 						data-ng-click="openDialog('surgery')">Хірург:<span
 							data-ng-show="collapseDialog == 'surgery'"
 							class="glyphicon glyphicon-folder-open"></span></a>
 						{{operation.surgery_name}}
-					</span>, <span><a data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
+					</span>, <span><a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
 							data-ng-show="collapseDialog == 'anesthetist'"
 							class="glyphicon glyphicon-folder-open"></span>
 					</a> </span> {{operation.anesthetist_name}} <span>Анестезія</span>
 				</div>
 				<div>
-					<span><a data-ng-click="openDialog('opresult')">
+					<span><a href="#" data-ng-click="openDialog('opresult')">
 							Результат:<span data-ng-show="collapseDialog == 'opresult'"
 							class="glyphicon glyphicon-folder-open"></span>
-					</a> {{operation.operation_result_name}} </span>, <span> <a
+					</a> {{operation.operation_result_name}} </span>, <span> <a href="#"
 						data-ng-click="openDialog('complication')"> Ускладнення:<span
 							data-ng-show="collapseDialog == 'complication'"
 							class="glyphicon glyphicon-folder-open"></span></a>

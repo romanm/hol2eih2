@@ -1,6 +1,8 @@
 cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("OpCtrl");
+	$scope.hoursList = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7];
+	$scope.minList = [0,5,10,15,20,25,30,35,40,45,50,55];
 	$scope.operationTree = operationTree;
 	readInitHistory($scope, $http, $sce, $filter);
 	operationDirective($scope, $http, $sce, $filter);
@@ -10,9 +12,11 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
 		$scope.patientHistory.movePatientDepartment = {};
-		initHistory();
 		initAppConfig($scope, $http, $sce, $filter);
-		manageOpeSeekInterval(0);
+		initHistory();
+		
+		initOperation();
+		
 		makeFilteredOperationTree();
 	}).error(function(data, status, headers, config) {
 	});
@@ -25,15 +29,27 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 			$scope.error = data;
 		});
 	}
-
 	} ]);
+
+cuwyApp.controller('BasicAnalysisCtrl', [ '$scope', '$http', '$filter', '$sce', 
+		function ($scope, $http, $filter, $sce) {
+	console.log('BasicAnalysisCtrl');
+	$http({method : 'GET', url : "/hol/basicAnalysis_2015_1_3"
+	}).success(function(data, status, headers, config) {
+		$scope.data = data;
+		console.log($scope.data);
+	}).error(function(data, status, headers, config) {
+	});
+} ]);
+cuwyApp.controller('AdminCtrl', [ '$scope', '$http', '$filter', '$sce', 
+	function ($scope, $http, $filter, $sce) {
+		console.log('AdminCtrl');
+} ]);
 
 cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("LoginCtrl");
-	$http({
-		method : 'GET',
-		url : "/user"
+	$http({ method : 'GET', url : "/user"
 	}).success(function(data, status, headers, config) {
 		$scope.user = data;
 		console.log($scope.user);

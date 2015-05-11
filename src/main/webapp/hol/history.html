@@ -434,9 +434,6 @@
 					</div>
 				</div>
 					
-					
-					
-					
 					</div>
 					<hr class="shortPatienHistory" />
 				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
@@ -446,13 +443,18 @@
 								</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
 									Операції </a>
 							</h3>
-							<div data-ng-repeat="operation in patientHistory.operationHistorys">
-							{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
-							{{operation.operation_history_end | date:'HH:mm'}} <span
-								title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
-							<span>{{operation.operation_additional}}</span>
+							<div
+								data-ng-repeat="operation in patientHistory.operationHistorys">
+								<a
+									href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{operation.operation_history_id}}">
+									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
+									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
+									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+								<span>{{operation.operation_additional}}</span> <span>Хірург:
+									<i> {{operation.surgery_name}}</i>
+								</span>
+							</div>
 						</div>
-					</div>
 					<h3>
 						<small> <span class="glyphicon glyphicon-share"></span>
 						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
@@ -565,7 +567,6 @@
 	<script src="/js/cuwy1.controller.js"></script>
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/historyCtrl.js"></script>
-
 
 </body>
 </html>

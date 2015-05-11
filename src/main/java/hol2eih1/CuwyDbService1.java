@@ -1,9 +1,14 @@
 package hol2eih1;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -1393,24 +1398,38 @@ public class CuwyDbService1 {
 		return nextId.intValue();
 	}
 
+	static String sqlOperationHistorys = null; //operation-historys.sql
 	public List<Map<String, Object>> getOperationHistorys(HistoryHolDb shortPatientHistory) {
-		String sql = "SELECT og.operation_group_name, osg.operation_subgroup_name, o.operation_name, ore.operation_result_name,"
-				+ "  oc.operation_complication_name,  d.department_name, ps.surgery_name, pa.surgery_name anesthetist_name, o.operation_code, oh.* "
-				+ "   FROM operation_history oh, operation_group og, operation_subgroup osg, operation o, operation_complication oc, department d, operation_result ore"
-				+ "    ,(select concat(personal_name,' ',personal_surname,' ',personal_patronymic) surgery_name, personal_id from personal) ps"
-				+ "   ,(select concat(personal_name,' ',personal_surname,' ',personal_patronymic) surgery_name, personal_id from personal) pa"
-				+ "     WHERE"
-				+ "      oh.operation_result_id = ore.operation_result_id AND "
-				+ "      oh.anesthetist_id = pa.personal_id AND "
-				+ "       oh.personal_id = ps.personal_id AND  oh.department_id =  d.department_id AND  oh.operation_complication_id=oc.operation_complication_id"
-				+ "     AND  og.operation_group_id=oh.operation_group_id  AND osg.operation_subgroup_id=oh.operation_subgroup_id "
-				+ "      AND o.operation_id=oh.operation_id and oh.history_id = ?";
-		logger.info("\n"+sql.replaceFirst("\\?", ""+shortPatientHistory.getHistoryId()));
+		sqlOperationHistorys = readSqlFromFile("operation-historys.sql", sqlOperationHistorys);
+		logger.info("\n"+sqlOperationHistorys.replaceFirst("\\?", ""+shortPatientHistory.getHistoryId()));
 		List<Map<String, Object>> lmso
-			= jdbcTemplate.queryForList(sql, new Object[] { shortPatientHistory.getHistoryId()});
+			= jdbcTemplate.queryForList(sqlOperationHistorys, new Object[] { shortPatientHistory.getHistoryId()});
 		return lmso;
 	}
 
+	private String readSqlFromFile(final String sqlFileName, String sql) {
+		if(sql == null) {
+			sql = readSqlFromFile(sqlFileName);
+		}
+		return sql;
+	}
+
+	private final String readSqlFromFile(String sqlFileName) {
+		Path path = FileSystems.getDefault().getPath(AppConfig.applicationResourcesFolderPfad, sqlFileName);
+		System.out.println(path);
+		final StringBuffer stringBuffer = new StringBuffer();
+		try (BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"))) {
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				stringBuffer.append(line);
+				stringBuffer.append(" ");
+			}
+		} catch (IOException x) {
+			System.err.format("IOException: %s%n", x);
+		}
+		System.out.println(stringBuffer);
+		return stringBuffer.toString();
+	}
 	
 //	public List<Map<String, Object>> dsReferral(Integer departmentId) {
 //		logger.info("\n"+sqlGroupReferral.replaceFirst("\\?", ""+departmentId));
@@ -1649,13 +1668,30 @@ public class CuwyDbService1 {
 		logger.debug(""+auth);
 	}
 
-	
+
+	public List<Map<String, Object>> basicAnalysis(Integer year, Integer mBegin, Integer mEnd) {
+		final String sqlBasicAnalysis = readSqlFromFile("sql-basic-analysis.sql");
+		final ArrayList<Object> arrayList = new ArrayList<>();
+		arrayList.add(year);
+		arrayList.add(mBegin);
+		arrayList.add(mEnd);
+		logger.debug(arrayList.toString());
+		final List<Object> subList = arrayList.subList(0, 3);
+		logger.debug(subList.toString());
+		for (int i = 0; i < 4; i++) {
+			arrayList.add(year);
+			arrayList.add(mBegin);
+			arrayList.add(mEnd);
+//			arrayList.addAll(subList);
+		}
+		logger.debug(arrayList.toString());
+		List<Map<String, Object>> list
+		= jdbcTemplate.queryForList(sqlBasicAnalysis, arrayList.toArray());
+		return list;
+	}
+
 
 	
-	
-
-	
-
 
 
 }

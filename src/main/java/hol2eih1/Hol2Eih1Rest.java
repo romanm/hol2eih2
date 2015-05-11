@@ -109,6 +109,15 @@ public class Hol2Eih1Rest {
 		return epicrise;
 	}
 	
+	@RequestMapping(value = "/hol/basicAnalysis_{year}_{mBegin}_{mEnd}", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> basicAnalysis(
+			@PathVariable Integer year ,@PathVariable Integer mBegin ,@PathVariable Integer mEnd
+			, Principal userPrincipal, HttpSession session) throws IOException {
+		final List<Map<String, Object>> basicAnalysis = cuwyDbService1.basicAnalysis(year, mBegin,mEnd);
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("basicAnalysis", basicAnalysis);
+		return map;
+	}
 	@RequestMapping(value = "/hol/quartalReport_{departmentId}", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> quartalReport(@PathVariable Integer departmentId
 			, Principal userPrincipal, HttpSession session) throws IOException {
@@ -156,10 +165,9 @@ public class Hol2Eih1Rest {
 		logger.debug(""+userPrincipal);
 		if(null == userPrincipal){
 			setLoginRedirectValue(session, "department", departmentId);
-			return departmentHol;
+//			return departmentHol;
 		}
 		departmentHol.setUser(userPrincipal);
-
 		List<PatientDiagnosisHol> departmentsHolPatientsDiagnose
 		= cuwyDbService1.getDepartmentsHolPatientsDiagnose(departmentId);
 		System.out.println(departmentsHolPatientsDiagnose);
@@ -258,6 +266,7 @@ public class Hol2Eih1Rest {
 
 	private void getOperation(HistoryHolDb shortPatientHistory) {
 		List<Map<String, Object>> operationHistorys = cuwyDbService1.getOperationHistorys(shortPatientHistory);
+		logger.debug(operationHistorys.toString());
 		shortPatientHistory.setOperationHistorys(operationHistorys);
 	}
 

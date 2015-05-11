@@ -81,7 +81,8 @@ public class Hol2H2Jdbc {
 			}
 		}
 	}
-	final String fileNameDbVersionUpdate = AppConfig.applicationFolderPfad + "src/main/resources/dbVersionUpdate.sql.json.js";
+//	final String fileNameDbVersionUpdate = AppConfig.applicationFolderPfad + "src/main/resources/dbVersionUpdate.sql.json.js";
+	final String fileNameDbVersionUpdate = AppConfig.applicationResourcesFolderPfad + "dbVersionUpdate.sql.json.js";
 	private Map<String, Object> readJsonDbFile2map() {
 		logger.debug(fileNameDbVersionUpdate);
 		File file = new File(fileNameDbVersionUpdate);

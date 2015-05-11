@@ -114,6 +114,7 @@ Date.prototype.addMonths2 = function (num) {
 var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngular']);
 
 initAppConfig = function($scope, $http, $sce, $filter){
+	$scope.departmentsHol = configHol.departments;
 	if(!$scope.user){
 		console.log($scope.patientHistory);
 		if($scope.patientHistory){
@@ -122,19 +123,21 @@ initAppConfig = function($scope, $http, $sce, $filter){
 			$scope.user = $scope.department.user;
 		}
 	}
+	if(!$scope.user){
+		return;
+	}
+	$scope.userDepartmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
 	$scope.userPersonalId = $scope.user.authorities[0].authority.split("_")[2].split("-")[1];
 	if($scope.patientHistory){
 		$scope.patientHistory.userPersonalId = $scope.userPersonalId;
 	}
-	$scope.userDepartmentId = $scope.user.authorities[0].authority.split("_")[1].split("-")[1];
-	$scope.departmentsHol = configHol.departments;
 }
 
 initseekIcd10Tree = function($scope, $http, $sce, $filter){
 
 	$scope.seekGroupIcd10 = function(icd10Class){
 		var icd10GroupCode = icd10Class.icdCode.substring(0,icd10Class.icdCode.indexOf('.'));
-		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName =  icd10GroupCode;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName = icd10GroupCode;
 		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdCode = icd10GroupCode;
 		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex]);
 		seekIcd10Tree();
@@ -185,12 +188,13 @@ initseekIcd10Tree = function($scope, $http, $sce, $filter){
 			seekIcd10Tree();
 		}
 	}
-
 }
 
 readInitHistory = function($scope, $http, $sce, $filter){
+	$scope.param = parameters;
 	$scope.historyFile = "/db/history_id_"+parameters.hno;
 	if(parameters.hid){
+		$scope.param.hno = parameters.hid;
 		$scope.historyFile = "/db/history_id_"+parameters.hid;
 	}
 
@@ -215,7 +219,20 @@ readInitHistory = function($scope, $http, $sce, $filter){
 	}
 
 	initHistory = function(){
+		if(!$scope.patientHistory.patientDepartmentMovements){
+			$scope.patientHistory.patientDepartmentMovements = [];
+			$scope.patientHistory.patientDepartmentMovements.push({});
+//			console.log($scope.departmentsHol);
+			for (var i = 0; i < $scope.departmentsHol.length; i++) {
+				if($scope.patientHistory.historyDepartmentIn == $scope.departmentsHol[i].department_id){
+					$scope.patientHistory.patientDepartmentMovements[0].departmentName = $scope.departmentsHol[i].department_name;
+					$scope.patientHistory.patientDepartmentMovements[0].departmentId = $scope.departmentsHol[i].department_id;
+				}
+			}
+		}
 		$scope.diagnosTypeIndex = {};
+		if(!$scope.patientHistory.diagnosis)
+			return;
 		var dl = $scope.patientHistory.diagnosis.length;
 		for (var i = 0; i < dl; i++) {
 			var ds = $scope.patientHistory.diagnosis[i];
