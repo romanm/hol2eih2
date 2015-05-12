@@ -55,21 +55,34 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		$scope.operation.surgery_name = s.personal_surname + " " + s.personal_name + " " + s.personal_patronymic;
 		$scope.collapseDialog = "false";
 	}
+	delAnesthetist = function(){
+		$scope.operation.anesthetist_id = null;
+		$scope.operation.anesthetist_name = null;
+	}
 	$scope.setAnesthetist = function(a){
 		$scope.operation.anesthetist_id = a.personal_id;
 		$scope.operation.anesthetist_name = a.personal_surname + " " + a.personal_name + " " + a.personal_patronymic;
 		$scope.collapseDialog = "false";
 	}
 	$scope.setDepartment = function(d){
-		console.log(d);
 		$scope.operation.department_id = d.department_id;
 		$scope.operation.department_name = d.department_name;
+		$scope.collapseDialog = "false";
+	}
+	$scope.setDiagnos = function(ds){
+		$scope.operation.icd_id = ds.icdId;
+		$scope.operation.icd_code = ds.icdCode;
+		$scope.operation.icd_name = ds.icdName;
 		$scope.collapseDialog = "false";
 	}
 	$scope.setOperationResult = function(or){
 		$scope.operation.operation_result_id = or.operation_result_id;
 		$scope.operation.operation_result_name = or.operation_result_name;
 		$scope.collapseDialog = "false";
+	}
+	delComplication = function(){
+		$scope.operation.operation_complication_name = null;
+		$scope.operation.operation_complication_id = null;
 	}
 	$scope.setComplication = function(opc){
 		$scope.operation.operation_complication_name = opc.operation_complication_name;
@@ -85,17 +98,17 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		}else if(dialogName == "opresult"){
 			$scope.operationResultListe = configHol.operationResultListe;
 		}else if(dialogName == "anesthetist"){
-				$http({ method : 'GET', url : "/hol/anesthetists"
-				}).success(function(data, status, headers, config) {
-					$scope.anesthetists = data;
-				}).error(function(data, status, headers, config) {
-				});
+			$http({ method : 'GET', url : "/hol/anesthetists"
+			}).success(function(data, status, headers, config) {
+				$scope.anesthetists = data;
+			}).error(function(data, status, headers, config) {
+			});
 		}else if(dialogName == "surgery"){
-				$http({ method : 'GET', url : "/hol/surgerys"
-				}).success(function(data, status, headers, config) {
-					$scope.surgerys = data;
-				}).error(function(data, status, headers, config) {
-				});
+			$http({ method : 'GET', url : "/hol/surgerys"
+			}).success(function(data, status, headers, config) {
+				$scope.surgerys = data;
+			}).error(function(data, status, headers, config) {
+			});
 		}else if(dialogName == "complication"){
 			$http({ method : 'GET', url : "/hol/operation-complication"
 			}).success(function(data, status, headers, config) {
@@ -117,6 +130,7 @@ operation2Directive = function($scope, $http, $sce, $filter){
 				$scope.patientHistory.operationHistorys[0].operation_history_start = opStartDate;
 				$scope.patientHistory.operationHistorys[0].operation_history_end = new Date();
 				$scope.patientHistory.operationHistorys[0].operation_name = "";
+				$scope.patientHistory.operationHistorys[0].history_id = $scope.patientHistory.historyId;
 			}
 			var opEditIndex = 0;
 			for (var i = 0; i < $scope.patientHistory.operationHistorys.length; i++) {

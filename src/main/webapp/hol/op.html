@@ -94,8 +94,11 @@
 			<div data-ng-if="patientHistory.operationHistorys">
 				<h3>
 					<small> <span class="glyphicon glyphicon-pushpin"></span>
-					</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
+					</small> <a href="#"> Операця </a>
+					<!-- 
+						<a href="/hol/op.html?hid={{patientHistory.historyId}}">
 						Операції </a>
+						 -->
 				</h3>
 				<div>
 					<span
@@ -104,7 +107,7 @@
 							{{!operation.operation_code?'Код операції':''}}
 							{{operation.operation_code}}<span
 							data-ng-show="collapseDialog == 'op'"
-							class="glyphicon glyphicon-folder-open"></span>
+							class="glyphicon glyphicon-folder-open no-print"></span>
 					</a> - {{operation.operation_name}} . <span>{{operation.operation_additional}}</span>
 					</span> <a href="#" data-ng-click="openDialog('beginOp')">
 						{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
@@ -159,7 +162,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="well" collapse="collapseDialog != 'op'">
+				<div class="well no-print" collapse="collapseDialog != 'op'">
 					<div class="row no-print">
 						<form class="form-inline" role="form">
 							<div class="col-xs-6">
@@ -258,7 +261,20 @@
 						</div>
 					</div>
 				</div>
-				<div>Діагноз при операції</div>
+				<div>
+					<a href="#" data-ng-click="openDialog('diagnos')">Діагноз при
+						операції :<span data-ng-show="collapseDialog == 'diagnos'"
+						class="glyphicon glyphicon-folder-open"></span>
+						{{operation.icd_code}} - {{operation.icd_name}}
+					</a>
+				</div>
+				<div class="well" collapse="collapseDialog != 'diagnos'">
+					<ul>
+						<li data-ng-repeat="ds in patientHistory.diagnosis"><a href="#"
+							data-ng-click="setDiagnos(ds)"> {{ds.icdCode}} -
+								{{ds.icdName}} </a></li>
+					</ul>
+				</div>
 				<div>
 					<span><a href="#" data-ng-click="openDialog('department')">Відділення:<span
 							data-ng-show="collapseDialog == 'department'"
@@ -268,22 +284,23 @@
 							data-ng-show="collapseDialog == 'surgery'"
 							class="glyphicon glyphicon-folder-open"></span></a>
 						{{operation.surgery_name}}
-					</span>, <span><a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
-							data-ng-show="collapseDialog == 'anesthetist'"
-							class="glyphicon glyphicon-folder-open"></span>
-					</a> </span> {{operation.anesthetist_name}} <span>Анестезія</span>
+					</span>,<a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
+						data-ng-show="collapseDialog == 'anesthetist'"
+						class="glyphicon glyphicon-folder-open"></span>
+					</a> <span ng-context-menu="menuDeletAnesthetist">
+						{{operation.anesthetist_name}} </span> <span>Анестезія</span>
 				</div>
 				<div>
 					<span><a href="#" data-ng-click="openDialog('opresult')">
 							Результат:<span data-ng-show="collapseDialog == 'opresult'"
 							class="glyphicon glyphicon-folder-open"></span>
-					</a> {{operation.operation_result_name}} </span>, <span> <a href="#"
+					</a> {{operation.operation_result_name}} </span>, <a href="#"
 						data-ng-click="openDialog('complication')"> Ускладнення:<span
-							data-ng-show="collapseDialog == 'complication'"
-							class="glyphicon glyphicon-folder-open"></span></a>
+						data-ng-show="collapseDialog == 'complication'"
+						class="glyphicon glyphicon-folder-open"></span></a><span
+						ng-context-menu="menuDeletComplication">
 						{{operation.operation_complication_id}}.
-						{{operation.operation_complication_name}}
-					</span>
+						{{operation.operation_complication_name}} </span>
 				</div>
 				<div class="well" collapse="collapseDialog != 'opresult'">
 					<ul>
@@ -294,13 +311,15 @@
 				<div class="well" collapse="collapseDialog != 'anesthetist'">
 					<div class="input-group">
 						<span class="input-group-addon">Пошук:</span> <input
+						id="seekAnesthetist"
 							data-ng-model="seekAnesthetist" type="text" class="form-control"
 							placeholder=" пошук анестезіолога " />
 					</div>
 					<ul>
 						<li data-ng-repeat="a in anesthetists | filter : seekAnesthetist"><a
-							data-ng-click="setAnesthetist(a)"> {{a.personal_surname}}
-								{{a.personal_name}} {{a.personal_patronymic}} </a></li>
+							href="#" data-ng-click="setAnesthetist(a)">
+								{{a.personal_surname}} {{a.personal_name}}
+								{{a.personal_patronymic}} </a></li>
 					</ul>
 				</div>
 				<div class="well" collapse="collapseDialog != 'surgery'">
@@ -315,6 +334,7 @@
 								{{s.personal_name}} {{s.personal_patronymic}} </a></li>
 					</ul>
 				</div>
+				
 				<div class="well" collapse="collapseDialog != 'department'">
 					<div class="input-group">
 						<span class="input-group-addon">Пошук:</span> <input
@@ -355,8 +375,6 @@
 					{{numberOfChange}} </a> <span
 					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
-
-
 				<ol class="list-inline navbar-right">
 					<li><span class="glyphicon glyphicon-eye-open"></span> <a
 						href="/hol/history.html?hno={{param.hid}}"> Перегляд </a></li>

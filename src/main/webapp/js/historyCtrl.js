@@ -58,4 +58,15 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		}]
 	];
 
+	$scope.menuDeletOperation = [
+		['<span class="glyphicon glyphicon-remove"></span> Видалити', function ($itemScope) {
+			console.log("menuDeletOperation");
+			console.log($itemScope);
+			console.log($itemScope.operation);
+			console.log($scope.patientHistory.operationHistorys);
+			$scope.patientHistory.operationHistorys.splice(0,1);
+			
+		}]
+	];
+
 } ] );

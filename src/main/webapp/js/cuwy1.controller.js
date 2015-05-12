@@ -22,6 +22,13 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	});
 
 	$scope.saveOperation = function(){
+
+		var opStartDate = new Date($scope.operation.operation_history_start);
+		$scope.operation.operation_history_start_long = opStartDate.getTime();
+		var opEndDate = new Date($scope.operation.operation_history_end);
+		$scope.operation.operation_history_end_long = opEndDate.getTime();
+		$scope.operation.operation_history_duration_sec = $scope.operation_duration_min*60;
+
 		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/saveoperation"
 		}).success(function(data, status, headers, config){
 			console.log(data);
@@ -29,6 +36,19 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 			$scope.error = data;
 		});
 	}
+
+	$scope.menuDeletComplication = [
+		['<span class="glyphicon glyphicon-remove"></span> Видалити', function () {
+			delComplication();
+		}]
+	];
+
+	$scope.menuDeletAnesthetist = [
+		['<span class="glyphicon glyphicon-remove"></span> Видалити', function () {
+			delAnesthetist();
+		}]
+	];
+
 	} ]);
 
 cuwyApp.controller('BasicAnalysisCtrl', [ '$scope', '$http', '$filter', '$sce', 

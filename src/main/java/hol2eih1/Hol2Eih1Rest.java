@@ -240,9 +240,10 @@ public class Hol2Eih1Rest {
 		logger.info(" diagnosis ");
 		return historyHolDb;
 	}
-	
+
 	@RequestMapping(value = "/db/history_id_{historyId}", method = RequestMethod.GET)
-	public @ResponseBody HistoryHolDb getHolPatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
+	public @ResponseBody HistoryHolDb getHolPatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) 
+			throws IOException {
 		logger.info("\n Start /db/history_id_"+historyId);
 		session.setAttribute("hno", historyId);
 		logger.debug(""+historyId);

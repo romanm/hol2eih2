@@ -17,8 +17,8 @@
 		}
 	</style>
 </head>
-<body>
 
+<body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 <div class="container">
 	<div class="row">
@@ -444,6 +444,7 @@
 									Операції </a>
 							</h3>
 							<div
+								data-ng-context-menu="menuDeletOperation"
 								data-ng-repeat="operation in patientHistory.operationHistorys">
 								<a
 									href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{operation.operation_history_id}}">
