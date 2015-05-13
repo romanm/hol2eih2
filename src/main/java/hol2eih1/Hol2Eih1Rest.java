@@ -219,6 +219,7 @@ public class Hol2Eih1Rest {
 	public  @ResponseBody Map<String, Object> saveHistory(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/savehistory"+historyHolDb.keySet());
 		final List<Map<String, Object>> deleteOperationHistorys = (List<Map<String, Object>>) historyHolDb.get("deleteOperationHistorys");
+		if(deleteOperationHistorys != null)
 		for (Map<String, Object> map : deleteOperationHistorys) {
 			final Integer operationHistoryId = (Integer) map.get("operation_history_id");
 			cuwyDbService1.deleteOperationHistory(operationHistoryId);
