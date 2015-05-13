@@ -803,7 +803,8 @@ public class CuwyDbService1 {
 	String sqlInsertOperationHistory2 = "INSERT INTO operation_history "
 			+ " (history_id, operation_id, operation_history_start, operation_history_end"
 			+ " ) VALUES (?,?,?,?)";
-	String sqlInsertOperationHistory = "INSERT INTO operation_history "
+	final String deleteOperationHistory = "DELETE FROM operation_history WHERE operation_history_id = ? ";
+	final String sqlInsertOperationHistory = "INSERT INTO operation_history "
 			+ " (history_id, operation_history_start, operation_history_end, operation_history_duration"
 			+ " , personal_id, department_id, operation_result_id"
 			+ " , operation_id, operation_subgroup_id, operation_group_id "
@@ -829,6 +830,10 @@ public class CuwyDbService1 {
 		logger.debug(sqlUpdateOperationHistory);
 		jdbcTemplate.update(sqlUpdateOperationHistory, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
 	}
+	public void deleteOperationHistory(Integer operationHistoryId) {
+		jdbcTemplate.update(deleteOperationHistory, operationHistoryId);
+	}
+
 	public void updateHistoryDiagnosis(Map<String, Object> map) {
 		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
 	}
@@ -1717,9 +1722,5 @@ public class CuwyDbService1 {
 		= jdbcTemplate.queryForList(sqlBasicAnalysis, arrayList.toArray());
 		return list;
 	}
-
-
-	
-
 
 }

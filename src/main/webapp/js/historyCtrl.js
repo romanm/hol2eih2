@@ -61,11 +61,15 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	$scope.menuDeletOperation = [
 		['<span class="glyphicon glyphicon-remove"></span> Видалити', function ($itemScope) {
 			console.log("menuDeletOperation");
-			console.log($itemScope);
-			console.log($itemScope.operation);
-			console.log($scope.patientHistory.operationHistorys);
-			$scope.patientHistory.operationHistorys.splice(0,1);
-			
+			var deletedOperation = $scope.patientHistory.operationHistorys.splice($itemScope.$index,1);
+			if(!$scope.patientHistory.deleteOperationHistorys)
+				$scope.patientHistory.deleteOperationHistorys = deletedOperation;
+			else
+				deletedOperation.forEach(function(dOp) {
+					$scope.patientHistory.deleteOperationHistorys.push(dOp);
+				});
+			console.log($scope.patientHistory.deleteOperationHistorys);
+			console.log($scope.patientHistory);
 		}]
 	];
 

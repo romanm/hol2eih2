@@ -218,6 +218,11 @@ public class Hol2Eih1Rest {
 	@RequestMapping(value = "/db/savehistory", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveHistory(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/savehistory"+historyHolDb.keySet());
+		final List<Map<String, Object>> deleteOperationHistorys = (List<Map<String, Object>>) historyHolDb.get("deleteOperationHistorys");
+		for (Map<String, Object> map : deleteOperationHistorys) {
+			final Integer operationHistoryId = (Integer) map.get("operation_history_id");
+			cuwyDbService1.deleteOperationHistory(operationHistoryId);
+		}
 		final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) historyHolDb.get("diagnosis");
 		logger.info(" diagnosis "+diagnosis);
 		for (Map<String, Object> map : diagnosis) {
