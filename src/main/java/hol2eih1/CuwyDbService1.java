@@ -775,53 +775,53 @@ public class CuwyDbService1 {
 
 		@Override
 		public void setValues(PreparedStatement ps) throws SQLException {
+			ps.setString(1, (String) map.get("operation_additional"));
+			ps.setTimestamp(2, new Timestamp((long) map.get("operation_history_start_long")));
+			ps.setTimestamp(3, new Timestamp((long) map.get("operation_history_end_long")));
+			ps.setInt(4, (int) map.get("operation_history_duration_sec"));
+
+			ps.setInt(5, (int) map.get("personal_id"));
+			ps.setInt(6, (int) map.get("department_id"));
+			ps.setInt(7, (int) map.get("operation_result_id"));
+			
+			ps.setInt(8, (int) map.get("operation_id"));
+			ps.setInt(9, (int) map.get("icd_id"));
+
 			if(isInsert){
-				logger.debug(map.toString());
 				int nextOperationHistoryId = getAutoIncrement("operation_history");
-				logger.debug("nextOperationHistoryId = "+nextOperationHistoryId);
-				ps.setInt(1, (int) map.get("history_id"));
-				final Timestamp o_h_start = new Timestamp((long) map.get("operation_history_start_long"));
-				ps.setTimestamp(2, o_h_start);
-				final Timestamp o_h_end = new Timestamp((long) map.get("operation_history_end_long"));
-				ps.setTimestamp(3, o_h_end);
-				ps.setInt(4, (int) map.get("operation_history_duration_sec"));
-				ps.setInt(5, (int) map.get("personal_id"));
-				ps.setInt(6, (int) map.get("department_id"));
-				ps.setInt(7, (int) map.get("operation_result_id"));
-				ps.setInt(8, (int) map.get("operation_id"));
-				ps.setInt(9, (int) map.get("icd_id"));
-			}else{
-				final String string = (String) map.get("operation_additional");
-				logger.debug(string);
-				ps.setString(1, string);
-				ps.setInt(2, (int) map.get("operation_id"));
-				ps.setInt(3, (int) map.get("history_id"));
+				map.put("operation_history_id", nextOperationHistoryId);
+				ps.setInt(11, (int) map.get("history_id"));
 			}
+			ps.setInt(10, (int) map.get("operation_history_id"));
 		}
 	}
 
-	String sqlInsertOperationHistory2 = "INSERT INTO operation_history "
-			+ " (history_id, operation_id, operation_history_start, operation_history_end"
-			+ " ) VALUES (?,?,?,?)";
-	final String deleteOperationHistory = "DELETE FROM operation_history WHERE operation_history_id = ? ";
 	final String sqlInsertOperationHistory = "INSERT INTO operation_history "
-			+ " (history_id, operation_history_start, operation_history_end, operation_history_duration"
-			+ " , personal_id, department_id, operation_result_id"
-			+ " , operation_id, operation_subgroup_id, operation_group_id "
-			+ " , icd_id, icd_start, icd_end"
-			+ " ) SELECT ?, ?, ?, ?"
-			+ " , ?, ?, ?"
-			+ " , o.operation_id, o.operation_subgroup_id, os.operation_group_id "
-			+ " , icd.icd_id, icd.icd_start, icd.icd_end"
-			+ " FROM operation o,  operation_subgroup os, icd icd"
-			+ " WHERE o.operation_id = ? AND os.operation_subgroup_id = o.operation_subgroup_id "
-			+ " AND icd.icd_id = ?";
-	String sqlUpdateOperationHistory = "UPDATE operation_history oh, operation_subgroup os, operation o SET "
-			+ " oh.operation_additional = ? "
-	+ ", oh.operation_id = o.operation_id "
-	+ ", oh.operation_subgroup_id = os.operation_subgroup_id "
+		+ " (operation_additional, operation_history_start, operation_history_end, operation_history_duration "
+		+ " , personal_id, department_id, operation_result_id "
+		+ " , operation_id, operation_subgroup_id, operation_group_id "
+		+ " , icd_id, icd_start, icd_end "
+		+ " , operation_history_id, history_id "
+		+ " ) SELECT oh1.*, oh2.* FROM "
+		+ "(SELECT ?, ?, ?, ?"
+		+ " , ?, ?, ?"
+		+ " , o.operation_id, o.operation_subgroup_id, os.operation_group_id "
+		+ " , icd.icd_id, icd.icd_start, icd.icd_end"
+		+ " FROM operation_subgroup os, operation o, icd icd "
+		+ " WHERE o.operation_id = ? AND os.operation_subgroup_id = o.operation_subgroup_id AND icd.icd_id = ?) oh1"
+		+ " ( SELECT ?, ? ) oh2 "
+		+ "";
+
+	final String sqlUpdateOperationHistory = "UPDATE operation_history oh, operation_subgroup os, operation o, icd icd SET "
+	+ " oh.operation_additional = ?, oh.operation_history_start = ?, oh.operation_history_end = ?, oh.operation_history_duration = ? "
+	+ ", oh.personal_id = ?, oh.department_id = ?, oh.operation_result_id = ? "
+	+ ", oh.operation_id = o.operation_id, oh.operation_subgroup_id = os.operation_subgroup_id "
 	+ ", oh.operation_group_id = os.operation_group_id "
-	+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND oh.history_id = ? ";
+	+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND icd.icd_id = ? AND oh.operation_history_id = ? ";
+
+	final String deleteOperationHistory = "DELETE FROM operation_history WHERE operation_history_id = ? ";
+
+	//+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND oh.history_id = ? ";
 	public void insertOperationHistory(Map<String, Object> map) {
 		logger.debug(sqlInsertOperationHistory);
 		jdbcTemplate.update(sqlInsertOperationHistory, new InsAppOperationHistory(map, sqlInsertOperationHistory));
