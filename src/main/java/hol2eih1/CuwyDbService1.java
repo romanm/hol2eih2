@@ -775,24 +775,48 @@ public class CuwyDbService1 {
 
 		@Override
 		public void setValues(PreparedStatement ps) throws SQLException {
+			testSql();
 			ps.setString(1, (String) map.get("operation_additional"));
-			ps.setTimestamp(2, new Timestamp((long) map.get("operation_history_start_long")));
-			ps.setTimestamp(3, new Timestamp((long) map.get("operation_history_end_long")));
+			final Timestamp timestamp = new Timestamp((long) map.get("operation_history_start_long"));
+			final Timestamp timestamp2 = new Timestamp((long) map.get("operation_history_end_long"));
+			ps.setTimestamp(2, timestamp);
+			ps.setTimestamp(3, timestamp2);
 			ps.setInt(4, (int) map.get("operation_history_duration_sec"));
 
 			ps.setInt(5, (int) map.get("personal_id"));
 			ps.setInt(6, (int) map.get("department_id"));
 			ps.setInt(7, (int) map.get("operation_result_id"));
 			
-			ps.setInt(8, (int) map.get("operation_id"));
-			ps.setInt(9, (int) map.get("icd_id"));
+			ps.setInt(8, (int) map.get("anestetist_id"));
+			
+			ps.setInt(9, (int) map.get("operation_id"));
+			ps.setInt(10, (int) map.get("icd_id"));
 
 			if(isInsert){
 				int nextOperationHistoryId = getAutoIncrement("operation_history");
 				map.put("operation_history_id", nextOperationHistoryId);
-				ps.setInt(11, (int) map.get("history_id"));
+				ps.setInt(12, (int) map.get("history_id"));
 			}
-			ps.setInt(10, (int) map.get("operation_history_id"));
+			ps.setInt(11, (int) map.get("operation_history_id"));
+		}
+
+		private void testSql() {
+			final Timestamp timestamp = new Timestamp((long) map.get("operation_history_start_long"));
+			final Timestamp timestamp2 = new Timestamp((long) map.get("operation_history_end_long"));
+			String sql = sqlInsertOperationHistory
+			.replaceFirst("\\?", (String) map.get("operation_additional"))
+			.replaceFirst("\\?",  timestamp.toString())
+			.replaceFirst("\\?",  timestamp2.toString())
+			.replaceFirst("\\?",  ""+ map.get("operation_history_duration_sec"))
+			.replaceFirst("\\?",  ""+  map.get("personal_id"))
+			.replaceFirst("\\?",  ""+  map.get("department_id"))
+			.replaceFirst("\\?",  ""+  map.get("operation_result_id"))
+			.replaceFirst("\\?",  ""+  map.get("operation_id"))
+			.replaceFirst("\\?",  ""+  map.get("icd_id"))
+			.replaceFirst("\\?",  ""+  map.get("operation_history_id"))
+			.replaceFirst("\\?",  ""+  map.get("history_id"))
+			;
+			logger.debug(sql);
 		}
 	}
 
@@ -801,16 +825,17 @@ public class CuwyDbService1 {
 		+ " , personal_id, department_id, operation_result_id "
 		+ " , operation_id, operation_subgroup_id, operation_group_id "
 		+ " , icd_id, icd_start, icd_end "
+		+ " , anestetist_id "
 		+ " , operation_history_id, history_id "
 		+ " ) SELECT oh1.*, oh2.* FROM "
 		+ "(SELECT ?, ?, ?, ?"
 		+ " , ?, ?, ?"
 		+ " , o.operation_id, o.operation_subgroup_id, os.operation_group_id "
 		+ " , icd.icd_id, icd.icd_start, icd.icd_end"
+		+ " , ?"
 		+ " FROM operation_subgroup os, operation o, icd icd "
 		+ " WHERE o.operation_id = ? AND os.operation_subgroup_id = o.operation_subgroup_id AND icd.icd_id = ?) oh1"
-		+ " ( SELECT ?, ? ) oh2 "
-		+ "";
+		+ ", ( SELECT ?, ? ) oh2 ";
 
 	final String sqlUpdateOperationHistory = "UPDATE operation_history oh, operation_subgroup os, operation o, icd icd SET "
 	+ " oh.operation_additional = ?, oh.operation_history_start = ?, oh.operation_history_end = ?, oh.operation_history_duration = ? "

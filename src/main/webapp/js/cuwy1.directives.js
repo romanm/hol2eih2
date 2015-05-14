@@ -116,7 +116,6 @@ var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngu
 initAppConfig = function($scope, $http, $sce, $filter){
 	$scope.departmentsHol = configHol.departments;
 	if(!$scope.user){
-		console.log($scope.patientHistory);
 		if($scope.patientHistory){
 			$scope.user = $scope.patientHistory.user;
 		}else if($scope.department){

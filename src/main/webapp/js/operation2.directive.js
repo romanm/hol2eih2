@@ -122,28 +122,31 @@ operation2Directive = function($scope, $http, $sce, $filter){
 
 	initOperation = function(){
 		if($scope.user.authenticated){
-			if($scope.patientHistory.operationHistorys.length == 0){
+//			if($scope.patientHistory.operationHistorys.length == 0){
+			$scope.patientHistory.opEditIndex = 0;
+			if(!$scope.param.ophid){
+				$scope.patientHistory.opEditIndex = $scope.patientHistory.operationHistorys.length;
 				$scope.patientHistory.operationHistorys.push({});
 				var opStartDate = new Date();
 				var mm = opStartDate.getMinutes();
 				opStartDate.setMinutes(mm-mm%5);
-				$scope.patientHistory.operationHistorys[0].operation_history_start = opStartDate;
-				$scope.patientHistory.operationHistorys[0].operation_history_end = new Date();
-				$scope.patientHistory.operationHistorys[0].operation_name = "";
-				$scope.patientHistory.operationHistorys[0].history_id = $scope.patientHistory.historyId;
+				$scope.patientHistory.operationHistorys[$scope.patientHistory.opEditIndex].operation_history_start = opStartDate;
+				$scope.patientHistory.operationHistorys[$scope.patientHistory.opEditIndex].operation_history_end = new Date();
+				$scope.patientHistory.operationHistorys[$scope.patientHistory.opEditIndex].operation_name = "";
+				$scope.patientHistory.operationHistorys[$scope.patientHistory.opEditIndex].history_id = $scope.patientHistory.historyId;
 			}
-			var opEditIndex = 0;
 			for (var i = 0; i < $scope.patientHistory.operationHistorys.length; i++) {
 				if($scope.patientHistory.operationHistorys[i].operation_history_id
 						== $scope.param.ophid){
-					var opEditIndex = i;
+					$scope.patientHistory.opEditIndex = i;
 					break;
 				}
 			}
 			console.log($scope.patientHistory.operationHistorys);
-			manageOpeSeekInterval(opEditIndex);
+			manageOpeSeekInterval();
 			calcOperationDuration();
 		}
+		console.log($scope.operation);
 		var opStartDate = new Date($scope.operation.operation_history_start);
 		$scope.ophStartHH = opStartDate.getHours();
 		var mm = opStartDate.getMinutes();
@@ -166,12 +169,8 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		calcDurationEndDate();
 	}
 
-	manageOpeSeekInterval = function(index){
-		console.log(index);
-		$scope.indexOp = index;
-		console.log($scope.patientHistory.operationHistorys);
-		$scope.operation = $scope.patientHistory.operationHistorys[index];
-		console.log($scope.operation);
+	manageOpeSeekInterval = function(){
+		$scope.operation = $scope.patientHistory.operationHistorys[$scope.patientHistory.opEditIndex];
 		if(!$scope.operation)
 			return;
 		if($scope.collapseDialog != "op"){
@@ -190,6 +189,7 @@ operation2Directive = function($scope, $http, $sce, $filter){
 
 	calcOperationDuration = function(){
 		var diff = Math.abs($scope.operation.operation_history_end - $scope.operation.operation_history_start);
+		console.log(diff);
 		$scope.operation_duration_min = diff/(1000*60);
 		calcOperationDurationHHmm();
 	}
@@ -207,7 +207,7 @@ operation2Directive = function($scope, $http, $sce, $filter){
 	}
 	$scope.openOpDialog = function(){
 		$scope.openDialog("op");
-		manageOpeSeekInterval($scope.indexOp);
+		manageOpeSeekInterval();
 	}
 
 	$scope.activeTabName = "seek";

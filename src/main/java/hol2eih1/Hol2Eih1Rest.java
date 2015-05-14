@@ -198,20 +198,24 @@ public class Hol2Eih1Rest {
 	@RequestMapping(value = "/db/saveoperation", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveOperation(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/saveoperation"+historyHolDb.keySet());
+		final Integer opEditIndex = (Integer) historyHolDb.get("opEditIndex");
 		final List<Map<String, Object>> operationHistorys = (List<Map<String, Object>>) historyHolDb.get("operationHistorys");
-		logger.info("operationHistorys = "+operationHistorys);
-		for (Map<String, Object> map : operationHistorys) {
-			logger.debug(""+map);
-			if(null != map){
-				Integer operationHistoryId = (Integer) map.get("operation_history_id");
-				logger.debug(""+operationHistoryId);
-				if(null == operationHistoryId){
-					cuwyDbService1.insertOperationHistory(map);
-				}else{
-					cuwyDbService1.updateOperationHistory(map);
-				}
+		logger.info(opEditIndex + " operationHistorys = "+operationHistorys);
+		Map<String, Object> map = operationHistorys.get(opEditIndex);
+		if(null != map){
+			Integer operationHistoryId = (Integer) map.get("operation_history_id");
+			logger.debug(""+operationHistoryId);
+			if(null == operationHistoryId){
+				cuwyDbService1.insertOperationHistory(map);
+			}else{
+				cuwyDbService1.updateOperationHistory(map);
 			}
 		}
+		/*
+		for (Map<String, Object> map : operationHistorys) {
+			logger.debug(""+map);
+		}
+		 * */
 		return historyHolDb;
 	}
 
