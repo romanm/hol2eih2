@@ -775,7 +775,6 @@ public class CuwyDbService1 {
 
 		@Override
 		public void setValues(PreparedStatement ps) throws SQLException {
-			testSql();
 			ps.setString(1, (String) map.get("operation_additional"));
 			final Timestamp timestamp = new Timestamp((long) map.get("operation_history_start_long"));
 			final Timestamp timestamp2 = new Timestamp((long) map.get("operation_history_end_long"));
@@ -786,9 +785,12 @@ public class CuwyDbService1 {
 			ps.setInt(5, (int) map.get("personal_id"));
 			ps.setInt(6, (int) map.get("department_id"));
 			ps.setInt(7, (int) map.get("operation_result_id"));
-			
-			ps.setInt(8, (int) map.get("anestetist_id"));
-			
+
+			logger.debug(map.toString());
+			logger.debug(""+map.get("anesthetist_id"));
+
+			ps.setInt(8, (int) map.get("anesthetist_id"));
+
 			ps.setInt(9, (int) map.get("operation_id"));
 			ps.setInt(10, (int) map.get("icd_id"));
 
@@ -799,25 +801,6 @@ public class CuwyDbService1 {
 			}
 			ps.setInt(11, (int) map.get("operation_history_id"));
 		}
-
-		private void testSql() {
-			final Timestamp timestamp = new Timestamp((long) map.get("operation_history_start_long"));
-			final Timestamp timestamp2 = new Timestamp((long) map.get("operation_history_end_long"));
-			String sql = sqlInsertOperationHistory
-			.replaceFirst("\\?", (String) map.get("operation_additional"))
-			.replaceFirst("\\?",  timestamp.toString())
-			.replaceFirst("\\?",  timestamp2.toString())
-			.replaceFirst("\\?",  ""+ map.get("operation_history_duration_sec"))
-			.replaceFirst("\\?",  ""+  map.get("personal_id"))
-			.replaceFirst("\\?",  ""+  map.get("department_id"))
-			.replaceFirst("\\?",  ""+  map.get("operation_result_id"))
-			.replaceFirst("\\?",  ""+  map.get("operation_id"))
-			.replaceFirst("\\?",  ""+  map.get("icd_id"))
-			.replaceFirst("\\?",  ""+  map.get("operation_history_id"))
-			.replaceFirst("\\?",  ""+  map.get("history_id"))
-			;
-			logger.debug(sql);
-		}
 	}
 
 	final String sqlInsertOperationHistory = "INSERT INTO operation_history "
@@ -825,7 +808,7 @@ public class CuwyDbService1 {
 		+ " , personal_id, department_id, operation_result_id "
 		+ " , operation_id, operation_subgroup_id, operation_group_id "
 		+ " , icd_id, icd_start, icd_end "
-		+ " , anestetist_id "
+		+ " , anesthetist_id "
 		+ " , operation_history_id, history_id "
 		+ " ) SELECT oh1.*, oh2.* FROM "
 		+ "(SELECT ?, ?, ?, ?"
@@ -840,8 +823,9 @@ public class CuwyDbService1 {
 	final String sqlUpdateOperationHistory = "UPDATE operation_history oh, operation_subgroup os, operation o, icd icd SET "
 	+ " oh.operation_additional = ?, oh.operation_history_start = ?, oh.operation_history_end = ?, oh.operation_history_duration = ? "
 	+ ", oh.personal_id = ?, oh.department_id = ?, oh.operation_result_id = ? "
-	+ ", oh.operation_id = o.operation_id, oh.operation_subgroup_id = os.operation_subgroup_id "
-	+ ", oh.operation_group_id = os.operation_group_id "
+	+ ", oh.operation_id = o.operation_id, oh.operation_subgroup_id = os.operation_subgroup_id , oh.operation_group_id = os.operation_group_id "
+	+ ", oh.icd_id = icd.icd_id, oh.icd_start=icd.icd_start, oh.icd_end=icd.icd_end "
+	+ ", oh.anesthetist_id = ? "
 	+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND icd.icd_id = ? AND oh.operation_history_id = ? ";
 
 	final String deleteOperationHistory = "DELETE FROM operation_history WHERE operation_history_id = ? ";
@@ -898,6 +882,7 @@ public class CuwyDbService1 {
 		private final Integer personalDepartmentIdIn;
 		private InsAppDiagnosHistory(Map<String, Object> map, String sql) {
 			super(map, sql);
+			logger.debug(map.toString());
 			final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
 			final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
 			this.personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
@@ -1354,6 +1339,14 @@ public class CuwyDbService1 {
 		List<Map<String, Object>> countPatientsProMonth 
 		= jdbcTemplate.queryForList(sql);
 		return countPatientsProMonth;
+	}
+
+	public List<Map<String, Object>> getAnestesiaListe() {
+		String sql = "SELECT * FROM anestesia";
+		logger.info("\n"+sql);
+		List<Map<String, Object>> anestesiaListe 
+		= jdbcTemplate.queryForList(sql);
+		return anestesiaListe;
 	}
 
 	public List<Map<String, Object>> getAnesthetistListe() {

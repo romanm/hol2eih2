@@ -64,6 +64,16 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		$scope.operation.anesthetist_name = a.personal_surname + " " + a.personal_name + " " + a.personal_patronymic;
 		$scope.collapseDialog = "false";
 	}
+	delAnestesia = function(){
+		$scope.operation.anestesia_id = null;
+		$scope.operation.anestesia_name = null;
+	}
+	$scope.setAnestesia = function(a){
+		$scope.operation.anestesia_id = a.anestesia_id;
+		$scope.operation.anestesia_name = a.anestesia_name;
+		$scope.collapseDialog = "false";
+	}
+	
 	$scope.setDepartment = function(d){
 		$scope.operation.department_id = d.department_id;
 		$scope.operation.department_name = d.department_name;
@@ -97,6 +107,13 @@ operation2Directive = function($scope, $http, $sce, $filter){
 			$scope.departments = configHol.departments;
 		}else if(dialogName == "opresult"){
 			$scope.operationResultListe = configHol.operationResultListe;
+		}else if(dialogName == "anestesia"){
+			$http({ method : 'GET', url : "/hol/anestesia"
+			}).success(function(data, status, headers, config) {
+				$scope.anestesia = data;
+				console.log($scope.anestesia);
+			}).error(function(data, status, headers, config) {
+			});
 		}else if(dialogName == "anesthetist"){
 			$http({ method : 'GET', url : "/hol/anesthetists"
 			}).success(function(data, status, headers, config) {

@@ -78,6 +78,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
 			initEpicrise();
+			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {
 		});
 	}
@@ -90,8 +91,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log($scope.patientHistory.historyTreatmentAnalysises);
 		$scope.patientHistory.historyTreatmentAnalysises.forEach(function(hol1Element) {
 			var groupElement = createGroupElement(hol1Element.historyTreatmentAnalysisName);
-			console.log(groupElement);
-			addTextHtmlValue (groupElement, hol1Element.historyTreatmentAnalysisText);
+			addTextHtmlValue(groupElement, hol1Element.historyTreatmentAnalysisText);
 			if( rsp.name == groupElement.name){
 				rsp = groupElement;
 			}else{
@@ -118,6 +118,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	setGroupElementType = function(groupElement){
 		if(groupElement.name == "Діагнози"){
 			groupElement.type="isDiagnos";
+		}else if(groupElement.name == "Операції"){
+			groupElement.type="isOperation";
 		}else if(epicriseTemplate.epicriseBlockConfig[groupElement.name]){
 			if(epicriseTemplate.epicriseBlockConfig[groupElement.name].isLabor){
 				groupElement.type="isLabor";
@@ -156,10 +158,18 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			}
 			epicriseElement.laborValues = laborValues;
 		}else{
-			epicriseElement.textHtml = textHol1;
-			if(textHol1 == "") {
-				epicriseElement.textHtml = " &nbsp; ";
+			console.log(epicriseElement.textHtml);
+			return;
+			if(epicriseElement.textHtml){
+				console.log(epicriseElement.textHtml.trim().length);
 			}
+			if(!epicriseElement.textHtml || epicriseElement.textHtml.trim().length == 0){
+				epicriseElement.textHtml = textHol1;
+				if(textHol1 == "") {
+					epicriseElement.textHtml = " &nbsp; ";
+				}
+			}
+			epicriseElement.textHtml1 = textHol1;
 		}
 	}
 
@@ -204,12 +214,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	$scope.saveWorkDocClick = function(){
-		saveWorkDocEpicrise();
 		$scope.autoSaveCount = 0;
 		console.log("----");
 		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
 		}).success(function(data, status, headers, config){
 			console.log(data);
+			saveWorkDocEpicrise();
 		}).error(function(data, status, headers, config) {
 			$scope.error = data;
 		});

@@ -40,17 +40,18 @@ public class Hol2Service {
 		logger.debug("hid = "+hidStr);
 		final Integer hid = Integer.parseInt(hidStr);
 		final Map<String, Object> epicrise2 = readEpicriseId(hid);
+		logger.debug("epicrise = "+epicrise);
 		if(epicrise2 == null){
 			hol2H2Jdbc.insertEpicrise(hid,epicrise);
 		}else{
 			logger.debug("-------------update--------------");
+			logger.debug(hid+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
 			hol2H2Jdbc.updateEpicrise(hid,epicrise);
 		}
 		return null;
 	}
 	Map<String, Object> readEpicriseId(final Integer hid) {
 		final Map<String, Object> epicrise2 = hol2H2Jdbc.getEpicriseId(hid);
-		logger.debug("epicrise2 = "+epicrise2);
 		return epicrise2;
 	}
 

@@ -43,10 +43,11 @@
 							відділення:
 							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 							-1].departmentName}} </a></li>
-					<li><a
-						href="/hol/epicrise.html?hid={{patientHistory.historyId}}"> ІХ
-							№ <u>{{patientHistory.historyNo}}</u> :: Виписка
+					<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ № <u>{{patientHistory.historyNo}}</u>
 					</a></li>
+					<li><a
+						href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+							Виписка </a></li>
 				</ol>
 			</div>
 			<div class="col-xs-5" style="text-align: right;background-color: #f5f5f5;">

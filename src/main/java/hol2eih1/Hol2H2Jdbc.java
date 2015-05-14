@@ -127,9 +127,7 @@ public class Hol2H2Jdbc {
 	
 	public Map<String, Object> getEpicriseId(Integer hid) {
 		String sql = "SELECT epicrise_hol1_hid FROM epicrise1 WHERE epicrise_hol1_hid = ?";
-		logger.debug(sql.replace("\\?", hid.toString()));
 		List<Map<String, Object>> r = jdbcTemplate.queryForList(sql,hid);
-		logger.debug(""+r);
 		if(r.isEmpty())
 			return null;
 		return r.get(0);

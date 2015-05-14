@@ -443,17 +443,17 @@
 								</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
 									Операції </a>
 							</h3>
-							<div
-								data-ng-context-menu="menuDeletOperation"
+							<div data-ng-context-menu="menuDeletOperation"
 								data-ng-repeat="operation in patientHistory.operationHistorys">
 								<a
 									href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{operation.operation_history_id}}">
 									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
 									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
 									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
-								<span>{{operation.operation_additional}}</span> <span>Хірург:
+								<span>{{operation.operation_additional}}</span>  
+								<div class="right" style="text-align: right;">Хірург:
 									<i> {{operation.surgery_name}}</i>
-								</span>
+								</div>
 							</div>
 						</div>
 					<h3>

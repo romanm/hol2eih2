@@ -49,6 +49,12 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 		}]
 	];
 
+	$scope.menuDeletAnestesia = [
+		['<span class="glyphicon glyphicon-remove"></span> Видалити', function () {
+			delAnestesia();
+		}]
+	];
+
 	} ]);
 
 cuwyApp.controller('BasicAnalysisCtrl', [ '$scope', '$http', '$filter', '$sce', 

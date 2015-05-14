@@ -182,6 +182,7 @@ public class Hol2Eih1Rest {
 			return null;
 		}
 		Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
+		logger.debug(historyId+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
 		logger.debug(""+epicrise.size());
 		final Map patientHistory = (Map) epicrise.get("patientHistory");
 		System.out.println(patientHistory.keySet());
@@ -335,6 +336,12 @@ public class Hol2Eih1Rest {
 	}
 
 	//-----read json object-----------------------------------------------------
+	@RequestMapping(value="/hol/anestesia", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> json_anestesia_liste() {
+		logger.info("\n Start /hol/anesthetists");
+		final List<Map<String, Object>> anestesiaListe = cuwyDbService1.getAnestesiaListe();
+		return anestesiaListe;
+	}
 	@RequestMapping(value="/hol/anesthetists", method=RequestMethod.GET)
 	public @ResponseBody List<Map<String, Object>> json_anesthetists_liste() {
 		logger.info("\n Start /hol/anesthetists");

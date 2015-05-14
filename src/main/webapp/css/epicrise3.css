@@ -35,6 +35,9 @@ td.top {
 td.left {
 	text-align: left !important;
 }
+.right {
+	text-align: right;
+}
 tr.rotate-----90 th,
 .rotate-90 {
 	-webkit-transform: rotate(-90deg);  /* to support Safari and Android browser */

@@ -46,7 +46,8 @@
 							-1].departmentName}} </a></li>
 					<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ № <u>{{patientHistory.historyNo}}</u>
 					</a></li>
-					<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
+					<li><a
+						href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{param.ophid}}">
 							Операція </a></li>
 				</ol>
 			</div>
@@ -128,7 +129,7 @@
 						operation_duration_min%60)/60}} :
 						{{operation_duration_min%60<10?'0':''}}{{operation_duration_min%60}}
 					</label>
-					<table width="100%"> <tr> <td>0</td> <td>1</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
+					<table width="100%"> <tr> <td>0</td> <td>1 год.</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
 					<!-- 
 						data-ng-mouseup="setOperationDuration(operation_duration_min)"
 					 -->
@@ -280,15 +281,46 @@
 							data-ng-show="collapseDialog == 'department'"
 							class="glyphicon glyphicon-folder-open"></span></a>
 						{{operation.department_name}}</span>, <span> <a href="#"
-						data-ng-click="openDialog('surgery')"> <br /> Хірург:<span
+						data-ng-click="openDialog('surgery')"> Хірург:<span
 							data-ng-show="collapseDialog == 'surgery'"
 							class="glyphicon glyphicon-folder-open"></span></a>
 						{{operation.surgery_name}}
-					</span>,<a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
+					</span>.
+				</div>
+				<div>
+					<a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
 						data-ng-show="collapseDialog == 'anesthetist'"
 						class="glyphicon glyphicon-folder-open"></span>
-					</a> <span ng-context-menu="menuDeletAnesthetist">
-						{{operation.anesthetist_name}} </span> <span>Анестезія</span>
+					</a>
+					<span ng-context-menu="menuDeletAnesthetist">
+						{{operation.anesthetist_name}}</span>, 
+					<a href="#" data-ng-click="openDialog('anestesia')">Анестезія:<span
+						data-ng-show="collapseDialog == 'anestesia'"
+						class="glyphicon glyphicon-folder-open"></span>
+					</a>
+					<span ng-context-menu="menuDeletAnestesia">
+						{{operation.anestesia_name}}</span>
+				</div>
+				<div class="well" collapse="collapseDialog != 'anestesia'">
+					<ul>
+						<li data-ng-repeat="a in anestesia"><a
+							href="#" data-ng-click="setAnestesia(a)">
+								{{a.anestesia_name}} </a></li>
+					</ul>
+				</div>
+				<div class="well" collapse="collapseDialog != 'anesthetist'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+						id="seekAnesthetist"
+							data-ng-model="seekAnesthetist" type="text" class="form-control"
+							placeholder=" пошук анестезіолога " />
+					</div>
+					<ul>
+						<li data-ng-repeat="a in anesthetists | filter : seekAnesthetist"><a
+							href="#" data-ng-click="setAnesthetist(a)">
+								{{a.personal_surname}} {{a.personal_name}}
+								{{a.personal_patronymic}} </a></li>
+					</ul>
 				</div>
 				<div>
 					<span><a href="#" data-ng-click="openDialog('opresult')">
@@ -308,20 +340,7 @@
 							data-ng-click="setOperationResult(or)"> {{or.operation_result_name}} </a></li>
 					</ul>
 				</div>
-				<div class="well" collapse="collapseDialog != 'anesthetist'">
-					<div class="input-group">
-						<span class="input-group-addon">Пошук:</span> <input
-						id="seekAnesthetist"
-							data-ng-model="seekAnesthetist" type="text" class="form-control"
-							placeholder=" пошук анестезіолога " />
-					</div>
-					<ul>
-						<li data-ng-repeat="a in anesthetists | filter : seekAnesthetist"><a
-							href="#" data-ng-click="setAnesthetist(a)">
-								{{a.personal_surname}} {{a.personal_name}}
-								{{a.personal_patronymic}} </a></li>
-					</ul>
-				</div>
+				
 				<div class="well" collapse="collapseDialog != 'surgery'">
 					<div class="input-group">
 						<span class="input-group-addon">Пошук:</span> <input
