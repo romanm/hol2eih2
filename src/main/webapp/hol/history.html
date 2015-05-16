@@ -436,7 +436,10 @@
 					
 					</div>
 					<hr class="shortPatienHistory" />
+					<!-- 
 				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
+				</div>
+					 -->
 					<div data-ng-if="patientHistory.operationHistorys">
 							<h3>
 								<small> <span class="glyphicon glyphicon-pushpin"></span>
@@ -472,7 +475,6 @@
 						<span
 							ng-bind-html="historyTreatmentAnalysis.historyTreatmentAnalysisText"></span>
 					</div>
-				</div>
 				<h3 data-ng-show="patientHistory.epicrise2saved">
 					<small> <span class="glyphicon glyphicon-share"></span>
 					</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">

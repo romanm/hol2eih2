@@ -90,8 +90,11 @@
 			р. (*{{patientHistory.patientHolDb.patientDob | date:'dd.MM.yyyy'}})
 		</div>
 
+			<!-- 
 		<div
 			data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
+			</div>
+			 -->
 			<div data-ng-if="patientHistory.operationHistorys">
 				<h3>
 					<small> <span class="glyphicon glyphicon-pushpin"></span>
@@ -129,8 +132,9 @@
 						operation_duration_min%60)/60}} :
 						{{operation_duration_min%60<10?'0':''}}{{operation_duration_min%60}}
 					</label>
-					<table width="100%"> <tr> <td>0</td> <td>1 год.</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
+					<table width="100%"> <tr> <td>0</td> <td>1</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
 					<!-- 
+					<table width="100%"> <tr> <td>0</td> <td>1 год.</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> <td>6</td> <td>7</td> </tr> </table>
 						data-ng-mouseup="setOperationDuration(operation_duration_min)"
 					 -->
 					<input id="intNumber"
@@ -287,6 +291,31 @@
 						{{operation.surgery_name}}
 					</span>.
 				</div>
+				<div class="well" collapse="collapseDialog != 'department'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekDepartment" type="text" class="form-control"
+							placeholder=" пошук відділення " />
+					</div>
+				<ul>
+					<li
+						data-ng-repeat="d in departments | filter:{department_profile_id:2} | filter : seekDepartment"><a
+						href="#" data-ng-click="setDepartment(d)">
+							{{d.department_id}}. {{d.department_name}} </a></li>
+				</ul>
+			</div>
+			<div class="well" collapse="collapseDialog != 'surgery'">
+					<div class="input-group">
+						<span class="input-group-addon">Пошук:</span> <input
+							data-ng-model="seekSurgery" type="text" class="form-control"
+							placeholder=" пошук хірурга " />
+					</div>
+					<ul>
+						<li data-ng-repeat="s in surgerys | filter : seekSurgery"><a href="#"
+							data-ng-click="setSurgery(s)"> {{s.personal_surname}}
+								{{s.personal_name}} {{s.personal_patronymic}} </a></li>
+					</ul>
+				</div>
 				<div>
 					<a href="#" data-ng-click="openDialog('anesthetist')">Анестезіолог:<span
 						data-ng-show="collapseDialog == 'anesthetist'"
@@ -334,40 +363,14 @@
 						{{operation.operation_complication_id}}.
 						{{operation.operation_complication_name}} </span>
 				</div>
-				<div class="well" collapse="collapseDialog != 'opresult'">
-					<ul>
-						<li data-ng-repeat="or in operationResultListe"><a
-							data-ng-click="setOperationResult(or)"> {{or.operation_result_name}} </a></li>
-					</ul>
-				</div>
-				
-				<div class="well" collapse="collapseDialog != 'surgery'">
-					<div class="input-group">
-						<span class="input-group-addon">Пошук:</span> <input
-							data-ng-model="seekSurgery" type="text" class="form-control"
-							placeholder=" пошук хірурга " />
-					</div>
-					<ul>
-						<li data-ng-repeat="s in surgerys | filter : seekSurgery"><a
-							data-ng-click="setSurgery(s)"> {{s.personal_surname}}
-								{{s.personal_name}} {{s.personal_patronymic}} </a></li>
-					</ul>
-				</div>
-				
-				<div class="well" collapse="collapseDialog != 'department'">
-					<div class="input-group">
-						<span class="input-group-addon">Пошук:</span> <input
-							data-ng-model="seekDepartment" type="text" class="form-control"
-							placeholder=" пошук відділення " />
-					</div>
-					<ul>
-						<li
-							data-ng-repeat="d in departments | filter:{department_profile_id:2} | filter : seekDepartment"><a
-							data-ng-click="setDepartment(d)"> {{d.department_id}}.
-								{{d.department_name}} </a></li>
-					</ul>
-				</div>
-				<div class="well" collapse="collapseDialog != 'complication'">
+			<div class="well" collapse="collapseDialog != 'opresult'">
+				<ul>
+					<li data-ng-repeat="or in operationResultListe"><a href="#"
+						data-ng-click="setOperationResult(or)">
+							{{or.operation_result_name}} </a></li>
+				</ul>
+			</div>
+			<div class="well" collapse="collapseDialog != 'complication'">
 					<div class="input-group">
 						<span class="input-group-addon">Пошук:</span> <input
 							data-ng-model="seekComplication" type="text" class="form-control"
@@ -381,7 +384,7 @@
 					</ul>
 				</div>
 			</div>
-		</div>
+		
 	</div>
 
 	<nav class="navbar navbar-default navbar-fixed-bottom"
