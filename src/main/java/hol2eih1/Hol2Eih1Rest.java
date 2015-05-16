@@ -177,13 +177,14 @@ public class Hol2Eih1Rest {
 	@RequestMapping(value = "/db/epicrise_id_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getHol2PatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
 		logger.info("\n Start /db/epicrise_id_"+historyId);
+		Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
+		logger.debug(""+epicrise.size());
+		logger.debug(historyId+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
 		if(null == userPrincipal){
 			setLoginRedirectValue(session, "epicrise", historyId);
-			return null;
+			return epicrise;
+//			return null;
 		}
-		Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
-		logger.debug(historyId+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
-		logger.debug(""+epicrise.size());
 		final Map patientHistory = (Map) epicrise.get("patientHistory");
 		System.out.println(patientHistory.keySet());
 		logger.debug(""+patientHistory.get("user"));

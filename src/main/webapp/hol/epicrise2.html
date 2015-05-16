@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="EpicriseCtrl"
+ ng-cloak class="ng-cloak"
+>
+<head>
+<title>Виписка - {{patientHistory.patientHolDb.patientSurname}}</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+</head>
+
+<body data-key-cuwytrap="">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-5" style="text-align: right;">
+				Хмельницька Обласна Лікарня<br> м.Хмельницький, вул.Пілотська,
+				1 <span class="navbar-left no-print"> </span>
+			</div>
+			<div class="col-xs-1" style="text-align: center;">
+				<img alt="trizub" src="/img/gerb_small.png">
+			</div>
+			<div class="col-xs-5">
+				+380 382 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <span
+					class="navbar-right no-print"> </span>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+	
+	<div class="row no-print" >
+			<div class="col-xs-7">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+					<li><a
+						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
+		[patientHistory.patientDepartmentMovements.length -1]
+		.departmentId}}">
+							відділення:
+							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+							-1].departmentName}} </a></li>
+					<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ № <u>{{patientHistory.historyNo}}</u>
+					</a></li>
+					<li><a
+						href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+							Виписка </a></li>
+				</ol>
+			</div>
+			<div class="col-xs-5" style="text-align: right;background-color: #f5f5f5;">
+				<ol class="list-inline navbar-right">
+					<li><span data-ng-show="autoSaveCount > 0"
+						title="Кільськість автозбережень - {{autoSaveCount}}">
+							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
+						<a data-ng-click="saveWorkDocClick()" href="#"
+						title="Запис {{numberOfChange}} незбережених змін"> Запис
+							{{numberOfChange}} </a> <span
+						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+					<li>|</li>
+					<li><span class="glyphicon glyphicon-eye-open"></span> <a
+						href="/hol/history.html?hno={{patientHistory.historyId}}">
+							Перегляд </a></li>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a
+						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
+				</ol>
+			</div>
+		</div>
+	
+			<h2 class="centered">Виписка</h2>
+			<h2 data-ng-show="!patientHistory.user">
+				<span class="glyphicon glyphicon-warning-sign"></span> <span
+					class="btn-warning"> Для роботи з випискою 
+					<br /> ввійдіть в програму.
+				</span>
+			</h2>
+		<div class="">
+			<span data-ng-show="patientHistory.patientHolDb.patientGender == 0">
+				Хвора </span> <span
+				data-ng-show="patientHistory.patientHolDb.patientGender == 1">
+				Хворий </span> <span class="pip">
+				{{patientHistory.patientHolDb.patientSurname}}
+				{{patientHistory.patientHolDb.patientPersonalName}}
+				{{patientHistory.patientHolDb.patientPatronymic}} </span> віком <b> <span
+				data-ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
+				р.,
+			</b> що проживає за адресою <b> <span
+				data-ng-if="patientHistory.patientHolDb.patientStreet">
+					вул.{{patientHistory.patientHolDb.patientStreet}},
+					буд.{{patientHistory.patientHolDb.patientHouse}},
+					кв.{{patientHistory.patientHolDb.patientFlat}} </span>
+			</b> <span data-ng-if="!patientHistory.patientHolDb.patientStreet">?</span>
+			поступив <b>
+				{{patientHistory.patientDepartmentMovements[0].departmentHistoryIn |
+				date:'dd.MM.yyyy'}} </b> виписаний <b>
+				{{epicrise.departmentHistoryOut | date:'dd.MM.yyyy'}} </b> провів
+			ліжкоднів: <b> {{beetDays()}} </b>
+		</div>
+		<hr/>
+			<div class="no-print navbar-right">
+				<small> <b>Тіп:</b> Використовуйти праву кнопку миші. </small>
+			</div>
+			<div>
+			<div class="epicriseElement"
+				data-ng-repeat-start="h1 in epicrise.epicriseGroups"
+				data-ng-init="h1Index = $index"
+				data-ng-class="{'no-print navbar-right':h1.type == 'isOnDemand'}"
+				data-ng-click="editOpenClose(h1Index)">
+				<!-- 
+					<span class="no-print"> {{h1Index}} </span> 
+					 -->
+				<span class="mouseover" data-ng-context-menu="menuEpicriseGroup">
+					<b> <span data-ng-show="h1.type == 'isOnDemand'">+</span>
+						{{h1.name}}
+				</b> <a href="#" class="no-print"> <span
+						data-ng-if="!epicrise.epicriseGroups[h1Index].open"
+						class="glyphicon glyphicon-chevron-right"></span> <span
+						data-ng-if="epicrise.epicriseGroups[h1Index].open"
+						class="glyphicon glyphicon-chevron-down"></span>
+				</a> <span data-ng-show="h1.value.withDate">
+						{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
+				</span>
+				</span>
+				<!-- dz 
+						Діагноз при госпіталізації:
+					-->
+				<span data-ng-show="h1.name == 'Діагнози'"> <span
+					data-ng-show="diagnosTypeIndex[3]"
+					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
+						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdCode}} -
+						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdName}} <small>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate
+							| date:'dd.MM HH:mm'}}</small>
+				</span> <span data-ng-show="!diagnosTypeIndex[3]"
+					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
+						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdCode}} -
+						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdName}} <small>({{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate
+							| date:'dd.MM HH:mm'}})</small>
+				</span>
+				</span>
+				<!-- текстові html данні -->
+				<span ng-bind-html="h1.value.textHtml"
+					data-ng-show="!h1.value.laborValues"></span>
+				<!-- лабораторні данні -->
+				<span
+					data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">
+					<span data-ng-context-menu="menuLabor"
+					data-ng-show="h1.value.laborValues[laborTemplate.name]">
+						{{laborTemplate.name}}
+						{{epicrise[h1.name].laborValues[laborTemplate.name].value}}
+						{{h1.value.laborValues[laborTemplate.name].value}}
+						{{laborTemplate.unit}} <span data-ng-show="!$last">,</span>
+				</span>
+				</span>
+			</div>
+			<!-- редактор -->
+				<div class="row well no-print" data-ng-repeat-end=""
+					data-ng-show="epicrise.epicriseGroups[h1Index].open">
+					<hr data-ng-show="h1.type == 'isOnDemand'" />
+				<div class="col-xs-9">
+					<!-- данні текстового формату - редактор -->
+					<div text-angular ng-model="h1.value.textHtml"
+						data-ng-show="h1.type == 'isTextHtml'"></div>
+					<div
+						data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
+						data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
+						data-ng-bind-html="hta.historyTreatmentAnalysisText">
+					</div>
+					<!-- додати групу - редактор -->
+					<div data-ng-show="h1.type == 'isOnDemand'">
+						<div class="input-group">
+							<span class="input-group-addon">Пошук:</span> <input
+								data-ng-model="seekGroup" type="text" class="form-control"
+								auto-focus="" placeholder=" пошук групи " auto-focus="" />
+						</div>
+						<span data-ng-repeat="tag in epicriseTemplate.head1s[2].tagsGroup">
+							<!-- 
+								data-ng-repeat="tag in epicriseTemplate.head1s[h1Index].tagsGroup">
+								 --> <span class="label"
+							data-ng-class="{'label-warning':seekTag == tag || ('все' === tag && '' === seekTag ), 'label-default':seekTag != tag}"
+							data-ng-click="setSeekTag(tag)">{{tag}}</span> &nbsp;
+						</span>
+						<!-- 
+								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[h1Index].tags[0]
+								 || ('все' === epicriseTemplate.head1s[h1Index].tags[0] && '' === seekTag )
+								 , 'label-default':seekTag != epicriseTemplate.head1s[h1Index].tags[0]}"
+								data-ng-click="setSeekTag(tag)"
+								>{{epicriseTemplate.head1s[h1Index].tags[0]}}</span>
+							<br/>
+							<span data-ng-repeat="h2 in epicriseTemplate.head1s[h1Index].addGroup | filter : seekTag | filter : seekGroup">
+							 -->
+						<span class="label"
+							data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[2].tags[0]
+								 || ('все' === epicriseTemplate.head1s[2].tags[0] && '' === seekTag )
+								 , 'label-default':seekTag != epicriseTemplate.head1s[2].tags[0]}"
+							data-ng-click="setSeekTag(tag)">{{epicriseTemplate.head1s[2].tags[0]}}</span>
+						<br /> <span
+							data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
+							<a data-ng-click="addGroup(h2)"> {{h2.name}} </a> |
+						</span>
+					</div>
+					<!-- лабораторні данні редактор -->
+
+					<div data-ng-show="h1.type == 'isDiagnos'">
+						<span data-ng-repeat="diagnosHol in configHol.diagnosesHol"
+							data-ng-show="$index < 6"><b
+							title="{{diagnosHol.diagnosName}}"> <span
+								data-ng-show="$index < 2">
+									{{diagnosHol.diagnosNameShort}} </span> <a data-ng-show="$index > 1"
+								data-ng-click="setDiagnosIndex($index)">{{diagnosHol.diagnosNameShort}}</a>
+						</b> <span class="glyphicon glyphicon-folder-open"
+							data-ng-show="diagnosisIndex == $index"></span><span
+							data-ng-show="!(diagnosTypeIndex[diagnosHol.diagnosId] >= 0)">,
+						</span><span data-ng-show="diagnosTypeIndex[diagnosHol.diagnosId] >= 0">:
+								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
+								-
+								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName
+								}}<span
+								data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
+									{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
+							</span>
+						</span> <br data-ng-if="diagnosTypeIndex[diagnosHol.diagnosId]" /> </span>
+
+
+						<div class="well" collapse="collapseIcd10Liste">
+
+							<form class="form-inline" role="form">
+								<div class="form-group">
+									<div class="input-group required-simple">
+										<div class="input-group-addon">
+											{{diagnosesHol[diagnosisIndex].diagnosNameShort}}
+											{{diagnosisIndex}} : МКБ</div>
+										<input type="text" class="form-control" id="icd10"
+											data-ng-change="changeIcd10Name()" name="icd10"
+											data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
+									</div>
+									<div class="input-group">
+										<label for="icd10Add">Додаток до діагнозу:</label>
+										<textarea class="form-control" rows="3" cols="50"
+											id="icd10Add" name="icd10Add"
+											data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
+									</div>
+								</div>
+							</form>
+
+							<div class="row">
+								<div class="col-xs-6">
+									<ul>
+										<li
+											data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+											<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
+												{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
+											data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
+											data-ng-click="setIcd10(icd10Class1)">
+												{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </a>
+											<ul
+												data-ng-show="patientHistory.diagnosis[diagnosisIndex].icdName.length > 2">
+												<li
+													data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+													<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
+														{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
+													data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
+													data-ng-click="setIcd10(icd10Class2)">
+														{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </a>
+													<ul>
+														<li
+															data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+															<span
+															data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
+																{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
+															data-ng-show="{{!icd10Class3.icdCode.contains('-') }}"
+															data-ng-click="setIcd10(icd10Class3)">
+																{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
+															<ul>
+																<li
+																	data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+																	{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
+																	data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
+																		{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
+																	data-ng-show="{{!icd10Class4.icdCode.contains('-') }}"
+																	data-ng-click="setIcd10(icd10Class4)">
+																		{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </a>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+								<div class="col-xs-6" data-ng-controller="icd10Ctrl">
+
+									<ul>
+										<li ng-repeat="icd10Class1 in icd10Root.icd10Childs"><span
+											ng-if="!icd10Class1.collapse"
+											class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+											ng-if="icd10Class1.collapse"
+											class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
+											class="record"
+											ng-class="{'record-highlight':  icd10Class1.icdId == icd10Selected.icdId
+, 'record-highlight-parent': icd10Class1.icdId == icd10Pfad2Parents[1].icdId }"
+											ng-click="clickItem(icd10Class1)"
+											title="{{icd10Class1.icd10Childs.length}}">
+												{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span>
+											<ul ng-if="isIcd10ChildsOpen(icd10Class1)">
+												<li ng-repeat="icd10Class2 in icd10Class1.icd10Childs">
+													<span ng-if="!icd10Class2.collapse"
+													class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+													ng-if="icd10Class2.collapse"
+													class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
+													class="record"
+													ng-class="{'record-highlight': icd10Class2.icdId == icd10Selected.icdId
+		, 'record-highlight-parent': icd10Class2.icdId == icd10Pfad2Parents[2].icdId }"
+													ng-click="clickItem(icd10Class2)"
+													title="{{icd10Class2.icd10Childs.length}}">
+														{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span>
+													<ul ng-if="isIcd10ChildsOpen(icd10Class2)">
+														<li ng-repeat="icd10Class3 in icd10Class2.icd10Childs">
+															<span
+															ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey == 1"
+															class="glyphicon glyphicon-minus"> </span> <span
+															ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey > 1">
+																<span ng-if="!icd10Class3.collapse"
+																class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+																ng-if="icd10Class3.collapse"
+																class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+														</span> <span class="record"
+															ng-class="{'record-highlight': icd10Class3.icdId == icd10Selected.icdId
+				, 'record-highlight-parent': icd10Class3.icdId == icd10Pfad2Parents[3].icdId }"
+															ng-click="clickItem(icd10Class3)"
+															title="{{icd10Class3.icd10Childs.length}}">
+																{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span>
+															<ul ng-if="isIcd10ChildsOpen(icd10Class3)">
+																<li ng-repeat="icd10Class4 in icd10Class3.icd10Childs">
+																	<span
+																	ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey == 1"
+																	class="glyphicon glyphicon-minus"> </span> <span
+																	ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey > 1">
+																		<span ng-if="!icd10Class4.collapse"
+																		class="glyphicon glyphicon-{{iconsTreeClose}}"></span>
+																		<span ng-if="icd10Class4.collapse"
+																		class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+																</span> <span class="record"
+																	ng-class="{'record-highlight': icd10Class4.icdId == icd10Selected.icdId
+						, 'record-highlight-parent': icd10Class4.icdId == icd10Pfad2Parents[4].icdId }"
+																	ng-click="clickItem(icd10Class4)"
+																	title="{{icd10Class4.icd10Childs.length}}">
+																		{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span>
+																	<ul ng-if="isIcd10ChildsOpen(icd10Class4)">
+																		<li ng-repeat="icd10Class5 in icd10Class4.icd10Childs">
+																			<span
+																			ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey == 1"
+																			class="glyphicon glyphicon-minus"> </span> <span
+																			ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey > 1">
+																				<span ng-if="!icd10Class5.collapse"
+																				class="glyphicon glyphicon-{{iconsTreeClose}}"></span>
+																				<span ng-if="icd10Class5.collapse"
+																				class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+																		</span> <span class="record"
+																			ng-class="{'record-highlight': icd10Class5.icdId == icd10Selected.icdId
+								, 'record-highlight-parent': icd10Class5.icdId == icd10Pfad2Parents[5].icdId }"
+																			ng-click="clickItem(icd10Class5)"
+																			title="{{icd10Class5.icd10Childs.length}}">
+																				{{icd10Class5.icdCode }}, {{icd10Class5.icdName}} </span>
+																		</li>
+																	</ul>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+											</ul></li>
+									</ul>
+
+								</div>
+							</div>
+						</div>
+
+
+
+
+					</div>
+					<div data-ng-show="h1.type == 'isLabor'">
+						<div class="input-group">
+							<span class="input-group-addon">Пошук:</span> <input
+								data-ng-model="seekLabor" type="text" class="form-control"
+								auto-focus="" placeholder=" пошук групи " auto-focus="" />
+						</div>
+						<span
+							data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name] | filter : seekLabor">
+							<a data-ng-show="laborTemplate.name != h1.laborOpenToEdit"
+							data-ng-click="openLaborToEdit(h1, laborTemplate.name)">
+								{{laborTemplate.name}}
+								{{h1.value.laborValues[laborTemplate.name].value}} <span
+								data-ng-show="!h1.value.laborValues[laborTemplate.name].value">
+									_________ </span> {{laborTemplate.unit}}
+						</a>
+							<form class="form-inline" role="form"
+								data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-addon">{{laborTemplate.name}}</div>
+										<input id="{{laborTemplate.name}}"
+											ng-model="h1.value.laborValues[laborTemplate.name].value"
+											class="form-control" type="text" />
+										<div class="input-group-addon">{{laborTemplate.unit}}</div>
+									</div>
+								</div>
+							</form> <span data-ng-show="!$last">,</span>
+						</span>
+					</div>
+				</div>
+				<div class="col-xs-3">
+					<div>
+						<label> Додати дату <input type="checkbox"
+							data-ng-model="h1.value.withDate" />
+						</label>
+					</div>
+					<div data-ng-show="h1.value.withDate">
+						<div class="pip">
+							{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
+						</div>
+						<a data-ng-click="changeBlockDate(dt, h1Index)"> Повернутись
+							до дати {{dt | date:'dd.MM.yyyy'}} </a>
+						<datepicker
+							data-ng-model="h1.value.historyTreatmentAnalysisDatetime"
+							min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+
+<nav class="navbar navbar-default navbar-fixed-bottom"
+		role="navigation">
+		<div class="container">
+			<span><span class="glyphicon glyphicon-console"></span>
+					&#160; &nbsp; </span>
+			
+			<span class="glyphicon glyphicon-floppy-disk"></span> <a
+					data-ng-click="saveWorkDocClick()" href="#"
+					title="Запис {{numberOfChange}} незбережених змін"> Запис
+						{{numberOfChange}} </a> <span
+					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+						ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
+			
+			<ol class="list-inline navbar-right">
+				
+				<li>|</li>
+				<li><span class="glyphicon glyphicon-eye-open"></span> <a
+					href="/hol/history.html?hno={{param.hid}}">
+						Перегляд </a></li>
+				<li>|</li>
+				<li data-ng-show="!patientHistory.user"><span
+					class="glyphicon glyphicon-log-in"></span> <a
+					href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+				<li data-ng-show="patientHistory.user"><span
+					class="glyphicon glyphicon-log-out"></span>
+					:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+			</ol>
+		</div>
+	</nav>
+
+</body>
+
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/rangy-core.js"></script>
+	<script src="/js/a/angular.min.js"></script>
+	<script src="/js/a/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/db/operationTree.json.js"></script>
+	<script src="/db/icd10uaGroups.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/cuwy1.controller.js"></script>
+	<script src="/js/icd10Editor1Ctrl.js"></script>
+	<script src="/js/epicriseTemplate.json.js"></script>
+	<script src="/js/epicrise2.js"></script>
+
+</html>

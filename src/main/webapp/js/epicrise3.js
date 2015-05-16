@@ -74,6 +74,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	readHol1 = function(){
+	console.log("readHol1");
 		$http({ method : 'GET', url : historyFile
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
@@ -88,7 +89,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicrise.epicriseGroups = [];
 		console.log($scope.epicrise.epicriseGroups);
 		var rsp = {name:"Рекомендовано/смерть/перевід"};
-		console.log($scope.patientHistory.historyTreatmentAnalysises);
 		$scope.patientHistory.historyTreatmentAnalysises.forEach(function(hol1Element) {
 			var groupElement = createGroupElement(hol1Element.historyTreatmentAnalysisName);
 			addTextHtmlValue(groupElement, hol1Element.historyTreatmentAnalysisText);
@@ -112,7 +112,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		var value = {};
 		value.historyTreatmentAnalysisDatetime = new Date();
 		initFromHol1(value, textHtmlValue);
-		groupElement.value = value;
+		if(!groupElement.value)
+			groupElement.value = value;
 	}
 
 	setGroupElementType = function(groupElement){
@@ -158,11 +159,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			}
 			epicriseElement.laborValues = laborValues;
 		}else{
-			console.log(epicriseElement.textHtml);
 			return;
-			if(epicriseElement.textHtml){
-				console.log(epicriseElement.textHtml.trim().length);
-			}
 			if(!epicriseElement.textHtml || epicriseElement.textHtml.trim().length == 0){
 				epicriseElement.textHtml = textHol1;
 				if(textHol1 == "") {
@@ -236,8 +233,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	$scope.editOpenClose = function(h1Index){
 		console.log(h1Index);
-		console.log($scope.epicriseTemplate.head1s);
-		console.log($scope.epicriseTemplate.head1s[h1Index]);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
 		console.log(groupElement);
 		if(groupElement){
