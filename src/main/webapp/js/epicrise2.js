@@ -8,35 +8,64 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 //	$scope.diagnosesHol = configHol.diagnosesHol;
 	$scope.configHol = configHol;
 	$scope.epicriseTemplate = epicriseTemplate;
+	initDeclareController($scope, $http, $sce, $filter);
 
+	//-----------save epicrise -------------------------------------------------
+	$scope.saveWorkDocClick = function(){
+		$scope.autoSaveCount = 0;
+		console.log("----");
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+			saveWorkDocEpicrise();
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
+	}
+	saveWorkDocEpicrise = function(){
+		console.log("-----------------");
+		$scope.epicrise.hid = parameters.hid;
+		$scope.epicrise.patientHistory = $scope.patientHistory;
+//		saveWorkDoc("/save/epicrise", $scope, $http);
+		//saveWorkDoc("/db/saveepicrise", $scope, $http);
+		var docToSave = $scope.epicrise;
+		docToSave.patientHistory = null;
+		console.log(docToSave);
+		postObject("/db/saveepicrise", docToSave, $scope, $http);
+		console.log("-----------------");
+	}
+	//-----------save epicrise ----------------------------------------------END
 	initEpicrise = function(){
 		if(!$scope.epicrise.epicriseGroups){
 			$scope.epicrise.epicriseGroups = [];
+			//create first epicriese groups list.
 			$scope.epicriseTemplate.head1s.forEach(function(headElement) {
 				var epicriseGroup = {name:headElement.name};
-				var epicriseBlockConfig = $scope.epicriseTemplate.epicriseBlockConfig[headElement.name];
-				//add epicriseBlockConfig object attributes to epicriseGroup
-				for(var key in epicriseBlockConfig)
-					epicriseGroup[key] = epicriseBlockConfig[key];
-				if(epicriseGroup.isTextHtml){
-					epicriseGroup.value = {};
-					epicriseGroup.value.textHtml = "";
-				}
-				if(headElement.id == "op"){
-					if($scope.patientHistory.operationHistorys){
-						epicriseGroup.operationHistorys = $scope.patientHistory.operationHistorys;
-					}
-				}
 				$scope.epicrise.epicriseGroups.push(epicriseGroup);
 			})
 		}
-		console.log($scope.epicrise);
+		//set epicriese group attributes
+		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
+			var epicriseBlockConfig = $scope.epicriseTemplate.epicriseBlockConfig[epicriseGroup.name];
+			//add epicriseBlockConfig object attributes to epicriseGroup
+			for(var key in epicriseBlockConfig)
+				epicriseGroup[key] = epicriseBlockConfig[key];
+			if(epicriseGroup.isTextHtml){
+				if(!epicriseGroup.value)
+					epicriseGroup.value = {};
+				if(!epicriseGroup.value.textHtml)
+					epicriseGroup.value.textHtml = "";
+			}
+			if(epicriseGroup.name == "Операції"){
+				if($scope.patientHistory.operationHistorys){
+					epicriseGroup.operationHistorys = $scope.patientHistory.operationHistorys;
+				}
+			}
+		});
 	}
 
 	$scope.editOpenClose = function(h1Index){
-		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
-		console.log(groupElement);
 		if(groupElement){
 //			setGroupElementType(groupElement);
 		}
@@ -54,10 +83,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	initValueFromHol1 = function(groupElement){
-		console.log(groupElement.name);
-		console.log(groupElement.type);
-		console.log(groupElement.value);
-		console.log(groupElement.value.textHtml);
 		if(groupElement.isTextHtml){
 			if(!groupElement.value.textHtml){
 				groupElement.value.textHtml = "";
@@ -85,6 +110,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
 			initEpicrise();
+			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {
 		});
 	}
