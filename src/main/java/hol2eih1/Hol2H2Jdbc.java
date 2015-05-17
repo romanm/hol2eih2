@@ -137,10 +137,10 @@ public class Hol2H2Jdbc {
 		new int[] {Types.CLOB, Types.INTEGER, Types.INTEGER}
 		);
 	}
-	public void updateEpicrise(Integer hid, Map<String, Object> epicrise) {
+	public void updateEpicrise(Integer epicriseId, Map<String, Object> epicrise) {
 		final String sql = "UPDATE epicrise1 SET epicrise_self = ? WHERE epicrise_id = ? ";
 		jdbcTemplate.update( sql,
-		new Object[] {new SqlLobValue(object2JsonString(epicrise), lobHandler), hid },
+		new Object[] {new SqlLobValue(object2JsonString(epicrise), lobHandler), epicriseId },
 		new int[] {Types.CLOB, Types.INTEGER}
 		);
 	}

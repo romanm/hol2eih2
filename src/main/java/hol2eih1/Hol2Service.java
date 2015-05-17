@@ -41,11 +41,13 @@ public class Hol2Service {
 		final Map<String, Object> epicrise2 = readEpicriseId(hid);
 		logger.debug("epicrise = "+epicrise);
 		if(epicrise2 == null){
-			hol2H2Jdbc.insertEpicrise(hid,hid,epicrise);
+			logger.debug("------------- Do nothing, but init insert by read. --------------");
+//			hol2H2Jdbc.insertEpicrise(hid,hid,epicrise);
 		}else{
 			logger.debug("-------------update--------------");
 			logger.debug(hid+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
-			hol2H2Jdbc.updateEpicrise(hid, epicrise);
+			final int epicriseId = (int) epicrise.get("epicriseId");
+			hol2H2Jdbc.updateEpicrise(epicriseId, epicrise);
 		}
 		return null;
 	}
@@ -53,16 +55,17 @@ public class Hol2Service {
 		final Map<String, Object> epicrise2 = hol2H2Jdbc.getEpicriseId(hid);
 		return epicrise2;
 	}
-
 	public Map<String, Object> initEpicrise(Integer historyId) {
 		logger.debug(""+historyId);
 		final Map<String, Object> epicriseFromDb = hol2H2Jdbc.getEpicriseFromHistoryId(historyId);
 		logger.debug(""+epicriseFromDb.size());
 		String epicriseSelf = (String) epicriseFromDb.get("EPICRISE_SELF");
+		Integer epicriseId = (Integer) epicriseFromDb.get("EPICRISE_ID");
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> epicrise = null;// = new HashMap<String, Object>();
 		try {
 			epicrise = mapper.readValue(epicriseSelf, Map.class);
+			epicrise.put("epicriseId", epicriseId);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

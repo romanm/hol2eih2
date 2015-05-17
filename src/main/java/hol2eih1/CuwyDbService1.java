@@ -787,19 +787,19 @@ public class CuwyDbService1 {
 			ps.setInt(7, (int) map.get("operation_result_id"));
 
 			logger.debug(map.toString());
-			logger.debug(""+map.get("anesthetist_id"));
+//			ps.setInt(8, (int) map.get("anesthetist_id"));
+			setFieldWithNull(ps, 8, "anesthetist_id");
+			setFieldWithNull(ps, 9, "operation_complication_id");
 
-			ps.setInt(8, (int) map.get("anesthetist_id"));
-
-			ps.setInt(9, (int) map.get("operation_id"));
-			ps.setInt(10, (int) map.get("icd_id"));
+			ps.setInt(10, (int) map.get("operation_id"));
+			ps.setInt(11, (int) map.get("icd_id"));
 
 			if(isInsert){
 				int nextOperationHistoryId = getAutoIncrement("operation_history");
 				map.put("operation_history_id", nextOperationHistoryId);
-				ps.setInt(12, (int) map.get("history_id"));
+				ps.setInt(13, (int) map.get("history_id"));
 			}
-			ps.setInt(11, (int) map.get("operation_history_id"));
+			ps.setInt(12, (int) map.get("operation_history_id"));
 		}
 	}
 
@@ -808,14 +808,14 @@ public class CuwyDbService1 {
 		+ " , personal_id, department_id, operation_result_id "
 		+ " , operation_id, operation_subgroup_id, operation_group_id "
 		+ " , icd_id, icd_start, icd_end "
-		+ " , anesthetist_id "
+		+ " , anesthetist_id, operation_complication_id "
 		+ " , operation_history_id, history_id "
 		+ " ) SELECT oh1.*, oh2.* FROM "
 		+ "(SELECT ?, ?, ?, ?"
 		+ " , ?, ?, ?"
 		+ " , o.operation_id, o.operation_subgroup_id, os.operation_group_id "
 		+ " , icd.icd_id, icd.icd_start, icd.icd_end"
-		+ " , ?"
+		+ " , ?, ?"
 		+ " FROM operation_subgroup os, operation o, icd icd "
 		+ " WHERE o.operation_id = ? AND os.operation_subgroup_id = o.operation_subgroup_id AND icd.icd_id = ?) oh1"
 		+ ", ( SELECT ?, ? ) oh2 ";
@@ -825,7 +825,7 @@ public class CuwyDbService1 {
 	+ ", oh.personal_id = ?, oh.department_id = ?, oh.operation_result_id = ? "
 	+ ", oh.operation_id = o.operation_id, oh.operation_subgroup_id = os.operation_subgroup_id , oh.operation_group_id = os.operation_group_id "
 	+ ", oh.icd_id = icd.icd_id, oh.icd_start=icd.icd_start, oh.icd_end=icd.icd_end "
-	+ ", oh.anesthetist_id = ? "
+	+ ", oh.anesthetist_id = ? ,oh.operation_complication_id = ?"
 	+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND icd.icd_id = ? AND oh.operation_history_id = ? ";
 
 	final String deleteOperationHistory = "DELETE FROM operation_history WHERE operation_history_id = ? ";

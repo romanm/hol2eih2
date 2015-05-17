@@ -243,10 +243,17 @@ readInitHistory = function($scope, $http, $sce, $filter){
 }
 
 initDeclareController = function($scope, $http, $sce, $filter){
+	/*
+	$scope.param = parameters;
+	 * */
 	$scope.param = {};
 	$scope.param.hid = parameters.hid;
-	$scope.param.hno = parameters.hno;
-	console.log("--------initDeclareController--------------------param = " + $scope.param);
+	if(parameters.hno)
+		$scope.param.hno = parameters.hno;
+	else
+		$scope.param.hno = parameters.hid;
+	console.log("--------initDeclareController--------------------param = ");
+	console.log($scope.param);
 
 	postObject = function(url, docToSave, $scope, $http){
 		$http({ method : 'POST', data : docToSave, url : url
