@@ -160,6 +160,14 @@
 						{{laborTemplate.unit}} <span data-ng-show="!$last">,</span>
 				</span>
 				</span>
+				<span
+					data-ng-repeat="operationHistory in h1.operationHistorys"
+					title="Хірург: {{operationHistory.surgery_name}}"
+					>
+					{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
+					{{operationHistory.operation_name}}
+					<br/>
+				</span>
 			</div>
 			<!-- редактор -->
 				<div class="row well no-print" data-ng-repeat-end=""
@@ -168,7 +176,7 @@
 				<div class="col-xs-9">
 					<!-- данні текстового формату - редактор -->
 					<div text-angular ng-model="h1.value.textHtml"
-						data-ng-show="h1.type == 'isTextHtml'"></div>
+						data-ng-show="h1.isTextHtml"></div>
 					<div
 						data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
 						data-ng-show="h1.name == hta.historyTreatmentAnalysisName"

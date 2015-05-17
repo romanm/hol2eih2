@@ -15,8 +15,18 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			$scope.epicriseTemplate.head1s.forEach(function(headElement) {
 				var epicriseGroup = {name:headElement.name};
 				var epicriseBlockConfig = $scope.epicriseTemplate.epicriseBlockConfig[headElement.name];
+				//add epicriseBlockConfig object attributes to epicriseGroup
 				for(var key in epicriseBlockConfig)
 					epicriseGroup[key] = epicriseBlockConfig[key];
+				if(epicriseGroup.isTextHtml){
+					epicriseGroup.value = {};
+					epicriseGroup.value.textHtml = "";
+				}
+				if(headElement.id == "op"){
+					if($scope.patientHistory.operationHistorys){
+						epicriseGroup.operationHistorys = $scope.patientHistory.operationHistorys;
+					}
+				}
 				$scope.epicrise.epicriseGroups.push(epicriseGroup);
 			})
 		}
