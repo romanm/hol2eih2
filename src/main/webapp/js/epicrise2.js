@@ -1,14 +1,28 @@
 
 //var historyFile = "/hol/history_id_" + parameters.hid;
 var historyUrl = "/db/history_id_" + parameters.hid;
-var epicriseUrl = "/db/epicrise_id_" + parameters.hid;
+var epicriseUrl = "/db/epicrise_hid_" + parameters.hid;
 
 cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
 	console.log("EpicriseCtrl");
 //	$scope.diagnosesHol = configHol.diagnosesHol;
 	$scope.configHol = configHol;
 	$scope.epicriseTemplate = epicriseTemplate;
-	
+
+	initEpicrise = function(){
+		if(!$scope.epicrise.epicriseGroups){
+			$scope.epicrise.epicriseGroups = [];
+			$scope.epicriseTemplate.head1s.forEach(function(headElement) {
+				var epicriseGroup = {name:headElement.name};
+				var epicriseBlockConfig = $scope.epicriseTemplate.epicriseBlockConfig[headElement.name];
+				for(var key in epicriseBlockConfig)
+					epicriseGroup[key] = epicriseBlockConfig[key];
+				$scope.epicrise.epicriseGroups.push(epicriseGroup);
+			})
+		}
+		console.log($scope.epicrise);
+	}
+
 	$scope.editOpenClose = function(h1Index){
 		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
@@ -34,7 +48,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log(groupElement.type);
 		console.log(groupElement.value);
 		console.log(groupElement.value.textHtml);
-		if(groupElement.type == "isTextHtml"){
+		if(groupElement.isTextHtml){
 			if(!groupElement.value.textHtml){
 				groupElement.value.textHtml = "";
 			}
@@ -60,6 +74,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$http({ method : 'GET', url : historyUrl
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
+			initEpicrise();
 		}).error(function(data, status, headers, config) {
 		});
 	}

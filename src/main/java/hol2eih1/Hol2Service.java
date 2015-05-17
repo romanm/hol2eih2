@@ -23,9 +23,8 @@ public class Hol2Service {
 		Integer tmpId = historyHolDb.getTmpId();
 		final Map<String, Object> history = hol2H2Jdbc.getHistory(tmpId);
 		if(history == null){
-			tmpId = hol2H2Jdbc.nextDbId();
-			historyHolDb.setTmpId(tmpId);
-			hol2H2Jdbc.insertHistory(tmpId, historyHolDb);
+			historyHolDb.setTmpId(hol2H2Jdbc.nextDbId());
+			hol2H2Jdbc.insertHistory(historyHolDb);
 		}else{
 			logger.debug("-------------update--------------");
 			hol2H2Jdbc.updateHistory(tmpId,historyHolDb);
@@ -42,11 +41,11 @@ public class Hol2Service {
 		final Map<String, Object> epicrise2 = readEpicriseId(hid);
 		logger.debug("epicrise = "+epicrise);
 		if(epicrise2 == null){
-			hol2H2Jdbc.insertEpicrise(hid,epicrise);
+			hol2H2Jdbc.insertEpicrise(hid,hid,epicrise);
 		}else{
 			logger.debug("-------------update--------------");
 			logger.debug(hid+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
-			hol2H2Jdbc.updateEpicrise(hid,epicrise);
+			hol2H2Jdbc.updateEpicrise(hid, epicrise);
 		}
 		return null;
 	}
@@ -55,9 +54,9 @@ public class Hol2Service {
 		return epicrise2;
 	}
 
-	public Map<String, Object> readEpicrise(Integer historyId) {
+	public Map<String, Object> initEpicrise(Integer historyId) {
 		logger.debug(""+historyId);
-		final Map<String, Object> epicriseFromDb = hol2H2Jdbc.getEpicrise(historyId);
+		final Map<String, Object> epicriseFromDb = hol2H2Jdbc.getEpicriseFromHistoryId(historyId);
 		logger.debug(""+epicriseFromDb.size());
 		String epicriseSelf = (String) epicriseFromDb.get("EPICRISE_SELF");
 		ObjectMapper mapper = new ObjectMapper();

@@ -1,7 +1,7 @@
 
 //var historyFile = "/hol/history_id_" + parameters.hid;
 var historyFile = "/db/history_id_" + parameters.hid;
-var history2File = "/db/epicrise_id_" + parameters.hid;
+var history2File = "/db/epicrise_hid_" + parameters.hid;
 //var history2File = "/hol2/history_id_" + parameters.hid;
 
 cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {

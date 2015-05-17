@@ -113,13 +113,13 @@
 			<div class="epicriseElement"
 				data-ng-repeat-start="h1 in epicrise.epicriseGroups"
 				data-ng-init="h1Index = $index"
-				data-ng-class="{'no-print navbar-right':h1.type == 'isOnDemand'}"
+				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
 				data-ng-click="editOpenClose(h1Index)">
 				<!-- 
 					<span class="no-print"> {{h1Index}} </span> 
 					 -->
 				<span class="mouseover" data-ng-context-menu="menuEpicriseGroup">
-					<b> <span data-ng-show="h1.type == 'isOnDemand'">+</span>
+					<b> <span data-ng-show="h1.isOnDemand">+</span>
 						{{h1.name}}
 				</b> <a href="#" class="no-print"> <span
 						data-ng-if="!epicrise.epicriseGroups[h1Index].open"

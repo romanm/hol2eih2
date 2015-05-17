@@ -103,7 +103,7 @@ public class Hol2Eih1Rest {
 			return null;
 		System.out.println("-------------------------------");
 		epicrise.put("server", "add from server");
-		epicrise = cuwyDbService1.saveEpicrise(epicrise);
+//		epicrise = cuwyDbService1.saveEpicrise(epicrise);
 		epicrise = hol2Service.saveEpicrise(epicrise);
 		System.out.println("-------------------------------");
 		return epicrise;
@@ -174,10 +174,10 @@ public class Hol2Eih1Rest {
 		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
 		return departmentHol;
 	}
-	@RequestMapping(value = "/db/epicrise_id_{historyId}", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getHol2PatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
-		logger.info("\n Start /db/epicrise_id_"+historyId);
-		Map<String, Object> epicrise = hol2Service.readEpicrise(historyId);
+	@RequestMapping(value = "/db/epicrise_hid_{historyId}", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> getHol2EpicriseByPatientHistoryId(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
+		logger.info("\n Start /db/epicrise_hid_"+historyId);
+		Map<String, Object> epicrise = hol2Service.initEpicrise(historyId);
 		logger.debug(""+epicrise.size());
 		logger.debug(historyId+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
 		if(null == userPrincipal){
@@ -185,10 +185,12 @@ public class Hol2Eih1Rest {
 			return epicrise;
 //			return null;
 		}
+		/*
 		final Map patientHistory = (Map) epicrise.get("patientHistory");
 		System.out.println(patientHistory.keySet());
 		logger.debug(""+patientHistory.get("user"));
 		patientHistory.put("user", userPrincipal);
+		 * */
 		return epicrise;
 	}
 	private void setLoginRedirectValue(HttpSession session, final String htmlPage,

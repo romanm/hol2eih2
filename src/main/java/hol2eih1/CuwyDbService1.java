@@ -68,9 +68,8 @@ public class CuwyDbService1 {
 					+ "dataSource="+dataSource+
 							"\n------------CuwyDbService1-------------");
 			this.jdbcTemplate = new JdbcTemplate(dataSource);
-		System.out.println("------------sqlHistoryInDepartmentProYearMonths-----------------------");
+			/*
 		System.out.println(sqlHistoryInDepartmentProYearMonths);
-		System.out.println("------------sqlMoveQuartal-----------------------");
 		System.out.println(sqlMoveQuartal);
 		logger.debug("\n------------ sqlPatientAdress = \n"+sqlPatientAdress);
 		logger.debug("\n------------ sqlGroupReferral = \n"+sqlReferral_cDs_group);
@@ -87,6 +86,7 @@ public class CuwyDbService1 {
 		logger.debug("\n------------ sqlReferral_pAd = \n"+sqlReferral_pAd);
 		logger.debug("\n------------ sqlMistoSelo_cDs_group = \n"+sqlMistoSelo_cDs_group);
 		logger.debug("\n------------CuwyDbService1-------------\n");
+			 * */
 	}
 
 	public Icd10UaClass getIcd10UaChilds(Icd10UaClass icd10Class) {
