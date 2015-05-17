@@ -160,7 +160,7 @@
 						{{laborTemplate.unit}} <span data-ng-show="!$last">,</span>
 				</span>
 				</span>
-				<span
+				<span data-ng-context-menu="menuOperation"
 					data-ng-repeat="operationHistory in h1.operationHistorys"
 					title="Хірург: {{operationHistory.surgery_name}}"
 					>
@@ -174,13 +174,31 @@
 					data-ng-show="epicrise.epicriseGroups[h1Index].open">
 					<hr data-ng-show="h1.isOnDemand" />
 				<div class="col-xs-9">
+					<div data-ng-show="h1.name == 'Операції'">
+						<div data-ng-if="patientHistory.operationHistorys">
+							<div data-ng-context-menu="menuDeletOperation"
+								data-ng-repeat="operation in patientHistory.operationHistorys">
+								<small> <span class="glyphicon glyphicon-pushpin"></span>
+								</small> <a href="#"
+								data-ng-click="addOperation(h1, operation)"
+								> {{operation.operation_history_start |
+									date:'dd.MM.yyyy HH:mm'}} - {{operation.operation_history_end |
+									date:'HH:mm'}} </a> <span
+									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+								<span>{{operation.operation_additional}}</span>
+								<div class="right" style="text-align: right;">
+									Хірург: <i> {{operation.surgery_name}}</i>
+								</div>
+							</div>
+						</div>
+					</div>
 					<!-- данні текстового формату - редактор -->
-					<div text-angular ng-model="h1.value.textHtml"
-						data-ng-show="h1.isTextHtml"></div>
-					<div
-						data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
-						data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
-						data-ng-bind-html="hta.historyTreatmentAnalysisText">
+					<div data-ng-show="h1.isTextHtml">
+						<div text-angular ng-model="h1.value.textHtml"></div>
+						<div
+							data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
+							data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
+							data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
 					</div>
 					<!-- додати групу - редактор -->
 					<div data-ng-show="h1.isOnDemand">
@@ -395,7 +413,6 @@
 
 					</div>
 					<div data-ng-show="h1.isLabor">
-					aq123
 						<div class="input-group">
 							<span class="input-group-addon">Пошук:</span> <input
 								data-ng-model="seekLabor" type="text" class="form-control"
@@ -423,6 +440,10 @@
 								</div>
 							</form> <span data-ng-show="!$last">,</span>
 						</span>
+						<div
+							data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
+							data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
+							data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
 					</div>
 				</div>
 				<div class="col-xs-3">
@@ -435,8 +456,10 @@
 						<div class="pip">
 							{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 						</div>
+						<!-- 
 						<a data-ng-click="changeBlockDate(dt, h1Index)"> Повернутись
 							до дати {{dt | date:'dd.MM.yyyy'}} </a>
+						-->
 						<datepicker
 							data-ng-model="h1.value.historyTreatmentAnalysisDatetime"
 							min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
