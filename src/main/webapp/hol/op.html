@@ -274,12 +274,12 @@
 					</a>
 				</div>
 				<div class="well" collapse="collapseDialog != 'diagnos'">
-					<ul>
-						<li data-ng-repeat="ds in patientHistory.diagnosis"><a href="#"
-							data-ng-click="setDiagnos(ds)"> {{ds.icdCode}} -
-								{{ds.icdName}} </a></li>
-					</ul>
-				</div>
+				<ul>
+					<li data-ng-repeat="ds in patientHistory.diagnosis"><a
+						href="#" data-ng-click="setDiagnos(ds)"> {{ds.icdCode}} -
+							{{ds.icdName}} {{ds.historyDiagnosAdditional}} </a></li>
+				</ul>
+			</div>
 				<div>
 					<span><a href="#" data-ng-click="openDialog('department')">Відділення:<span
 							data-ng-show="collapseDialog == 'department'"

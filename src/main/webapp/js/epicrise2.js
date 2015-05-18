@@ -78,6 +78,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			epicriseGroup.isLabor = true;
 		}else 
 		 * */
+		if(epicriseGroup.name == "Діагнози"){
+			epicriseGroup.isTextHtml = false;
+		}else
 		if(epicriseGroup.name == "Операції"){
 			epicriseGroup.isTextHtml = false;
 			if(!epicriseGroup.operationHistorys){
@@ -86,6 +89,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 				}
 			}
 		}
+	}
+	$scope.addDiagnose = function(epicriseGroup, diagnose){
+		console.log(epicriseGroup);
+		if(!epicriseGroup.diagnosis)
+			epicriseGroup.diagnosis = [];
+		epicriseGroup.diagnosis.push(diagnose);
+		
 	}
 	$scope.addOperation = function(epicriseGroup, operation){
 		epicriseGroup.operationHistorys.push(operation);

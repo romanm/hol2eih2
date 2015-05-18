@@ -133,18 +133,23 @@
 				<!-- dz 
 						Діагноз при госпіталізації:
 					-->
-				<span data-ng-show="h1.name == 'Діагнози'"> <span
-					data-ng-show="diagnosTypeIndex[3]"
+				<span data-ng-show="h1.name == 'Діагнози'">
+					<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}} -
+						{{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> 
+					<!-- 
+					 <span data-ng-show="diagnosTypeIndex[3]"
 					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
 						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdCode}} -
 						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdName}} <small>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate
 							| date:'dd.MM HH:mm'}}</small>
-				</span> <span data-ng-show="!diagnosTypeIndex[3]"
+				</span>
+				 <span data-ng-show="!diagnosTypeIndex[3]"
 					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
 						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdCode}} -
 						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdName}} <small>({{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate
 							| date:'dd.MM HH:mm'}})</small>
 				</span>
+					 -->
 				</span>
 				<!-- текстові html данні -->
 				<span ng-bind-html="h1.value.textHtml"
@@ -174,6 +179,14 @@
 					data-ng-show="epicrise.epicriseGroups[h1Index].open">
 					<hr data-ng-show="h1.isOnDemand" />
 				<div class="col-xs-9">
+					<div data-ng-show="h1.name == 'Діагнози'">
+					Діагнози
+						<ul>
+							<li data-ng-repeat="ds in patientHistory.diagnosis"><a
+								href="#" data-ng-click="addDiagnose(h1, ds)"> {{ds.icdCode}} -
+									{{ds.icdName}} {{ds.historyDiagnosAdditional}} </a></li>
+						</ul>
+					</div>
 					<div data-ng-show="h1.name == 'Операції'">
 						<div data-ng-if="patientHistory.operationHistorys">
 							<div data-ng-context-menu="menuDeletOperation"
@@ -466,6 +479,8 @@
 					</div>
 				</div>
 			</div>
+			<hr/>
+			Зав. відділенням ______________________________________________
 			</div>
 		</div>
 
