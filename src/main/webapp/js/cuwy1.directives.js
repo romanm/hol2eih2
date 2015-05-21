@@ -111,7 +111,7 @@ Date.prototype.addMonths2 = function (num) {
 }
 
 'use strict';
-var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ngSanitize', 'textAngular']);
+var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ui.sortable', 'ngSanitize', 'textAngular']);
 
 initAppConfig = function($scope, $http, $sce, $filter){
 	$scope.departmentsHol = configHol.departments;

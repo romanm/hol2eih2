@@ -30,6 +30,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 	}
 	var dayInMs = 1000*60*60*24;
+
+	$scope.goLink = function(link){
+		console.log(link);
+		location.href = link;
+	}
+
 	//-----------save epicrise -------------------------------------------------
 	$scope.saveWorkDocClick = function(){
 		$scope.autoSaveCount = 0;
@@ -150,6 +156,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			o.open = false;
 		});
 	};
+	$scope.editOpenClose2 = function(h1Index){
+		console.log(h1Index);
+		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
+		console.log(groupElement);
+		closeAllGroupEditors();
+		$scope.epicrise.epicriseGroups[h1Index].open = true;
+	}
 	$scope.editOpenClose = function(h1Index){
 		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];

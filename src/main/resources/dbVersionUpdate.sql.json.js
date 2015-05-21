@@ -8,12 +8,12 @@
 	"CREATE TABLE  IF NOT EXISTS  epicrise1 ( epicrise_id INT DEFAULT (NEXT VALUE FOR dbid) , PRIMARY KEY (epicrise_id) ,epicrise_hol1_hid INT NOT NULL UNIQUE ,epicrise_self CLOB)"
 ]},{
 	"dbVersionId" : 2, "sqls" : [
-	"ALTER TABLE history1 ADD COLUMN hol1_history_id INT NOT NULL"
+	"DELETE from history1"
+	,"ALTER TABLE history1 ADD COLUMN hol1_history_id INT NOT NULL"
 	,"ALTER TABLE history1 ADD CONSTRAINT hol1_history_id_unique UNIQUE(hol1_history_id)"
 ]},{
 	"dbVersionId" : 3, "sqls" : [
-	"DELETE from history1"
-	,"INSERT INTO history1 (history_id, hol1_history_id) SELECT epicrise_id, epicrise_hol1_hid FROM epicrise1"
+	"INSERT INTO history1 (history_id, hol1_history_id) SELECT epicrise_id, epicrise_hol1_hid FROM epicrise1"
 	,"ALTER TABLE EPICRISE1 ADD COLUMN history_id INT"
 	,"UPDATE epicrise1 SET history_id = epicrise_id" 
 	,"ALTER TABLE epicrise1 ADD CONSTRAINT history_id FOREIGN KEY (history_id) REFERENCES history1(history_id)"
