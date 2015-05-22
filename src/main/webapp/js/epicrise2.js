@@ -9,6 +9,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.configHol = configHol;
 	$scope.epicriseTemplate = epicriseTemplate;
 	initDeclareController($scope, $http, $sce, $filter);
+	readInitHistory($scope, $http, $sce, $filter);
 
 	$scope.openLaborToEdit = function(h1, laborName){
 		h1.laborOpenToEdit=laborName;
@@ -37,6 +38,14 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	//-----------save epicrise -------------------------------------------------
+	$scope.saveControlAndGo = function(url){
+		console.log(url);
+		var r = confirm("Зберегти і перейти за адресом: \n"+url);
+		if (r == true) {
+			window.location.href = url;
+		} else {
+		}
+	}
 	$scope.saveWorkDocClick = function(){
 		$scope.autoSaveCount = 0;
 		console.log("----");
@@ -128,8 +137,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			$scope.seekTag = "";
 		}
 	}
-	$scope.addGroup = function(addGroup){
+	$scope.addGroup = function(addGroup, h1Index){
 		console.log(addGroup);
+		console.log(h1Index);
+		var domElementId = "#g-"+h1Index;
+		console.log(domElementId);
+		var domElement  = document.querySelector(domElementId);
+		domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
 		var middlePosition = ($scope.epicrise.epicriseGroups.length + $scope.epicrise.epicriseGroups.length%2)/2;
 		var groupElement = createGroupElement(addGroup.name);
 		//addTextHtmlValue(groupElement, "");
@@ -210,6 +224,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$http({ method : 'GET', url : historyUrl
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
+			initHistory();
 			initEpicrise();
 			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {

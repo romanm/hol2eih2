@@ -10,27 +10,54 @@
 <link rel="stylesheet" href="/css/epicrise3.css"></link>
 <link href="/img/favicon.ico" rel="shortcut icon"
 	type="image/vnd.microsoft.icon" />
-
+<style type="text/css">
+.panel-heading {
+	/* For Safari 5.1 to 6.0 
+	background: -webkit-linear-gradient(gray, blue);
+	-webkit-gradient(linear, left top, left bottom, color-stop(0%, #00002b), color-stop(100%, #0060a2));
+	*/
+	/* For Opera 11.1 to 12.0 
+	background: -o-linear-gradient(red, blue);
+	*/
+	/* 
+	background: -moz-linear-gradient(gray, blue);	
+	For Firefox 3.6 to 15 */
+	/* Standard syntax 
+	background: linear-gradient(DimGray, Gainsboro);
+	background: linear-gradient(color-stop(0%, #00002b), color-stop(100%, #0060a2));
+	background: linear-gradient(DimGray, SlateGray );
+	*/
+	background: linear-gradient(DimGray, SlateGray );
+	text-shadow: 1px 1px 1px #999;
+	color: #fff !important;
+}
+</style>
 </head>
 
 <body data-key-cuwytrap="">
 	<div class="container">
-		<div class="row no-print">
+		<div class="row no-print navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="col-xs-7">
 				<ol class="breadcrumb">
-					<li><a href="/hol/home.html"><span
+					<li><a 
+						data-ng-click="saveControlAndGo('/hol/home.html')"
+					><span
 							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
 					<li><a
-						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
+						data-ng-click="saveControlAndGo('/hol/department.html?dep='+patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
-		.departmentId}}">
+		.departmentId)">
 							відділення:
 							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 							-1].departmentName}} </a></li>
-					<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ № <u>{{patientHistory.historyNo}}</u>
-					</a></li>
 					<li><a
-						href="/hol/epicrise4.html?hid={{patientHistory.historyId}}">
+						data-ng-click="saveControlAndGo('/hol/history.html?hno='+param.hno)"
+						>
+							ІХ № <u>{{patientHistory.historyNo}}</u>
+					</a></li>
+					<li><a 
+						data-ng-click="saveControlAndGo('/hol/epicrise4.html?hid='.concat(patientHistory.historyId))"
+						>
 							Виписка </a></li>
 				</ol>
 			</div>
@@ -39,27 +66,96 @@
 				<ol class="list-inline navbar-right">
 					<li><span data-ng-show="autoSaveCount > 0"
 						title="Кільськість автозбережень - {{autoSaveCount}}">
-							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
-						<a data-ng-click="saveWorkDocClick()" href="#"
-						title="Запис {{numberOfChange}} незбережених змін"> Запис
-							{{numberOfChange}} </a> <span
+							{{autoSaveCount}} </span>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="saveWorkDocClick()" data-toggle="modal">
+							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+						</button> <span
 						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
-					<li>|</li>
-					<li><span class="glyphicon glyphicon-eye-open"></span> <a
-						href="/hol/history.html?hno={{patientHistory.historyId}}">
-							Перегляд </a></li>
-					<li>|</li>
+					<li>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-toggle="modal" data-target="#myModal">∑</button>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-toggle="modal" data-target="#dialogSort">
+							<span class="glyphicon glyphicon-sort"></span>
+						</button>
+					</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a
 						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
 					<li data-ng-show="patientHistory.user"><span
 						class="glyphicon glyphicon-log-out"></span>
-						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+						:{{patientHistory.user.name}} <a
+						data-ng-click="saveControlAndGo('/hol/logout.html')">
 							Вийти </a></li>
 				</ol>
 			</div>
 		</div>
+		
+		<!-- Modal dialogs -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">Виписка</h4>
+					</div>
+					<div class="modal-body">
+						<div data-ng-repeat="h1 in epicrise.epicriseGroups"
+							data-ng-show="!h1.isOnDemand" data-ng-init="h1Index = $index">
+							<u>{{h1.name}}</u> 
+							<!-- diagnose -->
+							<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}}
+								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> 
+							<!-- operation -->
+							<span data-ng-repeat="operationHistory in h1.operationHistorys"
+								title="Хірург: {{operationHistory.surgery_name}}">
+								{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
+								{{operationHistory.operation_name}} <br />
+							</span>
+							<span ng-bind-html="h1.value.textHtml"
+								data-ng-show="!h1.value.laborValues"></span> 
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="dialogSort" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="panel-group" ui-sortable=""
+							data-ng-model="epicrise.epicriseGroups">
+							<div class="panel panel-default"
+								data-ng-repeat="h1 in epicrise.epicriseGroups"
+								data-ng-show="!h1.isOnDemand" data-ng-init="h1Index = $index">
+								{{h1.name}}</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="">
 			<span data-ng-show="patientHistory.patientHolDb.patientGender == 0">
 				Хвора </span> <span
@@ -83,12 +179,9 @@
 			ліжкоднів: <b> {{beetDays()}} </b>
 		</div>
 		<div class="no-print navbar-right">
-			<small> <b>Тіп:</b> Використовуйти табулятор і праву кнопку
-				миші.
-			</small>
+			<small class="bg-info"> <b>Тип:</b> Використовуйти табулятор і праву кнопку миші.</small>
 		</div>
-		<div class="panel-group" id="accordion" ui-sortable=""
-			data-ng-model="epicrise.epicriseGroups">
+		<div class="panel-group" id="accordion">
 			<div class="panel panel-default"
 				data-ng-repeat="h1 in epicrise.epicriseGroups"
 				data-ng-init="h1Index = $index">
@@ -96,14 +189,23 @@
 				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
 				data-ng-click="goLink('#g-'+h1Index)">
 					<h4 class="panel-title">
+						<a style="color:black;"
+						data-ng-show="!h1.isOnDemand"
+							data-toggle="modal" data-target="#dialogSort">
+							<span class="glyphicon glyphicon-sort"></span>
+						</a>
 						<b data-ng-show="h1.isOnDemand">+ Додати:</b> <a
 							data-toggle="collapse" data-parent="#accordion"
 							href="#g-{{h1Index}}" data-ng-click="editOpenClose2(h1Index)">{{h1.name}}
 							<span data-ng-if="!epicrise.epicriseGroups[h1Index].open"
 							class="glyphicon glyphicon-chevron-right"></span> <span
 							data-ng-if="epicrise.epicriseGroups[h1Index].open"
-							class="glyphicon glyphicon-chevron-down"></span> <span
-							data-ng-show="h1.isLabor">: <span
+							class="glyphicon glyphicon-chevron-down"></span> 
+							<!-- diagnose -->
+							<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}}
+								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> 
+							<!-- labor -->
+							<span data-ng-show="h1.isLabor">: <span
 								data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">
 									<span data-ng-context-menu="menuLabor"
 									data-ng-show="h1.value.laborValues[laborTemplate.name]">
@@ -119,8 +221,19 @@
 				</div>
 				<div id="g-{{h1Index}}" class="panel-collapse collapse">
 					<div class="panel-body">
-						<span data-ng-show="!h1.isTextHtml && !h1.isLabor">
+						<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози'">
 							{{h1.isTextHtml}} {{h1.name}} </span>
+						<div data-ng-show="h1.name == 'Діагнози'">
+							Діагнози
+							<ul>
+								<li data-ng-repeat="ds in patientHistory.diagnosis"><a
+									href="#" data-ng-click="addDiagnose(h1, ds)"> <u>
+											{{configHol.diagnosesHol[ds.diagnosId - 1].diagnosNameShort}}
+									</u> : {{ds.icdCode}} - {{ds.icdName}}
+										{{ds.historyDiagnosAdditional}}
+								</a></li>
+							</ul>
+						</div>
 						<!-- Текст -->
 						<div data-ng-show="h1.isTextHtml">
 							<div text-angular ng-model="h1.value.textHtml"></div>
@@ -130,7 +243,6 @@
 								data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
 						</div>
 						<!-- Лабораторія -->
-						
 						<div data-ng-show="h1.isLabor">
 							<div class="input-group">
 								<span class="input-group-addon">Фільтр:</span> <input
@@ -161,6 +273,66 @@
 									<td>{{laborTemplate.unit}}</td>
 								</tr>
 							</table>
+						</div>
+						<!-- + Додати -->
+						<div data-ng-show="h1.isOnDemand">
+							<div class="input-group">
+								<span class="input-group-addon">Фільтр:</span> <input
+									data-ng-model="seekGroup" type="text" class="form-control"
+									auto-focus="" placeholder=" пошук групи " auto-focus="" />
+							</div>
+							<span
+								data-ng-repeat="tag in epicriseTemplate.head1s[2].tagsGroup">
+								<span class="label"
+								data-ng-class="{'label-warning':seekTag == tag || ('все' === tag && '' === seekTag ), 'label-default':seekTag != tag}"
+								data-ng-click="setSeekTag(tag)">{{tag}}</span> &nbsp;
+							</span> <span class="label"
+								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[2].tags[0]
+								 || ('все' === epicriseTemplate.head1s[2].tags[0] && '' === seekTag )
+								 , 'label-default':seekTag != epicriseTemplate.head1s[2].tags[0]}"
+								data-ng-click="setSeekTag(tag)">{{epicriseTemplate.head1s[2].tags[0]}}</span>
+							<br /> 
+							<table class="table">
+								<tr>
+									<th colspan="2" class="center">аналізи</th>
+									<th rowspan="2">обстеженя</th>
+									<th rowspan="2">інше</th>
+								</tr>
+								<tr>
+									<th>крові</th>
+									<th>сечі</th>
+								</tr>
+								<tr>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'крові' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'сечі' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'обстеженя' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'інше' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<span
+								data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
+								<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a> |
+							</span>
 						</div>
 					</div>
 				</div>

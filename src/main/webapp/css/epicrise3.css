@@ -8,6 +8,10 @@
 	display: none !important;
 }
 
+.navbar {
+	margin-bottom: 1px;
+	min-height: 2px;
+}
 .bold {font-weight: bold;}
 .normal {font-weight: normal;}
 .italic {font-style: italic;}

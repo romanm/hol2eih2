@@ -162,7 +162,8 @@
 						{{h1.value.laborValues[laborTemplate.name].value}}
 						{{laborTemplate.unit}} <span data-ng-show="!$last">,</span>
 				</span>
-				</span> <span data-ng-context-menu="menuOperation"
+				</span> 
+				<span data-ng-context-menu="menuOperation"
 					data-ng-repeat="operationHistory in h1.operationHistorys"
 					title="Хірург: {{operationHistory.surgery_name}}">
 					{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
