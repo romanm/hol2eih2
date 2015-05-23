@@ -47,7 +47,8 @@
 					</a></li>
 					<li><a
 						href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
-							Виписка </a></li>
+							Виписка <sup> Новий стиль </sup>
+					</a></li>
 				</ol>
 			</div>
 			<div class="col-xs-5" style="text-align: right;background-color: #f5f5f5;">
@@ -107,7 +108,7 @@
 		</div>
 		<hr/>
 			<div class="no-print navbar-right">
-				<small> <b>Тіп:</b> Використовуйти табулятор і праву кнопку миші. </small>
+				<small class="bg-info"> <b>Тип:</b> Використовуйти табулятор і праву кнопку миші.</small>
 			</div>
 		<div ui-sortable="" data-ng-model="epicrise.epicriseGroups">
 			<div class="epicriseElement"
@@ -115,17 +116,15 @@
 				data-ng-init="h1Index = $index"
 				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
 				data-ng-click="editOpenClose(h1Index)">
-				<!-- 
-					<span class="no-print"> {{h1Index}} </span> 
-					 -->
 				<span class="mouseover" data-ng-context-menu="menuEpicriseGroup">
-					<b> <span data-ng-show="h1.isOnDemand">+</span> {{h1.name}}
-				</b> <a href="#" class="no-print"> <span
-						data-ng-if="!epicrise.epicriseGroups[h1Index].open"
-						class="glyphicon glyphicon-chevron-right"></span> <span
-						data-ng-if="epicrise.epicriseGroups[h1Index].open"
-						class="glyphicon glyphicon-chevron-down"></span>
-				</a> <span data-ng-show="h1.value.withDate">
+					<span data-ng-show="h1.isOnDemand">
+						<button type="button" class="btn btn-primary btn-xs">+
+							Додати:</button>
+						<b> <u> {{h1.name}} </u>
+					</b>
+				</span> <a href="#" data-ng-show="!h1.isOnDemand" class="no-print"><b>
+							<u> {{h1.name}} </u>
+					</b>:</a> <span data-ng-show="h1.value.withDate">
 						{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 				</span>
 				</span>

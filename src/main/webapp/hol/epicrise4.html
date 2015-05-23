@@ -10,7 +10,11 @@
 <link rel="stylesheet" href="/css/epicrise3.css"></link>
 <link href="/img/favicon.ico" rel="shortcut icon"
 	type="image/vnd.microsoft.icon" />
-<style type="text/css">
+	<style type="text/css">
+		body {
+			padding-top: 45px;
+			padding-bottom: 60px;
+		}
 .panel-heading {
 	/* For Safari 5.1 to 6.0 
 	background: -webkit-linear-gradient(gray, blue);
@@ -55,10 +59,10 @@
 						>
 							ІХ № <u>{{patientHistory.historyNo}}</u>
 					</a></li>
-					<li><a 
-						data-ng-click="saveControlAndGo('/hol/epicrise4.html?hid='.concat(patientHistory.historyId))"
-						>
-							Виписка </a></li>
+					<li><a
+						data-ng-click="saveControlAndGo('/hol/epicrise4.html?hid='.concat(patientHistory.historyId))">
+							Виписка <sub> Старий стиль </sub>
+					</a></li>
 				</ol>
 			</div>
 			<div class="col-xs-5"
@@ -74,12 +78,23 @@
 						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
 					<li>
-						<button type="button" class="btn btn-primary btn-sm"
-							data-toggle="modal" data-target="#myModal">∑</button>
-						<button type="button" class="btn btn-primary btn-sm"
-							data-toggle="modal" data-target="#dialogSort">
-							<span class="glyphicon glyphicon-sort"></span>
-						</button>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-primary btn-sm"
+								data-toggle="modal" data-target="#myModal">∑</button>
+							<button type="button" class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-print"></span>
+							</button>
+						</div>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-primary btn-sm"
+								title="Сортування" data-toggle="modal" data-target="#dialogSort">
+								<span class="glyphicon glyphicon-sort"></span>
+							</button>
+							<button type="button" class="btn btn-primary btn-sm"
+								title="Додати">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
 					</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a
@@ -108,18 +123,17 @@
 					<div class="modal-body">
 						<div data-ng-repeat="h1 in epicrise.epicriseGroups"
 							data-ng-show="!h1.isOnDemand" data-ng-init="h1Index = $index">
-							<u>{{h1.name}}</u> 
+							<u>{{h1.name}}</u>
 							<!-- diagnose -->
 							<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}}
-								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> 
+								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span>
 							<!-- operation -->
 							<span data-ng-repeat="operationHistory in h1.operationHistorys"
 								title="Хірург: {{operationHistory.surgery_name}}">
 								{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
 								{{operationHistory.operation_name}} <br />
-							</span>
-							<span ng-bind-html="h1.value.textHtml"
-								data-ng-show="!h1.value.laborValues"></span> 
+							</span> <span ng-bind-html="h1.value.textHtml"
+								data-ng-show="!h1.value.laborValues"></span>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -138,7 +152,7 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel"></h4>
+						<h4 class="modal-title" id="myModalLabel">Сортування</h4>
 					</div>
 					<div class="modal-body">
 						<div class="panel-group" ui-sortable=""
@@ -189,22 +203,22 @@
 				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
 				data-ng-click="goLink('#g-'+h1Index)">
 					<h4 class="panel-title">
-						<a style="color:black;"
-						data-ng-show="!h1.isOnDemand"
-							data-toggle="modal" data-target="#dialogSort">
-							<span class="glyphicon glyphicon-sort"></span>
-						</a>
-						<b data-ng-show="h1.isOnDemand">+ Додати:</b> <a
-							data-toggle="collapse" data-parent="#accordion"
-							href="#g-{{h1Index}}" data-ng-click="editOpenClose2(h1Index)">{{h1.name}}
-							<span data-ng-if="!epicrise.epicriseGroups[h1Index].open"
+						<a style="color: black;" data-ng-show="!h1.isOnDemand"
+							data-toggle="modal" data-target="#dialogSort"> <span
+							class="glyphicon glyphicon-sort"></span>
+						</a> <a data-toggle="collapse" data-parent="#accordion"
+							data-ng-click="editOpenClose2(h1Index)" href="#g-{{h1Index}}">
+							<span data-ng-show="h1.isOnDemand">
+								<button type="button" class="btn btn-primary btn-xs">
+									<span class="glyphicon glyphicon-plus"></span> Додати:
+								</button>
+						</span> {{h1.name}} <span
+							data-ng-if="!epicrise.epicriseGroups[h1Index].open"
 							class="glyphicon glyphicon-chevron-right"></span> <span
 							data-ng-if="epicrise.epicriseGroups[h1Index].open"
-							class="glyphicon glyphicon-chevron-down"></span> 
-							<!-- diagnose -->
+							class="glyphicon glyphicon-chevron-down"></span> <!-- diagnose -->
 							<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}}
-								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> 
-							<!-- labor -->
+								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> <!-- labor -->
 							<span data-ng-show="h1.isLabor">: <span
 								data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">
 									<span data-ng-context-menu="menuLabor"
@@ -339,6 +353,46 @@
 			</div>
 		</div>
 	</div>
+
+	<nav class="navbar navbar-default navbar-fixed-bottom"
+		role="navigation">
+		<div class="container">
+			<span><span class="glyphicon glyphicon-console"></span> &#160;
+				&nbsp; </span>
+			<button type="button" class="btn btn-primary btn-sm"
+				data-ng-click="saveWorkDocClick()" data-toggle="modal">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+			</button>
+			<ol class="list-inline navbar-right">
+				<li>
+					<div class="btn-group btn-group-sm" role="group">
+						<button type="button" class="btn btn-primary btn-sm"
+							data-toggle="modal" data-target="#myModal">∑</button>
+						<button type="button" class="btn btn-primary btn-sm"
+							><span class="glyphicon glyphicon-print"></span></button>
+					</div>
+					<div class="btn-group btn-group-sm" role="group">
+						<button type="button" class="btn btn-primary btn-sm"
+							title="Сортування" data-toggle="modal" data-target="#dialogSort">
+							<span class="glyphicon glyphicon-sort"></span>
+						</button>
+						<button type="button" class="btn btn-primary btn-sm"
+							title="Додати">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</div>
+				</li>
+				<li data-ng-show="!patientHistory.user"><span
+					class="glyphicon glyphicon-log-in"></span> <a
+					href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+				<li data-ng-show="patientHistory.user"><span
+					class="glyphicon glyphicon-log-out"></span>
+					:{{patientHistory.user.name}} <a
+					data-ng-click="saveControlAndGo('/hol/logout.html')"> Вийти </a></li>
+			</ol>
+		</div>
+	</nav>
+
 </body>
 
 <script src="/js/jquery-2.1.3.min.js"></script>
