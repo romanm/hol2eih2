@@ -3,7 +3,23 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 	console.log("OpCtrl");
 	$scope.hoursList = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7];
 	$scope.minList = [0,5,10,15,20,25,30,35,40,45,50,55];
+	$scope.requiredFiledList = ["operation_id","operation_result_id","icd_id"];
+	$scope.requiredFileds = {
+		"operation_result_id":{
+			dialogJsName:"opresult"
+			, dialogName:"Результат"
+		}
+		,"operation_id":{
+			dialogJsName:"operation_id"
+			, dialogName:"Код операції"
+		}
+		,"icd_id":{
+			dialogJsName:"diagnos"
+			, dialogName:"Діагноз при операції"
+		}
+	};
 	$scope.operationTree = operationTree;
+	$scope.configHol = configHol;
 	readInitHistory($scope, $http, $sce, $filter);
 	operationDirective($scope, $http, $sce, $filter);
 	operation2Directive($scope, $http, $sce, $filter);
@@ -20,22 +36,6 @@ cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce',
 		makeFilteredOperationTree();
 	}).error(function(data, status, headers, config) {
 	});
-
-	$scope.saveOperation = function(){
-
-		var opStartDate = new Date($scope.operation.operation_history_start);
-		$scope.operation.operation_history_start_long = opStartDate.getTime();
-		var opEndDate = new Date($scope.operation.operation_history_end);
-		$scope.operation.operation_history_end_long = opEndDate.getTime();
-		$scope.operation.operation_history_duration_sec = $scope.operation_duration_min*60;
-
-		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/saveoperation"
-		}).success(function(data, status, headers, config){
-			console.log(data);
-		}).error(function(data, status, headers, config) {
-			$scope.error = data;
-		});
-	}
 
 	$scope.menuDeletComplication = [
 		['<span class="glyphicon glyphicon-remove"></span> Видалити', function () {

@@ -281,21 +281,34 @@ public class CuwyDbService1 {
 			return new DepartmentHol(rs.getInt("department_id"), 
 					rs.getString("department_name"),
 					rs.getBoolean("department_active"),
-					rs.getShort("department_profile_id")
+					rs.getShort("department_profile_id"),
+					rs.getString("personal_username")
 					);
 		}
 	}
 	public DepartmentHol getDepartmentsHol(int id) {
 		return jdbcTemplate.queryForObject(
-				"SELECT * FROM department WHERE department_id = ?", 
+				"SELECT * FROM ("
+				+ sqlDepartmentsHol
+				+ ") department WHERE department_id = ?", 
 				new Object[] { id }, new DepartmentHolRowMapper());
 	}
-
+	final static String sqlDepartmentsHol = "SELECT p.personal_username"
+			+ ", d.department_id, d.department_name, d.department_profile_id, d.department_active "
+			+ " FROM personal_department pd, personal p, department d "
+			+ " WHERE p.personal_id=pd.personal_id AND pd.department_id=d.department_id "
+			+ " AND d.department_active AND pd.position_id = 3";
+	public List<DepartmentHol> getDepartmentsHol() {
+//		final String sql = "SELECT * FROM department";
+		return jdbcTemplate.query(
+				sqlDepartmentsHol, 
+				new DepartmentHolRowMapper());
+	}
 	public List<Map<String, Object>> getFirstNames() {
-		String sql = "select * from ("
-				+ " select count(patient_name) cnt, patient_name, patient_gender "
-				+ " from patient group by patient_name order by cnt desc) pn"
-				+ " where cnt >4 and length(patient_name) > 1"
+		String sql = "SELECT * from ("
+				+ " SELECT COUNT(patient_name) cnt, patient_name, patient_gender "
+				+ " FROM patient GROUP BY patient_name order by cnt desc) pn"
+				+ " WHERE cnt >4 AND length(patient_name) > 1"
 				;
 		logger.debug(sql);
 		List<Map<String, Object>> firstNames = jdbcTemplate.queryForList(sql);
@@ -310,15 +323,11 @@ public class CuwyDbService1 {
 		return directsHol;
 	}
 	public List<Map<String, Object>> getDirectsHol() {
-		String sql = "select * from direct";
+		String sql = "SELECT * FROM direct";
 		List<Map<String, Object>> directsHol = jdbcTemplate.queryForList(sql);
 		return directsHol;
 	}
-	public List<DepartmentHol> getDepartmentsHol() {
-		return jdbcTemplate.query(
-				"SELECT * FROM department", 
-				new DepartmentHolRowMapper());
-	}
+	
 	public List<DiagnosHol> getDiagnosesHol() {
 		return jdbcTemplate.query(
 				"SELECT * FROM diagnos", 
@@ -782,8 +791,8 @@ public class CuwyDbService1 {
 			ps.setTimestamp(3, timestamp2);
 			ps.setInt(4, (int) map.get("operation_history_duration_sec"));
 
-			ps.setInt(5, (int) map.get("personal_id"));
-			ps.setInt(6, (int) map.get("department_id"));
+			ps.setInt(5, setFiendInt("personal_id"));
+			ps.setInt(6, setFiendInt("department_id"));
 			ps.setInt(7, (int) map.get("operation_result_id"));
 
 			logger.debug(map.toString());
@@ -800,6 +809,17 @@ public class CuwyDbService1 {
 				ps.setInt(13, (int) map.get("history_id"));
 			}
 			ps.setInt(12, (int) map.get("operation_history_id"));
+			logger.debug(ps.toString());
+		}
+
+		private int setFiendInt(final String fieldName) {
+			final Object object = map.get(fieldName);
+			int personalId;
+			if(object instanceof String)
+				personalId = Integer.parseInt((String) object);
+				else
+					personalId = (int) object;
+			return personalId;
 		}
 	}
 
@@ -811,11 +831,11 @@ public class CuwyDbService1 {
 		+ " , anesthetist_id, operation_complication_id "
 		+ " , operation_history_id, history_id "
 		+ " ) SELECT oh1.*, oh2.* FROM "
-		+ "(SELECT ?, ?, ?, ?"
+		+ "(SELECT ? AS operation_additional, ? AS operation_history_start, ? AS operation_history_end, ?"
 		+ " , ?, ?, ?"
 		+ " , o.operation_id, o.operation_subgroup_id, os.operation_group_id "
 		+ " , icd.icd_id, icd.icd_start, icd.icd_end"
-		+ " , ?, ?"
+		+ " , ? AS anesthetist_id, ? AS operation_complication_id"
 		+ " FROM operation_subgroup os, operation o, icd icd "
 		+ " WHERE o.operation_id = ? AND os.operation_subgroup_id = o.operation_subgroup_id AND icd.icd_id = ?) oh1"
 		+ ", ( SELECT ?, ? ) oh2 ";
@@ -901,7 +921,7 @@ public class CuwyDbService1 {
 		protected void setFieldWithNull( PreparedStatement ps, final int i, String key)
 				throws SQLException {
 			final Object fieldWithNull = map.get(key);
-			logger.debug(""+fieldWithNull);
+			logger.debug(i+" "+key+" = "+fieldWithNull+" = "+(null == fieldWithNull));
 			if(null == fieldWithNull){
 				ps.setNull(i, Types.CHAR);
 			}else{
@@ -1340,7 +1360,15 @@ public class CuwyDbService1 {
 		= jdbcTemplate.queryForList(sql);
 		return countPatientsProMonth;
 	}
-
+	public List<Map<String, Object>> getSurgeryOperationListe(Integer personalId) {
+		String sql = "SELECT oh.*, operation_name, operation_code "
+				+ " FROM (select operation_id, count(operation_id) operation_cnt, operation_additional "
+				+ " FROM operation_history "
+				+ " WHERE personal_id = ? GROUP BY operation_id) oh, operation o "
+				+ " WHERE o.operation_id=oh.operation_id ORDER BY operation_cnt DESC";
+		final List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(sql, new Object[] { personalId});
+		return queryForList;
+	}
 	public List<Map<String, Object>> getAnestesiaListe() {
 		String sql = "SELECT * FROM anestesia";
 		logger.info("\n"+sql);
@@ -1740,5 +1768,8 @@ public class CuwyDbService1 {
 		= jdbcTemplate.queryForList(sqlBasicAnalysis, arrayList.toArray());
 		return list;
 	}
+
+
+	
 
 }

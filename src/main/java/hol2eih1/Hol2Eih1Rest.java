@@ -215,11 +215,6 @@ public class Hol2Eih1Rest {
 				cuwyDbService1.updateOperationHistory(map);
 			}
 		}
-		/*
-		for (Map<String, Object> map : operationHistorys) {
-			logger.debug(""+map);
-		}
-		 * */
 		return historyHolDb;
 	}
 
@@ -339,6 +334,12 @@ public class Hol2Eih1Rest {
 	}
 
 	//-----read json object-----------------------------------------------------
+
+	@RequestMapping(value="/hol/surgery_{personalId}_operation", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> json_surgery_operation_liste(@PathVariable Integer personalId) {
+		final List<Map<String, Object>> surgeryOperationListe = cuwyDbService1.getSurgeryOperationListe(personalId);
+		return surgeryOperationListe;
+	}
 	@RequestMapping(value="/hol/anestesia", method=RequestMethod.GET)
 	public @ResponseBody List<Map<String, Object>> json_anestesia_liste() {
 		logger.info("\n Start /hol/anesthetists");
@@ -371,6 +372,9 @@ public class Hol2Eih1Rest {
 		ConfigHol configHol = new ConfigHol();
 		final List<CountryHol> readCountries = cuwyDbService1.readCountries();
 		final List<DepartmentHol> departmentsHol = cuwyDbService1.getDepartmentsHol();
+		final HashMap<Integer, Integer> departmentsIdPosition = new HashMap<Integer, Integer>();
+		for (int i = 0; i < departmentsHol.size(); i++)
+			departmentsIdPosition.put(departmentsHol.get(i).getDepartment_id() , i);
 		final List<Map<String, Object>> directsHol = cuwyDbService1.getDirectsHol();
 		final List<Map<String, Object>> treatmentAnalysis = cuwyDbService1.getTreatmentAnalysis();
 		final List<Map<String, Object>> firstNames = cuwyDbService1.getFirstNames();
@@ -378,6 +382,7 @@ public class Hol2Eih1Rest {
 		final List<Map<String, Object>> complicationListe = cuwyDbService1.getComplicationListe();
 		final List<Map<String, Object>> operationResultListe = cuwyDbService1.getOperationResultListe();
 		configHol.setCountries(readCountries);
+		configHol.setDepartmentsIdPosition(departmentsIdPosition);
 		configHol.setDepartments(departmentsHol);
 		configHol.setDirects(directsHol);
 		configHol.setTreatmentAnalysis(treatmentAnalysis);
@@ -390,7 +395,9 @@ public class Hol2Eih1Rest {
 		return configHol;
 	}
 	private void writeToPrettyJsDbFile(String variable, Object objectForJson, String fileName) {
-		File file = new File(AppConfig.applicationFolderPfad + AppConfig.innerDbFolderPfad + fileName);
+		final String path_file = AppConfig.applicationFolderPfad + AppConfig.innerDbFolderPfad + fileName;
+		logger.debug("-----path_file----------------------------------- \n "+path_file);
+		File file = new File(path_file);
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectWriter writerWithDefaultPrettyPrinter = mapper.writerWithDefaultPrettyPrinter();
 		try {

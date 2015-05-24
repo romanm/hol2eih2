@@ -91,6 +91,7 @@
 								<span class="glyphicon glyphicon-sort"></span>
 							</button>
 							<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="editOpenCloseAdd()"
 								title="Додати">
 								<span class="glyphicon glyphicon-plus"></span>
 							</button>
@@ -108,6 +109,9 @@
 			</div>
 		</div>
 		
+		<div class="no-print navbar-right">
+			<small class="bg-info"> Старий стиль | Новий стиль </small>
+		</div>
 		<!-- Modal dialogs -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
@@ -144,7 +148,7 @@
 		</div>
 		
 		<div class="modal fade" id="dialogSort" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel" aria-hidden="true">
+			aria-labelledby="dialogSortLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -152,7 +156,7 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel">Сортування</h4>
+						<h4 class="modal-title" id="dialogSortLabel">Сортування</h4>
 					</div>
 					<div class="modal-body">
 						<div class="panel-group" ui-sortable=""
@@ -201,6 +205,7 @@
 				data-ng-init="h1Index = $index">
 				<div class="panel-heading" 
 				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
+				data-ng-context-menu="menuEpicriseGroup"
 				data-ng-click="goLink('#g-'+h1Index)">
 					<h4 class="panel-title">
 						<a style="color: black;" data-ng-show="!h1.isOnDemand"
@@ -216,10 +221,18 @@
 							data-ng-if="!epicrise.epicriseGroups[h1Index].open"
 							class="glyphicon glyphicon-chevron-right"></span> <span
 							data-ng-if="epicrise.epicriseGroups[h1Index].open"
-							class="glyphicon glyphicon-chevron-down"></span> <!-- diagnose -->
-							<span data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}}
-								- {{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> <!-- labor -->
-							<span data-ng-show="h1.isLabor">: <span
+							class="glyphicon glyphicon-chevron-down"></span> 
+						<!-- operation -->
+						<span data-ng-context-menu="menuOperation"
+							data-ng-repeat="operationHistory in h1.operationHistorys"
+							title="Хірург: {{operationHistory.surgery_name}}">
+								{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
+								{{operationHistory.operation_name}} <br />
+						</span> 
+						<!-- diagnose --> <span data-ng-repeat="ds in h1.diagnosis">
+								{{ds.icdCode}} - {{ds.icdName}} {{ds.historyDiagnosAdditional}}
+						</span> 
+						<!-- labor --> <span data-ng-show="h1.isLabor">: <span
 								data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">
 									<span data-ng-context-menu="menuLabor"
 									data-ng-show="h1.value.laborValues[laborTemplate.name]">
@@ -235,8 +248,25 @@
 				</div>
 				<div id="g-{{h1Index}}" class="panel-collapse collapse">
 					<div class="panel-body">
-						<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози'">
+						<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози' && h1.name == 'Операції'">
 							{{h1.isTextHtml}} {{h1.name}} </span>
+						<div data-ng-show="h1.name == 'Операції'">
+						Операції
+						<div data-ng-if="patientHistory.operationHistorys">
+							<div data-ng-context-menu="menuDeletOperation"
+								data-ng-repeat="operation in patientHistory.operationHistorys">
+								<small> <span class="glyphicon glyphicon-pushpin"></span>
+								</small> <a href="#" data-ng-click="addOperation(h1, operation)">
+									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
+									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
+									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+								<span>{{operation.operation_additional}}</span>
+								<div class="right" style="text-align: right;">
+									Хірург: <i> {{operation.surgery_name}}</i>
+								</div>
+							</div>
+						</div>
+					</div>
 						<div data-ng-show="h1.name == 'Діагнози'">
 							Діагнози
 							<ul>
@@ -377,6 +407,7 @@
 							<span class="glyphicon glyphicon-sort"></span>
 						</button>
 						<button type="button" class="btn btn-primary btn-sm"
+						data-ng-click="editOpenCloseAdd()"
 							title="Додати">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>

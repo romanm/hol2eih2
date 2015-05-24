@@ -14,9 +14,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.openLaborToEdit = function(h1, laborName){
 		h1.laborOpenToEdit=laborName;
 		if(!h1.value.laborValues[laborName])
-		h1.value.laborValues[laborName] = {value:""};
-		//not work
-		$('#'+laborName).focus();
+			h1.value.laborValues[laborName] = {value:""};
 	}
 	$scope.beetDays = function(){
 		if($scope.epicrise){
@@ -38,9 +36,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	//-----------save epicrise -------------------------------------------------
-	$scope.saveControlAndGo = function(url){
+	$scope.saveControlAndGo = function(url, siteName){
 		console.log(url);
-		var r = confirm("Зберегти і перейти за адресом: \n"+url);
+		var r = confirm("Зберегти і перейти за адресом: " +
+				"\n \"" +siteName+
+				"\"\n"+url);
 		if (r == true) {
 			window.location.href = url;
 		} else {
@@ -124,12 +124,14 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 				//var epicriseGroup = {name:headElement.name};
 				var epicriseGroup = createGroupElement(headElement.name);
 				$scope.epicrise.epicriseGroups.push(epicriseGroup);
-			})
+			});
 		}
 		//set epicriese group attributes
 		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
 			initEpicriseGroupElement(epicriseGroup);
 		});
+		$scope.patientHistory.departmentId = $scope.patientHistory.patientDepartmentMovements[$scope.patientHistory.patientDepartmentMovements.length - 1].departmentId;
+		console.log($scope.configHol.departments[$scope.configHol.departmentsIdPosition[$scope.patientHistory.departmentId]]);
 	}
 	$scope.setSeekTag = function(tag){
 		$scope.seekTag = tag;
@@ -140,13 +142,16 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.addGroup = function(addGroup, h1Index){
 		console.log(addGroup);
 		console.log(h1Index);
-		var domElementId = "#g-"+h1Index;
-		console.log(domElementId);
-		var domElement  = document.querySelector(domElementId);
-		domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
+		if(h1Index){
+			var domElementId = "#g-"+h1Index;
+			console.log(domElementId);
+			var domElement  = document.querySelector(domElementId);
+			domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
+		}
+
 		var middlePosition = ($scope.epicrise.epicriseGroups.length + $scope.epicrise.epicriseGroups.length%2)/2;
 		var groupElement = createGroupElement(addGroup.name);
-		//addTextHtmlValue(groupElement, "");
+		addTextHtmlValue(groupElement, "");
 		$scope.epicrise.epicriseGroups.splice(middlePosition,0,groupElement);
 		closeAllGroupEditors();
 		$scope.epicrise.epicriseGroups[middlePosition].open = true;
@@ -170,6 +175,19 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			o.open = false;
 		});
 	};
+	$scope.editOpenCloseAdd = function(){
+		var h1Index = 0;
+		for (var i = 0; i < $scope.epicrise.epicriseGroups.length; i++) {
+			var groupElement = $scope.epicrise.epicriseGroups[i];
+			console.log(groupElement);
+			if(groupElement.isOnDemand){
+				h1Index = i;
+//				break;
+			}
+		}
+		console.log(h1Index);
+		$scope.editOpenClose(h1Index);
+	}
 	$scope.editOpenClose2 = function(h1Index){
 		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
@@ -267,6 +285,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	//--------------sort array-----------------------------------------------END
 
 	//-----------------context menu---------------------------------------------
+	$scope.menuDiagnos = [
+		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
+			console.log($itemScope);
+			$scope.epicrise.epicriseGroups[$itemScope.h1Index].diagnosis.splice($itemScope.$index,1);
+		}]
+	];
 	$scope.menuOperation = [
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
 			console.log($itemScope);
@@ -279,32 +303,44 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}]
 	];
 	$scope.menuEpicriseGroup = [
+/*
+ * */
 		['<span class="glyphicon glyphicon-arrow-up"></span> Догори ', function ($itemScope) {
-			moveEpicriseGroupUp($itemScope);
+//			moveEpicriseGroupUp($itemScope);
+			var arrayToSort = $scope.epicrise.epicriseGroups;
+			var index = $itemScope.$index;
+			if(index > 0){
+				moveUp(arrayToSort, index);
+			}else{
+				moveTo(arrayToSort, 0, arrayToSort.length-1);
+			}
 		}],
 		['<span class="glyphicon glyphicon-arrow-down"></span> Донизу ', function ($itemScope) {
-			moveEpicriseGroupDown($itemScope);
+//			moveEpicriseGroupDown($itemScope);
+			var arrayToSort = $scope.epicrise.epicriseGroups;
+			var index = $itemScope.$index;
+			if(index < arrayToSort.length-1){
+				moveUp(arrayToSort, index+1);
+			}
 		}], null,
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
 			$scope.epicrise.epicriseGroups.splice($itemScope.h1Index,1);
 		}]
 	];
-	moveEpicriseGroupDown = function($itemScope){
-		console.log($itemScope.$index);
-		movePlus($scope.epicrise.epicriseGroups, $itemScope.$index);
-		console.log($scope.epicrise.epicriseGroups);
-	}
-	moveEpicriseGroupUp = function($itemScope){
-		console.log($itemScope.$index);
-		moveMinus($scope.epicrise.epicriseGroups, $itemScope.$index);
-		console.log($scope.epicrise.epicriseGroups);
-	}
 	moveTo = function(arrayToSort, indexFrom, indexTo){
+		console.log(indexFrom+"/"+indexTo);
 		var el = arrayToSort.splice(indexFrom, 1);
+		console.log(el);
 		arrayToSort.splice(indexTo, 0, el[0]);
 	}
 	moveUp = function(arrayToSort, index){
 		moveTo(arrayToSort, index, index-1);
+	}
+	moveEpicriseGroupDown = function($itemScope){
+		movePlus($scope.epicrise.epicriseGroups, $itemScope.$index);
+	}
+	moveEpicriseGroupUp = function($itemScope){
+		moveMinus($scope.epicrise.epicriseGroups, $itemScope.$index);
 	}
 	movePlus = function(arrayToSort, index){
 		if(index < arrayToSort.length){

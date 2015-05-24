@@ -10,9 +10,17 @@ public class DepartmentHol {
 	private List<PatientDiagnosisHol> patientesDiagnosisHol;
 	
 	private int department_id, department_profile_id;
-	private String department_name;
+	private String department_name, zaviduvach;
 	private boolean department_active;
 	private Principal user;
+
+	public String getZaviduvach() {
+		return zaviduvach;
+	}
+	
+	public void setZaviduvach(String zaviduvach) {
+		this.zaviduvach = zaviduvach;
+	}
 	public List<Map<String, Object>> getJornalMovePatient() {
 		return jornalMovePatient;
 	}
@@ -21,11 +29,12 @@ public class DepartmentHol {
 		this.jornalMovePatient = jornalMovePatient;
 	}
 
-	public DepartmentHol(int department_id, String department_name, boolean department_active, int department_profile_id) {
+	public DepartmentHol(int department_id, String department_name, boolean department_active, int department_profile_id, String zaviduvach) {
 		this.department_id = department_id;
 		this.department_name = department_name;
 		this.department_active = department_active;
 		this.department_profile_id = department_profile_id;
+		this.zaviduvach = zaviduvach;
 	}
 
 	public DepartmentHol() {

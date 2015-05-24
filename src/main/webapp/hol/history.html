@@ -45,23 +45,30 @@
 			</div>
 		</div>
 		<div class="col-md-3" style="text-align: right;">
-			<ul class="list-inline navbar-right">
-				<li><span class="glyphicon glyphicon-floppy-disk"></span> <a
-					data-ng-click="saveWorkDoc()" href="#"
-					title="Запис {{numberOfChange}} незбережених змін"> Запис
-						{{numberOfChange}} </a> <span
-					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
-						ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
-				<li>|</li>
-				<li data-ng-show="!patientHistory.user"><span
-					class="glyphicon glyphicon-log-in"></span> <a href="/login">
-						Ввійти </a></li>
-				<li data-ng-show="patientHistory.user"><span
-					class="glyphicon glyphicon-log-out"></span>
-					:{{patientHistory.user.name}} <a href="/hol/logout.html">
-						Вийти </a></li>
-			</ul>
-		</div>
+				<ul class="list-inline navbar-right">
+					<li>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="saveWorkDoc()" data-toggle="modal">
+							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+						</button> <!-- 
+			<span class="glyphicon glyphicon-floppy-disk"></span> <a
+				data-ng-click="saveWorkDoc()" href="#"
+				title="Запис {{numberOfChange}} незбережених змін"> Запис
+					{{numberOfChange}} </a> <span
+				data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
+			 -->
+					</li>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
+				</ul>
+			</div>
 	</div>
 
 </div>
@@ -462,8 +469,13 @@
 					<h3>
 						<small> <span class="glyphicon glyphicon-share"></span>
 						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
-							Епикриз </a>
+							Епикриз </a> <sub style="font-size: 50%;"> <a
+							href="epicrise.html?hid={{patientHistory.historyId}}">Новий
+								стиль</a>| <a href="epicrise4.html?hid={{patientHistory.historyId}}">Старий
+								стиль</a>
+						</sub>
 					</h3>
+					<a></a>
 					<!-- 
 				<u><b>Перебіг хвороби</b></u>:
 				 -->

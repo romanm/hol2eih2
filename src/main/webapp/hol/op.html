@@ -56,16 +56,26 @@
 				<ol class="list-inline navbar-right">
 					<li><span data-ng-show="autoSaveCount > 0"
 						title="Кільськість автозбережень - {{autoSaveCount}}">
-							{{autoSaveCount}} </span> <span class="glyphicon glyphicon-floppy-disk"></span>
+							{{autoSaveCount}} </span> 
+			<button type="button" class="btn btn-primary btn-sm"
+				data-ng-click="saveOperation()" data-toggle="modal">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+			</button>
+							<!-- 
+							<span class="glyphicon glyphicon-floppy-disk"></span>
 						<a data-ng-click="saveOperation()" href="#"
 						title="Запис {{numberOfChange}} незбережених змін"> Запис
-							{{numberOfChange}} </a> <span
+							{{numberOfChange}} </a> 
+							 -->
+							<span
 						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+							<!-- 
 					<li>|</li>
 					<li><span class="glyphicon glyphicon-eye-open"></span> <a
 						href="/hol/history.html?hno={{patientHistory.historyId}}">
 							Перегляд </a></li>
+							 -->
 					<li>|</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a
@@ -104,7 +114,17 @@
 						Операції </a>
 						 -->
 				</h3>
-				<div>
+			<div 
+			class="bg-danger"
+			data-ng-if="operation.checkRequiredFiledList">
+				Для запису протоколу операції заповніть обов’язкові поля:
+				<span
+					data-ng-repeat="rf in operation.checkRequiredFiledList"> <a
+					data-ng-click="openDialog(requiredFileds[rf].dialogJsName)">
+						{{requiredFileds[rf].dialogName}} </a> ,
+				</span>
+			</div>
+			<div>
 					<span
 						title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">
 						<a href="#" data-ng-click="openOpDialog()">
@@ -180,6 +200,7 @@
 								</div>
 							</div>
 							<div class="col-xs-6">
+							Доповнення до назви <br/>
 								<textarea rows="2" cols="33"
 									data-ng-model="operation.operation_additional">
 								</textarea>
@@ -188,17 +209,27 @@
 					</div>
 					<div class="row no-print">
 						<div class="col-xs-12">
-							<ul class="nav nav-tabs">
-								<li role="presentation"
-									data-ng-class="{'active':activeTabName == 'seek'}"
-									class="active"><a data-ng-click="activateTabName('seek')"><span
-										class="glyphicon glyphicon-search"></span></a></li>
-								<li role="presentation"
-									data-ng-class="{'active':activeTabName == 'folder'}"><a
-									data-ng-click="activateTabName('folder')"><span
-										class="glyphicon glyphicon-folder-{{activeTabName == 'folder' ? 'open':'close'}}"></span></a></li>
+						<ul class="nav nav-tabs">
+							<li role="presentation"><a href="#"
+								data-ng-click="activateTabName('surgeryOperation')">
+									Операції хірурга </a></li>
+							<li role="presentation"
+								data-ng-class="{'active':activeTabName == 'seek'}"
+								class="active"><a data-ng-click="activateTabName('seek')"><span
+									class="glyphicon glyphicon-search"></span></a></li>
+							<li role="presentation"
+								data-ng-class="{'active':activeTabName == 'folder'}"><a
+								data-ng-click="activateTabName('folder')"><span
+									class="glyphicon glyphicon-folder-{{activeTabName == 'folder' ? 'open':'close'}}"></span></a></li>
+						</ul>
+						<div data-ng-show="activeTabName == 'surgeryOperation'">
+							<ul>
+								<li data-ng-repeat="op3 in surgeryOperation"><a
+									data-ng-click="setSurgeryOp(op3)"> {{op3.operation_code}} </a>
+									{{op3.operation_name}} <sup> {{op3.operation_cnt}} </sup></li>
 							</ul>
-							<div data-ng-show="activeTabName == 'seek'">
+						</div>
+						<div data-ng-show="activeTabName == 'seek'">
 								<ul>
 									<li data-ng-repeat="op1 in filteredOperationTree"><a
 										data-ng-click="openOpGroup(1,op1)"> <span
@@ -275,7 +306,8 @@
 				</div>
 				<div class="well" collapse="collapseDialog != 'diagnos'">
 				<ul>
-					<li data-ng-repeat="ds in patientHistory.diagnosis"><a
+					<li data-ng-repeat="ds in patientHistory.diagnosis"><i>
+							{{configHol.diagnosesHol[ds.diagnosId - 1].diagnosNameShort}} </i> <a
 						href="#" data-ng-click="setDiagnos(ds)"> {{ds.icdCode}} -
 							{{ds.icdName}} {{ds.historyDiagnosAdditional}} </a></li>
 				</ul>
@@ -352,7 +384,9 @@
 					</ul>
 				</div>
 				<div>
-					<span><a href="#" data-ng-click="openDialog('opresult')">
+					<span><a href="#"
+					id="operation_result_id"
+					 data-ng-click="openDialog('opresult')">
 							Результат:<span data-ng-show="collapseDialog == 'opresult'"
 							class="glyphicon glyphicon-folder-open"></span>
 					</a> {{operation.operation_result_name}} </span>, <a href="#"
@@ -391,15 +425,26 @@
 			role="navigation">
 			<div class="container">
 				<span><span class="glyphicon glyphicon-console"></span>
-					&#160; &nbsp; </span><span class="glyphicon glyphicon-floppy-disk"></span>
+					&#160; &nbsp; </span>
+			<button type="button" class="btn btn-primary btn-sm"
+				data-ng-click="saveOperation()" data-toggle="modal">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+			</button>
+			<!-- 
+			<span class="glyphicon glyphicon-floppy-disk"></span>
 				<a data-ng-click="saveOperation()" href="#"
 					title="Запис {{numberOfChange}} незбережених змін"> Запис
-					{{numberOfChange}} </a> <span
+					{{numberOfChange}} </a> 
+			 -->
+					
+					<span
 					data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
 				<ol class="list-inline navbar-right">
+				<!-- 
 					<li><span class="glyphicon glyphicon-eye-open"></span> <a
 						href="/hol/history.html?hno={{param.hid}}"> Перегляд </a></li>
+				 -->
 					<li>|</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a

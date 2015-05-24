@@ -6,7 +6,12 @@ import java.util.Map;
 public class ConfigHol {
 	private List<CountryHol> countries;
 	private List<DepartmentHol> departments;
+	private Map<Integer, Integer> departmentsIdPosition;
 	private List<DiagnosHol> diagnosesHol;
+	private List<Map<String, Object>> directs, treatmentAnalysis, firstNames;
+	private List<Map<String, Object>> complicationListe;
+	private List<Map<String, Object>> operationResultListe;
+
 	public List<DiagnosHol> getDiagnosesHol() {
 		return diagnosesHol;
 	}
@@ -15,10 +20,15 @@ public class ConfigHol {
 		this.diagnosesHol = diagnosesHol;
 	}
 
-	private List<Map<String, Object>> directs, treatmentAnalysis, firstNames;
-	private List<Map<String, Object>> complicationListe;
-	private List<Map<String, Object>> operationResultListe;
-	
+	public Map<Integer, Integer> getDepartmentsIdPosition() {
+		return departmentsIdPosition;
+	}
+
+	public void setDepartmentsIdPosition(
+			Map<Integer, Integer> departmentsIdPosition) {
+		this.departmentsIdPosition = departmentsIdPosition;
+	}
+
 	public List<Map<String, Object>> getComplicationListe() {
 		return complicationListe;
 	}

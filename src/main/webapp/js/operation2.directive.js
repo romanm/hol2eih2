@@ -6,6 +6,11 @@ operation2Directive = function($scope, $http, $sce, $filter){
 	$scope.operation = {};
 	var checkSeekInterval;
 
+	$scope.setSurgeryOp = function(op2set){
+		console.log(op2set);
+		$scope.operation.operation_id = op2set.operation_id;
+		$scope.operation.operation_name = op2set.operation_name;
+	}
 	$scope.setOp = function(op2set){
 		console.log(op2set);
 		console.log("1 "+$scope.operation.operation_id );
@@ -51,6 +56,7 @@ operation2Directive = function($scope, $http, $sce, $filter){
 
 
 	$scope.setSurgery = function(s){
+	console.log(s);
 		$scope.operation.personal_id = s.personal_id;
 		$scope.operation.surgery_name = s.personal_surname + " " + s.personal_name + " " + s.personal_patronymic;
 		$scope.collapseDialog = "false";
@@ -105,6 +111,16 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		$scope.collapseDialog = $scope.collapseDialog == dialogName ? 'false': dialogName;
 		if(dialogName == "department"){
 			$scope.departments = configHol.departments;
+		}else if(dialogName == "operation_id"){
+			$scope.openOpDialog();
+		}else if(dialogName == "op"){
+			if($scope.operation.personal_id){
+				$http({ method : 'GET', url : "/hol/surgery_"+$scope.operation.personal_id+"_operation"
+				}).success(function(data, status, headers, config) {
+					$scope.surgeryOperation = data;
+				}).error(function(data, status, headers, config) {
+				});
+			}
 		}else if(dialogName == "opresult"){
 			$scope.operationResultListe = configHol.operationResultListe;
 		}else if(dialogName == "anestesia"){
@@ -168,6 +184,49 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		$scope.ophStartHH = opStartDate.getHours();
 		var mm = opStartDate.getMinutes();
 		$scope.ophStartMM = mm-mm%5;
+		if(!$scope.operation.department_id){
+			console.log($scope.userDepartmentId);
+			var department = $scope.configHol.departments[$scope.configHol.departmentsIdPosition[$scope.userDepartmentId]];
+			console.log(department);
+			$scope.setDepartment({"department_id":department.department_id,"department_name":department.department_name});
+		}
+		if(!$scope.operation.personal_id){
+			$scope.operation.personal_id = $scope.userPersonalId;
+			$scope.operation.surgery_name = $scope.patientHistory.user.name;
+		}
+		
+		if(!$scope.operation.icd_id){
+			for (var i = 0; i < $scope.patientHistory.diagnosis.length; i++) {
+				var ds = $scope.patientHistory.diagnosis[i];
+				$scope.setDiagnos(ds);
+				if(ds.diagnoseId == 3)
+					break;
+			}
+		}
+	}
+
+	$scope.saveOperation = function(){
+
+		console.log("check field");
+		console.log($scope.operation);
+		$scope.operation.checkRequiredFiledList = [];
+		$scope.requiredFiledList.forEach(function(key) {
+			if(!$scope.operation[key])
+				$scope.operation.checkRequiredFiledList.push(key);
+		});
+
+		var opStartDate = new Date($scope.operation.operation_history_start);
+		$scope.operation.operation_history_start_long = opStartDate.getTime();
+		var opEndDate = new Date($scope.operation.operation_history_end);
+		$scope.operation.operation_history_end_long = opEndDate.getTime();
+		$scope.operation.operation_history_duration_sec = $scope.operation_duration_min*60;
+
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/saveoperation"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
 	}
 
 	$scope.clickOphStartHH = function(hh){
