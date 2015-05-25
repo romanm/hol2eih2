@@ -76,10 +76,6 @@
 					<li>
 						<div class="btn-group btn-group-sm" role="group">
 							<button type="button" class="btn btn-primary btn-sm"
-								title="Сортування" data-toggle="modal" data-target="#dialogSort">
-								<span class="glyphicon glyphicon-sort"></span>
-							</button>
-							<button type="button" class="btn btn-primary btn-sm"
 							data-ng-click="editOpenCloseAdd()"
 								title="Додати">
 								<span class="glyphicon glyphicon-plus"></span>
@@ -99,33 +95,6 @@
 
 		<div class="no-print navbar-right">
 			<small class="bg-info"> Старий стиль | Новий стиль </small>
-		</div>
-
-		<div class="modal fade" id="dialogSort" tabindex="-1" role="dialog"
-			aria-labelledby="dialogSortLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="dialogSortLabel">Сортування</h4>
-					</div>
-					<div class="modal-body">
-						<div class="panel-group" ui-sortable=""
-							data-ng-model="epicrise.epicriseGroups">
-							<div class="panel panel-default"
-								data-ng-repeat="h1 in epicrise.epicriseGroups"
-								data-ng-show="!h1.isOnDemand" data-ng-init="h1Index = $index">
-								{{h1.name}}</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<h2 class="centered">Виписка</h2>
@@ -549,24 +518,21 @@
 		role="navigation">
 		<div class="container">
 			<span><span class="glyphicon glyphicon-console"></span> &#160;
-				&nbsp; </span>
+				&nbsp; </span> <span data-ng-show="autoSaveCount > 0"
+				title="Кільськість автозбережень - {{autoSaveCount}}">
+				{{autoSaveCount}} </span>
 			<button type="button" class="btn btn-primary btn-sm"
 				data-ng-click="saveWorkDocClick()" data-toggle="modal">
 				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
 			</button>
+			<div class="btn-group btn-group-sm" role="group">
+				<button type="button" class="btn btn-primary btn-sm"
+					data-ng-click="editOpenCloseAdd()" title="Додати">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</div>
 			<ol class="list-inline navbar-right">
 				<li>
-					<div class="btn-group btn-group-sm" role="group">
-						<button type="button" class="btn btn-primary btn-sm"
-							title="Сортування" data-toggle="modal" data-target="#dialogSort">
-							<span class="glyphicon glyphicon-sort"></span>
-						</button>
-						<button type="button" class="btn btn-primary btn-sm"
-						data-ng-click="editOpenCloseAdd()"
-							title="Додати">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
-					</div>
 				</li>
 				<li data-ng-show="!patientHistory.user"><span
 					class="glyphicon glyphicon-log-in"></span> <a
@@ -577,7 +543,7 @@
 					data-ng-click="saveControlAndGo('/hol/logout.html')"> Вийти </a></li>
 			</ol>
 		</div>
-		
+
 	</nav>
 	
 </body>

@@ -11,6 +11,39 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	initDeclareController($scope, $http, $sce, $filter);
 	readInitHistory($scope, $http, $sce, $filter);
 
+	//-------autoSave-----------------------------------------------------------
+	$scope.docLength = 0;
+	$scope.autoSaveCount = 0;
+//	var noSaveLimit = 100;
+	var noSaveLimit = 50
+	autoSaveTimer = function () {
+		if($scope.docLength == 0){
+			setDocLength();
+			return;
+		}
+		var newDocLength = getDocLength();
+		var diffDocLength = Math.abs($scope.docLength-newDocLength);
+		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
+		if(diffDocLength > noSaveLimit){
+			saveWorkDocEpicrise();
+			$scope.autoSaveCount++;
+			setDocLength();
+		}
+	}
+	setInterval(function(){autoSaveTimer()},5000);
+	getDiffDocLength = function(){
+		var newDocLength = getDocLength();
+		return  Math.abs($scope.docLength-newDocLength);
+	}
+	getDocLength = function(){
+		return JSON.stringify($scope.epicrise).length;
+	}
+	setDocLength = function(){
+		$scope.docLength = getDocLength();
+		console.log($scope.docLength);
+	}
+	//-------autoSave--------------------------------------------------------END
+
 	$scope.openLaborToEdit = function(h1, laborName){
 		h1.laborOpenToEdit=laborName;
 		if(!h1.value.laborValues[laborName])
@@ -38,13 +71,18 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	//-----------save epicrise -------------------------------------------------
 	$scope.saveControlAndGo = function(url, siteName){
 		console.log(url);
-		var r = confirm("Зберегти і перейти за адресом: " +
-				"\n \"" +siteName+
-				"\"\n"+url);
-		if (r == true) {
+		var diffDocLength = getDiffDocLength();
+		if(diffDocLength > 9){
+			var r = confirm("Зберегти "+diffDocLength+" і перейти за адресом: " +
+					"\n \"" +siteName+
+					"\" \n"+url);
+			if (r == true) {
+				window.location.href = url;
+			}
+		}else{
 			window.location.href = url;
-		} else {
 		}
+
 	}
 	$scope.saveWorkDocClick = function(){
 		$scope.autoSaveCount = 0;
@@ -257,30 +295,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		readHol1();
 	});
 	//-------------------------read end -------------------------------------END
-
-	//-------------------------autoSaveTimer------------------------------------
-	$scope.docLength = 0;
-	$scope.autoSaveCount = 0;
-	autoSaveTimer = function () {
-		if($scope.docLength == 0){
-			setDocLength();
-			return;
-		}
-		var newDocLength = getDocLength();
-		var diffDocLength = Math.abs($scope.docLength-newDocLength);
-		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
-		if(diffDocLength > 100){
-			saveWorkDocEpicrise();
-			$scope.autoSaveCount++;
-			setDocLength();
-		}
-	}
-
-	setDocLength = function(){
-		$scope.docLength = getDocLength();
-		console.log($scope.docLength);
-	}
-	//-------------------------autoSaveTimer---------------------------------END
 
 	//--------------sort array-----------------------------------------------END
 
