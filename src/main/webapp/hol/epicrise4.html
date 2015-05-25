@@ -81,7 +81,9 @@
 						<div class="btn-group btn-group-sm" role="group">
 							<button type="button" class="btn btn-primary btn-sm"
 								data-toggle="modal" data-target="#myModal">∑</button>
-							<button type="button" class="btn btn-primary btn-sm">
+							<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="goPrintSite()"
+							>
 								<span class="glyphicon glyphicon-print"></span>
 							</button>
 						</div>
@@ -110,7 +112,8 @@
 		</div>
 		
 		<div class="no-print navbar-right">
-			<small class="bg-info"> Старий стиль | Новий стиль </small>
+			<small class="bg-info"> <b> Старий стиль </b> | Новий стиль
+			</small>
 		</div>
 		<!-- Modal dialogs -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -389,6 +392,9 @@
 		<div class="container">
 			<span><span class="glyphicon glyphicon-console"></span> &#160;
 				&nbsp; </span>
+				<span data-ng-show="autoSaveCount > 0"
+				title="Кільськість автозбережень - {{autoSaveCount}}">
+				{{autoSaveCount}} </span>
 			<button type="button" class="btn btn-primary btn-sm"
 				data-ng-click="saveWorkDocClick()" data-toggle="modal">
 				<span class="glyphicon glyphicon-floppy-disk"></span> Запис

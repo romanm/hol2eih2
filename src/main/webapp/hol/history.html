@@ -46,7 +46,9 @@
 		</div>
 		<div class="col-md-3" style="text-align: right;">
 				<ul class="list-inline navbar-right">
-					<li>
+					<li><span data-ng-show="autoSaveCount > 0"
+						title="Кільськість автозбережень - {{autoSaveCount}}">
+							{{autoSaveCount}} </span>
 						<button type="button" class="btn btn-primary btn-sm"
 							data-ng-click="saveWorkDoc()" data-toggle="modal">
 							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
@@ -57,9 +59,8 @@
 					{{numberOfChange}} </a> <span
 				data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
-			 -->
-					</li>
-					<li>|</li>
+				--></li>
+						<li>|</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a href="/login">
 							Ввійти </a></li>
@@ -535,9 +536,17 @@
 		<div class="container">
 			<span><span class="glyphicon glyphicon-console"></span>
 					&#160; &nbsp; </span>
-			<span class="glyphicon glyphicon-floppy-disk"></span> <a data-ng-click="saveWorkDoc()" href="#"
+			<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="saveWorkDoc()" data-toggle="modal">
+							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+						</button>
+						<!-- 
+						<span class="glyphicon glyphicon-floppy-disk"></span>
+						<a data-ng-click="saveWorkDoc()" href="#"
 				title="Запис {{numberOfChange}} незбережених змін"> Запис
-				{{numberOfChange}} </a> <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+				{{numberOfChange}} </a>
+						 -->
+			 <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 				ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
 
 

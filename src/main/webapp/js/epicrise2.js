@@ -73,10 +73,10 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log(url);
 		var diffDocLength = getDiffDocLength();
 		if(diffDocLength > 9){
-			var r = confirm("Зберегти "+diffDocLength+" і перейти за адресом: " +
-					"\n \"" +siteName+
-					"\" \n"+url);
+			var r = confirm("В документі  "+diffDocLength+" не збережених змін. Зберегти і перейти за адресом: " +
+					"\n \"" +siteName+ "\"? \n"+url);
 			if (r == true) {
+				saveWorkDocEpicrise();
 				window.location.href = url;
 			}
 		}else{
@@ -212,6 +212,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicrise.epicriseGroups.forEach(function(o) {
 			o.open = false;
 		});
+	};
+	$scope.goPrintSite = function(){
+		window.location.href = "epicrise.html?hid="+parameters.hid;
 	};
 	$scope.editOpenCloseAdd = function(){
 		var h1Index = 0;

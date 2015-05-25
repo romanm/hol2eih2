@@ -7,7 +7,7 @@
 Виписка 
  -->
 <title>
-Відділення:
+Виписка Від.:
 	{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 	-1].departmentName}} - {{patientHistory.patientHolDb.patientSurname}}
 </title>
@@ -94,10 +94,23 @@
 		</div>
 
 		<div class="no-print navbar-right">
-			<small class="bg-info"> Старий стиль | Новий стиль </small>
+			<small class="bg-info"> <b>Новий стиль</b> | Старий стиль | 
+			<a href="http://192.168.68.62/history/edit/id/56541">
+			<span class="glyphicon glyphicon-link"></span>
+			Стара програма ІХ 
+			</a>
+			
+			</small>
 		</div>
 
-		<h2 class="centered">Виписка</h2>
+		<h3 class="centered">
+			Виписний епікриз <br /> <small> Відділення
+				«{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+				-1].departmentName}}» </small>
+		</h3>
+		<!-- 
+		<h4 class="centered"></h4>
+		 -->
 		<h2 data-ng-show="!patientHistory.user">
 			<span class="glyphicon glyphicon-warning-sign"></span> <span
 				class="btn-warning"> Для роботи з випискою <br /> ввійдіть в
@@ -146,9 +159,10 @@
 						</button>
 				</span> 
 				<a href="#" data-ng-show="!h1.isOnDemand"
-					data-ng-class="{'no-print':h1.name == epicrise.epicriseGroups[h1Index - 1].name}"><b>
-							<u> {{h1.name}} </u>
-					</b>:</a> <span data-ng-show="h1.value.withDate">
+					data-ng-class="{'no-print':h1.name == epicrise.epicriseGroups[h1Index - 1].name}">
+						<span data-ng-show="!h1.diagnosis"> <u> {{h1.name}} </u> :
+					</span>
+				</a> <span data-ng-show="h1.value.withDate">
 						{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 				</span>
 				</span>
@@ -156,9 +170,12 @@
 						Діагноз при госпіталізації:
 					-->
 				<span data-ng-show="h1.name == 'Діагнози'"> <span
-				 data-ng-context-menu="menuDiagnos"
-					data-ng-repeat="ds in h1.diagnosis"> {{ds.icdCode}} -
-						{{ds.icdName}} {{ds.historyDiagnosAdditional}} </span> <!-- 
+					data-ng-context-menu="menuDiagnos"
+					data-ng-repeat="ds in h1.diagnosis"> 
+					<span> <u> {{configHol.diagnosesHol[ds.diagnosId -
+								1].diagnosName}} </u>:
+					</span> {{ds.icdCode}} - {{ds.icdName}} {{ds.historyDiagnosAdditional}}
+				</span> <!-- 
 					 <span data-ng-show="diagnosTypeIndex[3]"
 					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
 						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdCode}} -
