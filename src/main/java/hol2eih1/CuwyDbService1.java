@@ -702,6 +702,7 @@ public class CuwyDbService1 {
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisText(rs.getString("history_treatment_analysis_text"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisName(rs.getString("treatment_analysis_name"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisDatetime(rs.getTimestamp("history_treatment_analysis_datetime"));
+					historyTreatmentAnalysis.setHistoryTreatmentAnalysisId(rs.getInt("history_treatment_analysis_id"));
 					return historyTreatmentAnalysis;
 				}
 			});

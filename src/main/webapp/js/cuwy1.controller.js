@@ -339,6 +339,27 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$scope.patientEditing = {}
 
 	$scope.parameters = parameters;
+	
+	$http({
+		method : 'GET',
+		url : departmentFile
+	}).success(function(data, status, headers, config) {
+		$scope.department = data;
+		seekDepartmentFromConfig();
+		initAppConfig($scope, $http, $sce, $filter);
+	}).error(function(data, status, headers, config) {
+	});
+	var seekDepartmentFromConfig = function(){
+		var departmentId = $scope.department.department_id;
+		$scope.departmentsHol.forEach(function(d){
+			if(departmentId == d.department_id){
+				$scope.departmentFromConfig = d;
+			}
+		})
+		console.log($scope.departmentFromConfig.zaviduvach);
+		console.log($scope.department.user.name);
+	};
+	
 	$scope.calculateAge = function (birthday) {
 		var ageDifMs = Date.now() - new Date(birthday);
 		var ageDate = new Date(ageDifMs); // miliseconds from epoch
@@ -399,13 +420,6 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 		}]
 	];
 
-	$http({
-		method : 'GET',
-		url : departmentFile
-	}).success(function(data, status, headers, config) {
-		$scope.department = data;
-		initAppConfig($scope, $http, $sce, $filter);
-	}).error(function(data, status, headers, config) {
-	});
+	
 
 } ] );

@@ -94,7 +94,6 @@ public class Hol2Eih1Rest {
 
 	//	@RequestMapping(value = "/save/epicrise", method = RequestMethod.POST)
 //	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.GET)
-	
 	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveEpicrise(@RequestBody Map<String, Object> epicrise, Principal userPrincipal) {
 		logger.info("\n Start /db/saveepicrise");

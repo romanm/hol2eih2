@@ -154,6 +154,21 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		epicriseGroup.operationHistorys.push(operation);
 	}
 	
+	initEpicriseHol1Id = function(){
+		var htaCopy = $scope.patientHistory.historyTreatmentAnalysises;
+		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
+			for (var i = 0; i < htaCopy.length; i++) {
+				if(!htaCopy[i].isIdCopied){
+					if(htaCopy[i].historyTreatmentAnalysisName == epicriseGroup.name){
+						epicriseGroup.htaId = htaCopy[i].historyTreatmentAnalysisId
+						htaCopy[i].isIdCopied = true;
+						console.log(epicriseGroup);
+						break;
+					}
+				}
+			}
+		});
+	}
 	initEpicrise = function(){
 		if(!$scope.epicrise.epicriseGroups){
 			$scope.epicrise.epicriseGroups = [];
@@ -285,6 +300,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			$scope.patientHistory = data;
 			initHistory();
 			initEpicrise();
+			initEpicriseHol1Id();
 			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {
 		});
