@@ -44,6 +44,7 @@ cuwyApp.controller('icd10Ctrl', [ '$scope', '$http',function ($scope, $http) {
 
 	$scope.clickItem = function(icd10Class) {
 		console.log("======clickItem=======");
+		console.log(icd10Class);
 		var icd10SelectedOld = $scope.icd10Selected;
 		$scope.icd10Selected = icd10Class;
 		icd10Class.collapse = !icd10Class.collapse;

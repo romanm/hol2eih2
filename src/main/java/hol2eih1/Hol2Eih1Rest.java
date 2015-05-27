@@ -159,8 +159,7 @@ public class Hol2Eih1Rest {
 	
 	@RequestMapping(value = "/hol/department_{departmentId}", method = RequestMethod.GET)
 	public @ResponseBody DepartmentHol getHolDepartment(@PathVariable Integer departmentId, Principal userPrincipal, HttpSession session) throws IOException {
-		logger.info("\n Start /hol/department_"+departmentId);
-		logger.info("\n Start /hol/department_"+session);
+		logger.info("\n Start /hol/department_"+departmentId+"session = "+session);
 		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
 		logger.debug(""+userPrincipal);
 		if(null == userPrincipal){
@@ -170,7 +169,6 @@ public class Hol2Eih1Rest {
 		departmentHol.setUser(userPrincipal);
 		List<PatientDiagnosisHol> departmentsHolPatientsDiagnose
 		= cuwyDbService1.getDepartmentsHolPatientsDiagnose(departmentId);
-		System.out.println(departmentsHolPatientsDiagnose);
 		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
 		return departmentHol;
 	}

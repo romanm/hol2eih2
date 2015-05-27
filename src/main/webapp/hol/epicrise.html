@@ -77,7 +77,7 @@
 						<div class="btn-group btn-group-sm" role="group">
 							<button type="button" class="btn btn-primary btn-sm"
 							data-ng-click="editOpenCloseAdd()"
-								title="Додати">
+								title="Додати: Лікування, обстеження, аналізи, рекомендації...">
 								<span class="glyphicon glyphicon-plus"></span>
 							</button>
 						</div>
@@ -141,7 +141,7 @@
 		</div>
 		<hr />
 		<div class="no-print navbar-right">
-			<small class="bg-info"> <b>Тип:</b> Використовуйти табулятор
+			<small class="bg-info"> <b>Тип:</b> Використовуйти табулятор, enter
 				і праву кнопку миші.
 			</small>
 		</div>
@@ -155,13 +155,16 @@
 					<span data-ng-show="h1.isOnDemand">
 						<button type="button" title=" {{h1.name}} "
 							class="btn btn-primary btn-xs">
-							<span class="glyphicon glyphicon-plus"></span> Додати:
+							<span class="glyphicon glyphicon-plus"></span> Додати
 						</button>
 				</span> 
 				<a href="#" data-ng-show="!h1.isOnDemand"
 					data-ng-class="{'no-print':h1.name == epicrise.epicriseGroups[h1Index - 1].name}">
-						<span data-ng-show="!h1.diagnosis"> <u> {{h1.name}} </u> :
-					</span>
+						<u> <span data-ng-show="!h1.diagnosis"> {{h1.name}} </span> <span
+							data-ng-show="h1.diagnosis">
+								{{configHol.diagnosesHol[h1.diagnosis[0].diagnosId -
+								1].diagnosName}}</span>
+					</u> :
 				</a> <span data-ng-show="h1.value.withDate">
 						{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 				</span>
@@ -172,23 +175,8 @@
 				<span data-ng-show="h1.name == 'Діагнози'"> <span
 					data-ng-context-menu="menuDiagnos"
 					data-ng-repeat="ds in h1.diagnosis"> 
-					<span> <u> {{configHol.diagnosesHol[ds.diagnosId -
-								1].diagnosName}} </u>:
-					</span> {{ds.icdCode}} - {{ds.icdName}} {{ds.historyDiagnosAdditional}}
-				</span> <!-- 
-					 <span data-ng-show="diagnosTypeIndex[3]"
-					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
-						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdCode}} -
-						{{patientHistory.diagnosis[diagnosTypeIndex[3]].icdName}} <small>{{patientHistory.diagnosis[diagnosTypeIndex[3]].historyDiagnosDate
-							| date:'dd.MM HH:mm'}}</small>
+					 {{ds.icdCode}} - {{ds.icdName}} {{ds.historyDiagnosAdditional}}
 				</span>
-				 <span data-ng-show="!diagnosTypeIndex[3]"
-					tooltip-html-unsafe="Дата встановлення: &lt;b>{{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate | date:'dd.MM.yyyy HH:mm'}}&lt;/b>">
-						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdCode}} -
-						{{patientHistory.diagnosis[diagnosTypeIndex[4]].icdName}} <small>({{patientHistory.diagnosis[diagnosTypeIndex[4]].historyDiagnosDate
-							| date:'dd.MM HH:mm'}})</small>
-				</span>
-					 -->
 				</span>
 				<!-- текстові html данні -->
 				<span ng-bind-html="h1.value.textHtml"
@@ -285,7 +273,6 @@
 						</span>
 					</div>
 					<!-- лабораторні данні редактор -->
-
 					<div data-ng-show="h1.isDiagnos">
 						<span data-ng-repeat="diagnosHol in configHol.diagnosesHol"
 							data-ng-show="$index < 6"><b
@@ -457,46 +444,41 @@
 												</li>
 											</ul></li>
 									</ul>
-
 								</div>
 							</div>
 						</div>
-
 					</div>
 					<div data-ng-show="h1.isLabor">
-						<div class="input-group">
-							<span class="input-group-addon">Пошук:</span> <input
-								data-ng-model="seekLabor" type="text" class="form-control"
-								auto-focus="" placeholder=" пошук групи " auto-focus="" />
+							<div class="input-group">
+								<span class="input-group-addon">Фільтр:</span> <input
+									data-ng-model="seekLabor" type="text" class="form-control"
+									auto-focus="" placeholder=" пошук групи " auto-focus="" />
+							</div>
+							<table>
+								<tr
+									data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name] | filter : seekLabor">
+									<td>{{laborTemplate.name}}</td>
+									<td><a href="#"
+										data-ng-show="laborTemplate.name != h1.laborOpenToEdit"
+										data-ng-click="openLaborToEdit(h1, laborTemplate.name)">
+											{{h1.value.laborValues[laborTemplate.name].value}} <span
+											data-ng-show="!h1.value.laborValues[laborTemplate.name].value">
+												_________ </span>
+									</a>
+										<form class="form-inline" role="form"
+											data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
+											<div class="form-group">
+												<div class="input-group">
+													<input id="{{laborTemplate.name}}"
+														ng-model="h1.value.laborValues[laborTemplate.name].value"
+														class="form-control" type="text" />
+												</div>
+											</div>
+										</form></td>
+									<td>{{laborTemplate.unit}}</td>
+								</tr>
+							</table>
 						</div>
-						<span
-							data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name] | filter : seekLabor">
-							<a href="#"
-							data-ng-show="laborTemplate.name != h1.laborOpenToEdit"
-							data-ng-click="openLaborToEdit(h1, laborTemplate.name)">
-								{{laborTemplate.name}}
-								{{h1.value.laborValues[laborTemplate.name].value}} <span
-								data-ng-show="!h1.value.laborValues[laborTemplate.name].value">
-									_________ </span> {{laborTemplate.unit}}
-						</a>
-							<form class="form-inline" role="form"
-								data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
-								<div class="form-group">
-									<div class="input-group">
-										<div class="input-group-addon">{{laborTemplate.name}}</div>
-										<input id="{{laborTemplate.name}}"
-											ng-model="h1.value.laborValues[laborTemplate.name].value"
-											class="form-control" type="text" />
-										<div class="input-group-addon">{{laborTemplate.unit}}</div>
-									</div>
-								</div>
-							</form> <span data-ng-show="!$last">,</span>
-						</span>
-						<div
-							data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
-							data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
-							data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
-					</div>
 				</div>
 				<div class="col-xs-3"
 				data-ng-show="h1.name != 'Діагнози' && h1.name != 'Операції'"
@@ -544,8 +526,9 @@
 			</button>
 			<div class="btn-group btn-group-sm" role="group">
 				<button type="button" class="btn btn-primary btn-sm"
-					data-ng-click="editOpenCloseAdd()" title="Додати">
+					data-ng-click="editOpenCloseAdd()" title="Додати: Лікування, обстеження, аналізи, рекомендації...">
 					<span class="glyphicon glyphicon-plus"></span>
+					Додати
 				</button>
 			</div>
 			<ol class="list-inline navbar-right">

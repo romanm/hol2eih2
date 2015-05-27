@@ -349,7 +349,7 @@ public class CuwyDbService1 {
 		+ " AND i.icd_id = hd.icd_id "
 		+ " AND h.history_id=dh.history_id AND dh.department_history_out IS NULL "
 		+ " AND dh.department_id = ? ";
-		logger.info("\n"+sql+departmentId);
+//		logger.info("\n"+sql+departmentId);
 		return jdbcTemplate.query(
 				sql, new Object[] { departmentId }, 
 				new RowMapper<PatientDiagnosisHol>(){
