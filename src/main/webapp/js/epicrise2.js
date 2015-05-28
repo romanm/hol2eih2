@@ -90,6 +90,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		saveWorkDocEpicrise();
 		console.log("----");
 		console.log($scope.patientHistory);
+		return;
 		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
 		}).success(function(data, status, headers, config){
 			console.log(data);
@@ -156,18 +157,39 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	
 	initEpicriseHol1Id = function(){
 		var htaCopy = $scope.patientHistory.historyTreatmentAnalysises;
+
+		var uniqueId = {};
 		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
-			for (var i = 0; i < htaCopy.length; i++) {
-				if(!htaCopy[i].isIdCopied){
-					if(htaCopy[i].historyTreatmentAnalysisName == epicriseGroup.name){
-						epicriseGroup.htaId = htaCopy[i].historyTreatmentAnalysisId
-						htaCopy[i].isIdCopied = true;
-						console.log(epicriseGroup);
+			for (var i = 0; i < configHol.treatmentAnalysis.length; i++) {
+				if(configHol.treatmentAnalysis[i].treatment_analysis_name == epicriseGroup.name){
+					epicriseGroup.treatmentAnalysId = configHol.treatmentAnalysis[i].treatment_analysis_id;
+				}
+			}
+			if(epicriseGroup.htaId){//clean error
+				if(!uniqueId[epicriseGroup.htaId]){
+					uniqueId[epicriseGroup.htaId] = epicriseGroup.htaId;
+				}else if(uniqueId[epicriseGroup.htaId] > 0) {
+					delete epicriseGroup.htaId;
+				}
+			}
+			if(!epicriseGroup.htaId){
+				for (var i = 0; i < htaCopy.length; i++) {
+					if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
+						console.log("------------------------"+htaCopy[i].historyTreatmentAnalysisId);
 						break;
+					}
+					if(!htaCopy[i].isIdCopied){
+						if(htaCopy[i].historyTreatmentAnalysisName == epicriseGroup.name){
+							epicriseGroup.htaId = htaCopy[i].historyTreatmentAnalysisId;
+							uniqueId[epicriseGroup.htaId] = epicriseGroup.htaId;
+							htaCopy[i].isIdCopied = true;
+							break;
+						}
 					}
 				}
 			}
 		});
+		console.log($scope.epicrise);
 	}
 	initEpicrise = function(){
 		if(!$scope.epicrise.epicriseGroups){

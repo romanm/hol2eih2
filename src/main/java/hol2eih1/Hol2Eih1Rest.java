@@ -100,10 +100,15 @@ public class Hol2Eih1Rest {
 		logger.debug(""+userPrincipal);
 		if(null == userPrincipal)
 			return null;
-		System.out.println("-------------------------------");
+		logger.debug(""+epicrise);
+		System.out.println("-------------==========START================------------------");
+		cuwyDbService1.saveHistoryTreatmentAnalysis(epicrise);
+		System.out.println("-------------==========END=================------------------");
 		epicrise.put("server", "add from server");
 //		epicrise = cuwyDbService1.saveEpicrise(epicrise);
 		epicrise = hol2Service.saveEpicrise(epicrise);
+		
+		
 		System.out.println("-------------------------------");
 		return epicrise;
 	}

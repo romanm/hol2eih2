@@ -17,8 +17,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -52,6 +54,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 @Component("cuwyDbService1")
 public class CuwyDbService1 {
@@ -1453,7 +1457,7 @@ public class CuwyDbService1 {
 	}
 	public int getAutoIncrement(String tableName) {
 		String sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES "
-				+ " WHERE TABLE_SCHEMA = 'hol' AND   TABLE_NAME = '?' ";
+				+ " WHERE TABLE_SCHEMA = 'hol' AND TABLE_NAME = '?' ";
 		String sql2 = sql.replaceFirst("\\?", tableName);
 		logger.info("\n"+sql2);
 		List<Map<String, Object>> nextIdList
@@ -1770,7 +1774,85 @@ public class CuwyDbService1 {
 		return list;
 	}
 
-
 	
+	private String getHistoryTreatmentAnalysisText(Map<String, Object> epiMap) {
+		Map value = (Map) epiMap.get("value");
+		String textHtml = (String) value.get("textHtml");
+		return textHtml;
+	}
+	void insertHistoryTreatmentAnalysis(Integer historyId, Map<String, Object> epiMap) {
+		Integer nextHistoryTreatmentAnalysisId = getAutoIncrement("history_treatment_analysis");
+		final Object treatmentAnalysIdObj = epiMap.get("treatmentAnalysId");
+		logger.debug(""+treatmentAnalysIdObj);
+		if(treatmentAnalysIdObj == null){
+			logger.debug(""+epiMap);
+			return;
+		}
+		Integer treatmentAnalysId = getInt(epiMap,"treatmentAnalysId");
+		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
+		final String sql = "INSERT INTO history_treatment_analysis"
+				+ " (history_treatment_analysis_text, treatment_analysis_id, history_treatment_analysis_id, history_id, history_treatment_analysis_datetime) "
+				+ " VALUES (?, ?, ?, ?, NOW())";
+		logger.debug(sql.replaceFirst("\\?", historyTreatmentAnalysisText)
+		.replaceFirst("\\?", treatmentAnalysId.toString())
+		.replaceFirst("\\?", nextHistoryTreatmentAnalysisId.toString())
+		.replaceFirst("\\?", historyId.toString()));
+		
+		jdbcTemplate.update( sql,
+				new Object[] {historyTreatmentAnalysisText, treatmentAnalysId, nextHistoryTreatmentAnalysisId, historyId },
+				new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER}
+				);
+		epiMap.put("htaId",nextHistoryTreatmentAnalysisId);
+	}
+
+	private Integer getInt(Map<String, Object> map, String key) {
+		final Object o = map.get(key);
+		Integer oInt ;
+		if(o instanceof Integer){
+			oInt = (Integer) o;
+		}else{
+			oInt = Integer.parseInt((String) o);
+		}
+		return oInt;
+	}
+	void updateHistoryTreatmentAnalysis(Integer id, Map<String, Object> epiMap) {
+		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
+		final String sql = " UPDATE history_treatment_analysis "
+				+ " SET history_treatment_analysis_text = ? "
+				+ " WHERE history_treatment_analysis_id = ? ";
+		jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, id }
+		, new int[] {Types.VARCHAR, Types.INTEGER} );
+	}
+
+	Set historyTreatmentAnalysisOnce = ImmutableSet.of(4);
+	public void saveHistoryTreatmentAnalysis(Map<String, Object> epicrise) {
+		logger.debug(epicrise.toString());
+		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
+		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
+		for (Map<String, Object> epiMap : epicriseGroups) {
+			logger.debug(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId"))
+					+"/"
+					+epiMap.get("treatmentAnalysId")
+					+"/"
+					+historyTreatmentAnalysisOnce.contains((Integer)epiMap.get("treatmentAnalysId"))
+					);
+			if(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId")))
+				continue;
+			final Boolean isTextHtml = (Boolean) epiMap.get("isTextHtml");
+			if(isTextHtml!=null && isTextHtml){
+				final Object objectHtaId = epiMap.get("htaId");
+				logger.debug(objectHtaId+" - "+epiMap);
+				if(objectHtaId != null){
+					final Integer htaId = Integer.parseInt((String) objectHtaId);
+					logger.debug("update" + htaId);
+//					updateHistoryTreatmentAnalysis(htaId, epiMap);
+				}else{
+					logger.debug("insert");
+//					insertHistoryTreatmentAnalysis(hid, epiMap);
+				}
+			}
+		}
+	}
+
 
 }
