@@ -21,6 +21,19 @@
 ]},{
 	"dbVersionId" : 4, "sqls" : [
 	"ALTER TABLE epicrise1 DROP COLUMN epicrise_hol1_hid"
+]},{
+	"dbVersionId" : 5, "sqls" : [
+	"CREATE SCHEMA hol2"
+	,"DROP TABLE IF EXISTS hol2.history1"
+	,"CREATE TABLE hol2.history1 ( history_id INT DEFAULT (NEXT VALUE FOR PUBLIC.DBID) NOT NULL, PRIMARY KEY (history_id), history_self CLOB, hol1_history_id INT NOT NULL UNIQUE ) "
+	,"INSERT INTO hol2.history1 SELECT * FROM public.history1 "
+	,"DROP TABLE IF EXISTS hol2.epicrise1 "
+	,"CREATE TABLE hol2.EPICRISE1 ( EPICRISE_ID INT DEFAULT (NEXT VALUE FOR PUBLIC.DBID) NOT NULL, PRIMARY KEY (EPICRISE_ID), EPICRISE_SELF CLOB, HISTORY_ID INT NOT NULL, CONSTRAINT hol2_epicrise1_HISTORY1_ID FOREIGN KEY (HISTORY_ID) REFERENCES hol2.HISTORY1 (HISTORY_ID))"
+	,"INSERT INTO hol2.epicrise1 SELECT * FROM public.epicrise1 "
+]},{
+	"dbVersionId" : 6, "sqls" : [
+	"DROP TABLE IF EXISTS public.epicrise1 "
+	,"DROP TABLE IF EXISTS public.history1"
 ]}
 	]
 }

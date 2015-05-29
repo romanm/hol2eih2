@@ -1807,6 +1807,8 @@ public class CuwyDbService1 {
 
 	private Integer getInt(Map<String, Object> map, String key) {
 		final Object o = map.get(key);
+		if (o == null)
+			return null;
 		Integer oInt ;
 		if(o instanceof Integer){
 			oInt = (Integer) o;
@@ -1815,13 +1817,14 @@ public class CuwyDbService1 {
 		}
 		return oInt;
 	}
-	void updateHistoryTreatmentAnalysis(Integer id, Map<String, Object> epiMap) {
+	int updateHistoryTreatmentAnalysis(Integer id, Map<String, Object> epiMap) {
 		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
 		final String sql = " UPDATE history_treatment_analysis "
 				+ " SET history_treatment_analysis_text = ? "
 				+ " WHERE history_treatment_analysis_id = ? ";
-		jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, id }
+		final int update = jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, id }
 		, new int[] {Types.VARCHAR, Types.INTEGER} );
+		return update;
 	}
 
 	Set historyTreatmentAnalysisOnce = ImmutableSet.of(4);
@@ -1830,29 +1833,37 @@ public class CuwyDbService1 {
 		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
 		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
 		for (Map<String, Object> epiMap : epicriseGroups) {
-			logger.debug(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId"))
-					+"/"
-					+epiMap.get("treatmentAnalysId")
-					+"/"
-					+historyTreatmentAnalysisOnce.contains((Integer)epiMap.get("treatmentAnalysId"))
-					);
 			if(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId")))
 				continue;
 			final Boolean isTextHtml = (Boolean) epiMap.get("isTextHtml");
 			if(isTextHtml!=null && isTextHtml){
-				final Object objectHtaId = epiMap.get("htaId");
-				logger.debug(objectHtaId+" - "+epiMap);
-				if(objectHtaId != null){
-					final Integer htaId = Integer.parseInt((String) objectHtaId);
+				Integer htaId = getInt(epiMap, "htaId");
+				logger.debug(htaId+" - "+epiMap);
+				if(htaId != null){
 					logger.debug("update" + htaId);
-//					updateHistoryTreatmentAnalysis(htaId, epiMap);
+					final int updateHistoryTreatmentAnalysis = updateHistoryTreatmentAnalysis(htaId, epiMap);
+					if(updateHistoryTreatmentAnalysis == 0){
+						insertHistoryTreatmentAnalysis(hid, epiMap);
+					}
 				}else{
 					logger.debug("insert");
-//					insertHistoryTreatmentAnalysis(hid, epiMap);
+					insertHistoryTreatmentAnalysis(hid, epiMap);
 				}
 			}
 		}
 	}
 
+	//depricated
+	Map<String, String> isIdInTableMap = ImmutableMap.of(
+		"history_treatment_analysis"
+		,"SELECT history_treatment_analysis_id FROM history_treatment_analysis_id WHERE history_treatment_analysis_id = ? ");
+	private boolean isIdInTable(Integer htaId, String tableName) {
+		final String sql = isIdInTableMap.get(tableName);
+		logger.debug("\n "+sql.replaceFirst("\\?", htaId.toString()));
+		List<Map<String, Object>> l = jdbcTemplate.queryForList(sql);
+		if(l.size()>0)
+			return true;
+		return false;
+	}
 
 }

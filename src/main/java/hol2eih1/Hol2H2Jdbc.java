@@ -110,7 +110,7 @@ public class Hol2H2Jdbc {
 	}
 
 	public Map<String, Object> getHistory(Integer hid) {
-		String sql = "SELECT history_id FROM history1 WHERE history_id = ?";
+		String sql = "SELECT history_id FROM hol2.history1 WHERE history_id = ?";
 		List<Map<String, Object>> r = jdbcTemplate.queryForList(sql,hid);
 		if(r.isEmpty())
 			return null;
@@ -121,24 +121,24 @@ public class Hol2H2Jdbc {
 	public void insertHistory( HistoryHolDb historyHolDb) {
 		final int hol1HistoryId = historyHolDb.getHistoryId();
 		final Integer historyId = historyHolDb.getTmpId();
-		final String sql = "INSERT INTO history1 (history_self, history_id, hol1_history_id) VALUES (?, ?, ?)";
+		final String sql = "INSERT INTO hol2.history1 (history_self, history_id, hol1_history_id) VALUES (?, ?, ?)";
 		jdbcTemplate.update( sql, new Object[] {new SqlLobValue(object2JsonString(historyHolDb), lobHandler), historyId, hol1HistoryId }
 		, new int[] {Types.CLOB, Types.INTEGER, Types.INTEGER} );
 	}
 	public void updateHistory(Integer tmpId, Object obj2json) {
-		final String sql = "UPDATE history1 SET history_self = ? WHERE history_id = ?";
+		final String sql = "UPDATE hol2.history1 SET history_self = ? WHERE history_id = ?";
 		jdbcTemplate.update( sql, new Object[] {new SqlLobValue(object2JsonString(obj2json), lobHandler), tmpId }
 		, new int[] {Types.CLOB, Types.INTEGER} );
 	}
 	public void insertEpicrise(Integer epicriseId, Integer h2id, Map<String, Object> epicrise) {
-		final String sql = "INSERT INTO epicrise1 (epicrise_self, epicrise_id, history_id) VALUES (?, ?, ?)";
+		final String sql = "INSERT INTO hol2.epicrise1 (epicrise_self, epicrise_id, history_id) VALUES (?, ?, ?)";
 		jdbcTemplate.update( sql,
 		new Object[] {new SqlLobValue(object2JsonString(epicrise), lobHandler), epicriseId, h2id },
 		new int[] {Types.CLOB, Types.INTEGER, Types.INTEGER}
 		);
 	}
 	public void updateEpicrise(Integer epicriseId, Map<String, Object> epicrise) {
-		final String sql = "UPDATE epicrise1 SET epicrise_self = ? WHERE epicrise_id = ? ";
+		final String sql = "UPDATE hol2.epicrise1 SET epicrise_self = ? WHERE epicrise_id = ? ";
 		jdbcTemplate.update( sql,
 		new Object[] {new SqlLobValue(object2JsonString(epicrise), lobHandler), epicriseId },
 		new int[] {Types.CLOB, Types.INTEGER}
@@ -162,14 +162,14 @@ public class Hol2H2Jdbc {
 	}
 	public Map<String, Object> getEpicriseId(Integer hid) {
 //		String sql = "SELECT epicrise_hol1_hid FROM epicrise1 WHERE epicrise_hol1_hid = ?";
-		String sql = "SELECT epicrise_id FROM epicrise1 e, history1 h WHERE h.history_id=epicrise_id and hol1_history_id = ?";
+		String sql = "SELECT epicrise_id FROM hol2.epicrise1 e, hol2.history1 h WHERE h.history_id=epicrise_id and hol1_history_id = ?";
 		List<Map<String, Object>> r = jdbcTemplate.queryForList(sql,hid);
 		if(r.isEmpty())
 			return null;
 		return r.get(0);
 	}
 	public Map<String, Object> getEpicriseFromHistoryId(Integer hid) {
-		String sql = "SELECT e.* FROM epicrise1 e, history1 h WHERE e.history_id=h.history_id AND h.hol1_history_id = ?";
+		String sql = "SELECT e.* FROM hol2.epicrise1 e, hol2.history1 h WHERE e.history_id=h.history_id AND h.hol1_history_id = ?";
 		logger.debug(sql.replace("\\?", hid.toString()));
 		List<Map<String, Object>> r = jdbcTemplate.queryForList(sql,hid);
 		logger.debug(""+r.size());
