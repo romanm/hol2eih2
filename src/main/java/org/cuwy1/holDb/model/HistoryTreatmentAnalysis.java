@@ -3,11 +3,18 @@ package org.cuwy1.holDb.model;
 import java.sql.Timestamp;
 
 public class HistoryTreatmentAnalysis {
-private String historyTreatmentAnalysisText;
-private String historyTreatmentAnalysisName;
+private String historyTreatmentAnalysisText, historyTreatmentAnalysisName;
 private Timestamp historyTreatmentAnalysisDatetime;
-private int historyTreatmentAnalysisId;
+private int historyTreatmentAnalysisId, treatmentAnalysisId;
 
+
+public int getTreatmentAnalysisId() {
+	return treatmentAnalysisId;
+}
+
+public void setTreatmentAnalysisId(int treatmentAnalysisId) {
+	this.treatmentAnalysisId = treatmentAnalysisId;
+}
 
 public String getHistoryTreatmentAnalysisText() {
 	return historyTreatmentAnalysisText;

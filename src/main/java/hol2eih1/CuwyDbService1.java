@@ -692,7 +692,7 @@ public class CuwyDbService1 {
 
 	public List<HistoryTreatmentAnalysis> getHistoryTreatmentAnalysises(int historyId) {
 //		String sql ="SELECT * FROM history_treatment_analysis WHERE history_id=?";
-		String sql ="SELECT ta.treatment_analysis_name, hta.* "
+		String sql ="SELECT ta.treatment_analysis_name, ta.treatment_analysis_id, hta.* "
 				+ " FROM history_treatment_analysis hta, treatment_analysis ta "
 				+ " WHERE ta.treatment_analysis_id=hta.treatment_analysis_id and hta.history_id = ?";
 		logger.info("\n"+sql+historyId);
@@ -705,6 +705,7 @@ public class CuwyDbService1 {
 					HistoryTreatmentAnalysis historyTreatmentAnalysis = new HistoryTreatmentAnalysis();
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisText(rs.getString("history_treatment_analysis_text"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisName(rs.getString("treatment_analysis_name"));
+					historyTreatmentAnalysis.setTreatmentAnalysisId(rs.getInt("treatment_analysis_id"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisDatetime(rs.getTimestamp("history_treatment_analysis_datetime"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisId(rs.getInt("history_treatment_analysis_id"));
 					return historyTreatmentAnalysis;
@@ -1781,28 +1782,32 @@ public class CuwyDbService1 {
 		return textHtml;
 	}
 	void insertHistoryTreatmentAnalysis(Integer historyId, Map<String, Object> epiMap) {
-		Integer nextHistoryTreatmentAnalysisId = getAutoIncrement("history_treatment_analysis");
+		if(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId")))
+			return;
+		Integer historyTreatmentAnalysisId = getAutoIncrement("history_treatment_analysis");
+		final Integer sort = (Integer) epiMap.get("sort");
 		final Object treatmentAnalysIdObj = epiMap.get("treatmentAnalysId");
-		logger.debug(""+treatmentAnalysIdObj);
 		if(treatmentAnalysIdObj == null){
-			logger.debug(""+epiMap);
 			return;
 		}
 		Integer treatmentAnalysId = getInt(epiMap,"treatmentAnalysId");
 		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
-		final String sql = "INSERT INTO history_treatment_analysis"
-				+ " (history_treatment_analysis_text, treatment_analysis_id, history_treatment_analysis_id, history_id, history_treatment_analysis_datetime) "
-				+ " VALUES (?, ?, ?, ?, NOW())";
+		final String sql = " INSERT INTO history_treatment_analysis "
+				+ " (history_treatment_analysis_text, history_treatment_analysis_sort "
+				+ " , treatment_analysis_id, history_treatment_analysis_id "
+				+ " , history_id, history_treatment_analysis_datetime ) "
+				+ " VALUES (?, ?, ?, ?, ?, NOW()) ";
 		logger.debug(sql.replaceFirst("\\?", historyTreatmentAnalysisText)
 		.replaceFirst("\\?", treatmentAnalysId.toString())
-		.replaceFirst("\\?", nextHistoryTreatmentAnalysisId.toString())
+		.replaceFirst("\\?", sort.toString())
+		.replaceFirst("\\?", historyTreatmentAnalysisId.toString())
 		.replaceFirst("\\?", historyId.toString()));
 		
 		jdbcTemplate.update( sql,
-				new Object[] {historyTreatmentAnalysisText, treatmentAnalysId, nextHistoryTreatmentAnalysisId, historyId },
-				new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER}
+				new Object[] {historyTreatmentAnalysisText, sort, treatmentAnalysId, historyTreatmentAnalysisId, historyId },
+				new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
-		epiMap.put("htaId",nextHistoryTreatmentAnalysisId);
+		epiMap.put("htaId",historyTreatmentAnalysisId);
 	}
 
 	private Integer getInt(Map<String, Object> map, String key) {
@@ -1817,38 +1822,54 @@ public class CuwyDbService1 {
 		}
 		return oInt;
 	}
-	int updateHistoryTreatmentAnalysis(Integer id, Map<String, Object> epiMap) {
+	int updateHistoryTreatmentAnalysisSort(Integer htaId, Integer sort) {
+		final String sql = " UPDATE history_treatment_analysis "
+				+ " SET history_treatment_analysis_sort = ? "
+				+ " WHERE history_treatment_analysis_id = ? ";
+		logger.debug(sql
+				.replaceFirst("\\?", sort.toString())
+				.replaceFirst("\\?", htaId.toString()));
+		final int update = jdbcTemplate.update( sql, new Object[] {sort, htaId }
+		, new int[] {Types.VARCHAR, Types.INTEGER} );
+		return update;
+	}
+	int updateHistoryTreatmentAnalysis(Integer htaId, Map<String, Object> epiMap) {
+		final Integer sort = (Integer) epiMap.get("sort");
 		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
 		final String sql = " UPDATE history_treatment_analysis "
 				+ " SET history_treatment_analysis_text = ? "
+				+ "\n , history_treatment_analysis_sort = ? "
 				+ " WHERE history_treatment_analysis_id = ? ";
-		final int update = jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, id }
-		, new int[] {Types.VARCHAR, Types.INTEGER} );
+		logger.debug(sql
+				.replaceFirst("\\?", historyTreatmentAnalysisText)
+				.replaceFirst("\\?", sort.toString())
+				.replaceFirst("\\?", htaId.toString()));
+		final int update = jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, sort, htaId }
+		, new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER} );
 		return update;
 	}
 
 	Set historyTreatmentAnalysisOnce = ImmutableSet.of(4);
 	public void saveHistoryTreatmentAnalysis(Map<String, Object> epicrise) {
-		logger.debug(epicrise.toString());
 		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
 		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
-		for (Map<String, Object> epiMap : epicriseGroups) {
-			if(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId")))
-				continue;
+		for (int sort = 0; sort < epicriseGroups.size(); sort++) {
+			Map<String, Object> epiMap = epicriseGroups.get(sort);
+			epiMap.put("sort", sort);
 			final Boolean isTextHtml = (Boolean) epiMap.get("isTextHtml");
+			Integer htaId = getInt(epiMap, "htaId");
+			logger.debug(epiMap.toString()+" -- "+htaId);
 			if(isTextHtml!=null && isTextHtml){
-				Integer htaId = getInt(epiMap, "htaId");
-				logger.debug(htaId+" - "+epiMap);
 				if(htaId != null){
-					logger.debug("update" + htaId);
 					final int updateHistoryTreatmentAnalysis = updateHistoryTreatmentAnalysis(htaId, epiMap);
 					if(updateHistoryTreatmentAnalysis == 0){
 						insertHistoryTreatmentAnalysis(hid, epiMap);
 					}
 				}else{
-					logger.debug("insert");
 					insertHistoryTreatmentAnalysis(hid, epiMap);
 				}
+			}else if(htaId != null){
+				updateHistoryTreatmentAnalysisSort(htaId,sort);
 			}
 		}
 	}

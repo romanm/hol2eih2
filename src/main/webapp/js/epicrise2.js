@@ -160,10 +160,14 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 		var uniqueId = {};
 		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
-			for (var i = 0; i < configHol.treatmentAnalysis.length; i++) {
-				if(configHol.treatmentAnalysis[i].treatment_analysis_name == epicriseGroup.name){
-					epicriseGroup.treatmentAnalysId = configHol.treatmentAnalysis[i].treatment_analysis_id;
-				}
+			if(!epicriseGroup.treatmentAnalysId)
+				for (var i = 0; i < configHol.treatmentAnalysis.length; i++)
+					if(configHol.treatmentAnalysis[i].treatment_analysis_name == epicriseGroup.name){
+						epicriseGroup.treatmentAnalysId = configHol.treatmentAnalysis[i].treatment_analysis_id;
+						break;
+					}
+			if(epicriseGroup.treatmentAnalysId == 4){
+				console.log(epicriseGroup);
 			}
 			if(epicriseGroup.htaId){//clean error
 				if(!uniqueId[epicriseGroup.htaId]){
@@ -172,11 +176,22 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 					delete epicriseGroup.htaId;
 				}
 			}
-			if(!epicriseGroup.htaId){
+//			if(!epicriseGroup.htaId){
+			if(true){
 				for (var i = 0; i < htaCopy.length; i++) {
-					if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
+					if(epicriseGroup.treatmentAnalysId == 4){
 						console.log("------------------------"+htaCopy[i].historyTreatmentAnalysisId);
+						if(htaCopy[i].historyTreatmentAnalysisId == 16349528){
+							console.log(htaCopy[i]);
+							console.log(epicriseGroup);
+						}
+					}
+					if(htaCopy[i].treatmentAnalysisId == epicriseGroup.treatmentAnalysisId) {
+						if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
+						console.log("------------------------"+htaCopy[i].historyTreatmentAnalysisId);
+						//break if id is used
 						break;
+						}
 					}
 					if(!htaCopy[i].isIdCopied){
 						if(htaCopy[i].historyTreatmentAnalysisName == epicriseGroup.name){

@@ -49,7 +49,7 @@ public class Hol2Service {
 			final int epicriseId = (int) epicrise.get("epicriseId");
 			hol2H2Jdbc.updateEpicrise(epicriseId, epicrise);
 		}
-		return null;
+		return epicrise;
 	}
 	Map<String, Object> readEpicriseId(final Integer hid) {
 		final Map<String, Object> epicrise2 = hol2H2Jdbc.getEpicriseId(hid);
