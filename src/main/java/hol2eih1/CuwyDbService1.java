@@ -2,8 +2,12 @@ package hol2eih1;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -17,7 +21,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +47,8 @@ import org.cuwy1.holDb.model.PatientDiagnosisHol;
 import org.cuwy1.holDb.model.PatientHistory;
 import org.cuwy1.holDb.model.PatientHolDb;
 import org.cuwy1.holDb.model.RegionHol;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,6 +57,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.collect.ImmutableMap;
@@ -1720,6 +1727,29 @@ public class CuwyDbService1 {
 	}
 	//---------------epicrise------------------------------------------------END
 
+	Map<String, Object> readJsonFile(String fileName) {
+		File file = new File(AppConfig.applicationFolderPfad + AppConfig.innerJsFolderPfad + fileName);
+		logger.debug(file.getName()+" -- "+file);
+		Map<String, Object> responseBody = null;
+		try {
+			FileInputStream fileInputStream;
+			fileInputStream = new FileInputStream(file);
+			final InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+			responseBody = new ObjectMapper().readValue(inputStreamReader, Map.class);
+//			logger.debug("\n"+responseBody);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return responseBody;
+	}
 	void writeToJsonDbFile(Map java2jsonObject, String fileName) {
 		//delete old parameters and document tiles
 		java2jsonObject.remove("savedTs");
@@ -1781,7 +1811,7 @@ public class CuwyDbService1 {
 		String textHtml = (String) value.get("textHtml");
 		return textHtml;
 	}
-	void insertHistoryTreatmentAnalysis(Integer historyId, Map<String, Object> epiMap) {
+	void insertHistoryTreatmentAnalysis(Integer historyId, Map<String, Object> epiMap, String historyTreatmentAnalysisText) {
 		if(historyTreatmentAnalysisOnce.contains(epiMap.get("treatmentAnalysId")))
 			return;
 		Integer historyTreatmentAnalysisId = getAutoIncrement("history_treatment_analysis");
@@ -1791,7 +1821,6 @@ public class CuwyDbService1 {
 			return;
 		}
 		Integer treatmentAnalysId = getInt(epiMap,"treatmentAnalysId");
-		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
 		final String sql = " INSERT INTO history_treatment_analysis "
 				+ " (history_treatment_analysis_text, history_treatment_analysis_sort "
 				+ " , treatment_analysis_id, history_treatment_analysis_id "
@@ -1833,9 +1862,8 @@ public class CuwyDbService1 {
 		, new int[] {Types.VARCHAR, Types.INTEGER} );
 		return update;
 	}
-	int updateHistoryTreatmentAnalysis(Integer htaId, Map<String, Object> epiMap) {
+	int updateHistoryTreatmentAnalysis(Integer htaId, Map<String, Object> epiMap, String historyTreatmentAnalysisText) {
 		final Integer sort = (Integer) epiMap.get("sort");
-		final String historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
 		final String sql = " UPDATE history_treatment_analysis "
 				+ " SET history_treatment_analysis_text = ? "
 				+ "\n , history_treatment_analysis_sort = ? "
@@ -1849,29 +1877,79 @@ public class CuwyDbService1 {
 		return update;
 	}
 
+	Map<String, Object> epicriseTemplate = null;
 	Set historyTreatmentAnalysisOnce = ImmutableSet.of(4);
 	public void saveHistoryTreatmentAnalysis(Map<String, Object> epicrise) {
 		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
 		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
+		
 		for (int sort = 0; sort < epicriseGroups.size(); sort++) {
 			Map<String, Object> epiMap = epicriseGroups.get(sort);
 			epiMap.put("sort", sort);
-			final Boolean isTextHtml = (Boolean) epiMap.get("isTextHtml");
+			final Boolean
+			isTextHtml = (Boolean) epiMap.get("isTextHtml")
+			,isLabor = (Boolean) epiMap.get("isLabor");
 			Integer htaId = getInt(epiMap, "htaId");
 			logger.debug(epiMap.toString()+" -- "+htaId);
-			if(isTextHtml!=null && isTextHtml){
+			
+			String historyTreatmentAnalysisText = null;
+			if(isLabor!=null && isLabor){
+				historyTreatmentAnalysisText = getLaborTable(epiMap);
+			}else if(isTextHtml!=null && isTextHtml){
+				historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
+			}
+			if((isTextHtml!=null && isTextHtml) || (isLabor!=null && isLabor)){
 				if(htaId != null){
-					final int updateHistoryTreatmentAnalysis = updateHistoryTreatmentAnalysis(htaId, epiMap);
+					final int updateHistoryTreatmentAnalysis = updateHistoryTreatmentAnalysis(htaId, epiMap, historyTreatmentAnalysisText);
 					if(updateHistoryTreatmentAnalysis == 0){
-						insertHistoryTreatmentAnalysis(hid, epiMap);
+						insertHistoryTreatmentAnalysis(hid, epiMap, historyTreatmentAnalysisText);
 					}
 				}else{
-					insertHistoryTreatmentAnalysis(hid, epiMap);
+					insertHistoryTreatmentAnalysis(hid, epiMap, historyTreatmentAnalysisText);
 				}
 			}else if(htaId != null){
 				updateHistoryTreatmentAnalysisSort(htaId,sort);
 			}
 		}
+	}
+
+	private String getLaborTable(Map<String, Object> epiMap) {
+		final Map value = (Map) epiMap.get("value");
+		final Map<String,Object> laborValues = (Map) value.get("laborValues");
+		if(epicriseTemplate == null){
+			epicriseTemplate = readJsonFile("epicriseTemplate.json");
+		}
+		Map<String,List> epicriseBlock  = (Map<String, List>) epicriseTemplate.get("epicriseBlock");
+		final String laborGroupName = (String) epiMap.get("name");
+		final List<Map<String,Object>> laborGroup = (List) epicriseBlock.get(laborGroupName);
+		Element tableTbody = DocumentHelper.createDocument()
+				.addElement("table").addAttribute("rules", "none").addAttribute("class", "mceItemTable")
+//				.addElement("tbody")
+				;
+		final Element trHead = tableTbody
+				.addElement("tr").addElement("td").addAttribute("class", "head").addText("Назва")
+				.getParent().addElement("td").addAttribute("class", "head").addText("Результат")
+				.getParent();
+		boolean isOdd = true;
+		for (Map<String, Object> labor : laborGroup) {
+			final Element td1 = tableTbody.addElement("tr").addElement("td").addAttribute("class", "name");
+			final String laborName = (String) labor.get("name");
+			final String laborUnit = (String) labor.get("unit");
+			td1.addText(laborName);
+			final Element td2 = td1.getParent().addElement("td").addAttribute("class", "value");
+			//add value
+			final Map laborValue = (Map) laborValues.get(laborName);
+			td2.addText((laborValue != null)?(String)laborValue.get("value"):" ");
+			if(laborUnit != null){
+				td1.getParent().addElement("td").addAttribute("class", "description")
+				.addText(laborUnit);
+			}
+			td1.getParent().addAttribute("class", isOdd?"odd":"even");
+			isOdd = !isOdd;
+		}
+//		logger.debug(tableTbody.getParent().asXML());
+		return tableTbody.asXML();
+//		return tableTbody.getParent().asXML();
 	}
 
 	//depricated

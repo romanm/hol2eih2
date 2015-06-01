@@ -108,7 +108,6 @@ public class Hol2Eih1Rest {
 		cuwyDbService1.saveHistoryTreatmentAnalysis(epicrise);
 		System.out.println("-------------==========END=================------------------");
 		
-		
 		System.out.println("-------------------------------");
 		return epicrise;
 	}

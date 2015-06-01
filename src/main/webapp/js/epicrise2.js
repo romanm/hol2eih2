@@ -166,9 +166,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 						epicriseGroup.treatmentAnalysId = configHol.treatmentAnalysis[i].treatment_analysis_id;
 						break;
 					}
-			if(epicriseGroup.treatmentAnalysId == 4){
-				console.log(epicriseGroup);
-			}
 			if(epicriseGroup.htaId){//clean error
 				if(!uniqueId[epicriseGroup.htaId]){
 					uniqueId[epicriseGroup.htaId] = epicriseGroup.htaId;
@@ -179,16 +176,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 //			if(!epicriseGroup.htaId){
 			if(true){
 				for (var i = 0; i < htaCopy.length; i++) {
-					if(epicriseGroup.treatmentAnalysId == 4){
-						console.log("------------------------"+htaCopy[i].historyTreatmentAnalysisId);
-						if(htaCopy[i].historyTreatmentAnalysisId == 16349528){
-							console.log(htaCopy[i]);
-							console.log(epicriseGroup);
-						}
-					}
 					if(htaCopy[i].treatmentAnalysisId == epicriseGroup.treatmentAnalysisId) {
 						if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
-						console.log("------------------------"+htaCopy[i].historyTreatmentAnalysisId);
 						//break if id is used
 						break;
 						}
@@ -204,7 +193,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 				}
 			}
 		});
-		console.log($scope.epicrise);
 	}
 	initEpicrise = function(){
 		if(!$scope.epicrise.epicriseGroups){
