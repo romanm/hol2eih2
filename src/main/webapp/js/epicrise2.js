@@ -224,7 +224,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			var domElementId = "#g-"+h1Index;
 			console.log(domElementId);
 			var domElement  = document.querySelector(domElementId);
-			domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
+			if(domElement)
+				domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
 		}
 
 		var middlePosition = ($scope.epicrise.epicriseGroups.length + $scope.epicrise.epicriseGroups.length%2)/2;

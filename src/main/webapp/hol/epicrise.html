@@ -239,39 +239,66 @@
 							data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
 							data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
 					</div>
-					<!-- додати групу - редактор -->
-					<div data-ng-show="h1.isOnDemand">
-						<div class="input-group">
-							<span class="input-group-addon">Пошук:</span> <input
-								data-ng-model="seekGroup" type="text" class="form-control"
-								auto-focus="" placeholder=" пошук групи " auto-focus="" />
-						</div>
-						<span data-ng-repeat="tag in epicriseTemplate.head1s[2].tagsGroup">
-							<!-- 
-								data-ng-repeat="tag in epicriseTemplate.head1s[h1Index].tagsGroup">
-								 --> <span class="label"
-							data-ng-class="{'label-warning':seekTag == tag || ('все' === tag && '' === seekTag ), 'label-default':seekTag != tag}"
-							data-ng-click="setSeekTag(tag)">{{tag}}</span> &nbsp;
-						</span>
-						<!-- 
-								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[h1Index].tags[0]
-								 || ('все' === epicriseTemplate.head1s[h1Index].tags[0] && '' === seekTag )
-								 , 'label-default':seekTag != epicriseTemplate.head1s[h1Index].tags[0]}"
-								data-ng-click="setSeekTag(tag)"
-								>{{epicriseTemplate.head1s[h1Index].tags[0]}}</span>
-							<br/>
-							<span data-ng-repeat="h2 in epicriseTemplate.head1s[h1Index].addGroup | filter : seekTag | filter : seekGroup">
-							 -->
-						<span class="label"
-							data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[2].tags[0]
+					<!-- + Додати -->
+<div data-ng-show="h1.isOnDemand">
+							<div class="input-group">
+								<span class="input-group-addon">Фільтр:</span> <input
+									data-ng-model="seekGroup" type="text" class="form-control"
+									auto-focus="" placeholder=" пошук групи " auto-focus="" />
+							</div>
+							<span
+								data-ng-repeat="tag in epicriseTemplate.head1s[2].tagsGroup">
+								<span class="label"
+								data-ng-class="{'label-warning':seekTag == tag || ('все' === tag && '' === seekTag ), 'label-default':seekTag != tag}"
+								data-ng-click="setSeekTag(tag)">{{tag}}</span> &nbsp;
+							</span> <span class="label"
+								data-ng-class="{'label-warning':seekTag == epicriseTemplate.head1s[2].tags[0]
 								 || ('все' === epicriseTemplate.head1s[2].tags[0] && '' === seekTag )
 								 , 'label-default':seekTag != epicriseTemplate.head1s[2].tags[0]}"
-							data-ng-click="setSeekTag(tag)">{{epicriseTemplate.head1s[2].tags[0]}}</span>
-						<br /> <span
-							data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
-							<a data-ng-click="addGroup(h2)"> {{h2.name}} </a> |
-						</span>
-					</div>
+								data-ng-click="setSeekTag(tag)">{{epicriseTemplate.head1s[2].tags[0]}}</span>
+							<br /> 
+							<table class="table">
+								<tr>
+									<th colspan="2" class="center">аналізи</th>
+									<th rowspan="2">обстеженя</th>
+									<th rowspan="2">інше</th>
+								</tr>
+								<tr>
+									<th>крові</th>
+									<th>сечі</th>
+								</tr>
+								<tr>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'крові' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'сечі' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'обстеженя' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+									<td>
+										<div
+											data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter: 'інше' | filter : seekTag | filter : seekGroup">
+											<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<span
+								data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
+								<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a> |
+							</span>
+						</div>
 					<!-- лабораторні данні редактор -->
 					<div data-ng-show="h1.isDiagnos">
 						<span data-ng-repeat="diagnosHol in configHol.diagnosesHol"
@@ -481,7 +508,7 @@
 						</div>
 				</div>
 				<div class="col-xs-3"
-				data-ng-show="h1.name != 'Діагнози' && h1.name != 'Операції'"
+				data-ng-show="h1.name != 'Діагнози' && h1.name != 'Операції' && !h1.isOnDemand"
 				>
 					<div>
 					<!-- 
@@ -516,6 +543,15 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom"
 		role="navigation">
 		<div class="container">
+			<div class="navbar-right bg-info">
+				<small> <b>Увага</b>:Збережений за допомогою нової програми
+					ЕПІКРИЗ буде доступній в старій програмі тільки коли CHROM буде
+					перезагружений
+				</small>
+			</div>
+		</div>
+		<div class="container">
+
 			<span><span class="glyphicon glyphicon-console"></span> &#160;
 				&nbsp; </span> <span data-ng-show="autoSaveCount > 0"
 				title="Кільськість автозбережень - {{autoSaveCount}}">
@@ -526,14 +562,13 @@
 			</button>
 			<div class="btn-group btn-group-sm" role="group">
 				<button type="button" class="btn btn-primary btn-sm"
-					data-ng-click="editOpenCloseAdd()" title="Додати: Лікування, обстеження, аналізи, рекомендації...">
-					<span class="glyphicon glyphicon-plus"></span>
-					Додати
+					data-ng-click="editOpenCloseAdd()"
+					title="Додати: Лікування, обстеження, аналізи, рекомендації...">
+					<span class="glyphicon glyphicon-plus"></span> Додати
 				</button>
 			</div>
 			<ol class="list-inline navbar-right">
-				<li>
-				</li>
+				<li></li>
 				<li data-ng-show="!patientHistory.user"><span
 					class="glyphicon glyphicon-log-in"></span> <a
 					href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
@@ -545,7 +580,7 @@
 		</div>
 
 	</nav>
-	
+
 </body>
 
 	<script src="/js/jquery-2.1.3.min.js"></script>
