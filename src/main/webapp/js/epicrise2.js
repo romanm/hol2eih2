@@ -84,6 +84,10 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 
 	}
+	$scope.printWorkDocClick = function(){
+		console.log("run print");
+		window.print();
+	}
 	$scope.saveWorkDocClick = function(){
 		$scope.autoSaveCount = 0;
 		console.log("----");

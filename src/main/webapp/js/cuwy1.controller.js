@@ -329,36 +329,62 @@ cuwyApp.controller('JornalMovePatientCtrl', [ '$scope', '$http', '$filter', '$sc
 	});
 }]);
 
+archivesFile = "/hol/archives_"+parameters.dep;
+cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',function ($scope, $http, $filter, $sce) {
+	$scope.parameters = parameters;
+	$scope.departmentsHol = configHol.departments;
+	$scope.seekInArchives = "";
+
+	$scope.changeSeekInArchives = function(){
+		console.log("seekInArchives");
+		console.log($scope.seekInArchives);
+		seekInArchivesDb();
+	}
+
+	var seekInArchivesDb = function(){
+		$http({ method : 'GET', url : archivesFile+"_"+$scope.seekInArchives
+		}).success(function(data, status, headers, config) {
+			$scope.department = data;
+			console.log($scope.department)
+			seekDepartmentFromConfig($scope);
+			initAppConfig($scope, $http, $sce, $filter);
+		}).error(function(data, status, headers, config) {
+		});
+	};
+
+	seekInArchivesDb();
+
+}]);
+
+var seekDepartmentFromConfig = function($scope){
+	var departmentId = $scope.department.department_id;
+	$scope.departmentsHol.forEach(function(d){
+		if(departmentId == d.department_id){
+			$scope.departmentFromConfig = d;
+		}
+	})
+	console.log($scope.departmentFromConfig.zaviduvach);
+	console.log($scope.department.user.name);
+};
+
 departmentFile = "/hol/department_"+parameters.dep;
 
 cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 	function ($scope, $http, $filter, $sce) {
+	$scope.parameters = parameters;
 	console.log('DepartmentCtrl');
 	$scope.departmentsHol = configHol.departments;
 	$scope.hol1host = configHol.hol1host;
 	$scope.patientEditing = {}
 
-	$scope.parameters = parameters;
 	
-	$http({
-		method : 'GET',
-		url : departmentFile
+	$http({ method : 'GET', url : departmentFile
 	}).success(function(data, status, headers, config) {
 		$scope.department = data;
-		seekDepartmentFromConfig();
+		seekDepartmentFromConfig($scope);
 		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
-	var seekDepartmentFromConfig = function(){
-		var departmentId = $scope.department.department_id;
-		$scope.departmentsHol.forEach(function(d){
-			if(departmentId == d.department_id){
-				$scope.departmentFromConfig = d;
-			}
-		})
-		console.log($scope.departmentFromConfig.zaviduvach);
-		console.log($scope.department.user.name);
-	};
 	
 	$scope.calculateAge = function (birthday) {
 		var ageDifMs = Date.now() - new Date(birthday);

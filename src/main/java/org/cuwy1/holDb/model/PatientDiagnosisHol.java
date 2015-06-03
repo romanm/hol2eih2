@@ -11,7 +11,15 @@ public class PatientDiagnosisHol {
 	private short diagnos_id;
 	private boolean collapsed = true;
 	private boolean collapseMovePatient = true;
-	private Timestamp history_in;
+	private Timestamp history_in, history_out;
+	public Timestamp getHistory_out() {
+		return history_out;
+	}
+
+	public void setHistory_out(Timestamp history_out) {
+		this.history_out = history_out;
+	}
+
 	private PatientHistory patientHistory;
 
 

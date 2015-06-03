@@ -298,11 +298,11 @@ public class CuwyDbService1 {
 		}
 	}
 	public DepartmentHol getDepartmentsHol(int id) {
-		return jdbcTemplate.queryForObject(
-				"SELECT * FROM ("
-				+ sqlDepartmentsHol
-				+ ") department WHERE department_id = ?", 
-				new Object[] { id }, new DepartmentHolRowMapper());
+		final String sql = "SELECT * FROM ("
+		+ sqlDepartmentsHol
+		+ ") department WHERE department_id = ?";
+		logger.debug(sql.replaceFirst("\\?", ""+id));
+		return jdbcTemplate.queryForObject( sql, new Object[] { id }, new DepartmentHolRowMapper());
 	}
 	final static String sqlDepartmentsHol = "SELECT p.personal_username"
 			+ ", d.department_id, d.department_name, d.department_profile_id, d.department_active "
@@ -345,42 +345,82 @@ public class CuwyDbService1 {
 				new DiagnosHolRowMapper());
 	}
 
-	public List<PatientDiagnosisHol> getDepartmentsHolPatientsDiagnose(Integer departmentId) {
-		String sql = "SELECT concat(p.patient_surname,' ',p.patient_name,' ',p.patient_patronnymic) name"
-		+ ", dh.department_history_in"
-		+ ", h.history_in"
-		+ ", h.history_no"
-		+ ", h.history_id"
-		+ ", h.patient_id"
-		+ ", hd.max_diagnosis_id"
-		+ ", icd_code, icd_name"
-		+ " FROM department_history dh, history h, patient p, icd i,"
-		+ "(SELECT history_id,diagnos_id,max(diagnos_id) max_diagnosis_id, icd_id FROM history_diagnos GROUP BY history_id) hd"
-		+ " WHERE h.patient_id = p.patient_id AND h.history_id=hd.history_id "
-		+ " AND i.icd_id = hd.icd_id "
-		+ " AND h.history_id=dh.history_id AND dh.department_history_out IS NULL "
-		+ " AND dh.department_id = ? ";
-//		logger.info("\n"+sql+departmentId);
+	static String sqlPatientDiagnosisHol1 = "SELECT concat(p.patient_surname,' ',p.patient_name,' ',p.patient_patronnymic) name"
+			+ ", dh.department_history_in"
+			+ ", h.history_in"
+			+ ", h.history_out"
+			+ ", h.history_no"
+			+ ", h.history_id"
+			+ ", h.patient_id"
+			+ ", hd.max_diagnosis_id"
+			+ ", icd_code, icd_name"
+			+ " FROM department_history dh, history h, patient p, icd i,"
+			+ "(SELECT history_id,diagnos_id,max(diagnos_id) max_diagnosis_id, icd_id FROM history_diagnos GROUP BY history_id) hd"
+			+ " WHERE h.patient_id = p.patient_id AND h.history_id=hd.history_id "
+			+ " AND i.icd_id = hd.icd_id "
+			+ " AND h.history_id=dh.history_id "
+			+ " AND dh.department_id = ? "
+			;
+	public List<PatientDiagnosisHol> getDepartmentsArchivesHolPatientsDiagnose(Integer departmentId, String seekInArchives) {
+		String sql = sqlPatientDiagnosisHol1 
+				+ " AND dh.department_history_out IS NOT NULL "
+				;
+		System.out.println(sql);
+		sql = "SELECT p.* FROM ("
+				+ sql
+				+ ") p WHERE name like '%?%'"
+				+ " ORDER BY history_in DESC "
+				+ " lIMIT 10"
+				;
+		System.out.println(sql);
+		final String sql2 = sql.replaceFirst("\\?", ""+departmentId).replaceFirst("\\?", seekInArchives);
+		logger.info("\n"+sql2);
 		return jdbcTemplate.query(
-				sql, new Object[] { departmentId }, 
-				new RowMapper<PatientDiagnosisHol>(){
-					@Override
-					public PatientDiagnosisHol mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						PatientDiagnosisHol patientDiagnosisHol = new PatientDiagnosisHol();
-						patientDiagnosisHol.setName(rs.getString("name"));
-						patientDiagnosisHol.setHistory_in(rs.getTimestamp("history_in"));
-						patientDiagnosisHol.setIcd_code(rs.getString("icd_code"));
-						patientDiagnosisHol.setIcd_name(rs.getString("icd_name"));
-						patientDiagnosisHol.setPatient_id(rs.getInt("patient_id"));
-						patientDiagnosisHol.setHistory_no(rs.getInt("history_no"));
-						patientDiagnosisHol.setHistory_id(rs.getInt("history_id"));
-						patientDiagnosisHol.setDiagnos_id(rs.getShort("max_diagnosis_id"));
-						return patientDiagnosisHol;
-					}
-
-				});
+//				sql, new Object[] { departmentId, seekInArchives }, 
+		sql2, 
+		new RowMapper<PatientDiagnosisHol>(){
+			@Override
+			public PatientDiagnosisHol mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				PatientDiagnosisHol patientDiagnosisHol = new PatientDiagnosisHol();
+				patientDiagnosisHol.setName(rs.getString("name"));
+				patientDiagnosisHol.setHistory_in(rs.getTimestamp("history_in"));
+				patientDiagnosisHol.setHistory_out(rs.getTimestamp("history_out"));
+				patientDiagnosisHol.setIcd_code(rs.getString("icd_code"));
+				patientDiagnosisHol.setIcd_name(rs.getString("icd_name"));
+				patientDiagnosisHol.setPatient_id(rs.getInt("patient_id"));
+				patientDiagnosisHol.setHistory_no(rs.getInt("history_no"));
+				patientDiagnosisHol.setHistory_id(rs.getInt("history_id"));
+				patientDiagnosisHol.setDiagnos_id(rs.getShort("max_diagnosis_id"));
+				return patientDiagnosisHol;
+			}
+		});
 	}
+	public List<PatientDiagnosisHol> getDepartmentsHolPatientsDiagnose(Integer departmentId) {
+		String sql = sqlPatientDiagnosisHol1 
+		+ " AND dh.department_history_out IS NULL "
+		;
+		logger.info("\n"+sql.replaceFirst("\\?", ""+departmentId));
+		return jdbcTemplate.query(
+		sql, new Object[] { departmentId }, 
+		new RowMapper<PatientDiagnosisHol>(){
+			@Override
+			public PatientDiagnosisHol mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				PatientDiagnosisHol patientDiagnosisHol = new PatientDiagnosisHol();
+				patientDiagnosisHol.setName(rs.getString("name"));
+				patientDiagnosisHol.setHistory_in(rs.getTimestamp("history_in"));
+				patientDiagnosisHol.setIcd_code(rs.getString("icd_code"));
+				patientDiagnosisHol.setIcd_name(rs.getString("icd_name"));
+				patientDiagnosisHol.setPatient_id(rs.getInt("patient_id"));
+				patientDiagnosisHol.setHistory_no(rs.getInt("history_no"));
+				patientDiagnosisHol.setHistory_id(rs.getInt("history_id"));
+				patientDiagnosisHol.setDiagnos_id(rs.getShort("max_diagnosis_id"));
+				return patientDiagnosisHol;
+			}
+		});
+	}
+
 
 	String sql_WHERE_YearWeek = " YEAR(h.history_in)= ? AND WEEKOFYEAR(h.history_in) = ? ";
 	String sqlPatientsYearWeek = "SELECT * FROM history h WHERE " + sql_WHERE_YearWeek;

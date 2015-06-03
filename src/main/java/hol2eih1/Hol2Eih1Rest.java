@@ -160,19 +160,38 @@ public class Hol2Eih1Rest {
 		return departmentHol;
 	}
 	
+	@RequestMapping(value = "/hol/archives_{departmentId}_{seekInArchives}", method = RequestMethod.GET)
+	public @ResponseBody DepartmentHol getHolArchives(
+			@PathVariable Integer departmentId
+			,@PathVariable String seekInArchives
+			, Principal userPrincipal, HttpSession session) throws IOException {
+		logger.info("\n Start /hol/archives_"+departmentId+"session = "+session);
+		DepartmentHol departmentHol = readDepartmentAndUser(departmentId,
+				userPrincipal, session);
+		List<PatientDiagnosisHol> departmentsHolPatientsDiagnose
+		= cuwyDbService1.getDepartmentsArchivesHolPatientsDiagnose(departmentId, seekInArchives);
+		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
+		return departmentHol;
+	}
 	@RequestMapping(value = "/hol/department_{departmentId}", method = RequestMethod.GET)
 	public @ResponseBody DepartmentHol getHolDepartment(@PathVariable Integer departmentId, Principal userPrincipal, HttpSession session) throws IOException {
 		logger.info("\n Start /hol/department_"+departmentId+"session = "+session);
+		DepartmentHol departmentHol = readDepartmentAndUser(departmentId,
+				userPrincipal, session);
+		List<PatientDiagnosisHol> departmentsHolPatientsDiagnose
+		= cuwyDbService1.getDepartmentsHolPatientsDiagnose(departmentId);
+		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
+		return departmentHol;
+	}
+
+	private DepartmentHol readDepartmentAndUser(Integer departmentId,
+			Principal userPrincipal, HttpSession session) {
 		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
 		logger.debug(""+userPrincipal);
 		if(null == userPrincipal){
 			setLoginRedirectValue(session, "department", departmentId);
-//			return departmentHol;
 		}
 		departmentHol.setUser(userPrincipal);
-		List<PatientDiagnosisHol> departmentsHolPatientsDiagnose
-		= cuwyDbService1.getDepartmentsHolPatientsDiagnose(departmentId);
-		departmentHol.setPatientesDiagnosisHol(departmentsHolPatientsDiagnose);
 		return departmentHol;
 	}
 	@RequestMapping(value = "/db/epicrise_hid_{historyId}", method = RequestMethod.GET)

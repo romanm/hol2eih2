@@ -275,10 +275,8 @@ data-ng-show="parameters.dep !=userDepartmentId">
 				</div>
 				<h2>Відділення</h2>
 				<div>
-					<a> Рух </a>
-				</div>
-				<div>
-					<a> Архів </a>
+					<b><a href="department.html?dep={{parameters.dep}}"> Рух </a> </b>
+					|<a href="archives.html?dep={{parameters.dep}}"> Архів </a>
 				</div>
 				<hr/>
 				<div data-ng-show="departmentFromConfig.zaviduvach == department.user.name">
