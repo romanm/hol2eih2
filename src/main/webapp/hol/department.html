@@ -45,7 +45,9 @@
 		</div>
 	</nav>
 
-	<h1>{{department.department_name}}</h1>
+	<h1>
+		<b>Пацієнти:</b> {{department.department_name}}
+	</h1>
 	<div class="container">
 	<h2 data-ng-show="!department.user">
 	<span class="glyphicon glyphicon-warning-sign"></span>
@@ -55,7 +57,6 @@
 	</h2>
 	<div class="row">
 		<div class="col-md-8">
-			<h2>Пацієнти</h2>
 		<div class="tab-pane fade in active" id="patient_seek">
 			<!-- Sidebar content -->
 

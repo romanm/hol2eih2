@@ -84,6 +84,30 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 
 	}
+	$scope.addNewHol1_hta = function(hta, htaIndex){
+		console.log("addNewHol1_hta");
+		var addPosition = htaIndex + 2;
+		console.log($scope.epicrise.epicriseGroups.length);
+		var groupElement = createGroupElement(hta.historyTreatmentAnalysisName);
+		if(groupElement.isTextHtml){
+			groupElement.value.textHtml = hta.historyTreatmentAnalysisText;
+		}
+		if(hta.historyTreatmentAnalysisDate){
+			groupElement.value.historyTreatmentAnalysisDatetime =hta.historyTreatmentAnalysisDate; 
+		}
+		console.log(hta);
+		console.log(groupElement);
+		if(addPosition < $scope.epicrise.epicriseGroups.length){
+			$scope.epicrise.epicriseGroups.splice(addPosition,0,groupElement);
+		}else{
+			$scope.epicrise.epicriseGroups.push(groupElement);
+		}
+	}
+	$scope.removeNewHol1_hta = function(hta){
+		console.log("removeNewHol1_hta");
+		hta.removeFromHol1DB = true;
+	}
+
 	$scope.printWorkDocClick = function(){
 		console.log("run print");
 		window.print();
@@ -159,7 +183,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		epicriseGroup.operationHistorys.push(operation);
 	}
 	
-	initEpicriseHol1Id = function(){
+	var initEpicriseHol1Id = function(){
 		var htaCopy = $scope.patientHistory.historyTreatmentAnalysises;
 
 		var uniqueId = {};
@@ -191,6 +215,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 							epicriseGroup.htaId = htaCopy[i].historyTreatmentAnalysisId;
 							uniqueId[epicriseGroup.htaId] = epicriseGroup.htaId;
 							htaCopy[i].isIdCopied = true;
+							$scope.isNewFromHol1 = true;
 							break;
 						}
 					}
@@ -325,9 +350,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	//-------------------------read history ------------------------------------
 	readHol1 = function(){
+		console.log(historyUrl);
 		$http({ method : 'GET', url : historyUrl
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
+			console.log($scope.patientHistory);
 			initHistory();
 			initEpicrise();
 			initEpicriseHol1Id();

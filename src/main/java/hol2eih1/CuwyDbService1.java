@@ -742,7 +742,7 @@ public class CuwyDbService1 {
 		String sql ="SELECT ta.treatment_analysis_name, ta.treatment_analysis_id, hta.* "
 				+ " FROM history_treatment_analysis hta, treatment_analysis ta "
 				+ " WHERE ta.treatment_analysis_id=hta.treatment_analysis_id and hta.history_id = ?";
-		logger.info("\n"+sql+historyId);
+		logger.info("\n"+sql.replaceFirst("\\?", ""+historyId));
 		return jdbcTemplate.query(
 			sql, new Object[] { historyId }, 
 			new RowMapper<HistoryTreatmentAnalysis>(){
@@ -754,6 +754,7 @@ public class CuwyDbService1 {
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisName(rs.getString("treatment_analysis_name"));
 					historyTreatmentAnalysis.setTreatmentAnalysisId(rs.getInt("treatment_analysis_id"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisDatetime(rs.getTimestamp("history_treatment_analysis_datetime"));
+					historyTreatmentAnalysis.setHistoryTreatmentAnalysisDate(rs.getTimestamp("history_treatment_analysis_date"));
 					historyTreatmentAnalysis.setHistoryTreatmentAnalysisId(rs.getInt("history_treatment_analysis_id"));
 					return historyTreatmentAnalysis;
 				}

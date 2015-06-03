@@ -4,7 +4,15 @@ import java.sql.Timestamp;
 
 public class HistoryTreatmentAnalysis {
 private String historyTreatmentAnalysisText, historyTreatmentAnalysisName;
-private Timestamp historyTreatmentAnalysisDatetime;
+private Timestamp historyTreatmentAnalysisDatetime, historyTreatmentAnalysisDate;
+public Timestamp getHistoryTreatmentAnalysisDate() {
+	return historyTreatmentAnalysisDate;
+}
+
+public void setHistoryTreatmentAnalysisDate(
+		Timestamp historyTreatmentAnalysisDate) {
+	this.historyTreatmentAnalysisDate = historyTreatmentAnalysisDate;
+}
 private int historyTreatmentAnalysisId, treatmentAnalysisId;
 
 

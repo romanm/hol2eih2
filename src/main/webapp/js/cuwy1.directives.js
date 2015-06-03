@@ -252,8 +252,8 @@ initDeclareController = function($scope, $http, $sce, $filter){
 		$scope.param.hno = parameters.hno;
 	else
 		$scope.param.hno = parameters.hid;
-	console.log("--------initDeclareController--------------------param = ");
-	console.log($scope.param);
+//	console.log("--------initDeclareController--------------------param = ");
+//	console.log($scope.param);
 
 	postObject = function(url, docToSave, $scope, $http){
 		$http({ method : 'POST', data : docToSave, url : url

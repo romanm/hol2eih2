@@ -275,7 +275,6 @@ public class Hol2Eih1Rest {
 			throws IOException {
 		logger.info("\n Start /db/history_id_"+historyId);
 		session.setAttribute("hno", historyId);
-		logger.debug(""+historyId);
 		HistoryHolDb historyHolDb = cuwyDbService1.getHistoryHolDbById(historyId);
 		PatientHolDb patientHolDb = cuwyDbService1.getPatientHolDb(historyHolDb.getPatientId());
 		historyHolDb.setPatientHolDb(patientHolDb);

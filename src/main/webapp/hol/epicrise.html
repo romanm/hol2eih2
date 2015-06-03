@@ -17,70 +17,81 @@
 <link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
 <link rel="stylesheet" href="/css/epicrise3.css"></link>
 <link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-
+<style type="text/css" media="screen">
+	body {
+		padding-top: 40px;
+		padding-bottom: 60px;
+	}
+</style>
 </head>
 
 <body data-key-cuwytrap="">
-	<div class="container">
-	
-	<div class="row no-print navbar navbar-default"
-			role="navigation">
-			<div class="col-xs-8">
-				<ol class="breadcrumb">
-					<li><a data-ng-click="saveControlAndGo('/hol/home.html','ХОЛ')"><span
-							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
-					<li><a
-						data-ng-click="saveControlAndGo('/hol/department.html?dep='+patientHistory.patientDepartmentMovements
+	<nav class="navbar navbar-default navbar-fixed-top no-print"
+		role="navigation">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-8">
+					<ol class="breadcrumb">
+						<li><a
+							data-ng-click="saveControlAndGo('/hol/home.html','ХОЛ')"><span
+								class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+						<li><a
+							data-ng-click="saveControlAndGo('/hol/department.html?dep='+patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
 		.departmentId,'відділення:'+patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 							-1].departmentName)">
-							відділення:
-							{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
-							-1].departmentName}} </a></li>
-					<li><a
-						data-ng-click="saveControlAndGo('/hol/history.html?hno='+param.hno, 'ІХ № '+patientHistory.historyNo)">
-							ІХ № <u>{{patientHistory.historyNo}}</u>
-					</a></li>
-					<li><a
-						data-ng-click="saveControlAndGo('/hol/epicrise.html?hid='.concat(patientHistory.historyId),'Виписка')">
-							Виписка <sub> Новий стиль </sub>
-					</a></li>
-				</ol>
-			</div>
-			<div class="col-xs-4"
-				style="text-align: right; background-color: #f5f5f5;">
-				<ol class="list-inline navbar-right">
-					<li><span data-ng-show="autoSaveCount > 0"
-						title="Кільськість автозбережень - {{autoSaveCount}}">
-							{{autoSaveCount}} </span>
-						<button type="button" class="btn btn-primary btn-sm"
-							data-ng-click="saveWorkDocClick()" data-toggle="modal">
-							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-						</button> <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
-							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
-					<li>
-						<div class="btn-group btn-group-sm" role="group">
+								відділення:
+								{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+								-1].departmentName}} </a></li>
+						<li><a
+							data-ng-click="saveControlAndGo('/hol/history.html?hno='+param.hno, 'ІХ № '+patientHistory.historyNo)">
+								ІХ № <u>{{patientHistory.historyNo}}</u>
+						</a></li>
+						<li><a
+							data-ng-click="saveControlAndGo('/hol/epicrise.html?hid='.concat(patientHistory.historyId),'Виписка')">
+								Виписка <sub> Новий стиль </sub>
+						</a></li>
+					</ol>
+				</div>
+				<div class="col-xs-4"
+					style="text-align: right; background-color: #f5f5f5;">
+					<ol class="list-inline navbar-right">
+						<li><span data-ng-show="autoSaveCount > 0"
+							title="Кільськість автозбережень - {{autoSaveCount}}">
+								{{autoSaveCount}} </span>
 							<button type="button" class="btn btn-primary btn-sm"
-								data-ng-click="editOpenCloseAdd()"
-								title="Додати: Лікування, обстеження, аналізи, рекомендації...">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-							<button type="button" class="btn btn-primary btn-sm"
-								data-ng-click="printWorkDocClick()" data-toggle="modal">
-								<span class="glyphicon glyphicon-print"></span>
-							</button>
-						</div>
-					</li>
-					<li data-ng-show="!patientHistory.user"><span
-						class="glyphicon glyphicon-log-in"></span> <a
-						href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
-					<li data-ng-show="patientHistory.user"><span
-						class="glyphicon glyphicon-log-out"></span>
-						:{{patientHistory.user.name}} <a
-						data-ng-click="saveControlAndGo('/hol/logout.html')"> Вийти </a></li>
-				</ol>
+								data-ng-click="saveWorkDocClick()" data-toggle="modal">
+								<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+							</button> <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+								ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
+						<li>
+							<div class="btn-group btn-group-sm" role="group">
+								<button type="button" class="btn btn-primary btn-sm"
+									data-ng-click="editOpenCloseAdd()"
+									title="Додати: Лікування, обстеження, аналізи, рекомендації...">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+								<button type="button" class="btn btn-primary btn-sm"
+									data-ng-click="printWorkDocClick()" data-toggle="modal">
+									<span class="glyphicon glyphicon-print"></span>
+								</button>
+							</div>
+						</li>
+						<li data-ng-show="!patientHistory.user"><span
+							class="glyphicon glyphicon-log-in"></span> <a
+							href="/login?url=addPatient&hno={{hno}}"> Ввійти </a></li>
+						<li data-ng-show="patientHistory.user"><span
+							class="glyphicon glyphicon-log-out"></span>
+							:{{patientHistory.user.name}} <a
+							data-ng-click="saveControlAndGo('/hol/logout.html')"> Вийти </a></li>
+					</ol>
+				</div>
 			</div>
 		</div>
+	</nav>
+	<div class="container">
+	
+	
 	
 		<div class="row">
 			<div class="col-xs-5" style="text-align: right;">
@@ -243,8 +254,13 @@
 						<div text-angular ng-model="h1.value.textHtml"></div>
 						<div
 							data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
-							data-ng-show="h1.name == hta.historyTreatmentAnalysisName"
-							data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
+							data-ng-show="h1.name == hta.historyTreatmentAnalysisName">
+							<span>
+							{{hta.historyTreatmentAnalysisDate | date:'dd.MM.yyyy'}}
+							</span>
+							<span data-ng-bind-html="hta.historyTreatmentAnalysisText">
+							</span>
+						</div>
 					</div>
 					<!-- + Додати -->
 <div data-ng-show="h1.isOnDemand">
@@ -301,6 +317,8 @@
 									</td>
 								</tr>
 							</table>
+							<!-- 
+							 -->
 							<span
 								data-ng-repeat="h2 in epicriseTemplate.head1s[2].addGroup | filter : seekTag | filter : seekGroup">
 								<a href="#" data-ng-click="addGroup(h2, h1Index)"> {{h2.name}} </a> |
@@ -539,6 +557,33 @@
 					</div>
 				</div>
 			</div>
+
+			<h3 data-ng-show="isNewFromHol1">
+				Нові записи в ЕПІКРІЗ добавлені в старій історії хвороби.
+			</h3>
+			<table>
+				<tr data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
+					data-ng-show="!hta.isIdCopied && !(hta.removeFromHol1DB == true)">
+					<td><b> {{hta.historyTreatmentAnalysisName}} </b></td>
+					<td>{{hta.historyTreatmentAnalysisDate | date:'dd.MM.yyyy'}}</td>
+					<td>
+						<div data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
+					</td>
+					<td>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="removeNewHol1_hta(hta)" data-toggle="modal">
+							<span class="glyphicon glyphicon-remove"></span> Видалити
+						</button>
+					</td>
+					<td>
+					<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="addNewHol1_hta(hta, $index)" data-toggle="modal">
+							<span class="glyphicon glyphicon-plus"></span>
+							Додати
+						</button>
+					</td>
+				</tr>
+			</table>
 			<hr />
 			Лікар: 
 			{{patientHistory.user.name}}___________________ 
