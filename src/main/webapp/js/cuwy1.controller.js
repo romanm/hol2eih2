@@ -346,7 +346,7 @@ cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',functi
 		}).success(function(data, status, headers, config) {
 			$scope.department = data;
 			console.log($scope.department)
-			seekDepartmentFromConfig($scope);
+			seekDepartmentFromConfig($scope, $scope.department.department_id);
 			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {
 		});
@@ -356,15 +356,12 @@ cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',functi
 
 }]);
 
-var seekDepartmentFromConfig = function($scope){
-	var departmentId = $scope.department.department_id;
+var seekDepartmentFromConfig = function($scope, departmentId){
 	$scope.departmentsHol.forEach(function(d){
 		if(departmentId == d.department_id){
 			$scope.departmentFromConfig = d;
 		}
 	})
-	console.log($scope.departmentFromConfig.zaviduvach);
-	console.log($scope.department.user.name);
 };
 
 departmentFile = "/hol/department_"+parameters.dep;
@@ -381,7 +378,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$http({ method : 'GET', url : departmentFile
 	}).success(function(data, status, headers, config) {
 		$scope.department = data;
-		seekDepartmentFromConfig($scope);
+		seekDepartmentFromConfig($scope, $scope.department.department_id);
 		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});

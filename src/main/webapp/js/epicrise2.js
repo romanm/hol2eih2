@@ -361,6 +361,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			initEpicrise();
 			initEpicriseHol1Id();
 			initAppConfig($scope, $http, $sce, $filter);
+			seekDepartmentFromConfig($scope, 5);
 		}).error(function(data, status, headers, config) {
 		});
 	}

@@ -16,9 +16,31 @@ public class HistoryHolDb {
 		this.epicrise2saved = epicrise2saved;
 	}
 	private int requiredFieldFullProcent;
-	private int historyId, historyNo, historyUrgent, patientId, directId, historyDepartmentIn,
+	private int historyId, historyNo, historyUrgent, patientId, directId
+	, resultId
+	, restoredId
+	, treatmentId
+	, historyDepartmentIn,
 	historyDepartmentId,
 	historyAgeYear, historyAgeMonth, historyAgeDay ;
+	public int getRestoredId() {
+		return restoredId;
+	}
+	public void setRestoredId(int restoredId) {
+		this.restoredId = restoredId;
+	}
+	public int getResultId() {
+		return resultId;
+	}
+	public void setResultId(int resultId) {
+		this.resultId = resultId;
+	}
+	public int getTreatmentId() {
+		return treatmentId;
+	}
+	public void setTreatmentId(int treatmentId) {
+		this.treatmentId = treatmentId;
+	}
 	private Timestamp historyIn;
 	private PatientHolDb patientHolDb;
 	private boolean perevid = false;

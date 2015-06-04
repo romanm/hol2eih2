@@ -95,15 +95,26 @@
 	
 		<div class="row">
 			<div class="col-xs-5" style="text-align: right;">
-				Хмельницька Обласна Лікарня<br> м.Хмельницький, вул.Пілотська,
-				1 <span class="navbar-left no-print"> </span>
-			</div>
+				Хмельницька Обласна Лікарня
+				<br/> м.Хмельницький, вул.Пілотська,1 
+				<br/>
+<small> Відділення
+				«{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
+				-1].departmentName}}» </small>
+</div>
 			<div class="col-xs-1" style="text-align: center;">
 				<img alt="trizub" src="/img/gerb_small.png">
 			</div>
 			<div class="col-xs-5">
-				+380 382 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <span
-					class="navbar-right no-print"> </span>
+				+380 382 - 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <br />
+				<small> <span
+					data-ng-show="departmentFromConfig.department_telefon"> 
+					<!--
+					<b>Телефон:</b>
+					 -->
+						+380 382 - {{departmentFromConfig.department_telefon}}
+				</span>
+				</small>
 			</div>
 		</div>
 	</div>
@@ -168,15 +179,15 @@
 				data-ng-repeat-start="h1 in epicrise.epicriseGroups"
 				data-ng-init="h1Index = $index"
 				data-ng-class="{'no-print navbar-right':h1.isOnDemand}"
-				data-ng-click="editOpenClose(h1Index)">
-				<span class="mouseover" data-ng-context-menu="menuEpicriseGroup">
-					<span data-ng-show="h1.isOnDemand">
+				>
+				<span class="mouseover" data-ng-context-menu="menuEpicriseGroup"
+					data-ng-click="editOpenClose(h1Index)"> <span
+					data-ng-show="h1.isOnDemand">
 						<button type="button" title=" {{h1.name}} "
 							class="btn btn-primary btn-xs">
 							<span class="glyphicon glyphicon-plus"></span> Додати
 						</button>
-				</span> 
-				<a href="#" data-ng-show="!h1.isOnDemand"
+				</span> <a href="#" data-ng-show="!h1.isOnDemand"
 					data-ng-class="{'no-print':h1.name == epicrise.epicriseGroups[h1Index - 1].name}">
 						<u> <span data-ng-show="!h1.diagnosis"> {{h1.name}} </span> <span
 							data-ng-show="h1.diagnosis">

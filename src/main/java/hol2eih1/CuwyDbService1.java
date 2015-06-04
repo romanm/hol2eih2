@@ -609,6 +609,10 @@ public class CuwyDbService1 {
 			historyHolDb.setHistoryNo(rs.getInt("history_no"));
 			historyHolDb.setPatientId(rs.getInt("patient_id"));
 			historyHolDb.setDirectId(rs.getInt("direct_id"));
+			//----------------
+			historyHolDb.setTreatmentId(rs.getInt("treatment_id"));
+			historyHolDb.setResultId(rs.getInt("result_id"));
+			historyHolDb.setRestoredId(rs.getInt("restored_id"));
 			historyHolDb.setHistoryDepartmentIn(rs.getInt("history_department_in"));
 			historyHolDb.setHistoryIn(rs.getTimestamp("history_in"));
 			if(mapHistoryOfPatient != null)

@@ -470,7 +470,7 @@
 							</div>
 						</div>
 					<h3>
-						<small> <span class="glyphicon glyphicon-share"></span>
+						<small> <span class="glyphicon glyphicon-edit"></span>
 						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
 							Епикриз </a> <sub style="font-size: 50%;"> <a
 							href="epicrise.html?hid={{patientHistory.historyId}}">Новий
@@ -517,8 +517,15 @@
 				<li><span class="glyphicon glyphicon-pushpin"></span> <a
 					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
 				</a></li>
-				<li><span class="glyphicon glyphicon-share"></span> <a
+				<li><span class="glyphicon glyphicon-edit"></span> <a
 					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+						Епикриз </a> | <small> <a
+						href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
+							<span class="glyphicon glyphicon-link"></span>HOL1
+					</a>
+				</small></li>
+				<li><span class="glyphicon glyphicon-share"></span> <a
+					href="/hol/extract.html?hid={{patientHistory.historyId}}">
 						Виписка </a> | <small> <a
 						href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
 							<span class="glyphicon glyphicon-link"></span>HOL1
@@ -565,7 +572,7 @@
 					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
 				</a></li>
 				<li><span class="glyphicon glyphicon-share"></span> <a
-					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+					href="/hol/extract.html?hid={{patientHistory.historyId}}">
 						Виписка </a></li>
 					<li>|</li>
 				<li data-ng-show="!patientHistory.user"><span

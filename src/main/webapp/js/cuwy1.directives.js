@@ -199,6 +199,9 @@ readInitHistory = function($scope, $http, $sce, $filter){
 
 	$scope.collapseIcd10Liste = true;
 
+	$scope.getObjectKeys = function(object){
+		return Object.keys(object);
+	}
 	$scope.setDiagnosIndex = function($index){
 		
 		if($scope.diagnosisIndex != $index){

@@ -4,6 +4,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	console.log('HistoryCtrl');
 
 	$scope.operationTree = operationTree;
+	$scope.configHol = configHol;
 	$scope.departmentsHol = configHol.departments;
 	$scope.diagnosesHol = configHol.diagnosesHol;
 
@@ -22,6 +23,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	$http({ method : 'GET', url : $scope.historyFile
 	}).success(function(data, status, headers, config) {
 		$scope.patientHistory = data;
+		console.log($scope.patientHistory);
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
 		initAppConfig($scope, $http, $sce, $filter);
