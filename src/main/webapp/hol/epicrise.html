@@ -558,10 +558,10 @@
 				</div>
 			</div>
 
-			<h3 data-ng-show="isNewFromHol1">
-				Нові записи в ЕПІКРІЗ добавлені в старій історії хвороби.
+			<h3 data-ng-show="isNewFromHol1" class="no-print">
+				Нові записи добавлені в ЕПІКРІЗ в старій історії хвороби.
 			</h3>
-			<table>
+			<table class="no-print">
 				<tr data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
 					data-ng-show="!hta.isIdCopied && !(hta.removeFromHol1DB == true)">
 					<td><b> {{hta.historyTreatmentAnalysisName}} </b></td>

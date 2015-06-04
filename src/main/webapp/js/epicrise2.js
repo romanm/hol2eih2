@@ -89,11 +89,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		var addPosition = htaIndex + 2;
 		console.log($scope.epicrise.epicriseGroups.length);
 		var groupElement = createGroupElement(hta.historyTreatmentAnalysisName);
+		groupElement.htaId = hta.historyTreatmentAnalysisId;
 		if(groupElement.isTextHtml){
 			groupElement.value.textHtml = hta.historyTreatmentAnalysisText;
 		}
 		if(hta.historyTreatmentAnalysisDate){
-			groupElement.value.historyTreatmentAnalysisDatetime =hta.historyTreatmentAnalysisDate; 
+			groupElement.value.historyTreatmentAnalysisDatetime = hta.historyTreatmentAnalysisDate; 
+			groupElement.value.withDate = true; 
 		}
 		console.log(hta);
 		console.log(groupElement);

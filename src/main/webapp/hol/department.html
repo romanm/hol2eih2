@@ -274,13 +274,23 @@ data-ng-show="parameters.dep !=userDepartmentId">
 					</a>
 					</small>
 				</div>
-				<h2>Відділення</h2>
+				<h2>
+					Відділення <small> {{departmentFromConfig.department_name}}
+					</small>
+				</h2>
+				<span data-ng-show="departmentFromConfig.department_telefon">
+					<b>Телефон:</b> {{departmentFromConfig.department_telefon}}
+				</span>
 				<div>
 					<b><a href="department.html?dep={{parameters.dep}}"> Рух </a> </b>
 					|<a href="archives.html?dep={{parameters.dep}}"> Архів </a>
 				</div>
-				<hr/>
-				<div data-ng-show="departmentFromConfig.zaviduvach == department.user.name">
+				<hr />
+				<span>
+					<b>Завідувач:</b> {{departmentFromConfig.zaviduvach}}
+				</span>
+				<div
+					data-ng-show="departmentFromConfig.zaviduvach == department.user.name">
 					<div>
 						<a href="jornalMovePatient.html?dep={{parameters.dep}}">
 							Журнал руху хворих </a>

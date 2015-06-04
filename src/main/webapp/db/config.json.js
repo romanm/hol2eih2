@@ -57,6 +57,7 @@ var configHol =
     "department_id" : 26,
     "department_profile_id" : 2,
     "department_name" : "Урологічне",
+    "department_telefon" : "65-61-11",
     "zaviduvach" : "Собчинський С.А.",
     "department_active" : true,
     "user" : null
@@ -67,6 +68,7 @@ var configHol =
     "department_id" : 5,
     "department_profile_id" : 1,
     "department_name" : "Детоксикації",
+    "department_telefon" : "74-35-00",
     "zaviduvach" : "Одолінський С.С.",
     "department_active" : true,
     "user" : null
@@ -77,6 +79,7 @@ var configHol =
     "department_id" : 27,
     "department_profile_id" : 2,
     "department_name" : "Хірургічне",
+    "department_telefon" : "65-02-06",
     "zaviduvach" : "Підмурняк Ор.О.",
     "department_active" : true,
     "user" : null
@@ -87,6 +90,7 @@ var configHol =
     "department_id" : 12,
     "department_profile_id" : 2,
     "department_name" : "Нейрохірургічне",
+    "department_telefon" : "79-45-72",
     "zaviduvach" : "Левицький В.М.",
     "department_active" : true,
     "user" : null
@@ -97,6 +101,7 @@ var configHol =
     "department_id" : 24,
     "department_profile_id" : 2,
     "department_name" : "Судинної хірургії",
+    "department_telefon" : "65-43-42",
     "zaviduvach" : "Міщенко Є.М.",
     "department_active" : true,
     "user" : null
@@ -187,6 +192,7 @@ var configHol =
     "department_id" : 20,
     "department_profile_id" : 2,
     "department_name" : "Проктологічне",
+    "department_telefon" : "65-13-17",
     "zaviduvach" : "Балицький В.В.",
     "department_active" : true,
     "user" : null
@@ -257,6 +263,7 @@ var configHol =
     "department_id" : 22,
     "department_profile_id" : 1,
     "department_name" : "Реанімаційне",
+    "department_telefon" : "65-62-37",
     "zaviduvach" : "Карнаух  К.В.",
     "department_active" : true,
     "user" : null
