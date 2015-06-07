@@ -33,6 +33,50 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	$scope.diagnosEditIndex = 0;
 	initseekIcd10Tree($scope, $http, $sce, $filter);
 
+	//-------------extract------------------------------------------------------
+	$scope.saveExtract = function(){
+		console.log("----");
+		console.log($scope.patientHistory);
+		var urlStr =  "/db/savehistoryextract"; 
+		console.log(urlStr);
+		console.log($scope.patientHistory.historyOut);
+		var ho = new Date($scope.patientHistory.historyOut).getTime();
+		console.log(ho);
+		$scope.patientHistory.historyOut = ho;
+		console.log($scope.patientHistory.historyOut);
+		$http({ method : 'POST', data : $scope.patientHistory, url : urlStr
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
+		console.log("----");
+	}
+	$scope.tmpVariables = {}
+	$scope.openDialog = function(dialogName){
+		console.log(dialogName+" "+$scope.collapseDialog);
+		$scope.collapseDialog = $scope.collapseDialog == dialogName ? 'false': dialogName;
+		console.log(dialogName+" "+$scope.collapseDialog);
+		if(dialogName == "historyOut"){
+			console.log($scope.patientHistory.historyOut);
+			var historyOut = new Date($scope.patientHistory.historyOut);
+			console.log(historyOut);
+			$scope.tmpVariables.historyOut_HH = historyOut.getHours();
+			$scope.tmpVariables.historyOut_mm = historyOut.getMinutes();
+			console.log($scope.tmpVariables);
+		}
+	}
+	$scope.setHH2datetime = function(dt, hh){
+		var dtTmp = new Date(dt);
+		dtTmp.setHours(hh);
+		return dtTmp.getTime();
+	}
+	$scope.setMm2datetime = function(dt, mm){
+		var dtTmp = new Date(dt);
+		dtTmp.setMinutes(mm);
+		return dtTmp.getTime();
+	}
+	//-------------extract---------------------------------------------------END
 	$scope.saveWorkDoc = function(){
 		console.log("----");
 		console.log($scope.patientHistory);

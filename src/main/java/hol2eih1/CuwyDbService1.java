@@ -572,6 +572,30 @@ public class CuwyDbService1 {
 		}
 		
 	}
+	class HistoryExitHolDbPSSetter implements PreparedStatementSetter{
+
+		@Override
+		public void setValues(PreparedStatement ps) throws SQLException {
+			logger.debug(historyHolDb.keySet().toString());
+			ps.setInt(1, getInt(historyHolDb, "treatmentId"));
+			ps.setInt(2, getInt(historyHolDb, "resultId"));
+			ps.setInt(3, getInt(historyHolDb, "restoredId"));
+			ps.setString(4, (String) historyHolDb.get("historyOtherTreatment"));
+			ps.setString(5, (String) historyHolDb.get("historyExpertiseConslusion"));
+			ps.setString(6, (String) historyHolDb.get("historySpecial"));
+			final Object object = historyHolDb.get("historyOut");
+			logger.debug(""+object);
+			final Timestamp historyOut = new Timestamp((long) object);
+			ps.setTimestamp(7, historyOut);
+
+			ps.setInt(8, (int) historyHolDb.get("historyId"));
+		}
+		
+		private Map<String, Object> historyHolDb;
+		public HistoryExitHolDbPSSetter(Map<String, Object> historyHolDb) {
+			this.historyHolDb = historyHolDb;
+		}
+	}
 	class HistoryHolDbPSSetter implements PreparedStatementSetter{
 		private HistoryHolDb historyHolDb;
 		public HistoryHolDbPSSetter(HistoryHolDb historyHolDb) {
@@ -613,6 +637,11 @@ public class CuwyDbService1 {
 			historyHolDb.setTreatmentId(rs.getInt("treatment_id"));
 			historyHolDb.setResultId(rs.getInt("result_id"));
 			historyHolDb.setRestoredId(rs.getInt("restored_id"));
+			historyHolDb.setHistoryOtherTreatment(rs.getString("history_other_treatment"));
+			historyHolDb.setHistoryExpertiseConslusion(rs.getString("history_expertise_conslusion"));
+			historyHolDb.setHistorySpecial(rs.getString("history_special"));
+			historyHolDb.setHistoryOut(rs.getTimestamp("history_out"));
+			//----------------
 			historyHolDb.setHistoryDepartmentIn(rs.getInt("history_department_in"));
 			historyHolDb.setHistoryIn(rs.getTimestamp("history_in"));
 			if(mapHistoryOfPatient != null)
@@ -1006,6 +1035,34 @@ public class CuwyDbService1 {
 			final PatientDepartmentMovement patientDepartmentMovement) {
 		jdbcTemplate.update(DepartmentHistoryMapSet.insertPatientDepartmentMovement
 				, new DepartmentHistoryMapSet(patientDepartmentMovement));
+	}
+	String sqlExitDepartmentHistory = "UPDATE department_history dh, history h, "
+			+ " (SELECT MAX(department_history_id) ax , history_id FROM department_history"
+			+ " WHERE history_id = ? GROUP BY history_id) m, "
+			+ " (SELECT personal_department_id FROM personal_department "
+			+ " WHERE personal_id = ? AND department_id = ?) pd "
+			+ " SET dh.personal_department_id_out = pd.personal_department_id"
+			+ " , dh.department_history_out = h.history_out"
+			+ " , dh.department_history_bed_day = TIMESTAMPDIFF(HOUR, department_history_in, h.history_out) DIV 24 "
+			+ " WHERE m.ax = dh.department_history_id AND h.history_id = m.history_id";
+	String sqlExitHistory = "UPDATE history "
+			+ " SET treatment_id = ? "
+			+ " , result_id = ? "
+			+ " , restored_id = ? "
+			+ " , history_other_treatment = ? "
+			+ " , history_expertise_conslusion = ? "
+			+ " , history_special = ? "
+			+ " , history_out = ? "
+			+ " WHERE history_id = ? ";
+	public void exitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
+		jdbcTemplate.update(sqlExitHistory, new HistoryExitHolDbPSSetter(historyHolDb));
+		//update to department history doctor and out date
+		final Integer personId = roleTypes.get("per");
+		int historyId = (int) historyHolDb.get("historyId");
+		jdbcTemplate.update( sqlExitDepartmentHistory,
+				new Object[] {historyId, roleTypes.get("per"), roleTypes.get("dep") },
+				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}
+				);
 	}
 	String sqlInsertHistory = "INSERT INTO history "
 			+ "( history_in, history_no, history_urgent, patient_id, direct_id"
@@ -1885,11 +1942,10 @@ public class CuwyDbService1 {
 	}
 
 	private Integer getInt(Map<String, Object> map, String key) {
+		Integer oInt = null;
 		final Object o = map.get(key);
-		if (o == null)
-			return null;
-		Integer oInt ;
-		if(o instanceof Integer){
+		if (o == null){}
+		else if(o instanceof Integer){
 			oInt = (Integer) o;
 		}else{
 			oInt = Integer.parseInt((String) o);

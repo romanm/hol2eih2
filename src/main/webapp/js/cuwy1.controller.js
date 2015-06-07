@@ -1,8 +1,7 @@
 cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("OpCtrl");
-	$scope.hoursList = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7];
-	$scope.minList = [0,5,10,15,20,25,30,35,40,45,50,55];
+
 	$scope.requiredFiledList = ["operation_id","operation_result_id","icd_id"];
 	$scope.requiredFileds = {
 		"operation_result_id":{

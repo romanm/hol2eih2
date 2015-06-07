@@ -238,6 +238,33 @@ public class Hol2Eih1Rest {
 		return historyHolDb;
 	}
 
+	@RequestMapping(value = "/db/savehistoryextract", method = RequestMethod.POST)
+	public  @ResponseBody Map<String, Object> saveHistoryExtract(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
+		logger.info("\n Start /db/savehistoryextract_" +historyHolDb.keySet());
+		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
+		cuwyDbService1.exitHistoryHolDb(historyHolDb, roleTypes);
+		return historyHolDb;
+	}
+
+	private Map<String, Integer> getRoleTypes(Principal userPrincipal) {
+		final Collection<GrantedAuthority> authorities;
+		if(userPrincipal instanceof UsernamePasswordAuthenticationToken){
+			UsernamePasswordAuthenticationToken ut = (UsernamePasswordAuthenticationToken)userPrincipal;
+			authorities = ut.getAuthorities();
+		}else{
+			User u = (User)userPrincipal;
+			authorities = u.getAuthorities();
+		}
+		Map<String,Integer> roleTypes = new HashMap<String, Integer>();
+		for (GrantedAuthority grantedAuthority : authorities) 
+			for (String roleGroup : grantedAuthority.getAuthority().split("_")) {
+				final String[] rolePaar = roleGroup.split("-");
+				if(rolePaar.length>1)
+					roleTypes.put(rolePaar[0], Integer.parseInt(rolePaar[1]));
+			}
+		logger.debug(roleTypes.toString());
+		return roleTypes;
+	}
 	@RequestMapping(value = "/db/savehistory", method = RequestMethod.POST)
 	public  @ResponseBody Map<String, Object> saveHistory(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/savehistory"+historyHolDb.keySet());

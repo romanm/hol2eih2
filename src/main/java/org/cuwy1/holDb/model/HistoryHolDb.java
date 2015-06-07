@@ -6,15 +6,30 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryHolDb {
+	private String historyOtherTreatment,
+	historyExpertiseConslusion,
+	historySpecial
+	;
+	public String getHistorySpecial() {
+		return historySpecial;
+	}
+	public void setHistorySpecial(String historySpecial) {
+		this.historySpecial = historySpecial;
+	}
+	public String getHistoryExpertiseConslusion() {
+		return historyExpertiseConslusion;
+	}
+	public void setHistoryExpertiseConslusion(String historyExpertiseConslusion) {
+		this.historyExpertiseConslusion = historyExpertiseConslusion;
+	}
+	public String getHistoryOtherTreatment() {
+		return historyOtherTreatment;
+	}
+	public void setHistoryOtherTreatment(String historyOtherTreatment) {
+		this.historyOtherTreatment = historyOtherTreatment;
+	}
 	private boolean epicrise2saved;
 	
-	public boolean isEpicrise2saved() {
-		return epicrise2saved;
-	}
-	public HistoryHolDb(){}
-	public void setEpicrise2saved(boolean epicrise2saved) {
-		this.epicrise2saved = epicrise2saved;
-	}
 	private int requiredFieldFullProcent;
 	private int historyId, historyNo, historyUrgent, patientId, directId
 	, resultId
@@ -23,25 +38,14 @@ public class HistoryHolDb {
 	, historyDepartmentIn,
 	historyDepartmentId,
 	historyAgeYear, historyAgeMonth, historyAgeDay ;
-	public int getRestoredId() {
-		return restoredId;
+	
+	private Timestamp historyIn, historyOut;
+	public Timestamp getHistoryOut() {
+		return historyOut;
 	}
-	public void setRestoredId(int restoredId) {
-		this.restoredId = restoredId;
+	public void setHistoryOut(Timestamp historyOut) {
+		this.historyOut = historyOut;
 	}
-	public int getResultId() {
-		return resultId;
-	}
-	public void setResultId(int resultId) {
-		this.resultId = resultId;
-	}
-	public int getTreatmentId() {
-		return treatmentId;
-	}
-	public void setTreatmentId(int treatmentId) {
-		this.treatmentId = treatmentId;
-	}
-	private Timestamp historyIn;
 	private PatientHolDb patientHolDb;
 	private boolean perevid = false;
 	private List<PatientDepartmentMovement> patientDepartmentMovements;
@@ -72,6 +76,15 @@ public class HistoryHolDb {
 				, patientHolDb, diagnosisOnAdmission
 				);
 	}
+
+	public boolean isEpicrise2saved() {
+		return epicrise2saved;
+	}
+	public HistoryHolDb(){}
+	public void setEpicrise2saved(boolean epicrise2saved) {
+		this.epicrise2saved = epicrise2saved;
+	}
+	
 	public int getRequiredFieldFullProcent() {
 		return requiredFieldFullProcent;
 	}
@@ -222,5 +235,23 @@ public class HistoryHolDb {
 	}
 	public Integer getTmpId() {
 		return tmpId;
+	}
+	public int getRestoredId() {
+		return restoredId;
+	}
+	public void setRestoredId(int restoredId) {
+		this.restoredId = restoredId;
+	}
+	public int getResultId() {
+		return resultId;
+	}
+	public void setResultId(int resultId) {
+		this.resultId = resultId;
+	}
+	public int getTreatmentId() {
+		return treatmentId;
+	}
+	public void setTreatmentId(int treatmentId) {
+		this.treatmentId = treatmentId;
 	}
 }

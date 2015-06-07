@@ -190,6 +190,8 @@ initseekIcd10Tree = function($scope, $http, $sce, $filter){
 }
 
 readInitHistory = function($scope, $http, $sce, $filter){
+	$scope.hoursList = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7];
+	$scope.minList = [0,5,10,15,20,25,30,35,40,45,50,55];
 	$scope.param = parameters;
 	$scope.historyFile = "/db/history_id_"+parameters.hno;
 	if(parameters.hid){
@@ -221,6 +223,9 @@ readInitHistory = function($scope, $http, $sce, $filter){
 	}
 
 	initHistory = function(){
+		if(!$scope.patientHistory.historyOut){
+			$scope.patientHistory.historyOut = new Date().getTime();
+		}
 		if(!$scope.patientHistory.patientDepartmentMovements){
 			$scope.patientHistory.patientDepartmentMovements = [];
 			$scope.patientHistory.patientDepartmentMovements.push({});
