@@ -12,6 +12,13 @@
 	margin-bottom: 1px;
 	min-height: 2px;
 }
+/*------------hover-menu------------------------------------------------------*/
+	.animate-show { transition: all linear 0.5s; opacity: 1; } 
+	.animate-show.ng-hide-add,
+	.animate-show.ng-hide-remove { display: inline-block !important; }
+	.animate-show.ng-hide { opacity: 0; }
+	li.hover-menu:hover { background: silver; }
+/*------------hover-menu---------------------------------------------------END*/
 .bold {font-weight: bold;}
 .normal {font-weight: normal;}
 .italic {font-style: italic;}

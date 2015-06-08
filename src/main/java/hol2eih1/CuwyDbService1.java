@@ -1026,6 +1026,7 @@ public class CuwyDbService1 {
 		logger.debug(""+departmentHistory);
 		final int personalId = departmentHistory.getPersonalId();
 		final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
+		logger.debug(""+personalDepartmentHolDb);
 		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
 		departmentHistory.setPersonalDepartmentIdIn(personalDepartmentIdIn);
 		jdbcTemplate.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
@@ -1208,8 +1209,7 @@ public class CuwyDbService1 {
 			return patientHolDb;
 		}
 	}
-/*
- * */
+
 	public Map<String, Object> getPersonalDepartmentHolDb(int personalId) {
 		String sql = "SELECT personal_department_id FROM personal_department WHERE personal_id = ?";
 		logger.info("\n"+sql+" "+personalId);
@@ -1219,6 +1219,7 @@ public class CuwyDbService1 {
 		logger.info(""+personalDepartment);
 		return personalDepartment;
 	}
+
 	public PatientHolDb getPatientHolDb(int patientId) {
 		String sql = "SELECT * FROM patient p WHERE patient_id = ?";
 		logger.info("\n"+sql+patientId);

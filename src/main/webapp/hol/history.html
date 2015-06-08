@@ -173,10 +173,26 @@
 								{{patientDepartmentMovement.personalPatronymic}} </small> <br />
 					</span>
 					</span>
-					<div collapse="!patientHistory.collapseMovePatient" class="well">
+					<div collapse="!patientHistory.collapseMovePatient" class="well" ng-controller="departmentCtrl">
 						<h3>Переведеня</h3>
-						<div class="row" ng-controller="departmentCtrl">
+						
+						<div class="row">
 							<div class="col-xs-5">
+							
+							<div class="input-group">
+								<span class="input-group-addon">Фільтр:</span> 
+								<input type="text" class="form-control input-sm"
+											placeholder="Відділення госпіталізації" id="department"
+											name="department" data-ng-model="patientEditing.departmentName"
+											required="" ng-change="seekMoveDepartment()"
+											tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+										<!-- 
+								<input
+									data-ng-model="seekGroup" type="text" class="form-control"
+									auto-focus="" placeholder=" пошук групи " auto-focus="" />
+								 -->
+							</div>
+							<!-- 
 								<div class="form-group has-success has-feedback required">
 									<label class="control-label sr-only" for="direct">Відділення
 										госпіталізації</label> <input type="text"
@@ -191,35 +207,7 @@
 										Відділення госпіталізації є обов'язковим і не може бути
 										порожнім!</span>
 								</div>
-							</div>
-							<div class="col-xs-1">
-								<button type="button"
-									class="btn btn-sm btn-default dropdown-toggle"
-									data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<div class="dropdown-menu  dropdown-menu-right" role="menu">
-									<table>
-										<tr>
-											<td>
-												<ul>
-													<li ng-repeat="departmentHol in departmentsHol"
-														ng-if="departmentHol.department_profile_id == 2"><a
-														ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-													</li>
-												</ul>
-											</td>
-											<td>
-												<ul>
-													<li ng-repeat="departmentHol in departmentsHol"
-														ng-if="departmentHol.department_profile_id == 1"><a
-														ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-													</li>
-												</ul>
-											</td>
-										</tr>
-									</table>
-								</div>
+							 -->
 							</div>
 							<div class="col-xs-2">
 								<button class="btn btn-default"
@@ -229,7 +217,25 @@
 								</button>
 							</div>
 						</div>
-					</div>
+							<div class="row">
+								<div class="col-xs-6">
+									<ul>
+										<li ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+											ng-if="departmentHol.department_profile_id == 2"><a
+											ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+										</li>
+									</ul>
+								</div>
+								<div class="col-xs-6">
+									<ul>
+										<li ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+											ng-if="departmentHol.department_profile_id == 1"><a
+											ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
 				</div>
 				<hr class="shortPatienHistory" />
 					<div data-ng-show="patientHistory.user">

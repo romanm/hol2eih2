@@ -114,7 +114,7 @@ cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', '$filter', '$sce',
 	});
 } ] );
 
-cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http) {
+cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', function ($scope, $sce, $filter, $http) {
 	
 	$scope.movePatientDepartment = function(){
 		console.log("movePatientDepartment");
@@ -126,7 +126,7 @@ cuwyApp.controller('departmentCtrl', [ '$scope', '$http',function ($scope, $http
 		var departmentHistory = {};
 		departmentHistory.historyId = $scope.patientHistory.historyId;
 		departmentHistory.departmentId = $scope.patientEditing.departmentId;
-		departmentHistory.personalId = $scope.personalId;
+		departmentHistory.personalId = $scope.userPersonalId;
 		departmentHistory.departmentHistoryIn = departmentHistoryIn;
 
 		console.log(departmentHistory);
@@ -330,6 +330,7 @@ cuwyApp.controller('JornalMovePatientCtrl', [ '$scope', '$http', '$filter', '$sc
 
 archivesFile = "/hol/archives_"+parameters.dep;
 cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',function ($scope, $http, $filter, $sce) {
+	initDepartmentArchiveCtrl($scope);
 	$scope.parameters = parameters;
 	$scope.departmentsHol = configHol.departments;
 	$scope.seekInArchives = "";
@@ -363,10 +364,27 @@ var seekDepartmentFromConfig = function($scope, departmentId){
 	})
 };
 
-departmentFile = "/hol/department_"+parameters.dep;
+var initDepartmentArchiveCtrl = function ($scope){
+	
+	$scope.hoverIn = function() { this.hoverEdit = true; };
+	$scope.hoverOut = function() { this.hoverEdit = false; };
 
-cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
-	function ($scope, $http, $filter, $sce) {
+
+	$scope.openPatientShortHistory = function(patient){
+		console.debug('openPatientShortHistory');
+		window.location.href = "/hol/history.html?hno="+patient.history_id;
+	}
+
+	$scope.movePatient = function(patient){
+		patient.collapseMovePatient = !patient.collapseMovePatient;
+		console.log(patient.collapseMovePatient);
+	}
+
+}
+
+departmentFile = "/hol/department_"+parameters.dep;
+cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
+	initDepartmentArchiveCtrl($scope);
 	$scope.parameters = parameters;
 	console.log('DepartmentCtrl');
 	$scope.departmentsHol = configHol.departments;
@@ -400,15 +418,6 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 		});
 	}
 
-	$scope.movePatient = function(patient){
-		patient.collapseMovePatient = !patient.collapseMovePatient;
-		console.log(patient.collapseMovePatient);
-	}
-
-	$scope.openPatientShortHistory = function(patient){
-		console.debug('openPatientShortHistory');
-		window.location.href = "/hol/history.html?hno="+patient.history_id;
-	}
 
 	$scope.openPatientInfo = function(patient){
 		patient.collapsed = !patient.collapsed;
@@ -442,8 +451,5 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 			$scope.movePatient($itemScope.patient);
 		}]
 	];
-
-	$scope.hoverIn = function() { this.hoverEdit = true; };
-	$scope.hoverOut = function() { this.hoverEdit = false; };
 
 } ] );
