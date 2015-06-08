@@ -15,6 +15,12 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		patientHistory: null
 	};
 
+	//----------move patient----------------------------------------------------
+	$scope.seekMoveDepartment = function(){
+		console.debug('seekMoveDepartment');
+	}
+	//----------move patient-------------------------------------------------END
+	
 	initDeclareController($scope, $http, $sce, $filter);
 	$scope.hno = parameters.hno;
 

@@ -12,11 +12,16 @@
 
 <link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 <style type="text/css">
-		body {
-			padding-top: 60px;
-			padding-bottom: 60px;
-		}
-	</style>
+	body {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+	.animate-show { transition: all linear 0.5s; opacity: 1; } 
+	.animate-show.ng-hide-add,
+	.animate-show.ng-hide-remove { display: inline-block !important; }
+	.animate-show.ng-hide { opacity: 0; }
+	li.hover-menu:hover { background: silver; }
+</style>
 	<title>ХОЛ::{{department.department_name}}</title>
 </head>
 
@@ -87,6 +92,7 @@ data-ng-show="parameters.dep !=userDepartmentId">
 				<li> <b> №, ПІБ, Поступив, Діагноз </b> </li>
 				<li ng-repeat="patient in department.patientesDiagnosisHol | filter:query"
 					ng-context-menu="menuPatientList"
+					class="hover-menu" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"
 				>
 				<!-- 
 					<a href="history_{{patient.history_id}}">
@@ -101,7 +107,17 @@ data-ng-show="parameters.dep !=userDepartmentId">
 						<span ng-if="patient.collapsed" class="glyphicon glyphicon-chevron-right"></span>
 						<span ng-if="!patient.collapsed" class="glyphicon glyphicon-chevron-down"></span>
 					</button>
-					<div class="row well" collapse="patient.collapseMovePatient"
+					<span ng-show="hoverEdit" class="animate-show">
+						<button ng-click="openPatientShortHistory(patient)"
+							title="Відкрити іс.хв." class="btn btn-default btn-xs">
+							<span class="glyphicon glyphicon-floppy-open"></span>
+						</button>
+						<button ng-click="movePatient(patient)" title="Переведеня"
+							class="btn btn-default btn-xs">
+							<span class="glyphicon glyphicon-transfer"></span>
+						</button>
+					</span>
+							<div class="row well" collapse="patient.collapseMovePatient"
 								data-ng-controller="departmentCtrl">
 						<div class="col-xs-5">
 							<div class="form-group has-success has-feedback required">

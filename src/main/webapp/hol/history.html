@@ -183,7 +183,7 @@
 										class="form-control input-sm"
 										placeholder="Відділення госпіталізації" id="department"
 										name="department" ng-model="patientEditing.departmentName"
-										required="" ng-blur="validField2(newPatientForm.department)"
+										required="" ng-change="seekMoveDepartment()"
 										tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
 									<span class="glyphicon form-control-feedback"></span> <span
 										class="control-label ng-hide"

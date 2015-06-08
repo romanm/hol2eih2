@@ -402,6 +402,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 
 	$scope.movePatient = function(patient){
 		patient.collapseMovePatient = !patient.collapseMovePatient;
+		console.log(patient.collapseMovePatient);
 	}
 
 	$scope.openPatientShortHistory = function(patient){
@@ -442,6 +443,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce',
 		}]
 	];
 
-	
+	$scope.hoverIn = function() { this.hoverEdit = true; };
+	$scope.hoverOut = function() { this.hoverEdit = false; };
 
 } ] );
