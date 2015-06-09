@@ -20,7 +20,6 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		console.debug('seekMoveDepartment');
 		console.debug($scope.patientEditing.departmentName);
 		console.debug($scope.departmentsHol);
-		
 	}
 	//----------move patient-------------------------------------------------END
 	

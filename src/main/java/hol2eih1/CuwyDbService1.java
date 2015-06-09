@@ -18,7 +18,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1022,31 +1024,41 @@ public class CuwyDbService1 {
 		jdbcTemplate.update(sqlInsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
 	}
 	String sqlinsertDepartmentHistory = "";
-	public void insertDepartmentHistory(final DepartmentHistory departmentHistory) {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	public void movePatientDepartment(final DepartmentHistory departmentHistory, Map<String, Integer> roleTypes) {
 		logger.debug(""+departmentHistory);
+		final Timestamp patientMoveTimeOut = new Timestamp(Calendar.getInstance().getTimeInMillis());
+		final Timestamp patientMoveTimeIn = new Timestamp(patientMoveTimeOut.getTime()+1000);
+		final String patientMoveTimeInStr = sdf.format(patientMoveTimeIn);
+		logger.debug(""+patientMoveTimeOut+"/"+patientMoveTimeIn+"//"+patientMoveTimeInStr);
 		final int personalId = departmentHistory.getPersonalId();
+		logger.debug(sqlExitUpdateDepartmentHistoryFirst
+				.replaceFirst("\\?", ""+departmentHistory.getHistoryId())
+				.replaceFirst("\\?", ""+roleTypes.get("per"))
+				.replaceFirst("\\?", ""+roleTypes.get("dep"))
+				.replaceFirst("\\?", "'"+patientMoveTimeInStr+"'")
+				.replaceFirst("\\?", "'"+patientMoveTimeInStr+"'")
+				);
+		jdbcTemplate.update( sqlExitUpdateDepartmentHistoryFirst,
+				new Object[] {departmentHistory.getHistoryId(), roleTypes.get("per"), roleTypes.get("dep"), patientMoveTimeInStr, patientMoveTimeInStr },
+				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR}
+				);
 		final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
 		logger.debug(""+personalDepartmentHolDb);
 		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
+		if(true)
+			return ;
 		departmentHistory.setPersonalDepartmentIdIn(personalDepartmentIdIn);
 		jdbcTemplate.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
-				, new DepartmentHistoryMapSet(departmentHistory,DepartmentHistoryMapSet.insertDepartmentHistoryMin));
+				, new DepartmentHistoryMapSet(departmentHistory, DepartmentHistoryMapSet.insertDepartmentHistoryMin));
 	}
 	public void insertDepartmentHistory(
 			final PatientDepartmentMovement patientDepartmentMovement) {
 		jdbcTemplate.update(DepartmentHistoryMapSet.insertPatientDepartmentMovement
 				, new DepartmentHistoryMapSet(patientDepartmentMovement));
 	}
-	String sqlExitDepartmentHistory = "UPDATE department_history dh, history h, "
-			+ " (SELECT MAX(department_history_id) ax , history_id FROM department_history"
-			+ " WHERE history_id = ? GROUP BY history_id) m, "
-			+ " (SELECT personal_department_id FROM personal_department "
-			+ " WHERE personal_id = ? AND department_id = ?) pd "
-			+ " SET dh.personal_department_id_out = pd.personal_department_id"
-			+ " , dh.department_history_out = h.history_out"
-			+ " , dh.department_history_bed_day = TIMESTAMPDIFF(HOUR, department_history_in, h.history_out) DIV 24 "
-			+ " WHERE m.ax = dh.department_history_id AND h.history_id = m.history_id";
-	String sqlExitHistory = "UPDATE history "
+	
+	String sqlExitUpdateHistory = "UPDATE history "
 			+ " SET treatment_id = ? "
 			+ " , result_id = ? "
 			+ " , restored_id = ? "
@@ -1055,26 +1067,36 @@ public class CuwyDbService1 {
 			+ " , history_special = ? "
 			+ " , history_out = ? "
 			+ " WHERE history_id = ? ";
+
+	String sqlExitUpdateDepartmentHistoryFirst = " UPDATE department_history dh, "
+			+ " (SELECT MAX(department_history_id) ax, history_id FROM department_history "
+			+ " WHERE history_id = ? GROUP BY history_id) m, "
+			+ " (SELECT personal_department_id FROM personal_department "
+			+ " WHERE personal_id = ? AND department_id = ?) pd "
+			+ " SET dh.personal_department_id_out = pd.personal_department_id "
+			+ " , dh.department_history_out = ? "
+			+ " , dh.department_history_bed_day = TIMESTAMPDIFF(HOUR, department_history_in, ? ) DIV 24 "
+			+ " WHERE m.ax = dh.department_history_id ";
+	String sqlExitUpdateDepartmentHistory = "UPDATE department_history dh, history h, "
+			+ " (SELECT MAX(department_history_id) ax , history_id FROM department_history"
+			+ " WHERE history_id = ? GROUP BY history_id) m, "
+			+ " (SELECT personal_department_id FROM personal_department "
+			+ " WHERE personal_id = ? AND department_id = ?) pd "
+			+ " SET dh.personal_department_id_out = pd.personal_department_id"
+			+ " , dh.department_history_out = h.history_out"
+			+ " , dh.department_history_bed_day = TIMESTAMPDIFF(HOUR, department_history_in, h.history_out) DIV 24 "
+			+ " WHERE m.ax = dh.department_history_id AND h.history_id = m.history_id";
 	public void exitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
-		jdbcTemplate.update(sqlExitHistory, new HistoryExitHolDbPSSetter(historyHolDb));
+		jdbcTemplate.update(sqlExitUpdateHistory, new HistoryExitHolDbPSSetter(historyHolDb));
 		//update to department history doctor and out date
 		final Integer personId = roleTypes.get("per");
 		int historyId = (int) historyHolDb.get("historyId");
-		jdbcTemplate.update( sqlExitDepartmentHistory,
-				new Object[] {historyId, roleTypes.get("per"), roleTypes.get("dep") },
+		jdbcTemplate.update( sqlExitUpdateDepartmentHistory,
+				new Object[] {historyId, personId, roleTypes.get("dep") },
 				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
 	}
-	String sqlInsertHistory = "INSERT INTO history "
-			+ "( history_in, history_no, history_urgent, patient_id, direct_id"
-			+ ", history_department_in "
-			+ ", history_department_id "
-			+ ", history_age_year, history_age_month, history_age_day "
-			+ ", history_id "
-			+ ") VALUES "
-			+ "( NOW(), ?, ?, ?, ?"
-			+ ", ?, ?, ?, ?, ?, ?)";
-//		+ "( now(),'15025',0,32111,1,1,66,0,0)";
+	
 	public void insertHistoryHolDb(final HistoryHolDb historyHolDb) {
 		int nextHistoryId = getAutoIncrement("history");
 		historyHolDb.setHistoryId(nextHistoryId);
@@ -1087,7 +1109,16 @@ public class CuwyDbService1 {
 		System.out.println("---------------------------------------");
 		jdbcTemplate.update(sqlInsertHistory, new HistoryHolDbPSSetter(historyHolDb));
 	}
-
+	String sqlInsertHistory = "INSERT INTO history "
+			+ "( history_in, history_no, history_urgent, patient_id, direct_id"
+			+ ", history_department_in "
+			+ ", history_department_id "
+			+ ", history_age_year, history_age_month, history_age_day "
+			+ ", history_id "
+			+ ") VALUES "
+			+ "( NOW(), ?, ?, ?, ?"
+			+ ", ?, ?, ?, ?, ?, ?)";
+//		+ "( now(),'15025',0,32111,1,1,66,0,0)";
 	public void insertPatientHolDb(final PatientHolDb patientHolDb) {
 		if(null == patientHolDb.getPatientHouse())
 			patientHolDb.setPatientHouse("-");

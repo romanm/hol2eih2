@@ -73,25 +73,6 @@ public class Hol2Eih1Rest {
 		return icd10UaGroups;
 	}
 
-	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
-	public  @ResponseBody DepartmentHistory movePatientDepartment(@RequestBody DepartmentHistory departmentHistory, Principal userPrincipal) {
-		logger.debug("/db/movePatientDepartment = " );
-		cuwyDbService1.insertDepartmentHistory(departmentHistory);
-		logger.debug("/db/movePatientDepartment ---------------------- END " );
-		return departmentHistory;
-	}
-
-	@RequestMapping(value = "/db/movePatientDepartment2", method = RequestMethod.POST)
-	public  @ResponseBody Map<String, Object> movePatientDepartment2(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
-		logger.debug(""+patientHistory);
-		final Object movePatientDepartment = patientHistory.get("movePatientDepartment");
-		logger.debug(""+movePatientDepartment);
-		DepartmentHistory departmentHistory = new DepartmentHistory();
-		departmentHistory.setDepartmentHistoryId(0);
-		cuwyDbService1.insertDepartmentHistory(departmentHistory);
-		return patientHistory;
-	}
-
 	//	@RequestMapping(value = "/save/epicrise", method = RequestMethod.POST)
 //	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.GET)
 	@RequestMapping(value = "/db/saveepicrise", method = RequestMethod.POST)
@@ -236,6 +217,26 @@ public class Hol2Eih1Rest {
 			}
 		}
 		return historyHolDb;
+	}
+
+	@RequestMapping(value = "/db/movePatientDepartment2", method = RequestMethod.POST)
+	public  @ResponseBody Map<String, Object> movePatientDepartment2(@RequestBody Map<String, Object> patientHistory, Principal userPrincipal) {
+		logger.debug(""+patientHistory);
+		final Object movePatientDepartment = patientHistory.get("movePatientDepartment");
+		logger.debug(""+movePatientDepartment);
+		DepartmentHistory departmentHistory = new DepartmentHistory();
+		departmentHistory.setDepartmentHistoryId(0);
+//		cuwyDbService1.insertDepartmentHistory(departmentHistory);
+		return patientHistory;
+	}
+
+	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
+	public  @ResponseBody DepartmentHistory movePatientDepartment(@RequestBody DepartmentHistory departmentHistory, Principal userPrincipal) {
+		logger.debug("/db/movePatientDepartment = " );
+		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
+		cuwyDbService1.movePatientDepartment(departmentHistory, roleTypes);
+		logger.debug("/db/movePatientDepartment ---------------------- END " );
+		return departmentHistory;
 	}
 
 	@RequestMapping(value = "/db/savehistoryextract", method = RequestMethod.POST)

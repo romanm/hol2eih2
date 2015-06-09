@@ -210,16 +210,6 @@ var configHol =
     "jornalMovePatient" : null,
     "departmentsHol" : null,
     "patientesDiagnosisHol" : null,
-    "department_id" : 25,
-    "department_profile_id" : 2,
-    "department_name" : "Торакальної хірургії",
-    "zaviduvach" : "Франковський Р.Б.",
-    "department_active" : true,
-    "user" : null
-  }, {
-    "jornalMovePatient" : null,
-    "departmentsHol" : null,
-    "patientesDiagnosisHol" : null,
     "department_id" : 2,
     "department_profile_id" : 2,
     "department_name" : "Гінекологічне",
