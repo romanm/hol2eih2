@@ -230,11 +230,18 @@ public class Hol2Eih1Rest {
 		return patientHistory;
 	}
 
+	@RequestMapping(value = "/db/moveHistoryDepartmentHistory", method = RequestMethod.POST)
+	public  @ResponseBody HistoryHolDb moveHistoryDepartmentHistory(@RequestBody HistoryHolDb history, Principal userPrincipal) {
+		logger.debug("\n /db/moveHistoryDepartmentHistory = " +history);
+		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
+		cuwyDbService1.movePatientDepartment(history, roleTypes);
+		return history;
+	}
 	@RequestMapping(value = "/db/movePatientDepartment", method = RequestMethod.POST)
 	public  @ResponseBody DepartmentHistory movePatientDepartment(@RequestBody DepartmentHistory departmentHistory, Principal userPrincipal) {
 		logger.debug("/db/movePatientDepartment = " );
 		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
-		cuwyDbService1.movePatientDepartment(departmentHistory, roleTypes);
+//		cuwyDbService1.movePatientDepartment(departmentHistory, roleTypes);
 		logger.debug("/db/movePatientDepartment ---------------------- END " );
 		return departmentHistory;
 	}

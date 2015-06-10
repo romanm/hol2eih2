@@ -123,12 +123,26 @@ cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', func
 		
 		initAppConfig($scope, $http, $sce, $filter);
 		var departmentHistoryIn = new Date();
+
 		var departmentHistory = {};
 		departmentHistory.historyId = $scope.patientHistory.historyId;
 		departmentHistory.departmentId = $scope.patientEditing.departmentId;
 		departmentHistory.personalId = $scope.userPersonalId;
 		departmentHistory.departmentHistoryIn = departmentHistoryIn;
+		var history = {};
+		history.historyId = $scope.patientHistory.historyId;
+		history.historyDepartmentId =$scope.patientEditing.departmentId;
+		history.departmentHistorys = [];
+		history.departmentHistorys.push(departmentHistory);
+		console.log(history);
+		$http({ method : 'POST', data : history, url : "/db/moveHistoryDepartmentHistory"
+		}).success(function(data, status, headers, config){
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
 
+		return;
 		console.log(departmentHistory);
 		postObject("/db/movePatientDepartment", departmentHistory, $scope, $http);
 	}

@@ -264,6 +264,7 @@ initDeclareController = function($scope, $http, $sce, $filter){
 //	console.log($scope.param);
 
 	postObject = function(url, docToSave, $scope, $http){
+		console.log(docToSave);
 		$http({ method : 'POST', data : docToSave, url : url
 		}).success(function(data, status, headers, config){
 			console.log(data);

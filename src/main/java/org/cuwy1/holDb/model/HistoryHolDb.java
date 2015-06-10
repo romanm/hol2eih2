@@ -6,10 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryHolDb {
+
+	private int requiredFieldFullProcent;
+	private int historyId, historyNo, historyUrgent, patientId, directId
+	, resultId
+	, restoredId
+	, treatmentId
+	, historyDepartmentIn,
+	historyDepartmentId,
+	historyAgeYear, historyAgeMonth, historyAgeDay ;
+	
 	private String historyOtherTreatment,
 	historyExpertiseConslusion,
 	historySpecial
 	;
+	private PatientHolDb patientHolDb;
+	private boolean perevid = false;
+	private List<PatientDepartmentMovement> patientDepartmentMovements;
+	private List<HistoryTreatmentAnalysis> historyTreatmentAnalysises;
+	private List<DiagnosIcd10> diagnosis;
+	private List<Map<String, Object>> operationHistorys;
+	private DiagnosIcd10 diagnosisOnAdmission;
+	//for update
+	private List<DepartmentHistory> departmentHistorys;
 	public String getHistorySpecial() {
 		return historySpecial;
 	}
@@ -30,15 +49,6 @@ public class HistoryHolDb {
 	}
 	private boolean epicrise2saved;
 	
-	private int requiredFieldFullProcent;
-	private int historyId, historyNo, historyUrgent, patientId, directId
-	, resultId
-	, restoredId
-	, treatmentId
-	, historyDepartmentIn,
-	historyDepartmentId,
-	historyAgeYear, historyAgeMonth, historyAgeDay ;
-	
 	private Timestamp historyIn, historyOut;
 	public Timestamp getHistoryOut() {
 		return historyOut;
@@ -46,14 +56,14 @@ public class HistoryHolDb {
 	public void setHistoryOut(Timestamp historyOut) {
 		this.historyOut = historyOut;
 	}
-	private PatientHolDb patientHolDb;
-	private boolean perevid = false;
-	private List<PatientDepartmentMovement> patientDepartmentMovements;
-	private List<HistoryTreatmentAnalysis> historyTreatmentAnalysises;
-	private List<DiagnosIcd10> diagnosis;
-	private List<Map<String, Object>> operationHistorys;
-	private DiagnosIcd10 diagnosisOnAdmission;
+	
 
+	public List<DepartmentHistory> getDepartmentHistorys() {
+		return departmentHistorys;
+	}
+	public void setDepartmentHistorys(List<DepartmentHistory> departmentHistorys) {
+		this.departmentHistorys = departmentHistorys;
+	}
 	public List<DiagnosIcd10> getDiagnosis() {
 		return diagnosis;
 	}
@@ -65,13 +75,13 @@ public class HistoryHolDb {
 	public String toString() {
 		return String.format(
 				"\n HistoryHolDb {"
-				+ "historyId = '%s', historyNo = '%s', historyUrgent = '%s'"
+				+ "historyId = '%s', historyNo = '%s', historyDepartmentId = '%s', historyUrgent = '%s'"
 				+ "\n, patientId = '%s', directId = '%s', historyDepartmentIn = '%s'"
 				+ "\n, historyAgeYear = '%s', historyAgeMonth = '%s', historyAgeDay = '%s'"
 				+ "\n, patientHolDb = {%s}"
 				+ ", diagnosisOnAdmission = {%s}"
 				+ "}",
-				historyId, historyNo, historyUrgent, patientId, directId, historyDepartmentIn,
+				historyId, historyNo, historyDepartmentId, historyUrgent, patientId, directId, historyDepartmentIn,
 				historyAgeYear, historyAgeMonth, historyAgeDay
 				, patientHolDb, diagnosisOnAdmission
 				);
