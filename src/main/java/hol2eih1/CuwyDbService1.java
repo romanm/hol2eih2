@@ -486,7 +486,7 @@ public class CuwyDbService1 {
 				, new DepartmentHistoryMapSet(departmentHistory, DepartmentHistoryMapSet.insertDepartmentHistoryMin));
 		logger.debug(""+history);
 		jdbcTemplate.update( sqlUpdateHistoryHistoryDepartmentId,
-				new Object[] {history.getHistoryId(), history.getHistoryDepartmentId()},
+				new Object[] {history.getHistoryDepartmentId(), history.getHistoryId()},
 				new int[] {Types.INTEGER, Types.INTEGER}
 				);
 	}
