@@ -76,11 +76,10 @@ body {
 						class="btn btn-default btn-xs" title="Зведена інформація">
 						<b>∑</b>
 					</button>
-					<button type="button" data-toggle="modal"
-						data-target="#moveDialog{{$index}}" 
-						class="btn btn-default btn-xs"
-						title="Переведеня"
-						>
+					<button data-ng-click="initDepartmentMoveCtrl(patient)"
+						type="button" data-toggle="modal"
+						data-target="#moveDialog{{$index}}"
+						class="btn btn-default btn-xs" title="Переведеня">
 						<span class="glyphicon glyphicon-transfer"></span>
 					</button>
 
@@ -88,18 +87,87 @@ body {
 							HH:mm'}} </span>, <span>Дз: {{patient.icd_code}},
 							{{patient.icd_name}}</span> <!-- Dialog -->
 						<div class="modal fade" id="moveDialog{{$index}}" role="dialog">
-							<div class="modal-dialog">
+							<div class="modal-dialog" style="width: 90%">
 
 								<!-- Modal content-->
-								<div class="modal-content">
+								<div class="modal-content" ng-controller="MovePatientCtrl">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4 class="modal-title">Перевести - {{patient.name}}</h4>
+										<h4 class="modal-title">
+											<span class="glyphicon glyphicon-transfer"></span> Переведеня
+											- {{patient.name}}
+										</h4>
 									</div>
-									<div class="modal-body">{{patient}}</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-xs-6">
+												<div class="input-group">
+													<span class="input-group-addon">Фільтр:</span> <input
+														type="text" class="form-control input-sm"
+														placeholder="Відділення переведення" id="department"
+														name="department"
+														data-ng-model="patientEditing.departmentName" required=""
+														tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+												</div>
+											</div>
+											<div class="col-xs-6">
+												Число і час <u> {{historyToMove.departmentHistorys[0].departmentHistoryIn |
+													date:'dd.MM.yyyy HH:mm'}} </u>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-3">
+												<ul>
+													<li
+														ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+														ng-if="departmentHol.department_profile_id == 2"><a
+														ng-click="writeDepartmentForMoveTo(departmentHol)">{{departmentHol.department_name}}</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-xs-3">
+												<ul>
+													<li
+														ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+														ng-if="departmentHol.department_profile_id == 1"><a
+														ng-click="writeDepartmentForMoveTo(departmentHol)">{{departmentHol.department_name}}</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-xs-6">
+												<table>
+													<tr>
+														<th>Дата - переведеня</th>
+														<th>години</th>
+														<th>хвилини</th>
+													</tr>
+													<tr>
+														<td><datepicker
+																data-ng-model="historyToMove.departmentHistorys[0].departmentHistoryIn"
+																data-date-format="dd MM yyyy - HH:ii p"
+																min-date="minDate" show-weeks="true"
+																class="well well-sm"></datepicker></td>
+														<td class="top"><select
+															data-ng-model="tmpVariables['departmentHistoryIn_HH']"
+															data-ng-change="historyToMove.departmentHistorys[0].departmentHistoryIn = 
+									setHH2datetime(historyToMove.departmentHistorys[0].departmentHistoryIn, tmpVariables['departmentHistoryIn_HH'])">
+																<option data-ng-repeat="hh in hoursList" value="{{hh}}">{{hh}}</option>
+														</select></td>
+														<td class="top"><select
+															data-ng-model="tmpVariables['departmentHistoryIn_mm']"
+															data-ng-change="historyToMove.departmentHistorys[0].departmentHistoryIn = 
+									setMm2datetime(historyToMove.departmentHistorys[0].departmentHistoryIn, tmpVariables['departmentHistoryIn_mm'])">
+																<option data-ng-repeat="mm in minList" value="{{mm}}">{{mm}}</option>
+														</select></td>
+													</tr>
+												</table>
+											</div>
+										</div>
+
+									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default"
-											>
+										<button data-ng-click="movePatientDepartment()" type="button"
+											class="btn btn-default">
 											<span class="glyphicon glyphicon-ok"></span> Перевести
 										</button>
 										<button type="button" class="btn btn-default"

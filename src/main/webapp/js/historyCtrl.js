@@ -18,8 +18,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	//----------move patient----------------------------------------------------
 	$scope.seekMoveDepartment = function(){
 		console.debug('seekMoveDepartment');
-		console.debug($scope.patientEditing.departmentName);
-		console.debug($scope.departmentsHol);
+		console.debug($scope.patientHistory.departmentHistoryIn);
 	}
 	//----------move patient-------------------------------------------------END
 	
@@ -35,6 +34,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
 		initAppConfig($scope, $http, $sce, $filter);
+		initDepartmentMoveCtrl($scope);
 	}).error(function(data, status, headers, config) {
 	});
 
@@ -60,7 +60,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		});
 		console.log("----");
 	}
-	$scope.tmpVariables = {}
+	$scope.tmpVariables = {};
 	$scope.openDialog = function(dialogName){
 		console.log(dialogName+" "+$scope.collapseDialog);
 		$scope.collapseDialog = $scope.collapseDialog == dialogName ? 'false': dialogName;
@@ -77,11 +77,13 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	$scope.setHH2datetime = function(dt, hh){
 		var dtTmp = new Date(dt);
 		dtTmp.setHours(hh);
+		console.log($scope.departmentHistoryIn);
 		return dtTmp.getTime();
 	}
 	$scope.setMm2datetime = function(dt, mm){
 		var dtTmp = new Date(dt);
 		dtTmp.setMinutes(mm);
+		console.log($scope.departmentHistoryIn);
 		return dtTmp.getTime();
 	}
 	//-------------extract---------------------------------------------------END

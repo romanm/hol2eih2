@@ -113,22 +113,44 @@ cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', '$filter', '$sce',
 	}).error(function(data, status, headers, config) {
 	});
 } ] );
-
+var initDepartmentMoveCtrl = function($scope){
+	console.log("initDepartmentMoveCtrl");
+	$scope.tmpVariables = {};	
+	var initTmpVariables = function(departmentHistoryIn){
+		$scope.tmpVariables.departmentHistoryIn_HH = departmentHistoryIn.getHours();
+		$scope.tmpVariables.departmentHistoryIn_mm = departmentHistoryIn.getMinutes();
+	}
+	console.log(parameters);
+	if(parameters.hno){
+		$scope.patientHistory.departmentHistoryIn = new Date();
+		initTmpVariables($scope.patientHistory.departmentHistoryIn);
+		console.log($scope.patientHistory.departmentHistoryIn);
+	}else if(parameters.dep){
+		$scope.departmentsHol.departmentHistoryIn = new Date();
+		initTmpVariables($scope.departmentsHol.departmentHistoryIn);
+		console.log($scope.departmentsHol.departmentHistoryIn);
+	}
+	console.log($scope.tmpVariables);
+	$scope.collapseMovePatient = function(){
+		console.log("collapseMovePatient");
+		$scope.patientHistory.collapseMovePatient = !$scope.patientHistory.collapseMovePatient
+	}
+}
 cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', function ($scope, $sce, $filter, $http) {
-	
+	console.log('departmentCtrl');
+	console.log(parameters);
 	$scope.movePatientDepartment = function(){
 		console.log("movePatientDepartment");
 		console.log($scope.patientHistory);
 		console.log($scope.patientHistory.user);
 		
 		initAppConfig($scope, $http, $sce, $filter);
-		var departmentHistoryIn = new Date();
 
 		var departmentHistory = {};
 		departmentHistory.historyId = $scope.patientHistory.historyId;
 		departmentHistory.departmentId = $scope.patientEditing.departmentId;
 		departmentHistory.personalId = $scope.userPersonalId;
-		departmentHistory.departmentHistoryIn = departmentHistoryIn;
+		departmentHistory.departmentHistoryIn = $scope.patientHistory.departmentHistoryIn;
 		var history = {};
 		history.historyId = $scope.patientHistory.historyId;
 		history.historyDepartmentId =$scope.patientEditing.departmentId;
@@ -398,9 +420,10 @@ var initDepartmentArchiveCtrl = function ($scope){
 
 departmentFile = "/hol/department_"+parameters.dep;
 cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', function ($scope, $http, $filter, $sce) {
-	initDepartmentArchiveCtrl($scope);
-	$scope.parameters = parameters;
 	console.log('DepartmentCtrl');
+	$scope.parameters = parameters;
+	initDepartmentArchiveCtrl($scope);
+	
 	$scope.departmentsHol = configHol.departments;
 	$scope.hol1host = configHol.hol1host;
 	$scope.patientEditing = {}
@@ -411,6 +434,7 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		$scope.department = data;
 		seekDepartmentFromConfig($scope, $scope.department.department_id);
 		initAppConfig($scope, $http, $sce, $filter);
+		initDepartmentMoveCtrl($scope);
 	}).error(function(data, status, headers, config) {
 	});
 	

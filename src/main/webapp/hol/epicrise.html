@@ -3,9 +3,7 @@
  ng-cloak class="ng-cloak"
 >
 <head>
-<!-- 
-Виписка 
- -->
+
 <title>
 Виписка Від.:
 	{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
@@ -48,8 +46,8 @@
 								ІХ № <u>{{patientHistory.historyNo}}</u>
 						</a></li>
 						<li><a
-							data-ng-click="saveControlAndGo('/hol/epicrise.html?hid='.concat(patientHistory.historyId),'Виписка')">
-								Виписка <sub> Новий стиль </sub>
+							data-ng-click="saveControlAndGo('/hol/epicrise.html?hid='.concat(patientHistory.historyId),'Виписний епікриз')">
+								Виписний епікриз <sub> Новий стиль </sub>
 						</a></li>
 					</ol>
 				</div>
@@ -122,21 +120,13 @@
 
 		
 
-		<div class="no-print navbar-right">
-			<small class="bg-info"> <b>Новий стиль</b> | Старий стиль | 
-			<a href="http://192.168.68.62/history/edit/id/56541">
-			<span class="glyphicon glyphicon-link"></span>
-			Стара програма ІХ 
-			</a>
-			
-			</small>
-		</div>
 
 		<h3 class="centered">
 			Виписний епікриз <br /> <small> Відділення
 				«{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 				-1].departmentName}}» </small>
 		</h3>
+
 		<!-- 
 		<h4 class="centered"></h4>
 		 -->
@@ -167,6 +157,13 @@
 				date:'dd.MM.yyyy'}} </b> виписаний <b>
 				{{epicrise.departmentHistoryOut | date:'dd.MM.yyyy'}} </b> провів
 			ліжкоднів: <b> {{beetDays()}} </b>
+		</div>
+		<div class="no-print navbar-right">
+			<small class="bg-info"> <b>Новий стиль</b> | Старий стиль | <a
+				href="http://192.168.68.62/history/edit/id/56541"> <span
+					class="glyphicon glyphicon-link"></span> Стара програма ІХ
+			</a>
+			</small>
 		</div>
 		<hr />
 		<div class="no-print navbar-right">

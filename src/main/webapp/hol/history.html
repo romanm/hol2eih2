@@ -52,14 +52,7 @@
 						<button type="button" class="btn btn-primary btn-sm"
 							data-ng-click="saveWorkDoc()" data-toggle="modal">
 							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-						</button> <!-- 
-			<span class="glyphicon glyphicon-floppy-disk"></span> <a
-				data-ng-click="saveWorkDoc()" href="#"
-				title="Запис {{numberOfChange}} незбережених змін"> Запис
-					{{numberOfChange}} </a> <span
-				data-ng-show="patientHistory.requiredFieldFullProcent > 0">
-					ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
-				--></li>
+						</button> </li>
 						<li>|</li>
 					<li data-ng-show="!patientHistory.user"><span
 						class="glyphicon glyphicon-log-in"></span> <a href="/login">
@@ -174,49 +167,38 @@
 					</span>
 					</span>
 					<div collapse="!patientHistory.collapseMovePatient" class="well" ng-controller="departmentCtrl">
-						<h3>Переведеня</h3>
-						
-						<div class="row">
-							<div class="col-xs-5">
-							
-							<div class="input-group">
-								<span class="input-group-addon">Фільтр:</span> 
-								<input type="text" class="form-control input-sm"
-											placeholder="Відділення госпіталізації" id="department"
-											name="department" data-ng-model="patientEditing.departmentName"
-											required="" ng-change="seekMoveDepartment()"
-											tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
-										<!-- 
-								<input
-									data-ng-model="seekGroup" type="text" class="form-control"
-									auto-focus="" placeholder=" пошук групи " auto-focus="" />
-								 -->
-							</div>
-							<!-- 
-								<div class="form-group has-success has-feedback required">
-									<label class="control-label sr-only" for="direct">Відділення
-										госпіталізації</label> <input type="text"
-										class="form-control input-sm"
-										placeholder="Відділення госпіталізації" id="department"
-										name="department" ng-model="patientEditing.departmentName"
-										required="" ng-change="seekMoveDepartment()"
-										tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
-									<span class="glyphicon form-control-feedback"></span> <span
-										class="control-label ng-hide"
-										ng-show="validateForm.department.fieldHasError">
-										Відділення госпіталізації є обов'язковим і не може бути
-										порожнім!</span>
+							<div class="row">
+								<div class="col-xs-8">
+									<h3><span class="glyphicon glyphicon-transfer"></span> Переведеня</h3>
 								</div>
-							 -->
-							</div>
-							<div class="col-xs-2">
+								<div class="col-xs-4">
 								<button class="btn btn-default"
-									data-ng-click="movePatientDepartment()">
-									<span class="glyphicon glyphicon-transfer"></span>
-									Переведення
-								</button>
+										data-ng-click="movePatientDepartment()">
+										<span class="glyphicon glyphicon-ok"></span> Перевести
+									</button>
+								<button class="btn btn-default"
+										data-ng-click="patientHistory.collapseMovePatient = false">
+										<span class="glyphicon glyphicon-remove"></span> Скасувати
+									</button>
+								</div>
 							</div>
-						</div>
+							<div class="row">
+								<div class="col-xs-6">
+									<div class="input-group">
+										<span class="input-group-addon">Фільтр:</span> <input
+											type="text" class="form-control input-sm"
+											placeholder="Відділення переведення" id="department"
+											name="department"
+											data-ng-model="patientEditing.departmentName" required=""
+											ng-change="seekMoveDepartment()"
+											tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+									</div>
+								</div>
+								<div class="col-xs-6">
+									Число і час <u> {{patientHistory.departmentHistoryIn |
+										date:'dd.MM.yyyy HH:mm'}} </u>
+								</div>
+							</div>
 							<div class="row">
 								<div class="col-xs-3">
 									<ul>
@@ -226,13 +208,39 @@
 										</li>
 									</ul>
 								</div>
-								<div class="col-xs-6">
+								<div class="col-xs-3">
 									<ul>
 										<li ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
 											ng-if="departmentHol.department_profile_id == 1"><a
 											ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
 										</li>
 									</ul>
+								</div>
+								<div class="col-xs-6">
+									<table>
+										<tr>
+											<th>Дата - переведеня</th>
+											<th>години</th>
+											<th>хвилини</th>
+										</tr>
+										<tr>
+											<td><datepicker data-ng-model="patientHistory.departmentHistoryIn"
+													data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
+													show-weeks="true" class="well well-sm"></datepicker></td>
+											<td class="top"><select
+												data-ng-model="tmpVariables['departmentHistoryIn_HH']"
+												data-ng-change="patientHistory.departmentHistoryIn = 
+									setHH2datetime(patientHistory.departmentHistoryIn, tmpVariables['departmentHistoryIn_HH'])">
+													<option data-ng-repeat="hh in hoursList" value="{{hh}}">{{hh}}</option>
+											</select></td>
+											<td class="top"><select
+												data-ng-model="tmpVariables['departmentHistoryIn_mm']"
+												data-ng-change="patientHistory.departmentHistoryIn = 
+									setMm2datetime(patientHistory.departmentHistoryIn, tmpVariables['departmentHistoryIn_mm'])">
+													<option data-ng-repeat="mm in minList" value="{{mm}}">{{mm}}</option>
+											</select></td>
+										</tr>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -478,7 +486,7 @@
 					<h3>
 						<small> <span class="glyphicon glyphicon-edit"></span>
 						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
-							Епикриз </a> <sub style="font-size: 50%;"> <a
+							Епікриз </a> <sub style="font-size: 50%;"> <a
 							href="epicrise.html?hid={{patientHistory.historyId}}">Новий
 								стиль</a>| <a href="epicrise4.html?hid={{patientHistory.historyId}}">Старий
 								стиль</a>
@@ -496,13 +504,6 @@
 						<span
 							ng-bind-html="historyTreatmentAnalysis.historyTreatmentAnalysisText"></span>
 					</div>
-					<!-- 
-				<h3 data-ng-show="patientHistory.epicrise2saved">
-					<small> <span class="glyphicon glyphicon-share"></span>
-					</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
-						Епикриз </a>
-				</h3>
-					 -->
 				</div>
 		</div>
 		<div class="col-md-3 well no-print">
@@ -518,14 +519,14 @@
 					</a>
 				</small></li>
 				<li><span class="glyphicon glyphicon-transfer"></span> <a
-					ng-click="patientHistory.collapseMovePatient = !patientHistory.collapseMovePatient ">
+					ng-click="collapseMovePatient()">
 						Переведеня </a></li>
 				<li><span class="glyphicon glyphicon-pushpin"></span> <a
 					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
 				</a></li>
 				<li><span class="glyphicon glyphicon-edit"></span> <a
 					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
-						Епикриз </a> | <small> <a
+						Епікриз </a> | <small> <a
 						href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
 							<span class="glyphicon glyphicon-link"></span>HOL1
 					</a>
