@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html ng-app="cuwyApp" ng-controller="DepartmentCtrl" ng-cloak
+	class="ng-cloak">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+
+<link href="/img/favicon.ico" rel="shortcut icon"
+	type="image/vnd.microsoft.icon" />
+<style type="text/css" media="screen">
+body {
+	padding-top: 60px;
+	padding-bottom: 60px;
+}
+</style>
+<title>ХОЛ::{{department.department_name}}</title>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<ol class="breadcrumb">
+					<li><a href="/hol/home.html"><span
+							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+					<li><a
+						href="/hol/department.html?dep={{department.department_id}}
+		">{{department.department_name}}</a></li>
+				</ol>
+			</div>
+			<div class="collapse navbar-collapse navbar-right">
+				<ul>
+					<li data-ng-show="!department.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="department.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{department.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h2>
+					<b>Пацієнти:</b> {{department.department_name}} 
+				</h2>
+				
+				<div class="h2 alert alert-warning" role="alert"
+					data-ng-show="!department.user">
+					<span class="glyphicon glyphicon-warning-sign"></span> Для
+					зчитування списку хворих відділення <br /> ввійдіть в програму.
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon">Пошук:</span> <input
+						ng-model="query" type="text" class="form-control"
+						placeholder="Перші букви/цифри пошуку" auto-focus="" />
+				</div>
+				<ul class="patients" data-ng-show="parameters.dep==userDepartmentId">
+					<li><b> №, ПІБ, Поступив, Діагноз </b></li>
+					<li
+						ng-repeat="patient in department.patientesDiagnosisHol | filter:query"
+						ng-context-menu="menuPatientList" class="hover-menu"
+						ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><a
+						href="history.html?hno={{patient.history_id}}"> <span>
+								{{patient.history_no}}</span>, {{patient.name}}
+					</a> <span ng-show="hoverEdit" class="animate-show">
+					<button ng-click="launcherPatientInfo(patient)" type="button"
+						data-toggle="modal" data-target="#patientInfoDialog{{$index}}"
+						class="btn btn-default btn-xs" title="Зведена інформація">
+						<b>∑</b>
+					</button>
+					<button type="button" data-toggle="modal"
+						data-target="#moveDialog{{$index}}" 
+						class="btn btn-default btn-xs"
+						title="Переведеня"
+						>
+						<span class="glyphicon glyphicon-transfer"></span>
+					</button>
+
+
+
+					</span> <br /> <span> {{patient.history_in | date:'dd-MM-yyyy
+							HH:mm'}} </span>, <span>Дз: {{patient.icd_code}},
+							{{patient.icd_name}}</span> <!-- Dialog -->
+						<div class="modal fade" id="moveDialog{{$index}}" role="dialog">
+							<div class="modal-dialog">
+
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Перевести - {{patient.name}}</h4>
+									</div>
+									<div class="modal-body">{{patient}}</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="modal fade" id="patientInfoDialog{{$index}}" role="dialog">
+							<div class="modal-dialog">
+
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Зведена інформація - {{patient.name}}</h4>
+									</div>
+									<div class="modal-body">{{patient}}</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						</li>
+				</ul>
+			</div>
+			<div class="col-md-4 well">
+				<div class="navbar-right">
+					<small> <a
+						href="http://{{hol1host}}/department/{{parameters.dep}}"> <span
+							class="glyphicon glyphicon-link"></span> HOL1
+					</a>
+					</small>
+				</div>
+				<h2>
+					Відділення <small> {{departmentFromConfig.department_name}}
+					</small>
+				</h2>
+				<div>
+					<small> Кількість хворих -
+						{{department.patientesDiagnosisHol.length}} </small>
+				</div>
+				<span data-ng-show="departmentFromConfig.department_telefon">
+					<b>Телефон:</b> {{departmentFromConfig.department_telefon}}
+				</span>
+				<div>
+					<b><a href="department.html?dep={{parameters.dep}}"> Рух </a> </b>
+					|<a href="archives.html?dep={{parameters.dep}}"> Архів </a>
+				</div>
+				<hr />
+				<span>
+					<b>Завідувач:</b> {{departmentFromConfig.zaviduvach}}
+				</span>
+				
+				<div
+					data-ng-show="departmentFromConfig.zaviduvach == department.user.name">
+					<div>
+						<a href="jornalMovePatient.html?dep={{parameters.dep}}">
+							Журнал руху хворих </a>
+					</div>
+					<div>
+						<a href="quartalReportSummary.html?dep={{parameters.dep}}">
+							Квартальний звіт </a>
+					</div>
+					<div>
+						<a href="quartalReport.html?dep={{parameters.dep}}"> Таблиці
+							квартального звіту </a>
+					</div>
+				</div>
+				<div ng-if="department.department_name == 'Реанімаційне123'">
+					<div>
+						<a href="/anesthesia/narcoseProtocol.html"> Протокол наркоза </a>
+					</div>
+					<div>
+						<h3>Шаблони лікування</h3>
+						<h4>Анестезія урологія</h4>
+						<ul>
+							<li><a href="/anesthesia/template/eta-ea.html"> ЕТН ЕА -
+									Ендотрахеальний наркоз - епідуральна анестезія </a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<nav class="navbar navbar-default navbar-fixed-bottom"
+			role="navigation">
+			<div class="container">
+				<span class="glyphicon glyphicon-play"></span>
+				<ol class="list-inline navbar-right">
+					<li>|</li>
+					<li data-ng-show="!department.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="department.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{department.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+				</ol>
+			</div>
+		</nav>
+	</div>
+</body>
+<script src="/js/jquery-2.1.3.min.js"></script>
+<script src="/css/b/js/bootstrap.min.js"></script>
+<script src="/js/rangy-core.js"></script>
+<script src="/js/a/angular.min.js"></script>
+<script src="/js/a/sortable.js"></script>
+<script src="/js/a/angular-sanitize.min.js"></script>
+<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+
+<script src="/db/config.json.js"></script>
+<script src="/js/cuwy2.directives.js"></script>
+<script src="/js/cuwy2.controller.js"></script>
+
+</html>
