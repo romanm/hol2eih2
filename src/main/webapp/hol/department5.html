@@ -84,8 +84,6 @@ body {
 						<span class="glyphicon glyphicon-transfer"></span>
 					</button>
 
-
-
 					</span> <br /> <span> {{patient.history_in | date:'dd-MM-yyyy
 							HH:mm'}} </span>, <span>Дз: {{patient.icd_code}},
 							{{patient.icd_name}}</span> <!-- Dialog -->
@@ -101,7 +99,13 @@ body {
 									<div class="modal-body">{{patient}}</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default"
-											data-dismiss="modal">Close</button>
+											>
+											<span class="glyphicon glyphicon-ok"></span> Перевести
+										</button>
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">
+											<span class="glyphicon glyphicon-remove"></span> Закрити
+										</button>
 									</div>
 								</div>
 
@@ -119,7 +123,9 @@ body {
 									<div class="modal-body">{{patient}}</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default"
-											data-dismiss="modal">Close</button>
+											data-dismiss="modal">
+											<span class="glyphicon glyphicon-remove"></span> Закрити
+										</button>
 									</div>
 								</div>
 
