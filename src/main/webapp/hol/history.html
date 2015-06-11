@@ -71,12 +71,13 @@
 		<div class="row">
 		<div class="col-md-9">
 			<div>
-					<h2 data-ng-show="!patientHistory.user">
-						<span class="glyphicon glyphicon-warning-sign"></span> <span
-							class="btn-warning"> №: {{patientHistory.historyNo}} <br /> Для відкриття
-							історії хвороби <b>{{hno}}</b> <br /> ввійдіть в програму.
-						</span> 
-					</h2>
+					<div class="h3 alert alert-warning" role="alert"
+						data-ng-show="!patientHistory.user">
+						<span class="glyphicon glyphicon-warning-sign"></span> Для
+						відкриття історії хвороби №: {{patientHistory.historyNo}} <small>(id:{{hno}})</small>
+						ввійдіть в програму.
+					</div>
+
 					<h4 data-ng-show="{{patientHistory}}">№: {{patientHistory.historyNo}}
 					{{patientHistory.patientHolDb.patientSurname}}
 					{{patientHistory.patientHolDb.patientPersonalName}}
