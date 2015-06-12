@@ -88,9 +88,8 @@
 		</div>
 	</nav>
 	<div class="container">
-	
-	
-	
+		<div class="row">
+		</div>
 		<div class="row">
 			<div class="col-xs-5" style="text-align: right;">
 				Хмельницька Обласна Лікарня
@@ -103,7 +102,7 @@
 			<div class="col-xs-1" style="text-align: center;">
 				<img alt="trizub" src="/img/gerb_small.png">
 			</div>
-			<div class="col-xs-5">
+			<div class="col-xs-6">
 				+380 382 - 72-07-42, incoming@med.km.ua <br /> http://hol.in.ua/ <br />
 				<small> <span
 					data-ng-show="departmentFromConfig.department_telefon"> 
@@ -115,11 +114,6 @@
 				</small>
 			</div>
 		</div>
-	</div>
-	<div class="container">
-
-		
-
 
 		<h3 class="centered">
 			Виписний епікриз <br /> <small> Відділення
@@ -131,11 +125,13 @@
 		<h4 class="centered"></h4>
 		 -->
 		<h2 data-ng-show="!patientHistory.user">
-			<span class="glyphicon glyphicon-warning-sign"></span> <span
-				class="btn-warning"> Для роботи з випискою <br /> ввійдіть в
-				програму.
-			</span>
+			
 		</h2>
+		<div class="h3 alert alert-warning" role="alert"
+			data-ng-show="!patientHistory.user">
+			<span class="glyphicon glyphicon-warning-sign"></span> Для роботи з
+			випискою <br /> ввійдіть в програму.
+		</div>
 		<div class="">
 			<span data-ng-show="patientHistory.patientHolDb.patientGender == 0">
 				Хвора </span> <span
@@ -536,7 +532,12 @@
 											</div>
 										</form></td>
 									<td>{{laborTemplate.unit}}</td>
-								</tr>
+								<td ng-show="laborTemplate.texts"><span
+									ng-repeat="text in laborTemplate.texts"> <a
+										ng-click="addTextTo(h1.value.laborValues[laborTemplate.name],text)">
+											{{text}} </a> ,
+								</span></td>
+							</tr>
 							</table>
 						</div>
 				</div>

@@ -43,9 +43,14 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		console.log($scope.docLength);
 	}
 	//-------autoSave--------------------------------------------------------END
-
+	$scope.addTextTo = function(field,text){
+		console.log(field);
+		console.log(text);
+		field.value = text;
+	}
 	$scope.openLaborToEdit = function(h1, laborName){
 		h1.laborOpenToEdit=laborName;
+		console.log(h1);
 		if(!h1.value.laborValues[laborName])
 			h1.value.laborValues[laborName] = {value:""};
 	}
