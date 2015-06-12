@@ -255,7 +255,8 @@
 					</div>
 					<!-- данні текстового формату - редактор -->
 					<div data-ng-show="h1.isTextHtml">
-						<div text-angular ng-model="h1.value.textHtml"></div>
+						<div text-angular  ta-toolbar="[['bold','italics','underline'],['undo','redo']
+						,['justifyLeft','justifyCenter','justifyRight'],['html']]" ng-model="h1.value.textHtml"></div>
 						<div
 							data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
 							data-ng-show="h1.name == hta.historyTreatmentAnalysisName">
