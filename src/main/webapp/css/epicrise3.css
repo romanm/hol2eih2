@@ -3,141 +3,20 @@
 		display: none !important;
 	}
 }
-/*
-[ng\:cloak], [ng-cloak], .ng-cloak {
-	display: none !important;
-}
-*/
-
-.navbar {
-	margin-bottom: 1px;
-	min-height: 2px;
-}
 /*------------hover-menu------------------------------------------------------*/
 	.animate-show { transition: all linear 0.5s; opacity: 1; } 
 	.animate-show.ng-hide-add,
 	.animate-show.ng-hide-remove { display: inline-block !important; }
 	.animate-show.ng-hide { opacity: 0; }
-	li.hover-menu:hover { background: silver; }
+	li.hover-menu:hover,
+	td.hover-menu:hover,
+	tr.hover-menu:hover { background: silver; }
+	.hover-menu-width {width: 70px;}
 /*------------hover-menu---------------------------------------------------END*/
-.bold {font-weight: bold;}
-.normal {font-weight: normal;}
-.italic {font-style: italic;}
-.underline { text-decoration: underline;}
-.nowrap {white-space: nowrap;max-width:something;}
-.pip {font-size:125%; 
-font-weight: bold;
-text-decoration: underline;}
-tr.border_top td {
-	border-top:1pt solid black;
-}
-tr.border_bottom td ,
-tr.border_bottom th {
-	border-bottom:2pt solid black;
-}
-table.border, th, td {
-	border: 1px solid black;
-}
-.center, tr.center th , tr.center td {
-	text-align: center;
-}
-td.top {
-		vertical-align: top;
-}
-td.left {
-	text-align: left !important;
-}
-.right {
-	text-align: right;
-}
-tr.rotate-----90 th,
-.rotate-90 {
-	-webkit-transform: rotate(-90deg);  /* to support Safari and Android browser */
-	-ms-transform: rotate(-90deg);  /* to support IE 9 */
-	transform: rotate(-90deg);
-}
-.rott90 {
-	width: 140px;
-	height: 21px;
-	/* 
-	Rotate div */
-	background-color: yellow;
-	-ms-transform: rotate(-90deg); /* IE 9 */
-	-webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
-	transform: rotate(-90deg);
-}
 
-.required-tooltip {font-size:150%;color: red;}
-		.required:after {
-			content: "*"; position:absolute; color: red;
-			top:-4px;right:-8px;
-		}
-		.required-simple:after {
-			content: "*"; position:absolute; color: red;
-		}
-		.record { }
-		.record-highlight-parent { border: 1px dotted green; }
-		.record-highlight { background-color: green; color: #fff; }
-		.row h2 { margin-top: 0px; }
-		hr.shortPatienHistory { margin: 0px; border-width: 3px 0 0;}
-
-
-.breadcrumb {
-	margin-bottom: 0;
-}
-.required:after {
-	content: "*"; position:absolute; color: red;
-	top:-4px;right:-8px;
-}
-.required-simple:after {
-	content: "*"; position:absolute; color: red;
-	top:-9px;right:-1px;
-}
-.input-group {
-	margin-top: 5px;
-}
-
-.epicriseElement p:first-child {
-	display: inline;
-}
-.epicriseElement p {
-	margin-right: 8px;
-}
-.dropdown-menu-right-700{
-	left: auto;
-	right: -700px;
-}
-.dropdown-menu-right-hol{
-	left: auto;
-	right: -200px;
-}
-.ta-editor {
-	height: 600px;
-	height: auto;
-	overflow: auto;
-	font-family: inherit;
-	font-size: 100%;
-	margin: 20px 0;
-}
-.centered {
-	text-align: center;
-	background-color: silver;
-	/*
-	background-color: orange;
-	background-color: red;
-	background-color:  olive;
-	background-color: lime;
-	background-color: aqua;
-	background-color: teal;
-	*/
-}
-.mouseover:hover,
-table.tablehover > tbody > tr > td:hover{
-	border: 1px dashed navy; 
-	/*
-	border: 1px dashed navy; 
-	border: 1px dotted lime; 
-	border: 1px dotted blue; 
-	border: 1px dotted green; 
-	*/
+.navbar,
+.navbar ol
+ {
+	margin-bottom: 1px;
+	min-height: 2px;
 }

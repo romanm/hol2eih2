@@ -138,7 +138,6 @@ var initDepartmentMoveCtrl = function($scope){
 }
 cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', function ($scope, $sce, $filter, $http) {
 	console.log('departmentCtrl');
-	console.log(parameters);
 	$scope.movePatientDepartment = function(){
 		console.log("movePatientDepartment");
 		console.log($scope.patientHistory);
@@ -428,13 +427,13 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	$scope.hol1host = configHol.hol1host;
 	$scope.patientEditing = {}
 
-	
 	$http({ method : 'GET', url : departmentFile
 	}).success(function(data, status, headers, config) {
 		$scope.department = data;
 		seekDepartmentFromConfig($scope, $scope.department.department_id);
 		initAppConfig($scope, $http, $sce, $filter);
 		initDepartmentMoveCtrl($scope);
+		console.log($scope.departmentId);
 	}).error(function(data, status, headers, config) {
 	});
 	

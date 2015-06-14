@@ -19,14 +19,12 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-<div class="container">
-	<div class="row">
-		<div class="col-md-9">
-			<div class="navbar-header">
-				<ol class="breadcrumb">
-					<li><a href="/hol/home.html"><span
-							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+					<div class="navbar-header">
+						<ol class="breadcrumb">
+							<li><a href="/hol/home.html"><span
+									class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
 							<li><a
 								href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
@@ -35,38 +33,33 @@
 									відділення: {{patientHistory.patientDepartmentMovements
 									[patientHistory.patientDepartmentMovements.length -1]
 									.departmentName}} </a></li>
-							<li>
-					<a href="/hol/history.html?hno={{param.hno}}">
-					ІХ № <u>{{patientHistory.historyNo}}</u>
-						::Короткий перегляд
-					</a>
-					</li>
-				</ol>
-			</div>
-		</div>
-		<div class="col-md-3" style="text-align: right;">
-				<ul class="list-inline navbar-right">
-					<li><span data-ng-show="autoSaveCount > 0"
-						title="Кільськість автозбережень - {{autoSaveCount}}">
-							{{autoSaveCount}} </span>
-						<button type="button" class="btn btn-primary btn-sm"
-							data-ng-click="saveWorkDoc()" data-toggle="modal">
-							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-						</button> </li>
+							<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ №
+									<u>{{patientHistory.historyNo}}</u> ::Короткий перегляд
+							</a></li>
+						</ol>
+					</div>
+								<div class="collapse navbar-collapse navbar-right">
+					<ul class="list-inline navbar-right">
+						<li><span data-ng-show="autoSaveCount > 0"
+							title="Кільськість автозбережень - {{autoSaveCount}}">
+								{{autoSaveCount}} </span>
+							<button type="button" class="btn btn-primary btn-sm"
+								data-ng-click="saveWorkDoc()" data-toggle="modal">
+								<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+							</button></li>
 						<li>|</li>
-					<li data-ng-show="!patientHistory.user"><span
-						class="glyphicon glyphicon-log-in"></span> <a href="/login">
-							Ввійти </a></li>
-					<li data-ng-show="patientHistory.user"><span
-						class="glyphicon glyphicon-log-out"></span>
-						:{{patientHistory.user.name}} <a href="/hol/logout.html">
-							Вийти </a></li>
-				</ul>
-			</div>
-	</div>
+						<li data-ng-show="!patientHistory.user"><span
+							class="glyphicon glyphicon-log-in"></span> <a href="/login">
+								Ввійти </a></li>
+						<li data-ng-show="patientHistory.user"><span
+							class="glyphicon glyphicon-log-out"></span>
+							:{{patientHistory.user.name}} <a href="/hol/logout.html">
+								Вийти </a></li>
+					</ul>			
+					</div>
 
-</div>
-</nav>
+		</div>
+	</nav>
 	<div class="container">
 		<div class="row">
 		<div class="col-md-9">
