@@ -115,7 +115,7 @@
 			</div>
 		</div>
 
-		<h3 class="centered">
+		<h3 class="center">
 			Виписний епікриз <br /> <small> Відділення
 				«{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 				-1].departmentName}}» </small>
@@ -570,6 +570,7 @@
 				</div>
 			</div>
 
+			<div ng-show="false">
 			<h3 data-ng-show="isNewFromHol1" class="no-print">
 				Нові записи добавлені в ЕПІКРІЗ в старій історії хвороби.
 			</h3>
@@ -602,6 +603,7 @@
 					</td>
 				</tr>
 			</table>
+			</div>
 			<hr />
 			Лікар: 
 			{{patientHistory.user.name}}___________________

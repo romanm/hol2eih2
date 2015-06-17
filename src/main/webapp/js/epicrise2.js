@@ -39,17 +39,13 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 	setDocLength = function(){
 		$scope.docLength = getDocLength();
-		console.log($scope.docLength);
 	}
 	//-------autoSave--------------------------------------------------------END
 	$scope.addTextTo = function(field,text){
-		console.log(field);
-		console.log(text);
 		field.value = text;
 	}
 	$scope.openLaborToEdit = function(h1, laborName){
 		h1.laborOpenToEdit=laborName;
-		console.log(h1);
 		if(!h1.value.laborValues[laborName])
 			h1.value.laborValues[laborName] = {value:""};
 	}
@@ -68,13 +64,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	var dayInMs = 1000*60*60*24;
 
 	$scope.goLink = function(link){
-		console.log(link);
 		location.href = link;
 	}
 
 	//-----------save epicrise -------------------------------------------------
 	$scope.saveControlAndGo = function(url, siteName){
-		console.log(url);
 		var diffDocLength = getDiffDocLength();
 		if(diffDocLength > 9){
 			var r = confirm("В документі  "+diffDocLength+" не збережених змін. Зберегти і перейти за адресом: " +
@@ -91,7 +85,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.addNewHol1_hta = function(hta, htaIndex){
 		console.log("addNewHol1_hta");
 		var addPosition = htaIndex + 2;
-		console.log($scope.epicrise.epicriseGroups.length);
 		var groupElement = createGroupElement(hta.historyTreatmentAnalysisName);
 		groupElement.htaId = hta.historyTreatmentAnalysisId;
 		if(groupElement.isTextHtml){
@@ -101,13 +94,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			groupElement.value.historyTreatmentAnalysisDatetime = hta.historyTreatmentAnalysisDate; 
 			groupElement.value.withDate = true; 
 		}
-		console.log(hta);
-		console.log(groupElement);
 		if(addPosition < $scope.epicrise.epicriseGroups.length){
 			$scope.epicrise.epicriseGroups.splice(addPosition,0,groupElement);
 		}else{
 			$scope.epicrise.epicriseGroups.push(groupElement);
 		}
+		return groupElement;
 	}
 	$scope.removeNewHol1_hta = function(hta){
 		console.log("removeNewHol1_hta");
@@ -115,15 +107,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	$scope.printWorkDocClick = function(){
-		console.log("run print");
 		window.print();
 	}
 	$scope.saveWorkDocClick = function(){
 		$scope.autoSaveCount = 0;
-		console.log("----");
 		saveWorkDocEpicrise();
-		console.log("----");
-		console.log($scope.patientHistory);
 		return;
 		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/savehistory"
 		}).success(function(data, status, headers, config){
@@ -140,7 +128,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		//saveWorkDoc("/db/saveepicrise", $scope, $http);
 		var docToSave = $scope.epicrise;
 		docToSave.patientHistory = null;
-		console.log(docToSave);
 		$http({ method : 'POST', data : docToSave, url : "/db/saveepicrise"
 		}).success(function(data, status, headers, config){
 			$scope.epicrise = data;
@@ -149,7 +136,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			$scope.error = data;
 		});
 
-		console.log("-----------------");
 	}
 	//-----------save epicrise ----------------------------------------------END
 	initEpicriseGroupElement = function(epicriseGroup){
@@ -185,7 +171,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 	}
 	$scope.addDiagnose = function(epicriseGroup, diagnose){
-		console.log(epicriseGroup);
 		if(!epicriseGroup.diagnosis)
 			epicriseGroup.diagnosis = [];
 		epicriseGroup.diagnosis.push(diagnose);
@@ -217,12 +202,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			}
 //			if(!epicriseGroup.htaId)
 			if(true){
-			//new from hol1
+				//new from hol1
 				for (var i = 0; i < htaCopy.length; i++) {
 					if(htaCopy[i].treatmentAnalysisId == epicriseGroup.treatmentAnalysisId) {
 						if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
-						//break if id is used
-						break;
+							//break if id is used
+							break;
 						}
 					}
 					if(!htaCopy[i].isIdCopied){
@@ -243,16 +228,19 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			//selected of new not in hol2
 				var valueObj = hol1LaborTableToJsonValue(hta.historyTreatmentAnalysisText);
 				if(valueObj){
-					var ks = Object.keys(valueObj.laborValues)
-					if(ks.length == 0){//leer labor
+					if(Object.keys(valueObj.laborValues).length == 0){//leer labor
 						if($scope.necessary[hta.historyTreatmentAnalysisName] > 0 ){
 							//necessary labor 
 							hta.removeFromHol1DB = true;
 							hta.htaId = hta.historyTreatmentAnalysisId;
 							$scope.epicrise.delPart.push(hta);
-						}else if($scope.necessary[hta.historyTreatmentAnalysisName] == 0 ){
-							$scope.addNewHol1_hta(hta, hta.historyTreatmentAnalysisSort);
 						}
+					}
+					//all no exist labor added to hol2 epicrise
+					if($scope.necessary[hta.historyTreatmentAnalysisName] == 0 ){
+						var groupElement = $scope.addNewHol1_hta(hta, hta.historyTreatmentAnalysisSort);
+						groupElement.value = valueObj;
+						hta.removeFromHol1DB = true;
 					}
 				}
 			}
@@ -309,6 +297,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			initEpicriseGroupElement(epicriseGroup);
 		});
 		$scope.patientHistory.departmentId = $scope.patientHistory.patientDepartmentMovements[$scope.patientHistory.patientDepartmentMovements.length - 1].departmentId;
+		console.log($scope.epicrise);
 	}
 	$scope.setSeekTag = function(tag){
 		$scope.seekTag = tag;
@@ -317,11 +306,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 	}
 	$scope.addGroup = function(addGroup, h1Index){
-		console.log(addGroup);
-		console.log(h1Index);
 		if(h1Index){
 			var domElementId = "#g-"+h1Index;
-			console.log(domElementId);
 			var domElement  = document.querySelector(domElementId);
 			if(domElement)
 				domElement.setAttribute("class",domElement.getAttribute("class").replace(" in", ""));
@@ -360,26 +346,20 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		var h1Index = 0;
 		for (var i = 0; i < $scope.epicrise.epicriseGroups.length; i++) {
 			var groupElement = $scope.epicrise.epicriseGroups[i];
-			console.log(groupElement);
 			if(groupElement.isOnDemand){
 				h1Index = i;
 //				break;
 			}
 		}
-		console.log(h1Index);
 		$scope.editOpenClose(h1Index);
 	}
 	$scope.editOpenClose2 = function(h1Index){
-		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
-		console.log(groupElement);
 		closeAllGroupEditors();
 		$scope.epicrise.epicriseGroups[h1Index].open = true;
 	}
 	$scope.editOpenClose = function(h1Index){
-		console.log(h1Index);
 		var groupElement = $scope.epicrise.epicriseGroups[h1Index];
-		console.log(groupElement);
 
 		if(groupElement){
 //			setGroupElementType(groupElement);
@@ -425,7 +405,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			$scope.patientHistory = data;
 			initHistory();
 			initEpicrise();
-			console.log($scope.epicrise);
 			initEpicriseHol1Id();
 			initAppConfig($scope, $http, $sce, $filter);
 			seekDepartmentFromConfig($scope, 5);
@@ -447,13 +426,11 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	//-----------------context menu---------------------------------------------
 	$scope.menuDiagnos = [
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
-			console.log($itemScope);
 			$scope.epicrise.epicriseGroups[$itemScope.h1Index].diagnosis.splice($itemScope.$index,1);
 		}]
 	];
 	$scope.menuOperation = [
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
-			console.log($itemScope);
 			$scope.epicrise.epicriseGroups[$itemScope.h1Index].operationHistorys.splice($itemScope.$index,1);
 		}]
 	];
@@ -483,20 +460,16 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}], null,
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
 			var delEpicriseGroup = $scope.epicrise.epicriseGroups.splice($itemScope.h1Index,1);
-			console.log(delEpicriseGroup);
 			if(!$scope.epicrise.delPart){
 				$scope.epicrise.delPart = [];
 			}
 			delEpicriseGroup.forEach(function(epicriseGroup) {
 				$scope.epicrise.delPart.push(epicriseGroup);
 			});
-			console.log($scope.epicrise.delPart);
 		}]
 	];
 	moveTo = function(arrayToSort, indexFrom, indexTo){
-		console.log(indexFrom+"/"+indexTo);
 		var el = arrayToSort.splice(indexFrom, 1);
-		console.log(el);
 		arrayToSort.splice(indexTo, 0, el[0]);
 	}
 	moveUp = function(arrayToSort, index){

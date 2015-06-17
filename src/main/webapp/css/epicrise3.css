@@ -16,6 +16,9 @@
 td.top {
 	vertical-align: top;
 }
+.center, tr.center th , tr.center td {
+	text-align: center;
+}
 .navbar,
 .navbar ol
  {
