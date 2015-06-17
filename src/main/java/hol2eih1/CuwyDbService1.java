@@ -856,12 +856,9 @@ public class CuwyDbService1 {
 
 	public List<HistoryTreatmentAnalysis> getHistoryTreatmentAnalysises(int historyId) {
 //		String sql ="SELECT * FROM history_treatment_analysis WHERE history_id=?";
-		String sql ="SELECT ta.treatment_analysis_name, ta.treatment_analysis_id, hta.* "
-				+ " FROM history_treatment_analysis hta, treatment_analysis ta "
-				+ " WHERE ta.treatment_analysis_id=hta.treatment_analysis_id and hta.history_id = ?";
-		logger.info("\n"+sql.replaceFirst("\\?", ""+historyId));
+		logger.info("\n"+sqlSelectHistoryTreatmentAnalysis.replaceFirst("\\?", ""+historyId));
 		return jdbcTemplate.query(
-			sql, new Object[] { historyId }, 
+			sqlSelectHistoryTreatmentAnalysis, new Object[] { historyId }, 
 			new RowMapper<HistoryTreatmentAnalysis>(){
 				@Override
 				public HistoryTreatmentAnalysis mapRow(ResultSet rs, int rowNum)
@@ -1965,23 +1962,36 @@ public class CuwyDbService1 {
 			return;
 		}
 		Integer treatmentAnalysId = getInt(epiMap,"treatmentAnalysId");
-		final String sql = " INSERT INTO history_treatment_analysis "
-				+ " (history_treatment_analysis_text, history_treatment_analysis_sort "
-				+ " , treatment_analysis_id, history_treatment_analysis_id "
-				+ " , history_id, history_treatment_analysis_datetime ) "
-				+ " VALUES (?, ?, ?, ?, ?, NOW()) ";
-		logger.debug(sql.replaceFirst("\\?", historyTreatmentAnalysisText)
+		logger.debug(sqlInsertHistoryTreatmentAnalysis.replaceFirst("\\?", historyTreatmentAnalysisText)
 		.replaceFirst("\\?", treatmentAnalysId.toString())
 		.replaceFirst("\\?", sort.toString())
 		.replaceFirst("\\?", historyTreatmentAnalysisId.toString())
 		.replaceFirst("\\?", historyId.toString()));
 		
-		jdbcTemplate.update( sql,
+		jdbcTemplate.update( sqlInsertHistoryTreatmentAnalysis,
 				new Object[] {historyTreatmentAnalysisText, sort, treatmentAnalysId, historyTreatmentAnalysisId, historyId },
 				new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
 		epiMap.put("htaId",historyTreatmentAnalysisId);
 	}
+	final String sqlDeleteHistoryTreatmentAnalysis = 
+			"DELETE FROM history_treatment_analysis "
+			+ " WHERE history_treatment_analysis_id = ? ";
+	final String sqlSelectHistoryTreatmentAnalysis ="SELECT ta.treatment_analysis_name, ta.treatment_analysis_id, hta.* "
+			+ " FROM history_treatment_analysis hta, treatment_analysis ta "
+			+ " WHERE ta.treatment_analysis_id=hta.treatment_analysis_id and hta.history_id = ?";
+	final String sqlUpdateHistoryTreatmentAnalysis3 = " UPDATE history_treatment_analysis "
+			+ " SET history_treatment_analysis_sort = ? "
+			+ " WHERE history_treatment_analysis_id = ? ";
+	final String sqlUpdateHistoryTreatmentAnalysis1 = " UPDATE history_treatment_analysis "
+			+ " SET history_treatment_analysis_text = ? "
+			+ "\n , history_treatment_analysis_sort = ? "
+			+ " WHERE history_treatment_analysis_id = ? ";
+	final String sqlInsertHistoryTreatmentAnalysis = " INSERT INTO history_treatment_analysis "
+			+ " (history_treatment_analysis_text, history_treatment_analysis_sort "
+			+ " , treatment_analysis_id, history_treatment_analysis_id "
+			+ " , history_id, history_treatment_analysis_datetime ) "
+			+ " VALUES (?, ?, ?, ?, ?, NOW()) ";
 
 	private Integer getInt(Map<String, Object> map, String key) {
 		Integer oInt = null;
@@ -1994,28 +2004,28 @@ public class CuwyDbService1 {
 		}
 		return oInt;
 	}
+	int deleteHistoryTreatmentAnalysisSort(Integer htaId) {
+		logger.debug(sqlDeleteHistoryTreatmentAnalysis
+				.replaceFirst("\\?", htaId.toString()));
+		final int update = jdbcTemplate.update( sqlDeleteHistoryTreatmentAnalysis, new Object[] {htaId }
+		, new int[] {Types.INTEGER} );
+		return update;
+	}
 	int updateHistoryTreatmentAnalysisSort(Integer htaId, Integer sort) {
-		final String sql = " UPDATE history_treatment_analysis "
-				+ " SET history_treatment_analysis_sort = ? "
-				+ " WHERE history_treatment_analysis_id = ? ";
-		logger.debug(sql
+		logger.debug(sqlUpdateHistoryTreatmentAnalysis3
 				.replaceFirst("\\?", sort.toString())
 				.replaceFirst("\\?", htaId.toString()));
-		final int update = jdbcTemplate.update( sql, new Object[] {sort, htaId }
+		final int update = jdbcTemplate.update( sqlUpdateHistoryTreatmentAnalysis3, new Object[] {sort, htaId }
 		, new int[] {Types.VARCHAR, Types.INTEGER} );
 		return update;
 	}
 	int updateHistoryTreatmentAnalysis(Integer htaId, Map<String, Object> epiMap, String historyTreatmentAnalysisText) {
 		final Integer sort = (Integer) epiMap.get("sort");
-		final String sql = " UPDATE history_treatment_analysis "
-				+ " SET history_treatment_analysis_text = ? "
-				+ "\n , history_treatment_analysis_sort = ? "
-				+ " WHERE history_treatment_analysis_id = ? ";
-		logger.debug(sql
+		logger.debug(sqlUpdateHistoryTreatmentAnalysis1
 				.replaceFirst("\\?", historyTreatmentAnalysisText)
 				.replaceFirst("\\?", sort.toString())
 				.replaceFirst("\\?", htaId.toString()));
-		final int update = jdbcTemplate.update( sql, new Object[] {historyTreatmentAnalysisText, sort, htaId }
+		final int update = jdbcTemplate.update( sqlUpdateHistoryTreatmentAnalysis1, new Object[] {historyTreatmentAnalysisText, sort, htaId }
 		, new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER} );
 		return update;
 	}
@@ -2023,9 +2033,21 @@ public class CuwyDbService1 {
 	Map<String, Object> epicriseTemplate = null;
 	Set historyTreatmentAnalysisOnce = ImmutableSet.of(4);
 	public void saveHistoryTreatmentAnalysis(Map<String, Object> epicrise) {
+		final List<Map<String, Object>> delPart = (List<Map<String, Object>>) epicrise.get("delPart");
+		if(delPart != null)
+			for (int i = 0; i < delPart.size(); i++) {
+				if(delPart.get(i) instanceof Map){
+					Map<String, Object> delMap = delPart.get(i);
+					Integer htaId = getInt(delMap, "htaId");
+					if(htaId != null){
+						deleteHistoryTreatmentAnalysisSort(htaId);
+					}
+				}
+			}
+		epicrise.remove(delPart);
 		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
 		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
-		
+
 		for (int sort = 0; sort < epicriseGroups.size(); sort++) {
 			Map<String, Object> epiMap = epicriseGroups.get(sort);
 			epiMap.put("sort", sort);
@@ -2033,8 +2055,7 @@ public class CuwyDbService1 {
 			isTextHtml = (Boolean) epiMap.get("isTextHtml")
 			,isLabor = (Boolean) epiMap.get("isLabor");
 			Integer htaId = getInt(epiMap, "htaId");
-			logger.debug(epiMap.toString()+" -- "+htaId);
-			
+
 			String historyTreatmentAnalysisText = null;
 			if(isLabor!=null && isLabor){
 				historyTreatmentAnalysisText = getLaborTable(epiMap);
@@ -2057,8 +2078,14 @@ public class CuwyDbService1 {
 	}
 
 	private String getLaborTable(Map<String, Object> epiMap) {
-		final Map value = (Map) epiMap.get("value");
-		final Map<String,Object> laborValues = (Map) value.get("laborValues");
+		Map value = (Map) epiMap.get("value");
+		if(value == null){
+			value = new HashMap<>();
+		}
+		Map<String,Object> laborValues = (Map) value.get("laborValues");
+		if(laborValues == null){
+			laborValues = new HashMap<>();
+		}
 		if(epicriseTemplate == null){
 			epicriseTemplate = readJsonFile("epicriseTemplate.json");
 		}

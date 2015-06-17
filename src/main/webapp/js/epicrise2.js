@@ -23,7 +23,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}
 		var newDocLength = getDocLength();
 		var diffDocLength = Math.abs($scope.docLength-newDocLength);
-		console.log("---------"+$scope.docLength+"-"+newDocLength+"="+diffDocLength);
 		if(diffDocLength > noSaveLimit){
 			saveWorkDocEpicrise();
 			$scope.autoSaveCount++;
@@ -135,7 +134,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		});
 	}
 	saveWorkDocEpicrise = function(){
-		console.log("-----------------");
 		$scope.epicrise.hid = parameters.hid;
 		$scope.epicrise.patientHistory = $scope.patientHistory;
 //		saveWorkDoc("/save/epicrise", $scope, $http);
@@ -143,7 +141,14 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		var docToSave = $scope.epicrise;
 		docToSave.patientHistory = null;
 		console.log(docToSave);
-		postObject("/db/saveepicrise", docToSave, $scope, $http);
+		$http({ method : 'POST', data : docToSave, url : "/db/saveepicrise"
+		}).success(function(data, status, headers, config){
+			$scope.epicrise = data;
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
+
 		console.log("-----------------");
 	}
 	//-----------save epicrise ----------------------------------------------END
@@ -195,6 +200,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 		var uniqueId = {};
 		$scope.epicrise.epicriseGroups.forEach(function(epicriseGroup) {
+			if($scope.necessary[epicriseGroup.name] >= 0)
+				$scope.necessary[epicriseGroup.name]++;
 			if(!epicriseGroup.treatmentAnalysId)
 				for (var i = 0; i < configHol.treatmentAnalysis.length; i++)
 					if(configHol.treatmentAnalysis[i].treatment_analysis_name == epicriseGroup.name){
@@ -208,8 +215,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 					delete epicriseGroup.htaId;
 				}
 			}
-//			if(!epicriseGroup.htaId){
+//			if(!epicriseGroup.htaId)
 			if(true){
+			//new from hol1
 				for (var i = 0; i < htaCopy.length; i++) {
 					if(htaCopy[i].treatmentAnalysisId == epicriseGroup.treatmentAnalysisId) {
 						if(uniqueId[htaCopy[i].historyTreatmentAnalysisId] > 0) {
@@ -229,8 +237,64 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 				}
 			}
 		});
+		//manage new from hol1
+		htaCopy.forEach(function(hta) {
+			if(!hta.isIdCopied){
+			//selected of new not in hol2
+				var valueObj = hol1LaborTableToJsonValue(hta.historyTreatmentAnalysisText);
+				if(valueObj){
+					var ks = Object.keys(valueObj.laborValues)
+					if(ks.length == 0){//leer labor
+						if($scope.necessary[hta.historyTreatmentAnalysisName] > 0 ){
+							//necessary labor 
+							hta.removeFromHol1DB = true;
+							hta.htaId = hta.historyTreatmentAnalysisId;
+							$scope.epicrise.delPart.push(hta);
+						}else if($scope.necessary[hta.historyTreatmentAnalysisName] == 0 ){
+							$scope.addNewHol1_hta(hta, hta.historyTreatmentAnalysisSort);
+						}
+					}
+				}
+			}
+		});
+		console.log($scope.epicrise.delPart);
 	}
+	
+	hol1LaborTableToJsonValue = function(textHol1, valueObj){
+		if(!valueObj)
+			valueObj = {};
+		var element = angular.element("<div>"+textHol1+"</div>");
+		var trs = element.find("td.name");
+		if(trs.length > 0){
+			var laborValues = {};
+			for(i = 0; i < trs.length; i++){
+				var nameTd = angular.element(trs[i]);
+				var valueTd = nameTd.next();
+				var unitTd = valueTd.next();
+				if(valueTd.text().trim().length > 0){
+					laborValues[nameTd.text()] = {value:valueTd.text(), unit:unitTd.text()};
+				}
+			}
+			valueObj.laborValues = laborValues;
+		}else{
+			return;
+			if(!valueObj.textHtml || valueObj.textHtml.trim().length == 0){
+				valueObj.textHtml = textHol1;
+				if(textHol1 == "") {
+					valueObj.textHtml = " &nbsp; ";
+				}
+			}
+			valueObj.textHtml1 = textHol1;
+		}
+		return valueObj;
+	}
+
 	initEpicrise = function(){
+		$scope.necessary = {};
+		$scope.epicriseTemplate.head1s.forEach(function(headElement) {
+			$scope.necessary[headElement.name]=0;
+		});
+		console.log($scope.necessary);
 		if(!$scope.epicrise.epicriseGroups){
 			$scope.epicrise.epicriseGroups = [];
 			//create first epicriese groups list.
@@ -245,7 +309,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			initEpicriseGroupElement(epicriseGroup);
 		});
 		$scope.patientHistory.departmentId = $scope.patientHistory.patientDepartmentMovements[$scope.patientHistory.patientDepartmentMovements.length - 1].departmentId;
-		console.log($scope.configHol.departments[$scope.configHol.departmentsIdPosition[$scope.patientHistory.departmentId]]);
 	}
 	$scope.setSeekTag = function(tag){
 		$scope.seekTag = tag;
@@ -357,13 +420,12 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	//-------------------------read history ------------------------------------
 	readHol1 = function(){
-		console.log(historyUrl);
 		$http({ method : 'GET', url : historyUrl
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
-			console.log($scope.patientHistory);
 			initHistory();
 			initEpicrise();
+			console.log($scope.epicrise);
 			initEpicriseHol1Id();
 			initAppConfig($scope, $http, $sce, $filter);
 			seekDepartmentFromConfig($scope, 5);
@@ -401,8 +463,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		}]
 	];
 	$scope.menuEpicriseGroup = [
-/*
- * */
 		['<span class="glyphicon glyphicon-arrow-up"></span> Догори ', function ($itemScope) {
 //			moveEpicriseGroupUp($itemScope);
 			var arrayToSort = $scope.epicrise.epicriseGroups;
@@ -422,7 +482,15 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			}
 		}], null,
 		['<span class="glyphicon glyphicon-remove"></span> Видалити ', function ($itemScope) {
-			$scope.epicrise.epicriseGroups.splice($itemScope.h1Index,1);
+			var delEpicriseGroup = $scope.epicrise.epicriseGroups.splice($itemScope.h1Index,1);
+			console.log(delEpicriseGroup);
+			if(!$scope.epicrise.delPart){
+				$scope.epicrise.delPart = [];
+			}
+			delEpicriseGroup.forEach(function(epicriseGroup) {
+				$scope.epicrise.delPart.push(epicriseGroup);
+			});
+			console.log($scope.epicrise.delPart);
 		}]
 	];
 	moveTo = function(arrayToSort, indexFrom, indexTo){

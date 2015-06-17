@@ -255,11 +255,6 @@
 					</div>
 					<!-- данні текстового формату - редактор -->
 					<div data-ng-show="h1.isTextHtml">
-					focusedH1Index = 
-					{{focusedH1Index}}
-					,
-					h1Index = 
-					{{h1Index}}
 						<div text-angular ta-toolbar="[['bold','italics','underline'],['undo','redo']
 						,['justifyLeft','justifyCenter','justifyRight'],['html']]" ng-model="h1.value.textHtml"
 						focus="focusedH1Index === h1Index"
@@ -584,7 +579,14 @@
 					<td><b> {{hta.historyTreatmentAnalysisName}} </b></td>
 					<td>{{hta.historyTreatmentAnalysisDate | date:'dd.MM.yyyy'}}</td>
 					<td>
-						<div data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
+						<div 
+						data-ng-show="!(hta.historyTreatmentAnalysisName == 'ЗАС' || hta.historyTreatmentAnalysisName == 'ЗАК'
+					 || hta.historyTreatmentAnalysisName == 'Біохімічний аналіз') "
+						data-ng-bind-html="hta.historyTreatmentAnalysisText"></div>
+					<span data-ng-show="hta.historyTreatmentAnalysisName == 'ЗАС' || hta.historyTreatmentAnalysisName == 'ЗАК'
+					 || hta.historyTreatmentAnalysisName == 'Біохімічний аналіз' ">
+					{{hta.historyTreatmentAnalysisName}}
+					</span>
 					</td>
 					<td>
 						<button type="button" class="btn btn-primary btn-sm"
@@ -593,18 +595,17 @@
 						</button>
 					</td>
 					<td>
-					<button type="button" class="btn btn-primary btn-sm"
+						<button type="button" class="btn btn-primary btn-sm"
 							data-ng-click="addNewHol1_hta(hta, $index)" data-toggle="modal">
-							<span class="glyphicon glyphicon-plus"></span>
-							Додати
+							<span class="glyphicon glyphicon-plus"></span> Додати
 						</button>
 					</td>
 				</tr>
 			</table>
 			<hr />
 			Лікар: 
-			{{patientHistory.user.name}}___________________ 
-			Зав. відділенням _____________________ 
+			{{patientHistory.user.name}}___________________
+			Зав. відділенням _____________________
 			{{configHol.departments[configHol.departmentsIdPosition[patientHistory.departmentId]].zaviduvach}} 
 		</div>
 	</div>
@@ -667,7 +668,6 @@
 	<script src="/css/b/js/bootstrap.min.js"></script>
 	<script src="/js/jquery-1.11.4.ui.min.js"></script>
 	<script src="/js/rangy-core.js"></script>
-	<script src="/js/autofocus.min.js"></script>
 	<script src="/js/a/sortable.js"></script>
 	<script src="/js/a/angular-sanitize.min.js"></script>
 	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>

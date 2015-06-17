@@ -147,11 +147,15 @@ body {
 														 -->
 												</div>
 											</div>
-											<div class="col-xs-6">
-												Число і час <u> {{historyToMove.departmentHistorys[0].departmentHistoryIn |
-													date:'dd.MM.yyyy HH:mm'}} </u>
-											</div>
-										</div>
+													<div class="col-xs-6">
+														Число і час <u>
+															{{historyToMove.departmentHistorys[0].departmentHistoryIn
+															| date:'dd MMM yyyy HH:mm'}} </u> <br /> <small>(Кійкодні
+															<span ng-bind="cureDays()"></span> від {{minDate |
+															date:'dd MMM yyyy HH:mm'}})
+														</small>
+													</div>
+												</div>
 										<div class="row">
 											<div class="col-xs-3">
 												<ul>
@@ -180,13 +184,6 @@ body {
 													</tr>
 													<tr>
 														<td>
-															<!-- 
-														<datepicker
-																data-ng-model="historyToMove.departmentHistorys[0].departmentHistoryIn"
-																data-date-format="dd MM yyyy - HH:ii p"
-																min-date="minDate" show-weeks="true"
-																class="well well-sm"></datepicker>
-														 --> 
 														 <datepicker
 																ng-model="historyToMove.departmentHistorys[0].departmentHistoryIn"
 																min-date="minDate" show-weeks="true"

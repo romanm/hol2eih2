@@ -13,7 +13,9 @@
 	tr.hover-menu:hover { background: silver; }
 	.hover-menu-width {width: 70px;}
 /*------------hover-menu---------------------------------------------------END*/
-
+td.top {
+	vertical-align: top;
+}
 .navbar,
 .navbar ol
  {
