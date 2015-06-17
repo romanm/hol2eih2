@@ -52,6 +52,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.beetDays = function(){
 		if($scope.epicrise){
 			var outDay = $scope.epicrise.departmentHistoryOut;
+			console.log($scope.epicrise);
 			var outDate = new Date(outDay);
 			if($scope.patientHistory){
 				var inDay = $scope.patientHistory.patientDepartmentMovements[0].departmentHistoryIn;
@@ -278,6 +279,7 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	}
 
 	initEpicrise = function(){
+		$scope.epicrise.departmentHistoryOut = new Date();
 		$scope.necessary = {};
 		$scope.epicriseTemplate.head1s.forEach(function(headElement) {
 			$scope.necessary[headElement.name]=0;

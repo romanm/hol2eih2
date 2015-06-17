@@ -155,7 +155,11 @@
 			ліжкоднів: <b> {{beetDays()}} </b>
 		</div>
 		<div class="no-print navbar-right">
-			<small class="bg-info"> <b>Новий стиль</b> | Старий стиль | <a
+			<small class="bg-info"> <b>Новий стиль</b> | 
+			<a href="#" ng-click="saveControlAndGo('/hol/epicrise4.html?hid='.concat(patientHistory.historyId),'Старий стиль')">
+			Старий стиль
+			</a>
+			 | <a
 				href="http://192.168.68.62/history/edit/id/56541"> <span
 					class="glyphicon glyphicon-link"></span> Стара програма ІХ
 			</a>
