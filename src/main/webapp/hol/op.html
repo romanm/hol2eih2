@@ -304,15 +304,81 @@
 						{{operation.icd_code}} - {{operation.icd_name}}
 					</a>
 				</div>
-				<div class="well" collapse="collapseDialog != 'diagnos'">
+			<div class="well" collapse="collapseDialog != 'diagnos'">
 				<ul>
+					<li><b>Діагнози з історії хвороби</b>:</li>
 					<li data-ng-repeat="ds in patientHistory.diagnosis"><i>
 							{{configHol.diagnosesHol[ds.diagnosId - 1].diagnosNameShort}} </i> <a
-						href="#" data-ng-click="setDiagnos(ds)"> {{ds.icdCode}} -
+						href="#" data-ng-click="setDiagnosToOperation(ds)"> {{ds.icdCode}} -
 							{{ds.icdName}} {{ds.historyDiagnosAdditional}} </a></li>
 				</ul>
+				<form class="form-inline" role="form">
+					<div class="form-group">
+						<div class="input-group required-simple">
+							<div class="input-group-addon"> МКБ діагноз</div>
+							<input type="text" class="form-control" id="icd10"
+								data-ng-model="seekIcdName" 
+								data-ng-change="seekIcd10TreeWithName(seekIcdName)" name="icd10"
+								/>
+						</div>
+					</div>
+				</form>
+
+
+				<ul>
+					<li
+						data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+						<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
+							{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
+						data-ng-show="icd10Class1.icdCode.indexOf('.') > 1 "
+						data-ng-click="seekGroupIcd10(icd10Class1)">
+							{{icd10Class1.icdCode.substring(0,icd10Class1.icdCode.indexOf('.'))
+							}}</a><a data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
+						data-ng-click="setIcd10(icd10Class1)">{{icd10Class1.icdCode.indexOf('.')
+							> 1?
+							icd10Class1.icdCode.substring(icd10Class1.icdCode.indexOf('.')):icd10Class1.icdCode
+							}}, {{icd10Class1.icdName}} </a>
+						<ul data-ng-show="seekIcdName.length > 2">
+							<li
+								data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+								<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
+									{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
+								data-ng-show="icd10Class2.icdCode.indexOf('.') > 1 "
+								data-ng-click="seekGroupIcd10(icd10Class2)">
+									{{icd10Class2.icdCode.substring(0,icd10Class2.icdCode.indexOf('.'))
+									}}</a><a data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
+								data-ng-click="setIcd10(icd10Class2)">{{icd10Class2.icdCode.indexOf('.')
+									> 1?
+									icd10Class2.icdCode.substring(icd10Class2.icdCode.indexOf('.')):icd10Class2.icdCode
+									}}, {{icd10Class2.icdName}} </a>
+								<ul>
+									<li
+										data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+										<span data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
+											{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
+										data-ng-show="{{!icd10Class3.icdCode.contains('-') }}"
+										data-ng-click="setIcd10(icd10Class3)">
+											{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
+										<ul>
+											<li
+												data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+												{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
+												data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
+													{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
+												data-ng-show="{{!icd10Class4.icdCode.contains('-') }}"
+												data-ng-click="setIcd10(icd10Class4)">
+													{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+
 			</div>
-				<div>
+			<div>
 					<span><a href="#" data-ng-click="openDialog('department')">Відділення:<span
 							data-ng-show="collapseDialog == 'department'"
 							class="glyphicon glyphicon-folder-open"></span></a>
@@ -456,7 +522,7 @@
 				</ol>
 			</div>
 		</nav>
-		
+<!-- 
 	<script src="/js/jquery-2.1.3.min.js" type="application/javascript"></script>
 	<script src="/css/b/js/bootstrap.min.js" type="application/javascript"></script>
 	<script src="/js/rangy-core.js" type="application/javascript"></script>
@@ -476,7 +542,29 @@
 	<script src="/js/operation2.directive.js" type="application/javascript"></script>
 	<script src="/js/cuwy1.controller.js" type="application/javascript"></script>
 	<script src="/js/icd10Editor1Ctrl.js" type="application/javascript"></script>
+ -->
 	
 </body>
+
+	<script src="/js/jquery-2.1.3.min.js"></script>
+	<script src="/js/a/angular.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/jquery-1.11.4.ui.min.js"></script>
+	<script src="/js/rangy-core.js"></script>
+	<script src="/js/a/sortable.js"></script>
+	<script src="/js/a/angular-sanitize.min.js"></script>
+	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<script src="/css/b/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src='/js/textAngular-sanitize.min.js'></script>
+	<script src='/js/textAngular.min.js'></script>
+	<script src="/db/config.json.js"></script>
+	<script src="/db/operationTree.json.js"></script>
+	<script src="/db/icd10uaGroups.json.js"></script>
+	<script src="/js/cuwy1.directives.js"></script>
+	<script src="/js/cuwy1.controller.js"></script>
+	<script src="/js/icd10Editor1Ctrl.js"></script>
+	<script src="/js/operation.directive.js" type="application/javascript"></script>
+	<script src="/js/operation2.directive.js" type="application/javascript"></script>
 
 </html>

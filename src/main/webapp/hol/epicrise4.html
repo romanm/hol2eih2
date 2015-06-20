@@ -253,25 +253,41 @@
 				</div>
 				<div id="g-{{h1Index}}" class="panel-collapse collapse">
 					<div class="panel-body">
-						<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози' && h1.name == 'Операції'">
-							{{h1.isTextHtml}} {{h1.name}} </span>
+						<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози' && h1.name == 'Операції'"> </span>
 						<div data-ng-show="h1.name == 'Операції'">
-						Операції
-						<div data-ng-if="patientHistory.operationHistorys">
-							<div data-ng-context-menu="menuDeletOperation"
-								data-ng-repeat="operation in patientHistory.operationHistorys">
-								<small> <span class="glyphicon glyphicon-pushpin"></span>
-								</small> <a href="#" data-ng-click="addOperation(h1, operation)">
-									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
-									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
-									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
-								<span>{{operation.operation_additional}}</span>
-								<div class="right" style="text-align: right;">
-									Хірург: <i> {{operation.surgery_name}}</i>
+							<div class="row">
+								<div class="col-md-2">в Виписці</div>
+								<div class="col-md-10">
+									<hr />
+								</div>
+							</div>
+							<span data-ng-context-menu="menuOperation"
+								data-ng-repeat="operationHistory in h1.operationHistorys"
+								title="Хірург: {{operationHistory.surgery_name}}">
+								{{operationHistory.operation_history_start | date:'dd.MM.yyyy'}}
+								{{operationHistory.operation_name}} <br />
+							</span>
+							<div class="row">
+								<div class="col-md-1">в ІХ</div>
+								<div class="col-md-11">
+									<hr />
+								</div>
+							</div>
+							<div data-ng-if="patientHistory.operationHistorys">
+								<div data-ng-context-menu="menuDeletOperation"
+									data-ng-repeat="operation in patientHistory.operationHistorys">
+									<small> <span class="glyphicon glyphicon-pushpin"></span>
+									</small> <a href="#" data-ng-click="addOperation(h1, operation)">
+										{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
+										- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
+										title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+									<span>{{operation.operation_additional}}</span>
+									<div class="right" style="text-align: right;">
+										Хірург: <i> {{operation.surgery_name}}</i>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 						<div data-ng-show="h1.name == 'Діагнози'">
 							Діагнози
 							<ul>
@@ -285,7 +301,10 @@
 						</div>
 						<!-- Текст -->
 						<div data-ng-show="h1.isTextHtml">
-							<div text-angular ng-model="h1.value.textHtml"></div>
+							<div text-angular
+								ta-toolbar="[['bold','italics','underline'],['undo','redo']
+						,['justifyLeft','justifyCenter','justifyRight'],['html']]"
+								ng-model="h1.value.textHtml"></div>
 							<div
 								data-ng-repeat="hta in patientHistory.historyTreatmentAnalysises"
 								data-ng-show="h1.name == hta.historyTreatmentAnalysisName"

@@ -1,6 +1,7 @@
 cuwyApp.controller('OpCtrl', [ '$scope', '$http', '$filter', '$sce', 
 		function ($scope, $http, $filter, $sce) {
 	console.log("OpCtrl");
+	initseekIcd10Tree($scope, $http, $sce, $filter);
 
 	$scope.requiredFiledList = ["operation_id","operation_result_id","icd_id"];
 	$scope.requiredFileds = {
@@ -77,9 +78,6 @@ cuwyApp.controller('LoginCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$http({ method : 'GET', url : "/user"
 	}).success(function(data, status, headers, config) {
 		$scope.user = data;
-		console.log($scope.user);
-		console.log("--------------");
-		console.log(document.querySelector("#username"));
 		document.querySelector("#username").focus();
 	}).error(function(data, status, headers, config) {
 	});
@@ -93,8 +91,6 @@ cuwyApp.controller('LogoutCtrl', [ '$scope', '$http', '$filter', '$sce',
 		url : "/user"
 	}).success(function(data, status, headers, config) {
 		$scope.user = data;
-		console.log($scope.user);
-		console.log("--------------");
 		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
@@ -107,8 +103,6 @@ cuwyApp.controller('HomeHolCtrl', [ '$scope', '$http', '$filter', '$sce',
 	$http({ method : 'GET', url : "/user"
 	}).success(function(data, status, headers, config) {
 		$scope.user = data;
-		console.log($scope.user.name);
-		console.log($scope.user);
 		initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
@@ -120,19 +114,14 @@ var initDepartmentMoveCtrl = function($scope){
 		$scope.tmpVariables.departmentHistoryIn_HH = departmentHistoryIn.getHours();
 		$scope.tmpVariables.departmentHistoryIn_mm = departmentHistoryIn.getMinutes();
 	}
-	console.log(parameters);
 	if(parameters.hno){
 		$scope.patientHistory.departmentHistoryIn = new Date();
 		initTmpVariables($scope.patientHistory.departmentHistoryIn);
-		console.log($scope.patientHistory.departmentHistoryIn);
 	}else if(parameters.dep){
 		$scope.departmentsHol.departmentHistoryIn = new Date();
 		initTmpVariables($scope.departmentsHol.departmentHistoryIn);
-		console.log($scope.departmentsHol.departmentHistoryIn);
 	}
-	console.log($scope.tmpVariables);
 	$scope.collapseMovePatient = function(){
-		console.log("collapseMovePatient");
 		$scope.patientHistory.collapseMovePatient = !$scope.patientHistory.collapseMovePatient
 	}
 }
@@ -140,8 +129,6 @@ cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', func
 	console.log('departmentCtrl');
 	$scope.movePatientDepartment = function(){
 		console.log("movePatientDepartment");
-		console.log($scope.patientHistory);
-		console.log($scope.patientHistory.user);
 		
 		initAppConfig($scope, $http, $sce, $filter);
 
@@ -155,7 +142,6 @@ cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', func
 		history.historyDepartmentId =$scope.patientEditing.departmentId;
 		history.departmentHistorys = [];
 		history.departmentHistorys.push(departmentHistory);
-		console.log(history);
 		$http({ method : 'POST', data : history, url : "/db/moveHistoryDepartmentHistory"
 		}).success(function(data, status, headers, config){
 			console.log(data);
@@ -164,20 +150,15 @@ cuwyApp.controller('departmentCtrl', ['$scope', '$sce', '$filter', '$http', func
 		});
 
 		return;
-		console.log(departmentHistory);
 		postObject("/db/movePatientDepartment", departmentHistory, $scope, $http);
 	}
 
 	$scope.writeDepartment = function(department){
 		$scope.patientEditing.departmentName = department.department_name;
 		$scope.patientEditing.departmentId = department.department_id;
-		console.log($scope.patientEditing);
 		/*
 		$scope.patientHistory.patientDepartmentMovements[0].departmentId = department.department_id;
 		$scope.patientHistory.patientDepartmentMovements[0].departmentName = department.department_name;
-		console.log($scope.patientHistory.patientDepartmentMovements[0]);
-		console.log($scope.patientHistory);
-		console.log($scope.patientHistory.historyDepartmentIn);
 		 */
 	}
 
@@ -203,7 +184,6 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 	}).success(function(data, status, headers, config) {
 		$scope.department = data.department;
 		$scope.data = data;
-		console.log($scope.data);
 		calcDsReportTable();
 		calcAdressReportTable();
 		//		clearInterval(checkLoadTimeInterval);
@@ -269,7 +249,6 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 			$scope.data.adressReportTable[adress_code].cnt.referralOut = adPerevedeni.cnt_adress_code;
 			$scope.data.adressReportTable[adress_code].bedday.referralOut = adPerevedeni.sum_b_d;
 		});
-		console.log($scope.data.adressReportTable);
 	}
 	setAdressRegionCode = function(adress_code){
 		if($scope.data.adressReportTable[adress_code] === undefined){
@@ -342,7 +321,6 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 			$scope.data.dsReportTable[cds_code].cnt.referralOut = dsPerevedeni.cnt_cds_code;
 			$scope.data.dsReportTable[cds_code].bedday.referralOut = dsPerevedeni.sum_b_d;
 		});
-		console.log($scope.data.dsReportTable);
 	};
 	//---------------------adress report----------------------------------------
 	
@@ -357,7 +335,6 @@ cuwyApp.controller('JornalMovePatientCtrl', [ '$scope', '$http', '$filter', '$sc
 	}).success(function(data, status, headers, config) {
 		$scope.department = data;
 		$scope.jornalMovePatient = data.jornalMovePatient;
-		console.log($scope.department);
 		//initAppConfig($scope, $http, $sce, $filter);
 	}).error(function(data, status, headers, config) {
 	});
@@ -372,7 +349,6 @@ cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',functi
 
 	$scope.changeSeekInArchives = function(){
 		console.log("seekInArchives");
-		console.log($scope.seekInArchives);
 		seekInArchivesDb();
 	}
 
@@ -380,7 +356,6 @@ cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',functi
 		$http({ method : 'GET', url : archivesFile+"_"+$scope.seekInArchives
 		}).success(function(data, status, headers, config) {
 			$scope.department = data;
-			console.log($scope.department)
 			seekDepartmentFromConfig($scope, $scope.department.department_id);
 			initAppConfig($scope, $http, $sce, $filter);
 		}).error(function(data, status, headers, config) {
@@ -412,7 +387,6 @@ var initDepartmentArchiveCtrl = function ($scope){
 
 	$scope.movePatient = function(patient){
 		patient.collapseMovePatient = !patient.collapseMovePatient;
-		console.log(patient.collapseMovePatient);
 	}
 
 }
@@ -433,7 +407,6 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		seekDepartmentFromConfig($scope, $scope.department.department_id);
 		initAppConfig($scope, $http, $sce, $filter);
 		initDepartmentMoveCtrl($scope);
-		console.log($scope.departmentId);
 	}).error(function(data, status, headers, config) {
 	});
 	
@@ -473,8 +446,6 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 	$scope.menuPatientList = [
 		['<span class="glyphicon glyphicon-floppy-open"></span> Відкрити іс.хв.', function ($itemScope) {
 			console.debug('Edit');
-			console.log($itemScope);
-			console.log($itemScope.patient);
 			$scope.openPatientShortHistory($itemScope.patient);
 		}],
 		null,
@@ -484,7 +455,6 @@ cuwyApp.controller('DepartmentCtrl', [ '$scope', '$http', '$filter', '$sce', fun
 		}],
 		['<span class="glyphicon glyphicon-transfer"></span> Переведеня', function ($itemScope) {
 			console.debug('Add');
-			console.debug($itemScope.patient);
 			$scope.movePatient($itemScope.patient);
 		}]
 	];

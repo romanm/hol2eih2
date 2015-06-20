@@ -25,3 +25,19 @@ td.top {
 	margin-bottom: 1px;
 	min-height: 2px;
 }
+/*-----------------text-angular-----------------------------------------------*/
+.ta-editor {
+	height: auto;
+	height: auto;
+}
+/*
+.ta-editor {
+	height: 600px;
+	height: auto;
+	overflow: auto;
+	font-family: inherit;
+	font-size: 100%;
+	margin: 20px 0;
+}
+*/
+/*-----------------text-angular--------------------------------------------END*/

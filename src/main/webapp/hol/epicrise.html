@@ -217,6 +217,7 @@
 						{{h1.value.laborValues[laborTemplate.name].value}}
 						{{laborTemplate.unit}} <span data-ng-show="!$last">,</span>
 				</span>
+				<!-- Операції -->
 				</span> <span data-ng-context-menu="menuOperation"
 					data-ng-repeat="operationHistory in h1.operationHistorys"
 					title="Хірург: {{operationHistory.surgery_name}}">
@@ -242,18 +243,18 @@
 						</ul>
 					</div>
 					<div data-ng-show="h1.name == 'Операції'">
-						<div data-ng-if="patientHistory.operationHistorys">
-							<div data-ng-context-menu="menuDeletOperation"
-								data-ng-repeat="operation in patientHistory.operationHistorys">
-								<small> <span class="glyphicon glyphicon-pushpin"></span>
-								</small> <a href="#" data-ng-click="addOperation(h1, operation)">
-									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
-									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
-									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
-								<span>{{operation.operation_additional}}</span>
-								<div class="right" style="text-align: right;">
-									Хірург: <i> {{operation.surgery_name}}</i>
-								</div>
+						<div data-ng-if="!patientHistory.operationHistorys">Жодного
+							запису про операції в історії хвороби цього хворого.</div>
+						<div data-ng-context-menu="menuDeletOperation"
+							data-ng-repeat="operation in patientHistory.operationHistorys">
+							<small> <span class="glyphicon glyphicon-pushpin"></span>
+							</small> <a href="#" data-ng-click="addOperation(h1, operation)">
+								{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
+								- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
+								title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+							<span>{{operation.operation_additional}}</span>
+							<div class="right" style="text-align: right;">
+								Хірург: <i> {{operation.surgery_name}}</i>
 							</div>
 						</div>
 					</div>
@@ -689,7 +690,5 @@
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/epicriseTemplate.json.js"></script>
 	<script src="/js/epicrise2.js"></script>
-<!-- 
- -->
 
 </html>

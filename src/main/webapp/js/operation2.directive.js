@@ -7,25 +7,19 @@ operation2Directive = function($scope, $http, $sce, $filter){
 	var checkSeekInterval;
 
 	$scope.setSurgeryOp = function(op2set){
-		console.log(op2set);
 		$scope.operation.operation_id = op2set.operation_id;
 		$scope.operation.operation_name = op2set.operation_name;
 	}
 	$scope.setOp = function(op2set){
-		console.log(op2set);
-		console.log("1 "+$scope.operation.operation_id );
 		$scope.operation.operation_id = op2set.operationId;
 		$scope.operation.operation_name = op2set.operationName;
 		$scope.operation.operation_subgroup_id = op2set.operationSubgroupId;
-		console.log("2 "+$scope.operation.operation_id );
-		console.log($scope.operation);
 	}
 
 	makeFilteredOperationTree = function(){
 		if(!$scope.operation)
 			return;
 		lastSeekOp = $scope.operation.operation_name;
-		console.log(lastSeekOp+' - '+(new Date().toLocaleTimeString()));
 		if(!lastSeekOp)
 			return;
 		$scope.filteredOperationTree = [];
@@ -44,19 +38,16 @@ operation2Directive = function($scope, $http, $sce, $filter){
 				})
 			})
 		})
-//		console.log($scope.filteredOperationTree);
 	}
 
 	controlOpeSeek = function(){
 		if(lastSeekOp.length != $scope.operation.operation_name.length){
-			console.log(lastSeekOp);
 			makeFilteredOperationTree();
 		}
 	}
 
 
 	$scope.setSurgery = function(s){
-	console.log(s);
 		$scope.operation.personal_id = s.personal_id;
 		$scope.operation.surgery_name = s.personal_surname + " " + s.personal_name + " " + s.personal_patronymic;
 		$scope.collapseDialog = "false";
@@ -83,12 +74,6 @@ operation2Directive = function($scope, $http, $sce, $filter){
 	$scope.setDepartment = function(d){
 		$scope.operation.department_id = d.department_id;
 		$scope.operation.department_name = d.department_name;
-		$scope.collapseDialog = "false";
-	}
-	$scope.setDiagnos = function(ds){
-		$scope.operation.icd_id = ds.icdId;
-		$scope.operation.icd_code = ds.icdCode;
-		$scope.operation.icd_name = ds.icdName;
 		$scope.collapseDialog = "false";
 	}
 	$scope.setOperationResult = function(or){
@@ -127,7 +112,6 @@ operation2Directive = function($scope, $http, $sce, $filter){
 			$http({ method : 'GET', url : "/hol/anestesia"
 			}).success(function(data, status, headers, config) {
 				$scope.anestesia = data;
-				console.log($scope.anestesia);
 			}).error(function(data, status, headers, config) {
 			});
 		}else if(dialogName == "anesthetist"){
@@ -175,19 +159,15 @@ operation2Directive = function($scope, $http, $sce, $filter){
 					break;
 				}
 			}
-			console.log($scope.patientHistory.operationHistorys);
 			manageOpeSeekInterval();
 			calcOperationDuration();
 		}
-		console.log($scope.operation);
 		var opStartDate = new Date($scope.operation.operation_history_start);
 		$scope.ophStartHH = opStartDate.getHours();
 		var mm = opStartDate.getMinutes();
 		$scope.ophStartMM = mm-mm%5;
 		if(!$scope.operation.department_id){
-			console.log($scope.userDepartmentId);
 			var department = $scope.configHol.departments[$scope.configHol.departmentsIdPosition[$scope.userDepartmentId]];
-			console.log(department);
 			$scope.setDepartment({"department_id":department.department_id,"department_name":department.department_name});
 		}
 		if(!$scope.operation.personal_id){
@@ -198,7 +178,7 @@ operation2Directive = function($scope, $http, $sce, $filter){
 		if(!$scope.operation.icd_id){
 			for (var i = 0; i < $scope.patientHistory.diagnosis.length; i++) {
 				var ds = $scope.patientHistory.diagnosis[i];
-				$scope.setDiagnos(ds);
+				$scope.setDiagnosToOperation(ds);
 				if(ds.diagnoseId == 3)
 					break;
 			}
@@ -207,8 +187,6 @@ operation2Directive = function($scope, $http, $sce, $filter){
 
 	$scope.saveOperation = function(){
 
-		console.log("check field");
-		console.log($scope.operation);
 		$scope.operation.checkRequiredFiledList = [];
 		$scope.requiredFiledList.forEach(function(key) {
 			if(!$scope.operation[key])
