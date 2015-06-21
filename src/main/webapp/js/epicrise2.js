@@ -52,7 +52,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$scope.beetDays = function(){
 		if($scope.epicrise){
 			var outDay = $scope.epicrise.departmentHistoryOut;
-			console.log($scope.epicrise);
 			var outDate = new Date(outDay);
 			if($scope.patientHistory){
 				var inDay = $scope.patientHistory.patientDepartmentMovements[0].departmentHistoryIn;
@@ -132,7 +131,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$http({ method : 'POST', data : docToSave, url : "/db/saveepicrise"
 		}).success(function(data, status, headers, config){
 			$scope.epicrise = data;
-			console.log(data);
 		}).error(function(data, status, headers, config) {
 			$scope.error = data;
 		});
@@ -246,7 +244,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 				}
 			}
 		});
-		console.log($scope.epicrise.delPart);
 	}
 	
 	hol1LaborTableToJsonValue = function(textHol1, valueObj){
@@ -284,7 +281,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		$scope.epicriseTemplate.head1s.forEach(function(headElement) {
 			$scope.necessary[headElement.name]=0;
 		});
-		console.log($scope.necessary);
 		if(!$scope.epicrise.epicriseGroups){
 			$scope.epicrise.epicriseGroups = [];
 			//create first epicriese groups list.
@@ -299,7 +295,6 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 			initEpicriseGroupElement(epicriseGroup);
 		});
 		$scope.patientHistory.departmentId = $scope.patientHistory.patientDepartmentMovements[$scope.patientHistory.patientDepartmentMovements.length - 1].departmentId;
-		console.log($scope.epicrise);
 	}
 	$scope.setSeekTag = function(tag){
 		$scope.seekTag = tag;

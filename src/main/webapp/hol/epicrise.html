@@ -211,7 +211,10 @@
 				<span
 					data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">
 					<span data-ng-context-menu="menuLabor"
+					data-ng-show="h1.value.laborValues[laborTemplate.name].value.length > 0">
+					<!-- 
 					data-ng-show="h1.value.laborValues[laborTemplate.name]">
+					 -->
 						{{laborTemplate.name}}
 						{{epicrise[h1.name].laborValues[laborTemplate.name].value}}
 						{{h1.value.laborValues[laborTemplate.name].value}}
@@ -522,23 +525,39 @@
 								<tr
 									data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name] | filter : seekLabor">
 									<td>{{laborTemplate.name}}</td>
-									<td><a href="#"
+									<td>
+									
+									<!-- 
+									<a href="#"
 										data-ng-show="laborTemplate.name != h1.laborOpenToEdit"
 										data-ng-click="openLaborToEdit(h1, laborTemplate.name)">
 											{{h1.value.laborValues[laborTemplate.name].value}} <span
 											data-ng-show="!h1.value.laborValues[laborTemplate.name].value">
 												_________ </span>
 									</a>
-										<form class="form-inline" role="form"
-											data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
-											<div class="form-group">
-												<div class="input-group">
-													<input id="{{laborTemplate.name}}"
-														ng-model="h1.value.laborValues[laborTemplate.name].value"
-														class="form-control" type="text" />
-												</div>
+									<form class="form-inline" role="form"
+										data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
+										<div class="form-group">
+											<div class="input-group">
+												<input id="{{laborTemplate.name}}"
+													ng-model="h1.value.laborValues[laborTemplate.name].value"
+													class="form-control" type="text" />
 											</div>
-										</form></td>
+										</div>
+									</form>
+									 -->
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<div class="input-group">
+												<input id="{{laborTemplate.name}}"
+													ng-model="h1.value.laborValues[laborTemplate.name].value"
+													class="form-control" type="text" />
+											</div>
+										</div>
+									</form>
+
+
+								</td>
 									<td>{{laborTemplate.unit}}</td>
 								<td ng-show="laborTemplate.texts"><span
 									ng-repeat="text in laborTemplate.texts"> <a
