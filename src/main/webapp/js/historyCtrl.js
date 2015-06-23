@@ -21,11 +21,28 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		console.debug($scope.patientHistory.departmentHistoryIn);
 	}
 	//----------move patient-------------------------------------------------END
-	
+
 	initDeclareController($scope, $http, $sce, $filter);
 	$scope.hno = parameters.hno;
 
 	readInitHistory($scope, $http, $sce, $filter);
+	initExtract = function(){
+		$scope.today = function() {
+			$scope.patientHistory.historyOut = new Date();
+		};
+		$scope.minDate = new Date($scope.patientHistory.historyIn);
+		if(window.location.toString().indexOf("extract.html")){
+			if(!$scope.patientHistory.historyOtherTreatment){
+				$scope.patientHistory.historyOtherTreatment = "&nbsp;";
+			}
+			if(!$scope.patientHistory.historyExpertiseConslusion){
+				$scope.patientHistory.historyExpertiseConslusion = "&nbsp;";
+			}
+			if(!$scope.patientHistory.historySpecial){
+				$scope.patientHistory.historySpecial = "&nbsp;";
+			}
+		}
+	}
 
 	$http({ method : 'GET', url : $scope.historyFile
 	}).success(function(data, status, headers, config) {
@@ -33,6 +50,7 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 		console.log($scope.patientHistory);
 		$scope.patientHistory.movePatientDepartment = {};
 		initHistory();
+		initExtract();
 		initAppConfig($scope, $http, $sce, $filter);
 		initDepartmentMoveCtrl($scope);
 	}).error(function(data, status, headers, config) {
@@ -42,6 +60,15 @@ cuwyApp.controller('HistoryCtrl', [ '$scope', '$http', '$filter', '$sce', functi
 	initseekIcd10Tree($scope, $http, $sce, $filter);
 
 	//-------------extract------------------------------------------------------
+	$scope.removeExtract = function(){
+		$http({ method : 'POST', data : $scope.patientHistory, url : "/db/removehistoryextract"
+		}).success(function(data, status, headers, config){
+			console.log("success remove exit");
+		}).error(function(data, status, headers, config) {
+			$scope.error = data;
+		});
+		
+	}
 	$scope.saveExtract = function(){
 		console.log("----");
 		console.log($scope.patientHistory);

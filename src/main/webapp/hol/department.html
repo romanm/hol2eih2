@@ -27,11 +27,10 @@ body {
 		<div class="container">
 			<div class="navbar-header">
 				<ol class="breadcrumb">
-					<li><a href="/hol/home.html"><span
-							class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
-					<li><a
+					<li title="Відділення"><i class="fa fa-bed"></i> <a
 						href="/hol/department.html?dep={{department.department_id}}
-		">{{department.department_name}}</a></li>
+		">
+							{{department.department_name}} </a></li>
 				</ol>
 			</div>
 			<div class="collapse navbar-collapse navbar-right">
@@ -94,7 +93,7 @@ body {
 						class="hover-menu"
 							data-ng-repeat="patient in department.patientesDiagnosisHol | filter:query">
 							<td>{{patient.history_no}}</td>
-							<th class="hover-menu-width">
+							<td class="hover-menu-width">
 							<span ng-show="hoverEdit"
 								class="animate-show">
 									<button ng-click="launcherPatientInfo(patient)" type="button"
@@ -109,16 +108,11 @@ body {
 										<span class="glyphicon glyphicon-transfer"></span>
 									</button>
 							</span>
-							</th>
+							</td>
 							<td
 							title="{{patient.icd_code}}, {{patient.icd_name}}"
-							><a
-								href="history.html?hno={{patient.history_id}}">
-									{{patient.name}} </a> 
-							
-							
-							
-							<!-- Dialog -->
+							><a href="history.html?hno={{patient.history_id}}">
+									{{patient.name}} </a> <!-- Dialog -->
 							
 							<div class="modal fade" id="moveDialog{{$index}}" role="dialog">
 							<div class="modal-dialog" style="width: 90%">
@@ -184,7 +178,7 @@ body {
 													</tr>
 													<tr>
 														<td>
-														 <datepicker
+														<datepicker
 																ng-model="historyToMove.departmentHistorys[0].departmentHistoryIn"
 																min-date="minDate" show-weeks="true"
 																class="well well-sm"></datepicker>
@@ -250,12 +244,10 @@ body {
 				
 			</div>
 			<div class="col-md-3 well">
-				<div class="navbar-right">
-					<small> <a
-						href="http://{{hol1host}}/department/{{parameters.dep}}"> <span
-							class="glyphicon glyphicon-link"></span> HOL1
+				<div class="navbar-right small">
+					<a href="http://{{hol1host}}/department/{{parameters.dep}}"> <span
+						class="glyphicon glyphicon-link"></span> HOL1
 					</a>
-					</small>
 				</div>
 				<h2>
 					Відділення <small> {{departmentFromConfig.department_name}}
@@ -276,7 +268,10 @@ body {
 				<span>
 					<b>Завідувач:</b> {{departmentFromConfig.zaviduvach}}
 				</span>
-				
+				<div class="navbar-right small">
+					<a href="/hol/home.html"><span class="glyphicon glyphicon-home"></span>
+						ХОЛ</a>
+				</div>
 				<div
 					data-ng-show="departmentFromConfig.zaviduvach == department.user.name">
 					<div>

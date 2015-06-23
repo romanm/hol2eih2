@@ -8,6 +8,7 @@
 	</title>
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+	<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
 	<link rel="stylesheet" href="/css/datepicker.css"></link>
 	<link rel="stylesheet" href="/css/epicrise3.css"></link>
 	<style type="text/css">
@@ -23,20 +24,23 @@
 		<div class="container">
 					<div class="navbar-header">
 						<ol class="breadcrumb">
-							<li><a href="/hol/home.html"><span
-									class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
-							<li><a
-								href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
+					<li><i class="fa fa-bed"></i><a
+						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
 		.departmentId}}
 		">
-									відділення: {{patientHistory.patientDepartmentMovements
-									[patientHistory.patientDepartmentMovements.length -1]
-									.departmentName}} </a></li>
-							<li><a href="/hol/history.html?hno={{param.hno}}"> ІХ №
-									<u>{{patientHistory.historyNo}}</u> ::Короткий перегляд
-							</a></li>
-						</ol>
+							{{patientHistory.patientDepartmentMovements
+							[patientHistory.patientDepartmentMovements.length -1]
+							.departmentName}} </a></li>
+					<li><i class="fa fa-history"></i><a
+						href="/hol/history.html?hno={{param.hno}}"> ІХ<b>№</b><u>{{patientHistory.historyNo}}</u>
+						<!-- 
+							::Короткий перегляд
+						 -->
+					</a>
+					<!-- № -->
+					</li>
+				</ol>
 					</div>
 								<div class="collapse navbar-collapse navbar-right">
 					<ul class="list-inline navbar-right">
@@ -241,9 +245,7 @@
 				</div>
 				<hr class="shortPatienHistory" />
 					<div data-ng-show="patientHistory.user">
-						<!-- 
-						Діагноз:
-					 -->
+						
 						<span data-ng-repeat="diagnosHol in diagnosesHol"> <b
 							title="{{diagnosHol.diagnosName}}"><span
 								data-ng-show="$index < 2 || $index > 5">{{diagnosHol.diagnosNameShort}}</span>
@@ -478,7 +480,10 @@
 							</div>
 						</div>
 					<h3>
-						<small> <span class="glyphicon glyphicon-edit"></span>
+						<small> <span class="fa-stack"> <i
+								class="fa fa-square-o fa-stack-2x"></i> <i
+								class="fa fa-send fa-stack-1x"></i>
+						</span>
 						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
 							Епікриз </a> <sub style="font-size: 50%;"> <a
 							href="epicrise.html?hid={{patientHistory.historyId}}">Новий
@@ -486,10 +491,7 @@
 								стиль</a>
 						</sub>
 					</h3>
-					<a></a>
 					<!-- 
-				<u><b>Перебіг хвороби</b></u>:
-				 -->
 					<div
 						ng-repeat="historyTreatmentAnalysis in patientHistory.historyTreatmentAnalysises "
 						ng-if="'' != historyTreatmentAnalysis.historyTreatmentAnalysisText"
@@ -498,48 +500,57 @@
 						<span
 							ng-bind-html="historyTreatmentAnalysis.historyTreatmentAnalysisText"></span>
 					</div>
+					 -->
 				</div>
 		</div>
-		<div class="col-md-3 well no-print">
-			<h4>Робоча панель</h4>
-			<ol>
-				<li><span class="glyphicon glyphicon-eye-open"></span> <a
-					href="/hol/history.html?hno={{patientHistory.historyId}}"> Перегляд </a></li>
-				<li><span class="glyphicon glyphicon-edit"></span> <a
-					href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
-						Редагування ПЧ </a> | <small> <a
-						href="http://localhost/history/inedit/id/{{patientHistory.historyId}}">
-							<span class="glyphicon glyphicon-link"></span> HOL1
+			<div class="col-md-3 well no-print">
+				<div class="navbar-right">
+					<a href="http://localhost/history/{{patientHistory.historyId}}">
+						<span class="glyphicon glyphicon-link"></span> HOL1
 					</a>
-				</small></li>
-				<li><span class="glyphicon glyphicon-transfer"></span> <a
-					ng-click="collapseMovePatient()">
-						Переведеня </a></li>
-				<li><span class="glyphicon glyphicon-pushpin"></span> <a
-					href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
-				</a></li>
-				<li><span class="glyphicon glyphicon-edit"></span> <a
-					href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
-						Епікриз </a> | <small> <a
-						href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
-							<span class="glyphicon glyphicon-link"></span>HOL1
-					</a>
-				</small></li>
-				<li><span class="glyphicon glyphicon-share"></span> <a
-					href="/hol/extract.html?hid={{patientHistory.historyId}}">
-						Виписка </a> | <small> <a
-						href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
-							<span class="glyphicon glyphicon-link"></span>HOL1
-					</a>
-				</small></li>
+				</div>
+				<h4>Робоча панель</h4>
+				<ol>
+					<li><i class="fa fa-history"></i> <a
+						href="/hol/history.html?hno={{patientHistory.historyId}}">
+							Перегляд ІХ</a></li>
+					<li><span class="glyphicon glyphicon-edit"></span> <a
+						href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
+							Редагування ПЧ </a> | <small> <a
+							href="http://localhost/history/inedit/id/{{patientHistory.historyId}}">
+								<span class="glyphicon glyphicon-link"></span> HOL1
+						</a>
+					</small></li>
+					<li><span class="glyphicon glyphicon-transfer"></span> <a
+						ng-click="collapseMovePatient()"> Переведеня </a></li>
+					<li><span class="glyphicon glyphicon-pushpin"></span> <a
+						href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
+					</a></li>
+					<li><small><span class="fa-stack"> <i
+								class="fa fa-square-o fa-stack-2x"></i> <i
+								class="fa fa-send fa-stack-1x"></i>
+						</span></small> <a href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+							Епікриз </a> | <small> <a
+							href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
+								<span class="glyphicon glyphicon-link"></span>HOL1
+						</a>
+					</small></li>
+					<li><span class="glyphicon glyphicon-share"></span> <a
+						href="/hol/extract.html?hid={{patientHistory.historyId}}">
+							Виписка </a> | <small> <a
+							href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
+								<span class="glyphicon glyphicon-link"></span>HOL1
+						</a>
+					</small></li>
 				</ol>
-			<div class="navbar-right"> 
-				<a href="http://localhost/history/{{patientHistory.historyId}}"> 
-				<span class="glyphicon glyphicon-link"></span>
-				HOL1 </a> 
+				<div class="navbar-right small">
+					<a href="/hol/home.html"><span class="glyphicon glyphicon-home"></span>
+						ХОЛ</a>
+				</div>
+
+
 			</div>
 		</div>
-	</div>
 	</div>
 	<nav class="navbar navbar-default navbar-fixed-bottom"
 		role="navigation">
@@ -561,8 +572,10 @@
 
 
 			<ol class="list-inline navbar-right">
-				<li><span class="glyphicon glyphicon-eye-open"></span> <a
-					href="/hol/history.html?hno={{patientHistory.historyId}}"> Перегляд </a></li>
+				<li> 
+				<i class="fa fa-history"></i>
+				<a
+					href="/hol/history.html?hno={{patientHistory.historyId}}"> Перегляд ІХ</a></li>
 				<li><span class="glyphicon glyphicon-edit"></span> <a
 					href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
 						Редагування ПЧ </a></li>

@@ -517,6 +517,15 @@ public class CuwyDbService1 {
 		jdbcTemplate.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
 				, new DepartmentHistoryMapSet(departmentHistory, DepartmentHistoryMapSet.insertDepartmentHistoryMin));
 	}
+	public void removeExitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
+		int historyId = (int) historyHolDb.get("historyId");
+		jdbcTemplate.update( sqlRemoveExitUpdateHistory, new Object[] {historyId}, new int[] {Types.INTEGER});
+		final Integer personId = roleTypes.get("per");
+		jdbcTemplate.update( sqlExitUpdateDepartmentHistory,
+				new Object[] {historyId, personId, roleTypes.get("dep") },
+				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}
+				);
+	}
 	public void exitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
 		jdbcTemplate.update(sqlExitUpdateHistory, new HistoryExitHolDbPSSetter(historyHolDb));
 		//update to department history doctor and out date
@@ -540,6 +549,7 @@ public class CuwyDbService1 {
 	String sqlUpdateHistoryHistoryDepartmentId = "UPDATE history "
 			+ " SET history_department_id = ? "
 			+ " WHERE history_id = ? ";
+	String sqlRemoveExitUpdateHistory = "update history set history_out = null where history_id = ? ";
 	String sqlExitUpdateHistory = "UPDATE history "
 			+ " SET treatment_id = ? "
 			+ " , result_id = ? "
@@ -1649,7 +1659,7 @@ public class CuwyDbService1 {
 
 	private final String readSqlFromFile(String sqlFileName) {
 		Path path = FileSystems.getDefault().getPath(AppConfig.applicationResourcesFolderPfad, sqlFileName);
-		System.out.println(path);
+		logger.debug(""+path);
 		final StringBuffer stringBuffer = new StringBuffer();
 		try (BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"))) {
 			String line = null;
@@ -1660,7 +1670,7 @@ public class CuwyDbService1 {
 		} catch (IOException x) {
 			System.err.format("IOException: %s%n", x);
 		}
-		System.out.println(stringBuffer);
+		logger.debug(""+stringBuffer);
 		return stringBuffer.toString();
 	}
 	

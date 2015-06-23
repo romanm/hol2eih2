@@ -352,6 +352,12 @@ cuwyApp.controller('ArchivesCtrl', [ '$scope', '$http', '$filter', '$sce',functi
 		seekInArchivesDb();
 	}
 
+	$scope.diffHour = function(out){
+		var d = new Date();
+		var h = (d - out)/1000/60/60;
+		return h;
+	}
+
 	var seekInArchivesDb = function(){
 		$http({ method : 'GET', url : archivesFile+"_"+$scope.seekInArchives
 		}).success(function(data, status, headers, config) {

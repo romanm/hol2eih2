@@ -17,7 +17,7 @@
 <link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 <style type="text/css" media="screen">
 	body {
-		padding-top: 40px;
+		padding-top: 47px;
 		padding-bottom: 60px;
 	}
 </style>
@@ -30,22 +30,21 @@
 			<div class="row">
 				<div class="col-xs-8">
 					<ol class="breadcrumb">
-						<li><a
-							data-ng-click="saveControlAndGo('/hol/home.html','ХОЛ')"><span
-								class="glyphicon glyphicon-home"></span> ХОЛ</a></li>
-						<li><a
+						<li title="Відділення"><i class="fa fa-bed"></i> <a
 							data-ng-click="saveControlAndGo('/hol/department.html?dep='+patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
 		.departmentId,'відділення:'+patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 							-1].departmentName)">
-								відділення:
 								{{patientHistory.patientDepartmentMovements[patientHistory.patientDepartmentMovements.length
 								-1].departmentName}} </a></li>
-						<li><a
+						<li><i class="fa fa-history"></i> <a
 							data-ng-click="saveControlAndGo('/hol/history.html?hno='+param.hno, 'ІХ № '+patientHistory.historyNo)">
-								ІХ № <u>{{patientHistory.historyNo}}</u>
+								ІХ<b>№</b><u>{{patientHistory.historyNo}}</u>
 						</a></li>
-						<li><a
+						<li><small><span class="fa-stack"> <i
+									class="fa fa-square-o fa-stack-2x"></i> <i
+									class="fa fa-send fa-stack-1x"></i>
+							</span></small> <a
 							data-ng-click="saveControlAndGo('/hol/epicrise.html?hid='.concat(patientHistory.historyId),'Виписний епікриз')">
 								Виписний епікриз <sub> Новий стиль </sub>
 						</a></li>
@@ -264,7 +263,7 @@
 					<!-- данні текстового формату - редактор -->
 					<div data-ng-show="h1.isTextHtml">
 						<div text-angular ta-toolbar="[['bold','italics','underline'],['undo','redo']
-						,['justifyLeft','justifyCenter','justifyRight'],['html']]" ng-model="h1.value.textHtml"
+						,['justifyLeft','justifyCenter','justifyRight']]" ng-model="h1.value.textHtml"
 						focus="focusedH1Index === h1Index"
 						></div>
 						<div

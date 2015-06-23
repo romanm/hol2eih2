@@ -245,9 +245,17 @@ public class Hol2Eih1Rest {
 		logger.debug("/db/movePatientDepartment ---------------------- END " );
 		return departmentHistory;
 	}
+	
+	@RequestMapping(value = "/db/removehistoryextract", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> removeHistoryExtract(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
+		logger.info("\n Start /db/removehistoryextract" +historyHolDb.keySet());
+		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
+		cuwyDbService1.removeExitHistoryHolDb(historyHolDb, roleTypes);
+		return historyHolDb;
+	}
 
 	@RequestMapping(value = "/db/savehistoryextract", method = RequestMethod.POST)
-	public  @ResponseBody Map<String, Object> saveHistoryExtract(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
+	public @ResponseBody Map<String, Object> saveHistoryExtract(@RequestBody Map<String, Object> historyHolDb, Principal userPrincipal) {
 		logger.info("\n Start /db/savehistoryextract_" +historyHolDb.keySet());
 		final Map<String, Integer> roleTypes = getRoleTypes(userPrincipal);
 		cuwyDbService1.exitHistoryHolDb(historyHolDb, roleTypes);
