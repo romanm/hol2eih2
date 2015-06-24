@@ -5,13 +5,13 @@ public class AppConfig {
 	final static String configJsFileName = "config.json.js";
 
 	//hol
-//	final static String applicationFolderPfad	= "/home/hol2/server/hol2eih2/";
-//	final static String urlDb = "jdbc:h2:tcp://localhost/db-hol2-eih/db-hol2-eih";
-//	final static String urlDb_file = "jdbc:h2:file:/home/hol2/db-h2/db-hol2-eih/db-hol2-eih";
-	//development
-	final static String applicationFolderPfad	= "/home/roman/01_hol_2/01_hol2eih/hol2eih2/";
+	final static String applicationFolderPfad	= "/home/hol2/server/hol2eih2/";
 	final static String urlDb = "jdbc:h2:tcp://localhost/db-hol2-eih/db-hol2-eih";
-	final static String urlDb_file = "jdbc:h2:file:/home/roman/01_hol_2/db-h2/db-hol2-eih/db-hol2-eih";
+	final static String urlDb_file = "jdbc:h2:file:/home/hol2/db-h2/db-hol2-eih/db-hol2-eih";
+	//development
+//	final static String applicationFolderPfad	= "/home/roman/01_hol_2/01_hol2eih/hol2eih2/";
+//	final static String urlDb = "jdbc:h2:tcp://localhost/db-hol2-eih/db-hol2-eih";
+//	final static String urlDb_file = "jdbc:h2:file:/home/roman/01_hol_2/db-h2/db-hol2-eih/db-hol2-eih";
 //	
 	final static String innerDbFolderPfad		= "src/main/webapp/db/";
 	final static String innerJsFolderPfad		= "src/main/webapp/js/";

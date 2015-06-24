@@ -28,7 +28,7 @@
 		role="navigation">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-8">
+				<div class="col-xs-7">
 					<ol class="breadcrumb">
 						<li title="Відділення"><i class="fa fa-bed"></i> <a
 							data-ng-click="saveControlAndGo('/hol/department.html?dep='+patientHistory.patientDepartmentMovements
@@ -50,7 +50,7 @@
 						</a></li>
 					</ol>
 				</div>
-				<div class="col-xs-4"
+				<div class="col-xs-5"
 					style="text-align: right; background-color: #f5f5f5;">
 					<ol class="list-inline navbar-right">
 						<li><span data-ng-show="autoSaveCount > 0"
@@ -72,6 +72,44 @@
 									data-ng-click="printWorkDocClick()" data-toggle="modal">
 									<span class="glyphicon glyphicon-print"></span>
 								</button>
+							</div>
+						</li>
+						<li>
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle"
+									title="Меню" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">
+									<span class="glyphicon glyphicon-option-vertical"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a
+										href="/hol/history.html?hno={{patientHistory.historyId}}">
+											<i class="fa fa-history"></i> Перегляд ІХ
+									</a></li>
+									<li><a
+										href="/hol/op.html?hid={{patientHistory.historyId}}"> <span
+											class="glyphicon glyphicon-pushpin"></span>Операція
+									</a></li>
+									<li><a
+										href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+											<small><span class="fa-stack"> <i
+													class="fa fa-square-o fa-stack-2x"></i> <i
+													class="fa fa-send fa-stack-1x"></i>
+											</span></small> Епікриз
+									</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a
+										href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
+											<span class="glyphicon glyphicon-edit"></span> Редагування ПЧ
+									</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a
+										href="http://{{configHol.hol1IP}}/history/{{patientHistory.historyId}}">
+											<span class="glyphicon glyphicon-link"></span> HOL1
+									</a></li>
+									<li><a href="/hol/home.html"><span
+											class="glyphicon glyphicon-home"></span> ХОЛ стартова</a></li>
+								</ul>
 							</div>
 						</li>
 						<li data-ng-show="!patientHistory.user"><span
@@ -525,26 +563,6 @@
 									data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name] | filter : seekLabor">
 									<td>{{laborTemplate.name}}</td>
 									<td>
-									
-									<!-- 
-									<a href="#"
-										data-ng-show="laborTemplate.name != h1.laborOpenToEdit"
-										data-ng-click="openLaborToEdit(h1, laborTemplate.name)">
-											{{h1.value.laborValues[laborTemplate.name].value}} <span
-											data-ng-show="!h1.value.laborValues[laborTemplate.name].value">
-												_________ </span>
-									</a>
-									<form class="form-inline" role="form"
-										data-ng-show="laborTemplate.name == h1.laborOpenToEdit">
-										<div class="form-group">
-											<div class="input-group">
-												<input id="{{laborTemplate.name}}"
-													ng-model="h1.value.laborValues[laborTemplate.name].value"
-													class="form-control" type="text" />
-											</div>
-										</div>
-									</form>
-									 -->
 									<form class="form-inline" role="form">
 										<div class="form-group">
 											<div class="input-group">
@@ -554,8 +572,6 @@
 											</div>
 										</div>
 									</form>
-
-
 								</td>
 									<td>{{laborTemplate.unit}}</td>
 								<td ng-show="laborTemplate.texts"><span
@@ -571,9 +587,6 @@
 				data-ng-show="h1.name != 'Діагнози' && h1.name != 'Операції' && !h1.isOnDemand"
 				>
 					<div>
-					<!-- 
-					<span data-ng-show="!h1.isTextHtml && !h1.isLabor && h1.name != 'Діагнози' && h1.name == 'Операції'">
-					 -->
 						<label> Додати дату <input type="checkbox"
 							data-ng-model="h1.value.withDate" />
 						</label>
@@ -582,10 +595,6 @@
 						<div class="pip">
 							{{h1.value.historyTreatmentAnalysisDatetime | date:'dd.MM.yyyy'}}
 						</div>
-						<!-- 
-						<a data-ng-click="changeBlockDate(dt, h1Index)"> Повернутись
-							до дати {{dt | date:'dd.MM.yyyy'}} </a>
-						-->
 						<datepicker
 							data-ng-model="h1.value.historyTreatmentAnalysisDatetime"
 							min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
@@ -672,6 +681,7 @@
 				data-ng-click="printWorkDocClick()" data-toggle="modal">
 				<span class="glyphicon glyphicon-print"></span>
 			</button>
+
 			<ol class="list-inline navbar-right">
 				<li></li>
 				<li data-ng-show="!patientHistory.user"><span
@@ -683,13 +693,29 @@
 					data-ng-click="saveControlAndGo('/hol/logout.html')"> Вийти </a></li>
 			</ol>
 		</div>
-
 	</nav>
-
 </body>
 
-	<script src="/js/jquery-2.1.3.min.js"></script>
-	<script src="/js/a/angular.min.js"></script>
+<script src="/js/jquery-2.1.3.min.js"></script>
+<script src="/js/jquery-1.11.4.ui.min.js"></script>
+<script src="/js2/angular_uk.min.js"></script>
+<script src="/js/a/sortable.js"></script>
+<script src="/js/a/angular-sanitize.min.js"></script>
+<script src="/js/rangy-core.js"></script>
+<script src="/js2/ui-bootstrap-tpls-0.13.0.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+<script src="/css/b/js/bootstrap.min.js"></script>
+<script src="/db/config.json.js"></script>
+<script src="/db/operationTree.json.js"></script>
+<script src="/db/icd10uaGroups.json.js"></script>
+<script src="/js/cuwy1.directives.js"></script>
+<script src="/js/cuwy1.controller.js"></script>
+<script src="/js/icd10Editor1Ctrl.js"></script>
+	<script src="/js/epicriseTemplate.json.js"></script>
+	<script src="/js/epicrise2.js"></script>
+<!-- 
 	<script src="/css/b/js/bootstrap.min.js"></script>
 	<script src="/js/jquery-1.11.4.ui.min.js"></script>
 	<script src="/js/rangy-core.js"></script>
@@ -708,5 +734,6 @@
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/epicriseTemplate.json.js"></script>
 	<script src="/js/epicrise2.js"></script>
+ -->
 
 </html>

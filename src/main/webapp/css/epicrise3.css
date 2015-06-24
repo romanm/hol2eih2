@@ -13,6 +13,8 @@
 	tr.hover-menu:hover { background: silver; }
 	.hover-menu-width {width: 70px;}
 /*------------hover-menu---------------------------------------------------END*/
+.bold {font-weight: bold;}
+.underline { text-decoration: underline;}
 .fa-stack-05x {
 	font-size: .5em;
 }

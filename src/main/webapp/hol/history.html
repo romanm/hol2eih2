@@ -34,9 +34,6 @@
 							.departmentName}} </a></li>
 					<li><i class="fa fa-history"></i><a
 						href="/hol/history.html?hno={{param.hno}}"> ІХ<b>№</b><u>{{patientHistory.historyNo}}</u>
-						<!-- 
-							::Короткий перегляд
-						 -->
 					</a>
 					<!-- № -->
 					</li>
@@ -51,6 +48,49 @@
 								data-ng-click="saveWorkDoc()" data-toggle="modal">
 								<span class="glyphicon glyphicon-floppy-disk"></span> Запис
 							</button></li>
+						<li><div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle"
+								title="Меню"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">
+									 <span class="glyphicon glyphicon-option-vertical"></span>
+								</button>
+							<ul class="dropdown-menu">
+								<li><a
+									href="/hol/history.html?hno={{patientHistory.historyId}}">
+										<i class="fa fa-history"></i> Перегляд ІХ
+								</a></li>
+								<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-pushpin"></span>Операція
+								</a></li>
+								<li><a
+									href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+										<small><span class="fa-stack"> <i
+												class="fa fa-square-o fa-stack-2x"></i> <i
+												class="fa fa-send fa-stack-1x"></i>
+										</span></small> Епікриз
+								</a></li>
+								<li><a
+									ng-click="patientHistory.collapseMovePatient = !patientHistory.collapseMovePatient ">
+										<span class="glyphicon glyphicon-transfer"></span> Переведеня
+								</a></li>
+
+								<li role="separator" class="divider"></li>
+								<li><a
+									href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-edit"></span> Редагування ПЧ
+								</a></li>
+
+
+								<li role="separator" class="divider"></li>
+								<li><a
+									href="http://{{configHol.hol1IP}}/history/{{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-link"></span> HOL1
+								</a></li>
+								<li><a href="/hol/home.html"><span
+										class="glyphicon glyphicon-home"></span> ХОЛ стартова</a></li>
+							</ul>
+						</div></li>
 						<li>|</li>
 						<li data-ng-show="!patientHistory.user"><span
 							class="glyphicon glyphicon-log-in"></span> <a href="/login">
@@ -59,40 +99,80 @@
 							class="glyphicon glyphicon-log-out"></span>
 							:{{patientHistory.user.name}} <a href="/hol/logout.html">
 								Вийти </a></li>
-					</ul>			
+					</ul>
 					</div>
 
 		</div>
 	</nav>
 	<div class="container">
+		<div class="h3 alert alert-warning" role="alert"
+			data-ng-show="!patientHistory.user">
+			<span class="glyphicon glyphicon-warning-sign"></span> Для відкриття
+			історії хвороби №: {{patientHistory.historyNo}} <small>(id:{{hno}})</small>
+			ввійдіть в програму.
+		</div>
 		<div class="row">
-		<div class="col-md-9">
-			<div>
-					<div class="h3 alert alert-warning" role="alert"
-						data-ng-show="!patientHistory.user">
-						<span class="glyphicon glyphicon-warning-sign"></span> Для
-						відкриття історії хвороби №: {{patientHistory.historyNo}} <small>(id:{{hno}})</small>
-						ввійдіть в програму.
-					</div>
+			<div class="col-md-6">
+				<div class="h4 underline"> ІХ №: {{patientHistory.historyNo}} <span
+					data-ng-show="patientHistory.patientHolDb.patientGender == 1">
+						Хворий: </span> <span
+					data-ng-show="patientHistory.patientHolDb.patientGender != 1">
+						Хвора: </span> <span class="pip">
+						{{patientHistory.patientHolDb.patientSurname}}
+						{{patientHistory.patientHolDb.patientPersonalName}}
+						{{patientHistory.patientHolDb.patientPatronymic}}</span> <span
+					ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
+					р. (*{{patientHistory.patientHolDb.patientDob |
+					date:'dd.MM.yyyy'}})
+				</div>
+				
+				<div>
+			Медична інформація: <span>гр.кр. <span
+				ng-if="'I' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(O),</span>
+				<span ng-if="'II' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(A),</span>
+				<span ng-if="'III' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(B),</span>
+				<span ng-if="'IV' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(AB),</span>
+			</span> <span ng-if="1 == patientHistory.patientHolDb.patientRh2">Rh(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientRh2">Rh(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientRh2 || 0 == patientHistory.patientHolDb.patientRh2)">Rh(?),</span>
 
-					<h4 data-ng-show="{{patientHistory}}">№: {{patientHistory.historyNo}}
-					{{patientHistory.patientHolDb.patientSurname}}
-					{{patientHistory.patientHolDb.patientPersonalName}}
-					{{patientHistory.patientHolDb.patientPatronymic}}</h4>
-					<div>
-						<span
-							data-ng-show="patientHistory.patientHolDb.patientGender == 1">
-							Хворий: </span> <span
-							data-ng-show="patientHistory.patientHolDb.patientGender != 1">
-							Хвора: </span> <span class="pip">
-							{{patientHistory.patientHolDb.patientSurname}}
-							{{patientHistory.patientHolDb.patientPersonalName}}
-							{{patientHistory.patientHolDb.patientPatronymic}}</span> <span
-							ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
-						р. (*{{patientHistory.patientHolDb.patientDob |
-						date:'dd.MM.yyyy'}})
-					</div>
-					<div>
+			<span ng-if="1 == patientHistory.patientHolDb.patientBj">Bj(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientBj">Bj(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientBj || 0 == patientHistory.patientHolDb.patientBj)">Bj(?),</span>
+
+			<span ng-if="1 == patientHistory.patientHolDb.patientSc">Sc(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientSc">Sc(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientSc || 0 == patientHistory.patientHolDb.patientSc)">Sc(?),</span>
+
+			<span ng-if="1 == patientHistory.patientHolDb.patientTbc">tbc(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientTbc">tbc(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientTbc || 0 == patientHistory.patientHolDb.patientTbc)">tbc(?),</span>
+
+			<span ng-if="1 == patientHistory.patientHolDb.patientT">T(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientT">T(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientT || 0 == patientHistory.patientHolDb.patientT)">T(?),</span>
+
+			<span ng-if="1 == patientHistory.patientHolDb.patientHbs">ВІЛ(+),</span>
+			<span ng-if="0 == patientHistory.patientHolDb.patientHbs">ВІЛ(-),</span>
+			<span
+				ng-if="!(1 == patientHistory.patientHolDb.patientHbs || 0 == patientHistory.patientHolDb.patientHbs)">ВІЛ(?),</span>
+
+			<span ng-if="1 == patientHistory.patientHolDb.patientRw">RW(+)
+				-</span> <span ng-if="0 == patientHistory.patientHolDb.patientRw">RW(-)
+				-</span> <span
+				ng-if="!(1 == patientHistory.patientHolDb.patientRw || 0 == patientHistory.patientHolDb.patientRw)">RW(?)
+				-</span> ({{patientHistory.patientHolDb.patientRwDate |
+			date:'dd.MM.yyyy'}})
+		</div>
+		<div>Побічна дія медикаментів:</div>
+			</div>
+			<div class="col-md-6">
+				<div>
 					Адреса: <span ng-if="patientHistory.patientHolDb.patientStreet">
 						вул.{{patientHistory.patientHolDb.patientStreet}},
 						буд.{{patientHistory.patientHolDb.patientHouse}},
@@ -104,51 +184,37 @@
 						{{patientHistory.patientHolDb.patientJob}} </span> <span
 						ng-if="!patientHistory.patientHolDb.patientJob">?</span>
 				</div>
-				<div>
-					Медична інформація: <span>гр.кр. <span
-						ng-if="'I' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(O),</span>
-						<span ng-if="'II' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(A),</span>
-						<span ng-if="'III' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(B),</span>
-						<span ng-if="'IV' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(AB),</span>
-					</span> <span ng-if="1 == patientHistory.patientHolDb.patientRh2">Rh(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientRh2">Rh(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientRh2 || 0 == patientHistory.patientHolDb.patientRh2)">Rh(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientBj">Bj(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientBj">Bj(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientBj || 0 == patientHistory.patientHolDb.patientBj)">Bj(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientSc">Sc(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientSc">Sc(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientSc || 0 == patientHistory.patientHolDb.patientSc)">Sc(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientTbc">tbc(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientTbc">tbc(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientTbc || 0 == patientHistory.patientHolDb.patientTbc)">tbc(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientT">T(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientT">T(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientT || 0 == patientHistory.patientHolDb.patientT)">T(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientHbs">ВІЛ(+),</span>
-					<span ng-if="0 == patientHistory.patientHolDb.patientHbs">ВІЛ(-),</span>
-					<span
-						ng-if="!(1 == patientHistory.patientHolDb.patientHbs || 0 == patientHistory.patientHolDb.patientHbs)">ВІЛ(?),</span>
-
-					<span ng-if="1 == patientHistory.patientHolDb.patientRw">RW(+)
-						-</span> <span ng-if="0 == patientHistory.patientHolDb.patientRw">RW(-)
-						-</span> <span
-						ng-if="!(1 == patientHistory.patientHolDb.patientRw || 0 == patientHistory.patientHolDb.patientRw)">RW(?)
-						-</span> ({{patientHistory.patientHolDb.patientRwDate |
-					date:'dd.MM.yyyy'}})
+			</div>
+		</div>
+		<hr class="shortPatienHistory" />
+		<div class="row">
+			<div class="col-md-6">
+				<div data-ng-show="patientHistory.user">
+					<div data-ng-repeat="i in [0,1]"
+						ng-init="diagnosHol = diagnosesHol[i]">
+						{{diagnosesHol[i].diagnosNameShort}} :
+						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
+						-
+						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName
+						}} <span
+							data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
+							{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
+						</span>
+					</div>
+					<div ng-init="diagnosHol = diagnosesHol[2]">
+						<a class="bold" data-ng-click="setDiagnosIndex(2)">{{diagnosesHol[2].diagnosNameShort}}</a>
+						:
+						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
+						-
+						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName
+						}}<span
+							data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
+							{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
+						</span>
+					</div>
 				</div>
-				<div>Побічна дія медикаментів:</div>
-				<hr class="shortPatienHistory" />
+			</div>
+			<div class="col-md-6">
 				<div ng-context-menu="menuMovePatient">
 					<u><b>Рух хворого</b></u>: <span
 						ng-repeat="patientDepartmentMovement in patientHistory.patientDepartmentMovements">
@@ -164,393 +230,297 @@
 								{{patientDepartmentMovement.personalPatronymic}} </small> <br />
 					</span>
 					</span>
-					<div collapse="!patientHistory.collapseMovePatient" class="well" ng-controller="departmentCtrl">
-							<div class="row">
-								<div class="col-xs-8">
-									<h3><span class="glyphicon glyphicon-transfer"></span> Переведеня</h3>
-								</div>
-								<div class="col-xs-4">
-								<button class="btn btn-default"
-										data-ng-click="movePatientDepartment()">
-										<span class="glyphicon glyphicon-ok"></span> Перевести
-									</button>
-								<button class="btn btn-default"
-										data-ng-click="patientHistory.collapseMovePatient = false">
-										<span class="glyphicon glyphicon-remove"></span> Скасувати
-									</button>
-								</div>
+					<div collapse="!patientHistory.collapseMovePatient" class="well"
+						ng-controller="departmentCtrl">
+						<div class="row">
+							<div class="col-xs-8">
+								<h3>
+									<span class="glyphicon glyphicon-transfer"></span> Переведеня
+								</h3>
 							</div>
-							<div class="row">
-								<div class="col-xs-6">
-									<div class="input-group">
-										<span class="input-group-addon">Фільтр:</span> <input
-											type="text" class="form-control input-sm"
-											placeholder="Відділення переведення" id="department"
-											name="department"
-											data-ng-model="patientEditing.departmentName" required=""
-											ng-change="seekMoveDepartment()"
-											tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
-									</div>
-								</div>
-								<div class="col-xs-6">
-									Число і час <u> {{patientHistory.departmentHistoryIn |
-										date:'dd.MM.yyyy HH:mm'}} </u>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-3">
-									<ul>
-										<li ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
-											ng-if="departmentHol.department_profile_id == 2"><a
-											ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-										</li>
-									</ul>
-								</div>
-								<div class="col-xs-3">
-									<ul>
-										<li ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
-											ng-if="departmentHol.department_profile_id == 1"><a
-											ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-										</li>
-									</ul>
-								</div>
-								<div class="col-xs-6">
-									<table>
-										<tr>
-											<th>Дата - переведеня</th>
-											<th>години</th>
-											<th>хвилини</th>
-										</tr>
-										<tr>
-											<td><datepicker data-ng-model="patientHistory.departmentHistoryIn"
-													data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
-													show-weeks="true" class="well well-sm"></datepicker></td>
-											<td class="top"><select
-												data-ng-model="tmpVariables['departmentHistoryIn_HH']"
-												data-ng-change="patientHistory.departmentHistoryIn = 
-									setHH2datetime(patientHistory.departmentHistoryIn, tmpVariables['departmentHistoryIn_HH'])">
-													<option data-ng-repeat="hh in hoursList" value="{{hh}}">{{hh}}</option>
-											</select></td>
-											<td class="top"><select
-												data-ng-model="tmpVariables['departmentHistoryIn_mm']"
-												data-ng-change="patientHistory.departmentHistoryIn = 
-									setMm2datetime(patientHistory.departmentHistoryIn, tmpVariables['departmentHistoryIn_mm'])">
-													<option data-ng-repeat="mm in minList" value="{{mm}}">{{mm}}</option>
-											</select></td>
-										</tr>
-									</table>
-								</div>
+							<div class="col-xs-4">
+								<button class="btn btn-default"
+									data-ng-click="movePatientDepartment()">
+									<span class="glyphicon glyphicon-ok"></span> Перевести
+								</button>
+								<button class="btn btn-default"
+									data-ng-click="patientHistory.collapseMovePatient = false">
+									<span class="glyphicon glyphicon-remove"></span> Скасувати
+								</button>
 							</div>
 						</div>
-				</div>
-				<hr class="shortPatienHistory" />
-					<div data-ng-show="patientHistory.user">
-						
-						<span data-ng-repeat="diagnosHol in diagnosesHol"> <b
-							title="{{diagnosHol.diagnosName}}"><span
-								data-ng-show="$index < 2 || $index > 5">{{diagnosHol.diagnosNameShort}}</span>
-								<a data-ng-show="$index > 1 && $index < 6"
-								data-ng-click="setDiagnosIndex($index)">{{diagnosHol.diagnosNameShort}}</a></b>
-							<span class="glyphicon glyphicon-folder-open"
-							data-ng-show="diagnosisIndex == $index"></span> <span
-							data-ng-show="!(diagnosTypeIndex[diagnosHol.diagnosId] >= 0)">
-								, </span><span
-							data-ng-show="diagnosTypeIndex[diagnosHol.diagnosId] >= 0">:
-								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
-								-
-								{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName
-								}}<span
-								data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
-									{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
-							</span>
-						</span> <br data-ng-if="diagnosTypeIndex[diagnosHol.diagnosId]" />
-						</span>
-					</div>
-					<div class="well" collapse="collapseIcd10Liste">
-					
-					<form class="form-inline" role="form">
-							<div class="form-group">
-								<div class="input-group required-simple">
-									<div class="input-group-addon">{{diagnosHolEdit.diagnosNameShort}} : МКБ</div>
-									<input type="text" class="form-control" id="icd10"
-										data-ng-change="changeIcd10Name()" name="icd10"
-										data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
-										<!-- 
-									<div class="input-group-btn">
-										<button class="btn btn-default"
-											ng-click="openIcd10TreeDialog()">
-											<span class="glyphicon glyphicon-th-list"></span> <span
-												class="caret"></span>
-										</button>
-									</div>
-										 -->
-								</div>
+						<div class="row">
+							<div class="col-xs-6">
 								<div class="input-group">
-								<label for="icd10Add">Додаток до діагнозу:</label>
-									<textarea class="form-control" rows="3" cols="50"
-									id="icd10Add" name="icd10Add"
-										data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
+									<span class="input-group-addon">Фільтр:</span> <input
+										type="text" class="form-control input-sm"
+										placeholder="Відділення переведення" id="department"
+										name="department"
+										data-ng-model="patientEditing.departmentName" required=""
+										ng-change="seekMoveDepartment()"
+										tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
 								</div>
 							</div>
-						</form>
-					
-					
-					
-			<div class="row">
-					<div class="col-xs-6">
-						<ul>
-							<li
-								data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
-								<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
-									{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
-								data-ng-show="icd10Class1.icdCode.indexOf('.') > 1 "
-								data-ng-click="seekGroupIcd10(icd10Class1)">
-									{{icd10Class1.icdCode.substring(0,icd10Class1.icdCode.indexOf('.'))
-									}}</a><a data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
-								data-ng-click="setIcd10(icd10Class1)">{{icd10Class1.icdCode.indexOf('.')
-									> 1?
-									icd10Class1.icdCode.substring(icd10Class1.icdCode.indexOf('.')):icd10Class1.icdCode
-									}}, {{icd10Class1.icdName}} </a>
-								<ul
-									data-ng-show="patientHistory.diagnosis[diagnosisIndex].icdName.length > 2">
-											<li
-												data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
-												<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
-													{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
-												data-ng-show="icd10Class2.icdCode.indexOf('.') > 1 "
-												data-ng-click="seekGroupIcd10(icd10Class2)">
-													{{icd10Class2.icdCode.substring(0,icd10Class2.icdCode.indexOf('.'))
-													}}</a><a
-												data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
-												data-ng-click="setIcd10(icd10Class2)"
-												>{{icd10Class2.icdCode.indexOf('.') > 1?
-									icd10Class2.icdCode.substring(icd10Class2.icdCode.indexOf('.')):icd10Class2.icdCode
-									}}, {{icd10Class2.icdName}} </a>
-												<ul>
-													<li
-														data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
-														<span
-														data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
-															{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
-														data-ng-show="{{!icd10Class3.icdCode.contains('-') }}"
-														data-ng-click="setIcd10(icd10Class3)">
-															{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
-														<ul>
-															<li
-																data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
-																{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
-																data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
-																	{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
-																data-ng-show="{{!icd10Class4.icdCode.contains('-') }}"
-																data-ng-click="setIcd10(icd10Class4)">
-																	{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </a>
-															</li>
-														</ul>
-													</li>
-												</ul>
-											</li>
-										</ul>
-							</li>
-						</ul>
-					</div>
-					<div class="col-xs-6" data-ng-controller="icd10Ctrl">
-
-						<ul>
-							<li ng-repeat="icd10Class1 in icd10Root.icd10Childs"><span
-								ng-if="!icd10Class1.collapse"
-								class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
-								ng-if="icd10Class1.collapse"
-								class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
-								class="record"
-								ng-class="{'record-highlight':  icd10Class1.icdId == icd10Selected.icdId
-	, 'record-highlight-parent': icd10Class1.icdId == icd10Pfad2Parents[1].icdId }"
-								ng-click="clickItem(icd10Class1)"
-								title="{{icd10Class1.icd10Childs.length}}">
-									{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span>
-								<ul ng-if="isIcd10ChildsOpen(icd10Class1)">
-									<li ng-repeat="icd10Class2 in icd10Class1.icd10Childs">
-										<span ng-if="!icd10Class2.collapse"
-										class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
-										ng-if="icd10Class2.collapse"
-										class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
-										class="record"
-										ng-class="{'record-highlight': icd10Class2.icdId == icd10Selected.icdId
-			, 'record-highlight-parent': icd10Class2.icdId == icd10Pfad2Parents[2].icdId }"
-										ng-click="clickItem(icd10Class2)"
-										title="{{icd10Class2.icd10Childs.length}}">
-											{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span>
-										<ul ng-if="isIcd10ChildsOpen(icd10Class2)">
-											<li ng-repeat="icd10Class3 in icd10Class2.icd10Childs">
-												<span
-												ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey == 1"
-												class="glyphicon glyphicon-minus"> </span> <span
-												ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey > 1">
-													<span ng-if="!icd10Class3.collapse"
-													class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
-													ng-if="icd10Class3.collapse"
-													class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
-											</span> <span class="record"
-												ng-class="{'record-highlight': icd10Class3.icdId == icd10Selected.icdId
-					, 'record-highlight-parent': icd10Class3.icdId == icd10Pfad2Parents[3].icdId }"
-												ng-click="clickItem(icd10Class3)"
-												title="{{icd10Class3.icd10Childs.length}}">
-													{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span>
-												<ul ng-if="isIcd10ChildsOpen(icd10Class3)">
-															<li ng-repeat="icd10Class4 in icd10Class3.icd10Childs">
-																<span
-																ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey == 1"
-																class="glyphicon glyphicon-minus"> </span> <span
-																ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey > 1">
-																	<span ng-if="!icd10Class4.collapse"
-																	class="glyphicon glyphicon-{{iconsTreeClose}}"></span>
-																	<span ng-if="icd10Class4.collapse"
-																	class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
-															</span> <span class="record"
-																ng-class="{'record-highlight': icd10Class4.icdId == icd10Selected.icdId
-							, 'record-highlight-parent': icd10Class4.icdId == icd10Pfad2Parents[4].icdId }"
-																ng-click="clickItem(icd10Class4)"
-																title="{{icd10Class4.icd10Childs.length}}">
-																	{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span>
-																<button data-ng-show="{{icd10Class4.icdCode.indexOf("
-																	-") == -1 }}"
- class="btn btn-default btn-xs"
-																	ng-click="setIcd10(icd10Class4)">
-																	<span class="glyphicon glyphicon-play"></span>
-																</button>
-																<ul ng-if="isIcd10ChildsOpen(icd10Class4)">
-																	<li ng-repeat="icd10Class5 in icd10Class4.icd10Childs">
-																		<span
-																		ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey == 1"
-																		class="glyphicon glyphicon-minus"> </span> <span
-																		ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey > 1">
-																			<span ng-if="!icd10Class5.collapse"
-																			class="glyphicon glyphicon-{{iconsTreeClose}}"></span>
-																			<span ng-if="icd10Class5.collapse"
-																			class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
-																	</span> <span class="record"
-																		ng-class="{'record-highlight': icd10Class5.icdId == icd10Selected.icdId
-									, 'record-highlight-parent': icd10Class5.icdId == icd10Pfad2Parents[5].icdId }"
-																		ng-click="clickItem(icd10Class5)"
-																		title="{{icd10Class5.icd10Childs.length}}">
-																			{{icd10Class5.icdCode }}, {{icd10Class5.icdName}} </span>
-
-																		<button class="btn btn-default btn-xs"
-																			data-ng-show="{{icd10Class5.icdCode.indexOf("
-																			-") == -1 }}"
-																			ng-click="setIcd10(icd10Class5)">
-																			<span class="glyphicon glyphicon-play"></span>
-																		</button>
-
-																	</li>
-																</ul>
-															</li>
-														</ul>
-											</li>
-										</ul>
+							<div class="col-xs-6">
+								Число і час <u> {{patientHistory.departmentHistoryIn |
+									date:'dd.MM.yyyy HH:mm'}} </u>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3">
+								<ul>
+									<li
+										ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+										ng-if="departmentHol.department_profile_id == 2"><a
+										ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
 									</li>
-								</ul></li>
-						</ul>
-
+								</ul>
+							</div>
+							<div class="col-xs-3">
+								<ul>
+									<li
+										ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+										ng-if="departmentHol.department_profile_id == 1"><a
+										ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-xs-6">
+								<table>
+									<tr>
+										<th>Дата - переведеня</th>
+										<th>години</th>
+										<th>хвилини</th>
+									</tr>
+									<tr>
+										<td><datepicker
+												data-ng-model="patientHistory.departmentHistoryIn"
+												data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
+												show-weeks="true" class="well well-sm"></datepicker></td>
+										<td class="top"><timepicker
+												ng-model="patientHistory.departmentHistoryIn" hour-step="1"
+												minute-step="5" show-meridian="false"></timepicker></td>
+									</tr>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
-					
+			</div>
+		</div>
+		
+		<hr class="shortPatienHistory" />
+		
+		<div class="well" collapse="collapseIcd10Liste">
+
+			<form class="form-inline" role="form">
+				<div class="form-group">
+					<div class="input-group required-simple">
+						<div class="input-group-addon">{{diagnosHolEdit.diagnosNameShort}}
+							: МКБ</div>
+						<input type="text" class="form-control" id="icd10"
+							data-ng-change="changeIcd10Name()" name="icd10"
+							data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
 					</div>
-					<hr class="shortPatienHistory" />
-					<!-- 
+					<div class="input-group">
+						<label for="icd10Add">Додаток до діагнозу:</label>
+						<textarea class="form-control" rows="3" cols="50" id="icd10Add"
+							name="icd10Add"
+							data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
+					</div>
+				</div>
+			</form>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<ul>
+						<li
+							data-ng-repeat="icd10Class1 in icd10Root.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+							<span data-ng-show="{{icd10Class1.icdCode.contains('-') }}">
+								{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span> <a
+							data-ng-show="icd10Class1.icdCode.indexOf('.') > 1 "
+							data-ng-click="seekGroupIcd10(icd10Class1)">
+								{{icd10Class1.icdCode.substring(0,icd10Class1.icdCode.indexOf('.'))
+								}}</a><a data-ng-show="{{!icd10Class1.icdCode.contains('-') }}"
+							data-ng-click="setIcd10(icd10Class1)">{{icd10Class1.icdCode.indexOf('.')
+								> 1?
+								icd10Class1.icdCode.substring(icd10Class1.icdCode.indexOf('.')):icd10Class1.icdCode
+								}}, {{icd10Class1.icdName}} </a>
+							<ul
+								data-ng-show="patientHistory.diagnosis[diagnosisIndex].icdName.length > 2">
+								<li
+									data-ng-repeat="icd10Class2 in icd10Class1.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+									<span data-ng-show="{{icd10Class2.icdCode.contains('-') }}">
+										{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span> <a
+									data-ng-show="icd10Class2.icdCode.indexOf('.') > 1 "
+									data-ng-click="seekGroupIcd10(icd10Class2)">
+										{{icd10Class2.icdCode.substring(0,icd10Class2.icdCode.indexOf('.'))
+										}}</a><a data-ng-show="{{!icd10Class2.icdCode.contains('-') }}"
+									data-ng-click="setIcd10(icd10Class2)">{{icd10Class2.icdCode.indexOf('.')
+										> 1?
+										icd10Class2.icdCode.substring(icd10Class2.icdCode.indexOf('.')):icd10Class2.icdCode
+										}}, {{icd10Class2.icdName}} </a>
+									<ul>
+										<li
+											data-ng-repeat="icd10Class3 in icd10Class2.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+											<span data-ng-show="{{icd10Class3.icdCode.contains('-') }}">
+												{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span> <a
+											data-ng-show="{{!icd10Class3.icdCode.contains('-') }}"
+											data-ng-click="setIcd10(icd10Class3)">
+												{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </a>
+											<ul>
+												<li
+													data-ng-repeat="icd10Class4 in icd10Class3.icd10Childs | filter:patientHistory.diagnosis[diagnosisIndex].icdName">
+													{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} <span
+													data-ng-show="{{icd10Class4.icdCode.contains('-') }}">
+														{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span> <a
+													data-ng-show="{{!icd10Class4.icdCode.contains('-') }}"
+													data-ng-click="setIcd10(icd10Class4)">
+														{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class="col-xs-6" data-ng-controller="icd10Ctrl">
+
+					<ul>
+						<li ng-repeat="icd10Class1 in icd10Root.icd10Childs"><span
+							ng-if="!icd10Class1.collapse"
+							class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+							ng-if="icd10Class1.collapse"
+							class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
+							class="record"
+							ng-class="{'record-highlight':  icd10Class1.icdId == icd10Selected.icdId
+	, 'record-highlight-parent': icd10Class1.icdId == icd10Pfad2Parents[1].icdId }"
+							ng-click="clickItem(icd10Class1)"
+							title="{{icd10Class1.icd10Childs.length}}">
+								{{icd10Class1.icdCode }}, {{icd10Class1.icdName}} </span>
+							<ul ng-if="isIcd10ChildsOpen(icd10Class1)">
+								<li ng-repeat="icd10Class2 in icd10Class1.icd10Childs"><span
+									ng-if="!icd10Class2.collapse"
+									class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+									ng-if="icd10Class2.collapse"
+									class="glyphicon glyphicon-{{iconsTreeOpen}}"></span> <span
+									class="record"
+									ng-class="{'record-highlight': icd10Class2.icdId == icd10Selected.icdId
+			, 'record-highlight-parent': icd10Class2.icdId == icd10Pfad2Parents[2].icdId }"
+									ng-click="clickItem(icd10Class2)"
+									title="{{icd10Class2.icd10Childs.length}}">
+										{{icd10Class2.icdCode }}, {{icd10Class2.icdName}} </span>
+									<ul ng-if="isIcd10ChildsOpen(icd10Class2)">
+										<li ng-repeat="icd10Class3 in icd10Class2.icd10Childs"><span
+											ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey == 1"
+											class="glyphicon glyphicon-minus"> </span> <span
+											ng-if="icd10Class3.icdRightKey - icd10Class3.icdLeftKey > 1">
+												<span ng-if="!icd10Class3.collapse"
+												class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+												ng-if="icd10Class3.collapse"
+												class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+										</span> <span class="record"
+											ng-class="{'record-highlight': icd10Class3.icdId == icd10Selected.icdId
+					, 'record-highlight-parent': icd10Class3.icdId == icd10Pfad2Parents[3].icdId }"
+											ng-click="clickItem(icd10Class3)"
+											title="{{icd10Class3.icd10Childs.length}}">
+												{{icd10Class3.icdCode }}, {{icd10Class3.icdName}} </span>
+											<ul ng-if="isIcd10ChildsOpen(icd10Class3)">
+												<li ng-repeat="icd10Class4 in icd10Class3.icd10Childs">
+													<span
+													ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey == 1"
+													class="glyphicon glyphicon-minus"> </span> <span
+													ng-if="icd10Class4.icdRightKey - icd10Class4.icdLeftKey > 1">
+														<span ng-if="!icd10Class4.collapse"
+														class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+														ng-if="icd10Class4.collapse"
+														class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+												</span> <span class="record"
+													ng-class="{'record-highlight': icd10Class4.icdId == icd10Selected.icdId
+							, 'record-highlight-parent': icd10Class4.icdId == icd10Pfad2Parents[4].icdId }"
+													ng-click="clickItem(icd10Class4)"
+													title="{{icd10Class4.icd10Childs.length}}">
+														{{icd10Class4.icdCode }}, {{icd10Class4.icdName}} </span>
+													<button data-ng-show="{{icd10Class4.icdCode.indexOf("
+														-") == -1 }}"
+ class="btn btn-default btn-xs"
+														ng-click="setIcd10(icd10Class4)">
+														<span class="glyphicon glyphicon-play"></span>
+													</button>
+													<ul ng-if="isIcd10ChildsOpen(icd10Class4)">
+														<li ng-repeat="icd10Class5 in icd10Class4.icd10Childs">
+															<span
+															ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey == 1"
+															class="glyphicon glyphicon-minus"> </span> <span
+															ng-if="icd10Class5.icdRightKey - icd10Class5.icdLeftKey > 1">
+																<span ng-if="!icd10Class5.collapse"
+																class="glyphicon glyphicon-{{iconsTreeClose}}"></span> <span
+																ng-if="icd10Class5.collapse"
+																class="glyphicon glyphicon-{{iconsTreeOpen}}"></span>
+														</span> <span class="record"
+															ng-class="{'record-highlight': icd10Class5.icdId == icd10Selected.icdId
+									, 'record-highlight-parent': icd10Class5.icdId == icd10Pfad2Parents[5].icdId }"
+															ng-click="clickItem(icd10Class5)"
+															title="{{icd10Class5.icd10Childs.length}}">
+																{{icd10Class5.icdCode }}, {{icd10Class5.icdName}} </span>
+
+															<button class="btn btn-default btn-xs"
+																data-ng-show="{{icd10Class5.icdCode.indexOf("
+																-") == -1 }}"
+																			ng-click="setIcd10(icd10Class5)">
+																<span class="glyphicon glyphicon-play"></span>
+															</button>
+
+														</li>
+													</ul>
+												</li>
+											</ul></li>
+									</ul></li>
+							</ul></li>
+					</ul>
+
+				</div>
+			</div>
+
+		</div>
+		<hr class="shortPatienHistory" />
+		<!-- 
 				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
 				</div>
 					 -->
-					<div data-ng-if="patientHistory.operationHistorys">
-							<h3>
-								<small> <span class="glyphicon glyphicon-pushpin"></span>
-								</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
-									Операції </a>
-							</h3>
-							<div data-ng-context-menu="menuDeletOperation"
-								data-ng-repeat="operation in patientHistory.operationHistorys">
-								<a
-									href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{operation.operation_history_id}}">
-									{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}}
-									- {{operation.operation_history_end | date:'HH:mm'}} </a> <span
-									title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
-								<span>{{operation.operation_additional}}</span>  
-								<div class="right" style="text-align: right;">Хірург:
-									<i> {{operation.surgery_name}}</i>
-								</div>
-							</div>
-						</div>
-					<h3>
-						<small> <span class="fa-stack"> <i
-								class="fa fa-square-o fa-stack-2x"></i> <i
-								class="fa fa-send fa-stack-1x"></i>
-						</span>
-						</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
-							Епікриз </a> <sub style="font-size: 50%;"> <a
-							href="epicrise.html?hid={{patientHistory.historyId}}">Новий
-								стиль</a>| <a href="epicrise4.html?hid={{patientHistory.historyId}}">Старий
-								стиль</a>
-						</sub>
-					</h3>
-					<!-- 
-					<div
-						ng-repeat="historyTreatmentAnalysis in patientHistory.historyTreatmentAnalysises "
-						ng-if="'' != historyTreatmentAnalysis.historyTreatmentAnalysisText"
-						ng-show="0 > historyTreatmentAnalysis.historyTreatmentAnalysisText.indexOf('table')">
-						<u><b>{{historyTreatmentAnalysis.historyTreatmentAnalysisName}}</b></u>:
-						<span
-							ng-bind-html="historyTreatmentAnalysis.historyTreatmentAnalysisText"></span>
-					</div>
-					 -->
+		<div data-ng-if="patientHistory.operationHistorys">
+			<h3>
+				<small> <span class="glyphicon glyphicon-pushpin"></span>
+				</small> <a href="/hol/op.html?hid={{patientHistory.historyId}}">
+					Операції </a>
+			</h3>
+			<div data-ng-context-menu="menuDeletOperation"
+				data-ng-repeat="operation in patientHistory.operationHistorys">
+				<a
+					href="/hol/op.html?hid={{patientHistory.historyId}}&ophid={{operation.operation_history_id}}">
+					{{operation.operation_history_start | date:'dd.MM.yyyy HH:mm'}} -
+					{{operation.operation_history_end | date:'HH:mm'}} </a> <span
+					title="{{operation.operation_group_name}}/{{operation.operation_subgroup_name}}">{{operation.operation_name}}.</span>
+				<span>{{operation.operation_additional}}</span>
+				<div class="right" style="text-align: right;">
+					Хірург: <i> {{operation.surgery_name}}</i>
 				</div>
-		</div>
-			<div class="col-md-3 well no-print">
-				<div class="navbar-right">
-					<a href="http://localhost/history/{{patientHistory.historyId}}">
-						<span class="glyphicon glyphicon-link"></span> HOL1
-					</a>
-				</div>
-				<h4>Робоча панель</h4>
-				<ol>
-					<li><i class="fa fa-history"></i> <a
-						href="/hol/history.html?hno={{patientHistory.historyId}}">
-							Перегляд ІХ</a></li>
-					<li><span class="glyphicon glyphicon-edit"></span> <a
-						href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
-							Редагування ПЧ </a> | <small> <a
-							href="http://localhost/history/inedit/id/{{patientHistory.historyId}}">
-								<span class="glyphicon glyphicon-link"></span> HOL1
-						</a>
-					</small></li>
-					<li><span class="glyphicon glyphicon-transfer"></span> <a
-						ng-click="collapseMovePatient()"> Переведеня </a></li>
-					<li><span class="glyphicon glyphicon-pushpin"></span> <a
-						href="/hol/op.html?hid={{patientHistory.historyId}}"> Операція
-					</a></li>
-					<li><small><span class="fa-stack"> <i
-								class="fa fa-square-o fa-stack-2x"></i> <i
-								class="fa fa-send fa-stack-1x"></i>
-						</span></small> <a href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
-							Епікриз </a> | <small> <a
-							href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
-								<span class="glyphicon glyphicon-link"></span>HOL1
-						</a>
-					</small></li>
-					<li><span class="glyphicon glyphicon-share"></span> <a
-						href="/hol/extract.html?hid={{patientHistory.historyId}}">
-							Виписка </a> | <small> <a
-							href="http://localhost/history/edit/id/{{patientHistory.historyId}}">
-								<span class="glyphicon glyphicon-link"></span>HOL1
-						</a>
-					</small></li>
-				</ol>
-				<div class="navbar-right small">
-					<a href="/hol/home.html"><span class="glyphicon glyphicon-home"></span>
-						ХОЛ</a>
-				</div>
-
-
 			</div>
 		</div>
+		<h3>
+			<small> <span class="fa-stack"> <i
+					class="fa fa-square-o fa-stack-2x"></i> <i
+					class="fa fa-send fa-stack-1x"></i>
+			</span>
+			</small> <a href="epicrise.html?hid={{patientHistory.historyId}}">
+				Епікриз </a> <sub style="font-size: 50%;"> <a
+				href="epicrise.html?hid={{patientHistory.historyId}}">Новий
+					стиль</a>| <a href="epicrise4.html?hid={{patientHistory.historyId}}">Старий
+					стиль</a>
+			</sub>
+		</h3>
 	</div>
 	<nav class="navbar navbar-default navbar-fixed-bottom"
 		role="navigation">
@@ -561,12 +531,6 @@
 							data-ng-click="saveWorkDoc()" data-toggle="modal">
 							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
 						</button>
-						<!-- 
-						<span class="glyphicon glyphicon-floppy-disk"></span>
-						<a data-ng-click="saveWorkDoc()" href="#"
-				title="Запис {{numberOfChange}} незбережених змін"> Запис
-				{{numberOfChange}} </a>
-						 -->
 			 <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 				ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
 
@@ -599,10 +563,11 @@
 		</div>
 	</nav>
 
+<!-- 
 	<script src="/js/jquery-2.1.3.min.js"></script>
 	<script src="/css/b/js/bootstrap.min.js"></script>
 	<script src="/js/rangy-core.js"></script>
-	<script src="/js/a/angular.min.js"></script>
+	<script src="/js2/angular_uk.min.js"></script>
 	<script src="/js/a/sortable.js"></script>
 	<script src="/js/a/angular-sanitize.min.js"></script>
 	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
@@ -617,6 +582,28 @@
 	<script src="/js/cuwy1.controller.js"></script>
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/historyCtrl.js"></script>
+ -->
 
 </body>
+
+<script src="/js2/jquery-2.1.4.min.js"></script>
+<script src="/js/jquery-1.11.4.ui.min.js"></script>
+<script src="/js2/angular_uk.min.js"></script>
+<script src="/js/a/sortable.js"></script>
+<script src="/js/a/angular-sanitize.min.js"></script>
+<script src="/js/rangy-core.js"></script>
+<script src="/js2/ui-bootstrap-tpls-0.13.0.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+<script src="/css/b/js/bootstrap.min.js"></script>
+<script src="/db/config.json.js"></script>
+<script src="/db/operationTree.json.js"></script>
+<script src="/db/icd10uaGroups.json.js"></script>
+<script src="/js/cuwy1.directives.js"></script>
+<script src="/js/cuwy1.controller.js"></script>
+<script src="/js/icd10Editor1Ctrl.js"></script>
+<script src="/js/historyCtrl.js"></script>
+
+
 </html>

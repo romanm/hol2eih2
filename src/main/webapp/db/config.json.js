@@ -1,5 +1,7 @@
 var configHol =
 {
+	"hol1IP":"192.168.68.62",
+	"hol1IP-rem":"localhost",
   "departments" : [ {
     "jornalMovePatient" : null,
     "departmentsHol" : null,
