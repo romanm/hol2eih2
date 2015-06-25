@@ -243,7 +243,7 @@
 				</span>
 				<!-- текстові html данні -->
 				<span ng-bind-html="h1.value.textHtml"
-					data-ng-show="!h1.value.laborValues"></span>
+					data-ng-show="!h1.value.laborValues && !epicrise.epicriseGroups[h1Index].open"></span>
 				<!-- лабораторні данні -->
 				<span
 					data-ng-repeat="laborTemplate in epicriseTemplate.epicriseBlock[h1.name]">

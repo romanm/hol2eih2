@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html ng-app="cuwyApp" ng-controller="HistoryCtrl" ng-cloak class="ng-cloak">
+<html ng-app="cuwyApp" ng-controller="HistoryCtrl" ng-cloak
+	class="ng-cloak">
 <head>
-	<title>ІХ::
-	{{patientHistory.patientDepartmentMovements
-				[patientHistory.patientDepartmentMovements.length -1]
-				.departmentName}}
-	</title>
-	<meta charset="utf-8"/>
-	<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
-	<link rel='stylesheet prefetch' href='/css/font-awesome.min.css'/>
-	<link rel="stylesheet" href="/css/datepicker.css"></link>
-	<link rel="stylesheet" href="/css/epicrise3.css"></link>
-	<style type="text/css">
-		body {
-			padding-top: 60px;
-			padding-bottom: 60px;
-		}
-	</style>
+<title>ІХ:: {{patientHistory.patientDepartmentMovements
+	[patientHistory.patientDepartmentMovements.length -1] .departmentName}}
+</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/css/b/css/bootstrap.min.css"></link>
+<link rel='stylesheet prefetch' href='/css/font-awesome.min.css' />
+<link rel="stylesheet" href="/css/datepicker.css"></link>
+<link rel="stylesheet" href="/css/epicrise3.css"></link>
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 60px;
+}
+</style>
 </head>
 
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
-					<div class="navbar-header">
-						<ol class="breadcrumb">
+			<div class="navbar-header">
+				<ol class="breadcrumb">
 					<li><i class="fa fa-bed"></i><a
 						href="/hol/department.html?dep={{patientHistory.patientDepartmentMovements
 		[patientHistory.patientDepartmentMovements.length -1]
@@ -34,27 +33,24 @@
 							.departmentName}} </a></li>
 					<li><i class="fa fa-history"></i><a
 						href="/hol/history.html?hno={{param.hno}}"> ІХ<b>№</b><u>{{patientHistory.historyNo}}</u>
-					</a>
-					<!-- № -->
-					</li>
+					</a> <!-- № --></li>
 				</ol>
-					</div>
-								<div class="collapse navbar-collapse navbar-right">
-					<ul class="list-inline navbar-right">
-						<li><span data-ng-show="autoSaveCount > 0"
-							title="Кільськість автозбережень - {{autoSaveCount}}">
-								{{autoSaveCount}} </span>
-							<button type="button" class="btn btn-primary btn-sm"
-								data-ng-click="saveWorkDoc()" data-toggle="modal">
-								<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-							</button></li>
-						<li><div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle"
-								title="Меню"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									 <span class="glyphicon glyphicon-option-vertical"></span>
-								</button>
+			</div>
+			<div class="collapse navbar-collapse navbar-right">
+				<ul class="list-inline navbar-right">
+					<li><span data-ng-show="autoSaveCount > 0"
+						title="Кільськість автозбережень - {{autoSaveCount}}">
+							{{autoSaveCount}} </span>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="saveWorkDoc()" data-toggle="modal">
+							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+						</button></li>
+					<li><div class="btn-group">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								title="Меню" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="glyphicon glyphicon-option-vertical"></span>
+							</button>
 							<ul class="dropdown-menu">
 								<li><a
 									href="/hol/history.html?hno={{patientHistory.historyId}}">
@@ -91,16 +87,16 @@
 										class="glyphicon glyphicon-home"></span> ХОЛ стартова</a></li>
 							</ul>
 						</div></li>
-						<li>|</li>
-						<li data-ng-show="!patientHistory.user"><span
-							class="glyphicon glyphicon-log-in"></span> <a href="/login">
-								Ввійти </a></li>
-						<li data-ng-show="patientHistory.user"><span
-							class="glyphicon glyphicon-log-out"></span>
-							:{{patientHistory.user.name}} <a href="/hol/logout.html">
-								Вийти </a></li>
-					</ul>
-					</div>
+					<li>|</li>
+					<li data-ng-show="!patientHistory.user"><span
+						class="glyphicon glyphicon-log-in"></span> <a href="/login">
+							Ввійти </a></li>
+					<li data-ng-show="patientHistory.user"><span
+						class="glyphicon glyphicon-log-out"></span>
+						:{{patientHistory.user.name}} <a href="/hol/logout.html">
+							Вийти </a></li>
+				</ul>
+			</div>
 
 		</div>
 	</nav>
@@ -113,63 +109,64 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<div class="h4 underline"> ІХ №: {{patientHistory.historyNo}} <span
-					data-ng-show="patientHistory.patientHolDb.patientGender == 1">
+				<div class="h4 underline">
+					ІХ №: {{patientHistory.historyNo}} <span
+						data-ng-show="patientHistory.patientHolDb.patientGender == 1">
 						Хворий: </span> <span
-					data-ng-show="patientHistory.patientHolDb.patientGender != 1">
+						data-ng-show="patientHistory.patientHolDb.patientGender != 1">
 						Хвора: </span> <span class="pip">
 						{{patientHistory.patientHolDb.patientSurname}}
 						{{patientHistory.patientHolDb.patientPersonalName}}
 						{{patientHistory.patientHolDb.patientPatronymic}}</span> <span
-					ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
+						ng-bind="calculateAge(patientHistory.patientHolDb.patientDob)"></span>
 					р. (*{{patientHistory.patientHolDb.patientDob |
 					date:'dd.MM.yyyy'}})
 				</div>
-				
+
 				<div>
-			Медична інформація: <span>гр.кр. <span
-				ng-if="'I' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(O),</span>
-				<span ng-if="'II' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(A),</span>
-				<span ng-if="'III' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(B),</span>
-				<span ng-if="'IV' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(AB),</span>
-			</span> <span ng-if="1 == patientHistory.patientHolDb.patientRh2">Rh(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientRh2">Rh(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientRh2 || 0 == patientHistory.patientHolDb.patientRh2)">Rh(?),</span>
+					Медична інформація: <span>гр.кр. <span
+						ng-if="'I' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(O),</span>
+						<span ng-if="'II' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(A),</span>
+						<span ng-if="'III' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(B),</span>
+						<span ng-if="'IV' == patientHistory.patientHolDb.patientBlood">{{patientHistory.patientHolDb.patientBlood}}(AB),</span>
+					</span> <span ng-if="1 == patientHistory.patientHolDb.patientRh2">Rh(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientRh2">Rh(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientRh2 || 0 == patientHistory.patientHolDb.patientRh2)">Rh(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientBj">Bj(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientBj">Bj(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientBj || 0 == patientHistory.patientHolDb.patientBj)">Bj(?),</span>
+					<span ng-if="1 == patientHistory.patientHolDb.patientBj">Bj(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientBj">Bj(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientBj || 0 == patientHistory.patientHolDb.patientBj)">Bj(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientSc">Sc(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientSc">Sc(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientSc || 0 == patientHistory.patientHolDb.patientSc)">Sc(?),</span>
+					<span ng-if="1 == patientHistory.patientHolDb.patientSc">Sc(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientSc">Sc(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientSc || 0 == patientHistory.patientHolDb.patientSc)">Sc(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientTbc">tbc(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientTbc">tbc(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientTbc || 0 == patientHistory.patientHolDb.patientTbc)">tbc(?),</span>
+					<span ng-if="1 == patientHistory.patientHolDb.patientTbc">tbc(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientTbc">tbc(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientTbc || 0 == patientHistory.patientHolDb.patientTbc)">tbc(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientT">T(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientT">T(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientT || 0 == patientHistory.patientHolDb.patientT)">T(?),</span>
+					<span ng-if="1 == patientHistory.patientHolDb.patientT">T(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientT">T(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientT || 0 == patientHistory.patientHolDb.patientT)">T(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientHbs">ВІЛ(+),</span>
-			<span ng-if="0 == patientHistory.patientHolDb.patientHbs">ВІЛ(-),</span>
-			<span
-				ng-if="!(1 == patientHistory.patientHolDb.patientHbs || 0 == patientHistory.patientHolDb.patientHbs)">ВІЛ(?),</span>
+					<span ng-if="1 == patientHistory.patientHolDb.patientHbs">ВІЛ(+),</span>
+					<span ng-if="0 == patientHistory.patientHolDb.patientHbs">ВІЛ(-),</span>
+					<span
+						ng-if="!(1 == patientHistory.patientHolDb.patientHbs || 0 == patientHistory.patientHolDb.patientHbs)">ВІЛ(?),</span>
 
-			<span ng-if="1 == patientHistory.patientHolDb.patientRw">RW(+)
-				-</span> <span ng-if="0 == patientHistory.patientHolDb.patientRw">RW(-)
-				-</span> <span
-				ng-if="!(1 == patientHistory.patientHolDb.patientRw || 0 == patientHistory.patientHolDb.patientRw)">RW(?)
-				-</span> ({{patientHistory.patientHolDb.patientRwDate |
-			date:'dd.MM.yyyy'}})
-		</div>
-		<div>Побічна дія медикаментів:</div>
+					<span ng-if="1 == patientHistory.patientHolDb.patientRw">RW(+)
+						-</span> <span ng-if="0 == patientHistory.patientHolDb.patientRw">RW(-)
+						-</span> <span
+						ng-if="!(1 == patientHistory.patientHolDb.patientRw || 0 == patientHistory.patientHolDb.patientRw)">RW(?)
+						-</span> ({{patientHistory.patientHolDb.patientRwDate |
+					date:'dd.MM.yyyy'}})
+				</div>
+				<div>Побічна дія медикаментів:</div>
 			</div>
 			<div class="col-md-6">
 				<div>
@@ -205,13 +202,15 @@
 						<a class="bold" data-ng-click="setDiagnosIndex(2)">{{diagnosesHol[2].diagnosNameShort}}</a>
 						:
 						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdCode}}
-						-
-						{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName
-						}}<span
+						- <span
+							data-ng-show="patientHistory.diagnosis[diagnosisIndex].useCodeOnly == null || !patientHistory.diagnosis[diagnosisIndex].useCodeOnly">
+							{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].icdName}}
+						</span> <span
 							data-ng-show="patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional">.
 							{{patientHistory.diagnosis[diagnosTypeIndex[diagnosHol.diagnosId]].historyDiagnosAdditional}}
 						</span>
 					</div>
+					{{patientHistory.diagnosis[diagnosisIndex].useCodeOnly}}
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -230,106 +229,122 @@
 								{{patientDepartmentMovement.personalPatronymic}} </small> <br />
 					</span>
 					</span>
-					<div collapse="!patientHistory.collapseMovePatient" class="well"
-						ng-controller="departmentCtrl">
-						<div class="row">
-							<div class="col-xs-8">
-								<h3>
-									<span class="glyphicon glyphicon-transfer"></span> Переведеня
-								</h3>
-							</div>
-							<div class="col-xs-4">
-								<button class="btn btn-default"
-									data-ng-click="movePatientDepartment()">
-									<span class="glyphicon glyphicon-ok"></span> Перевести
-								</button>
-								<button class="btn btn-default"
-									data-ng-click="patientHistory.collapseMovePatient = false">
-									<span class="glyphicon glyphicon-remove"></span> Скасувати
-								</button>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6">
-								<div class="input-group">
-									<span class="input-group-addon">Фільтр:</span> <input
-										type="text" class="form-control input-sm"
-										placeholder="Відділення переведення" id="department"
-										name="department"
-										data-ng-model="patientEditing.departmentName" required=""
-										ng-change="seekMoveDepartment()"
-										tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
-								</div>
-							</div>
-							<div class="col-xs-6">
-								Число і час <u> {{patientHistory.departmentHistoryIn |
-									date:'dd.MM.yyyy HH:mm'}} </u>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-3">
-								<ul>
-									<li
-										ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
-										ng-if="departmentHol.department_profile_id == 2"><a
-										ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-									</li>
-								</ul>
-							</div>
-							<div class="col-xs-3">
-								<ul>
-									<li
-										ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
-										ng-if="departmentHol.department_profile_id == 1"><a
-										ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
-									</li>
-								</ul>
-							</div>
-							<div class="col-xs-6">
-								<table>
-									<tr>
-										<th>Дата - переведеня</th>
-										<th>години</th>
-										<th>хвилини</th>
-									</tr>
-									<tr>
-										<td><datepicker
-												data-ng-model="patientHistory.departmentHistoryIn"
-												data-date-format="dd MM yyyy - HH:ii p" min-date="minDate"
-												show-weeks="true" class="well well-sm"></datepicker></td>
-										<td class="top"><timepicker
-												ng-model="patientHistory.departmentHistoryIn" hour-step="1"
-												minute-step="5" show-meridian="false"></timepicker></td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div>
+
 				</div>
 			</div>
 		</div>
-		
+
 		<hr class="shortPatienHistory" />
-		
+
+		<div collapse="!patientHistory.collapseMovePatient" class="well"
+			ng-controller="departmentCtrl">
+			<div class="row">
+				<div class="col-xs-8">
+					<h3>
+						<span class="glyphicon glyphicon-transfer"></span> Переведеня
+					</h3>
+				</div>
+				<div class="col-xs-4">
+					<button class="btn btn-default"
+						data-ng-click="movePatientDepartment()">
+						<span class="glyphicon glyphicon-ok"></span> Перевести
+					</button>
+					<button class="btn btn-default"
+						data-ng-click="patientHistory.collapseMovePatient = false">
+						<span class="glyphicon glyphicon-remove"></span> Скасувати
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="input-group">
+						<span class="input-group-addon">Фільтр:</span> <input type="text"
+							class="form-control input-sm"
+							placeholder="Відділення переведення" id="department"
+							name="department" data-ng-model="patientEditing.departmentName"
+							required="" ng-change="seekMoveDepartment()"
+							tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+					</div>
+				</div>
+				<div class="col-xs-6">
+					Число і час <u> {{patientHistory.departmentHistoryIn |
+						date:'dd.MM.yyyy HH:mm'}} </u>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">
+					<ul>
+						<li
+							ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+							ng-if="departmentHol.department_profile_id == 2"><a
+							ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-xs-3">
+					<ul>
+						<li
+							ng-repeat="departmentHol in departmentsHol | filter:patientEditing.departmentName"
+							ng-if="departmentHol.department_profile_id == 1"><a
+							ng-click="writeDepartment(departmentHol)">{{departmentHol.department_name}}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-xs-6">
+					<table>
+						<tr>
+							<th>Дата - переведеня</th>
+							<th>години</th>
+							<th>хвилини</th>
+						</tr>
+						<tr>
+							<td><datepicker
+									data-ng-model="patientHistory.departmentHistoryIn"
+									data-date-format="dd MM yyyy - HH:ii" min-date="minDate"
+									show-weeks="true" class="well well-sm"></datepicker></td>
+							<td class="top"><timepicker
+									ng-model="patientHistory.departmentHistoryIn" hour-step="1"
+									minute-step="5" show-meridian="false"></timepicker></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
 		<div class="well" collapse="collapseIcd10Liste">
 
 			<form class="form-inline" role="form">
-				<div class="form-group">
-					<div class="input-group required-simple">
-						<div class="input-group-addon">{{diagnosHolEdit.diagnosNameShort}}
-							: МКБ</div>
-						<input type="text" class="form-control" id="icd10"
-							data-ng-change="changeIcd10Name()" name="icd10"
-							data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
+				<div class="row">
+					<div class="col-md-5">
+						<div class="input-group required-simple">
+							<div class="input-group-addon">{{diagnosHolEdit.diagnosNameShort}}
+								: МКБ</div>
+							<input type="text" class="form-control" id="icd10"
+								data-ng-change="changeIcd10Name()" name="icd10"
+								data-ng-model="patientHistory.diagnosis[diagnosisIndex].icdName" />
+						</div>
+						<div>
+							<label> <input type="checkbox"
+								data-ng-model="patientHistory.diagnosis[diagnosisIndex].useCodeOnly">
+								Використовувати тільки МКБ код.
+							</label>
+						</div>
 					</div>
-					<div class="input-group">
-						<label for="icd10Add">Додаток до діагнозу:</label>
-						<textarea class="form-control" rows="3" cols="50" id="icd10Add"
-							name="icd10Add"
-							data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
+					<div class="col-md-5">
+					<!-- 
+						<div class="form-group"></div>
+					 -->
+						<div class="input-group">
+							<label for="icd10Add">Додаток до діагнозу:</label>
+							<textarea class="form-control" rows="3" cols="40" id="icd10Add"
+								name="icd10Add"
+								data-ng-model="patientHistory.diagnosis[diagnosisIndex].historyDiagnosAdditional"></textarea>
+						</div>
 					</div>
+					<div class="col-md-2">Скасувати</div>
 				</div>
 			</form>
+
 
 			<div class="row">
 				<div class="col-xs-6">
@@ -525,21 +540,20 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom"
 		role="navigation">
 		<div class="container">
-			<span><span class="glyphicon glyphicon-console"></span>
-					&#160; &nbsp; </span>
+			<span><span class="glyphicon glyphicon-console"></span> &#160;
+				&nbsp; </span>
 			<button type="button" class="btn btn-primary btn-sm"
-							data-ng-click="saveWorkDoc()" data-toggle="modal">
-							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-						</button>
-			 <span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
+				data-ng-click="saveWorkDoc()" data-toggle="modal">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+			</button>
+			<span data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 				ТЧ {{patientHistory.requiredFieldFullProcent}}%</span>
 
 
 			<ol class="list-inline navbar-right">
-				<li> 
-				<i class="fa fa-history"></i>
-				<a
-					href="/hol/history.html?hno={{patientHistory.historyId}}"> Перегляд ІХ</a></li>
+				<li><i class="fa fa-history"></i> <a
+					href="/hol/history.html?hno={{patientHistory.historyId}}">
+						Перегляд ІХ</a></li>
 				<li><span class="glyphicon glyphicon-edit"></span> <a
 					href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
 						Редагування ПЧ </a></li>
@@ -552,18 +566,19 @@
 				<li><span class="glyphicon glyphicon-share"></span> <a
 					href="/hol/extract.html?hid={{patientHistory.historyId}}">
 						Виписка </a></li>
-					<li>|</li>
+				<li>|</li>
 				<li data-ng-show="!patientHistory.user"><span
 					class="glyphicon glyphicon-log-in"></span> <a href="/login">
 						Ввійти </a></li>
 				<li data-ng-show="patientHistory.user"><span
 					class="glyphicon glyphicon-log-out"></span>
-					:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти </a></li>
+					:{{patientHistory.user.name}} <a href="/hol/logout.html"> Вийти
+				</a></li>
 			</ol>
 		</div>
 	</nav>
 
-<!-- 
+	<!-- 
 	<script src="/js/jquery-2.1.3.min.js"></script>
 	<script src="/css/b/js/bootstrap.min.js"></script>
 	<script src="/js/rangy-core.js"></script>
