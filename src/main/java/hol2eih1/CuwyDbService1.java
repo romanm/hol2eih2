@@ -27,10 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import org.cuwy1.holDb.model.CountryHol;
 import org.cuwy1.holDb.model.DepartmentHistory;
 import org.cuwy1.holDb.model.DepartmentHol;
@@ -53,6 +49,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -71,44 +68,16 @@ public class CuwyDbService1 {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CuwyDbService1.class);
 	
-	private JdbcTemplate jdbcTemplate;
-	public JdbcTemplate getJdbcTemplate() { return jdbcTemplate; }
+	@Autowired private JdbcTemplate jdbcTemplateHol1MySql;
+	public JdbcTemplate getJdbcTemplate() { return jdbcTemplateHol1MySql; }
 	
-	
-	public CuwyDbService1() throws NamingException{
-			final DataSource dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/hol1mySqlDataSource");
-			logger.debug("\n------------CuwyDbService1-------------\n"
-					+ "dataSource="+dataSource+
-							"\n------------CuwyDbService1-------------");
-			this.jdbcTemplate = new JdbcTemplate(dataSource);
-			/*
-		System.out.println(sqlHistoryInDepartmentProYearMonths);
-		System.out.println(sqlMoveQuartal);
-		logger.debug("\n------------ sqlPatientAdress = \n"+sqlPatientAdress);
-		logger.debug("\n------------ sqlGroupReferral = \n"+sqlReferral_cDs_group);
-		logger.debug("\n------------ sqlPerevedeni2hol = \n"+sqlPerevedeni2hol);
-		logger.debug("\n------------ sqlDeadOrvipisany = \n"+sqlDeadOrvipisany);
-		logger.debug("\n------------ sqlReferral = \n"+sqlReferral);
-		logger.debug("\n------------ sql_cDs = \n"+sql_cDs);
-		logger.debug("\n------------ sql_pAd = \n"+sql_pAd);
-		logger.debug("\n------------ sqlDeadOrvipisany_cDs_group = \n"+sqlDeadOrvipisany_cDs_group);
-		logger.debug("\n------------ sqlDeadOrvipisany_pAd = \n"+sqlDeadOrvipisany_pAd);
-		logger.debug("\n------------ sqlPerevedeni2hol_cDs_group = \n"+sqlPerevedeni2hol_cDs_group);
-		logger.debug("\n------------ sqlPerevedeni2hol_pAd = \n"+sqlPerevedeni2hol_pAd);
-		logger.debug("\n------------ sqlReferral_cDs_group = \n"+sqlReferral_cDs_group);
-		logger.debug("\n------------ sqlReferral_pAd = \n"+sqlReferral_pAd);
-		logger.debug("\n------------ sqlMistoSelo_cDs_group = \n"+sqlMistoSelo_cDs_group);
-		logger.debug("\n------------CuwyDbService1-------------\n");
-			 * */
-	}
-
 	public Icd10UaClass getIcd10UaChilds(Icd10UaClass icd10Class) {
 		String sql = "SELECT * FROM icd i1 WHERE icd_start >= ? AND icd_end <= ? AND icd_id != ? ";
 		String sql2 = sql.replaceFirst("\\?", "" + icd10Class.getIcdStart())
 				.replaceFirst("\\?", "" + icd10Class.getIcdEnd())
 				.replaceFirst("\\?", "" + icd10Class.getIcdId());
 		logger.info("\n "+sql2);
-		List<Icd10UaClass> icd10Classes = jdbcTemplate.query(
+		List<Icd10UaClass> icd10Classes = jdbcTemplateHol1MySql.query(
 				sql2,
 				new Icd2TreeMapper(icd10Class));
 		return icd10Class;
@@ -123,16 +92,16 @@ public class CuwyDbService1 {
 		Map<Integer, OperationSubGroup> operationSubGroupMap = new HashMap<Integer, OperationSubGroup>();
 		Operation operationTreeRoot = new Operation();
 		List<OperationGroup> operationGroups
-			= jdbcTemplate.query( sqlOperationGroup, new OperationGroupMapper(operationGroupMap));
-		jdbcTemplate.query( sqlOperationSubGroup, new OperationSubGroupMapper(operationGroupMap,operationSubGroupMap));
-		jdbcTemplate.query( sqlOperation, new OperationMapper(operationSubGroupMap));
+			= jdbcTemplateHol1MySql.query( sqlOperationGroup, new OperationGroupMapper(operationGroupMap));
+		jdbcTemplateHol1MySql.query( sqlOperationSubGroup, new OperationSubGroupMapper(operationGroupMap,operationSubGroupMap));
+		jdbcTemplateHol1MySql.query( sqlOperation, new OperationMapper(operationSubGroupMap));
 		return operationGroups;
 	}
 	public List<Map<String,Object>> icd10UaAllToFile() {
 		String sql = "select * from icd";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 	public Icd10UaClass getIcd10UaGroups() {
@@ -141,7 +110,7 @@ public class CuwyDbService1 {
 //		String sql = "SELECT * FROM icd i1 WHERE i1.icd_code like '%-%' ";
 		logger.info("\n "+sql);
 		Icd10UaClass icd10UaRoot = new Icd10UaClass();
-		List<Icd10UaClass> icd10Classes = jdbcTemplate.query(
+		List<Icd10UaClass> icd10Classes = jdbcTemplateHol1MySql.query(
 				sql,
 				new Icd2TreeMapper(icd10UaRoot));
 		return icd10UaRoot;
@@ -253,7 +222,7 @@ public class CuwyDbService1 {
 		int icdLeftKey = 1;
 		String sql = "SELECT * FROM icd WHERE icd_left_key = ?";
 		logger.info("\n "+sql.replaceFirst("\\?", ""+icdLeftKey));
-		List<Icd10UaClass> icd10Classes = jdbcTemplate.query(
+		List<Icd10UaClass> icd10Classes = jdbcTemplateHol1MySql.query(
 				sql, new Object[] { icdLeftKey },
 				new RowMapper<Icd10UaClass>() {
 					@Override
@@ -304,7 +273,7 @@ public class CuwyDbService1 {
 		+ sqlDepartmentsHol
 		+ ") department WHERE department_id = ?";
 		logger.debug(sql.replaceFirst("\\?", ""+id));
-		return jdbcTemplate.queryForObject( sql, new Object[] { id }, new DepartmentHolRowMapper());
+		return jdbcTemplateHol1MySql.queryForObject( sql, new Object[] { id }, new DepartmentHolRowMapper());
 	}
 	final static String sqlDepartmentsHol = "SELECT p.personal_username"
 			+ ", d.department_id, d.department_name, d.department_profile_id, d.department_active "
@@ -313,7 +282,7 @@ public class CuwyDbService1 {
 			+ " AND d.department_active AND pd.position_id = 3";
 	public List<DepartmentHol> getDepartmentsHol() {
 //		final String sql = "SELECT * FROM department";
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 				sqlDepartmentsHol, 
 				new DepartmentHolRowMapper());
 	}
@@ -324,7 +293,7 @@ public class CuwyDbService1 {
 				+ " WHERE cnt >4 AND length(patient_name) > 1"
 				;
 		logger.debug(sql);
-		List<Map<String, Object>> firstNames = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> firstNames = jdbcTemplateHol1MySql.queryForList(sql);
 		return firstNames;
 	}
 	public List<Map<String, Object>> getTreatmentAnalysis() {
@@ -332,17 +301,17 @@ public class CuwyDbService1 {
 				+ " treatment_analysis_id,treatment_analysis_name,treatment_analysis_type "
 				+ " FROM treatment_analysis "
 				;
-		List<Map<String, Object>> directsHol = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> directsHol = jdbcTemplateHol1MySql.queryForList(sql);
 		return directsHol;
 	}
 	public List<Map<String, Object>> getDirectsHol() {
 		String sql = "SELECT * FROM direct";
-		List<Map<String, Object>> directsHol = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> directsHol = jdbcTemplateHol1MySql.queryForList(sql);
 		return directsHol;
 	}
 	
 	public List<DiagnosHol> getDiagnosesHol() {
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 				"SELECT * FROM diagnos", 
 				new DiagnosHolRowMapper());
 	}
@@ -377,7 +346,7 @@ public class CuwyDbService1 {
 		System.out.println(sql);
 		final String sql2 = sql.replaceFirst("\\?", ""+departmentId).replaceFirst("\\?", seekInArchives);
 		logger.info("\n"+sql2);
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 //				sql, new Object[] { departmentId, seekInArchives }, 
 		sql2, 
 		new RowMapper<PatientDiagnosisHol>(){
@@ -403,7 +372,7 @@ public class CuwyDbService1 {
 		+ " AND dh.department_history_out IS NULL "
 		;
 		logger.info("\n"+sql.replaceFirst("\\?", ""+departmentId));
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 		sql, new Object[] { departmentId }, 
 		new RowMapper<PatientDiagnosisHol>(){
 			@Override
@@ -440,21 +409,21 @@ public class CuwyDbService1 {
 	private List<HistoryHolDb> getHistory(Integer year, Integer week, String sqlPatientsYearWeek) {
 		logger.info("\n"+sqlPatientsYearWeek.replaceFirst("\\?", ""+year).replaceFirst("\\?", ""+week));
 		Map<Integer, HistoryHolDb> mapHistoryOfPatient = new HashMap<Integer, HistoryHolDb>();
-		List patientsYearWeek = jdbcTemplate.query(
+		List patientsYearWeek = jdbcTemplateHol1MySql.query(
 				sqlPatientsYearWeek, new Object[] { year, week }, 
 				new HistoryHolDbRowMapper(mapHistoryOfPatient)
 				);
 		String sql2 = "SELECT p.* FROM patient p, (" + sqlPatientsYearWeek
 		+ ") h WHERE p.patient_id = h.patient_id";
 		logger.info("\n"+sql2.replaceFirst("\\?", ""+year).replaceFirst("\\?", ""+week));
-		jdbcTemplate.query(
+		jdbcTemplateHol1MySql.query(
 				sql2, new Object[] { year, week }, 
 				new PatientHolDbRowMapper(mapHistoryOfPatient)
 				);
 		String sql3 = sqlPatientDepartmentMovement.replaceFirst("\\?", 
 			"SELECT h.history_id FROM (" + sqlPatientsYearWeek + ") h");
 		logger.info("\n"+sql3.replaceFirst("\\?", ""+year).replaceFirst("\\?", ""+week));
-		jdbcTemplate.query(
+		jdbcTemplateHol1MySql.query(
 				sql3, new Object[] { year, week }, 
 				new PatientDepartmentMovementRowMapper(mapHistoryOfPatient)
 				);
@@ -465,7 +434,7 @@ public class CuwyDbService1 {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	public void insertDepartmentHistory(
 			final PatientDepartmentMovement patientDepartmentMovement) {
-		jdbcTemplate.update(DepartmentHistoryMapSet.insertPatientDepartmentMovement
+		jdbcTemplateHol1MySql.update(DepartmentHistoryMapSet.insertPatientDepartmentMovement
 				, new DepartmentHistoryMapSet(patientDepartmentMovement));
 	}
 	public void movePatientDepartment(final HistoryHolDb history, final Map<String, Integer> roleTypes) {
@@ -473,7 +442,7 @@ public class CuwyDbService1 {
 		logger.debug("\n"+departmentHistory);
 		final Timestamp departmentHistoryIn = departmentHistory.getDepartmentHistoryIn();
 		final Timestamp departmentHistoryOut = new Timestamp(departmentHistoryIn.getTime()-1000);
-		jdbcTemplate.update( sqlExitUpdateDepartmentHistoryFirst,
+		jdbcTemplateHol1MySql.update( sqlExitUpdateDepartmentHistoryFirst,
 				new Object[] {departmentHistory.getHistoryId()
 				, roleTypes.get("per"), roleTypes.get("dep"), departmentHistoryOut, departmentHistoryOut },
 				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP}
@@ -482,10 +451,10 @@ public class CuwyDbService1 {
 		logger.debug(""+personalDepartmentHolDb);
 		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
 		departmentHistory.setPersonalDepartmentIdIn(personalDepartmentIdIn);
-		jdbcTemplate.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
+		jdbcTemplateHol1MySql.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
 				, new DepartmentHistoryMapSet(departmentHistory, DepartmentHistoryMapSet.insertDepartmentHistoryMin));
 		logger.debug(""+history);
-		jdbcTemplate.update( sqlUpdateHistoryHistoryDepartmentId,
+		jdbcTemplateHol1MySql.update( sqlUpdateHistoryHistoryDepartmentId,
 				new Object[] {history.getHistoryDepartmentId(), history.getHistoryId()},
 				new int[] {Types.INTEGER, Types.INTEGER}
 				);
@@ -504,7 +473,7 @@ public class CuwyDbService1 {
 				.replaceFirst("\\?", "'"+patientMoveTimeInStr+"'")
 				.replaceFirst("\\?", "'"+patientMoveTimeInStr+"'")
 				);
-		jdbcTemplate.update( sqlExitUpdateDepartmentHistoryFirst,
+		jdbcTemplateHol1MySql.update( sqlExitUpdateDepartmentHistoryFirst,
 				new Object[] {departmentHistory.getHistoryId(), roleTypes.get("per"), roleTypes.get("dep"), patientMoveTimeInStr, patientMoveTimeInStr },
 				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR}
 				);
@@ -514,24 +483,24 @@ public class CuwyDbService1 {
 		logger.debug(""+personalDepartmentHolDb);
 		final Integer personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
 		departmentHistory.setPersonalDepartmentIdIn(personalDepartmentIdIn);
-		jdbcTemplate.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
+		jdbcTemplateHol1MySql.update(DepartmentHistoryMapSet.insertDepartmentHistoryMin
 				, new DepartmentHistoryMapSet(departmentHistory, DepartmentHistoryMapSet.insertDepartmentHistoryMin));
 	}
 	public void removeExitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
 		int historyId = (int) historyHolDb.get("historyId");
-		jdbcTemplate.update( sqlRemoveExitUpdateHistory, new Object[] {historyId}, new int[] {Types.INTEGER});
+		jdbcTemplateHol1MySql.update( sqlRemoveExitUpdateHistory, new Object[] {historyId}, new int[] {Types.INTEGER});
 		final Integer personId = roleTypes.get("per");
-		jdbcTemplate.update( sqlExitUpdateDepartmentHistory,
+		jdbcTemplateHol1MySql.update( sqlExitUpdateDepartmentHistory,
 				new Object[] {historyId, personId, roleTypes.get("dep") },
 				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
 	}
 	public void exitHistoryHolDb(final Map<String, Object> historyHolDb, Map<String, Integer> roleTypes) {
-		jdbcTemplate.update(sqlExitUpdateHistory, new HistoryExitHolDbPSSetter(historyHolDb));
+		jdbcTemplateHol1MySql.update(sqlExitUpdateHistory, new HistoryExitHolDbPSSetter(historyHolDb));
 		//update to department history doctor and out date
 		final Integer personId = roleTypes.get("per");
 		int historyId = (int) historyHolDb.get("historyId");
-		jdbcTemplate.update( sqlExitUpdateDepartmentHistory,
+		jdbcTemplateHol1MySql.update( sqlExitUpdateDepartmentHistory,
 				new Object[] {historyId, personId, roleTypes.get("dep") },
 				new int[] {Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
@@ -764,7 +733,7 @@ public class CuwyDbService1 {
 	public HistoryHolDb getHistoryHolDbById(int historyId) {
 		String sql = "SELECT * FROM history WHERE history_id = ? ";
 		logger.info("\n"+sql.replaceFirst("\\?", ""+historyId));
-		return jdbcTemplate.queryForObject(
+		return jdbcTemplateHol1MySql.queryForObject(
 				sql, new Object[] { historyId }, 
 				new HistoryHolDbRowMapper()
 				);
@@ -775,7 +744,7 @@ public class CuwyDbService1 {
 		/*
 		return null;
 		 * */
-		return jdbcTemplate.queryForObject(
+		return jdbcTemplateHol1MySql.queryForObject(
 				sql, new Object[] { historyNo }, 
 				new HistoryHolDbRowMapper()
 				);
@@ -785,7 +754,7 @@ public class CuwyDbService1 {
 		+ " WHERE h.history_out IS NULL AND h.patient_id=p.patient_id"
 		+ " AND h.history_no= ? ";
 		logger.info("\n"+sql+historyNo);
-		return jdbcTemplate.queryForObject(
+		return jdbcTemplateHol1MySql.queryForObject(
 			sql, new Object[] { historyNo }, 
 			new RowMapper<PatientHistory>(){
 				@Override
@@ -817,7 +786,7 @@ public class CuwyDbService1 {
 	
 	public List<DepartmentHistory> getDepartmentHistorys(int historyId) {
 		logger.info("\n"+DepartmentHistoryMapSet.selectDepartmentHistory.replaceFirst("\\?", ""+historyId));
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 				DepartmentHistoryMapSet.selectDepartmentHistory, new Object[] { historyId }, 
 				new DepartmentHistoryMapSet()
 			);
@@ -825,7 +794,7 @@ public class CuwyDbService1 {
 	
 	public List<PatientDepartmentMovement> getPatientDepartmentMovements(int historyId) {
 		logger.info("-------------------------\n"+sqlPatientDepartmentMovement.replaceFirst("\\?", ""+historyId));
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 				sqlPatientDepartmentMovement, new Object[] { historyId }, 
 				new PatientDepartmentMovementRowMapper()
 			);
@@ -867,7 +836,7 @@ public class CuwyDbService1 {
 	public List<HistoryTreatmentAnalysis> getHistoryTreatmentAnalysises(int historyId) {
 //		String sql ="SELECT * FROM history_treatment_analysis WHERE history_id=?";
 		logger.info("\n"+sqlSelectHistoryTreatmentAnalysis.replaceFirst("\\?", ""+historyId));
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 			sqlSelectHistoryTreatmentAnalysis, new Object[] { historyId }, 
 			new RowMapper<HistoryTreatmentAnalysis>(){
 				@Override
@@ -887,7 +856,7 @@ public class CuwyDbService1 {
 
 	public List<DiagnosIcd10> getDiagnosis(int historyId) {
 		logger.info("\n"+sqlDiagnosis.replaceFirst("\\?", ""+historyId));
-		final List<DiagnosIcd10> diagnosIcd10List = jdbcTemplate.query(
+		final List<DiagnosIcd10> diagnosIcd10List = jdbcTemplateHol1MySql.query(
 				sqlDiagnosis, new Object[] { historyId }, 
 				new RowMapper<DiagnosIcd10>(){
 			@Override
@@ -915,7 +884,7 @@ public class CuwyDbService1 {
 //		+ " WHERE 2 = hd.diagnos_id AND i.icd_id = hd.icd_id AND history_id=?";
 	public DiagnosIcd10 getDiagnosisOnAdmission(int historyId) {
 		logger.info("\n"+sqlDiagnosis.replaceFirst("\\?", ""+historyId));
-		return jdbcTemplate.queryForObject(
+		return jdbcTemplateHol1MySql.queryForObject(
 				sqlDiagnosis, new Object[] { historyId }, 
 				new RowMapper<DiagnosIcd10>(){
 					@Override
@@ -940,7 +909,7 @@ public class CuwyDbService1 {
 		String like = "%хм%";
 		String sql = "SELECT * FROM region where district_id = ? AND region_name like ?";
 		logger.info("\n"+sql+districtId);
-		return jdbcTemplate.query(
+		return jdbcTemplateHol1MySql.query(
 			sql, new Object[] { districtId, like }, 
 			new RowMapper<RegionHol>(){
 				@Override
@@ -1031,21 +1000,21 @@ public class CuwyDbService1 {
 	//+ " WHERE os.operation_subgroup_id = o.operation_subgroup_id AND o.operation_id = ? AND oh.history_id = ? ";
 	public void insertOperationHistory(Map<String, Object> map) {
 		logger.debug(sqlInsertOperationHistory);
-		jdbcTemplate.update(sqlInsertOperationHistory, new InsAppOperationHistory(map, sqlInsertOperationHistory));
+		jdbcTemplateHol1MySql.update(sqlInsertOperationHistory, new InsAppOperationHistory(map, sqlInsertOperationHistory));
 	}
 	public void updateOperationHistory(Map<String, Object> map) {
 		logger.debug(sqlUpdateOperationHistory);
-		jdbcTemplate.update(sqlUpdateOperationHistory, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
+		jdbcTemplateHol1MySql.update(sqlUpdateOperationHistory, new InsAppOperationHistory(map, sqlUpdateOperationHistory));
 	}
 	public void deleteOperationHistory(Integer operationHistoryId) {
-		jdbcTemplate.update(deleteOperationHistory, operationHistoryId);
+		jdbcTemplateHol1MySql.update(deleteOperationHistory, operationHistoryId);
 	}
 
 	public void updateHistoryDiagnosis(Map<String, Object> map) {
-		jdbcTemplate.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
+		jdbcTemplateHol1MySql.update(sqlUpdateHistoryDiagnos, new InsAppDiagnosHistory(map, sqlUpdateHistoryDiagnos));
 	}
 	public void insertHistoryDiagnosis(final Map<String, Object> map) {
-		jdbcTemplate.update(sqlInsertHistoryDiagnos, new InsAppDiagnosHistory(map, sqlInsertHistoryDiagnos));
+		jdbcTemplateHol1MySql.update(sqlInsertHistoryDiagnos, new InsAppDiagnosHistory(map, sqlInsertHistoryDiagnos));
 	}
 	String sqlUpdateHistoryDiagnos = "UPDATE history_diagnos hd, icd i SET"
 			+ " hd.history_diagnos_additional = ?,"
@@ -1081,10 +1050,14 @@ public class CuwyDbService1 {
 		private InsAppDiagnosHistory(Map<String, Object> map, String sql) {
 			super(map, sql);
 			logger.debug(map.toString());
-			final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
-			final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
-			this.personalDepartmentIdIn = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
+			this.personalDepartmentIdIn = personalId2departmentPersonalId(map);
 		}
+	}
+	private int personalId2departmentPersonalId(Map<String, Object> map) {
+		final int personalId = Integer.parseInt(map.get("userPersonalId").toString());
+		final Map<String, Object> personalDepartmentHolDb = getPersonalDepartmentHolDb(personalId);
+		final int intValue = ((Long) personalDepartmentHolDb.get("personal_department_id")).intValue();
+		return intValue;
 	}
 
 	private abstract class InsAddMap{
@@ -1110,7 +1083,7 @@ public class CuwyDbService1 {
 
 	public void insertDiagnosisOnAdmission(final DiagnosIcd10 diagnosisOnAdmission) {
 		System.out.println(diagnosisOnAdmission);
-		jdbcTemplate.update(sqlInsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
+		jdbcTemplateHol1MySql.update(sqlInsertHistoryDiagnos, new DiagnosisOnAdmissionPSSetter(diagnosisOnAdmission));
 	}
 	
 	
@@ -1124,7 +1097,7 @@ public class CuwyDbService1 {
 		System.out.println("---------------------------------------");
 		logger.debug(sqlInsertHistory);
 		System.out.println("---------------------------------------");
-		jdbcTemplate.update(sqlInsertHistory, new HistoryHolDbPSSetter(historyHolDb));
+		jdbcTemplateHol1MySql.update(sqlInsertHistory, new HistoryHolDbPSSetter(historyHolDb));
 	}
 	String sqlInsertHistory = "INSERT INTO history "
 			+ "( history_in, history_no, history_urgent, patient_id, direct_id"
@@ -1158,7 +1131,7 @@ public class CuwyDbService1 {
 				+ ") ";
 		logger.info("\n"+sql+"\n"+patientHolDb);
 		logger.info("\n"+sql+"\n"+patientHolDb.getPatientId());
-		jdbcTemplate.update(sql, new PatientHolDbPSSetter(patientHolDb));
+		jdbcTemplateHol1MySql.update(sql, new PatientHolDbPSSetter(patientHolDb));
 	}
 
 	public void updatePatientHolDb(final PatientHolDb patientHolDb) {
@@ -1175,7 +1148,7 @@ public class CuwyDbService1 {
 				+ ", patient_bj = ? "
 				+ " WHERE patient_id = ?";
 		logger.info("\n"+sql+patientHolDb.getPatientId());
-		jdbcTemplate.update(sql, new PatientHolDbPSSetter(patientHolDb));
+		jdbcTemplateHol1MySql.update(sql, new PatientHolDbPSSetter(patientHolDb));
 	}
 
 	class PatientHolDbPSSetter implements PreparedStatementSetter{
@@ -1261,7 +1234,7 @@ public class CuwyDbService1 {
 	public Map<String, Object> getPersonalDepartmentHolDb(int personalId) {
 		String sql = "SELECT personal_department_id FROM personal_department WHERE personal_id = ?";
 		logger.info("\n"+sql+" "+personalId);
-		final Map<String, Object> personalDepartment = jdbcTemplate.queryForMap(
+		final Map<String, Object> personalDepartment = jdbcTemplateHol1MySql.queryForMap(
 				sql, new Object[] { personalId }
 				);
 		logger.info(""+personalDepartment);
@@ -1271,7 +1244,7 @@ public class CuwyDbService1 {
 	public PatientHolDb getPatientHolDb(int patientId) {
 		String sql = "SELECT * FROM patient p WHERE patient_id = ?";
 		logger.info("\n"+sql+patientId);
-		return jdbcTemplate.queryForObject(
+		return jdbcTemplateHol1MySql.queryForObject(
 			sql, new Object[] { patientId }, 
 			new PatientHolDbRowMapper()
 			);
@@ -1282,7 +1255,7 @@ public class CuwyDbService1 {
 		String sql = "SELECT CONCAT(p.patient_surname,' ',p.patient_name,' ',p.patient_patronnymic) name"
 				+ " FROM patient p WHERE patient_id= ?";
 		logger.info("\n"+sql+patientId);
-		PatientHistory patientHistoryDb = jdbcTemplate.queryForObject(
+		PatientHistory patientHistoryDb = jdbcTemplateHol1MySql.queryForObject(
 				sql, new Object[] { patientId }, 
 				new RowMapper<PatientHistory>(){
 					@Override
@@ -1301,20 +1274,20 @@ public class CuwyDbService1 {
 		Map<Integer, CountryHol> mapCountryHol = new HashMap<Integer, CountryHol>();
 		Map<Integer, DistrictHol> mapDistrictHol = new HashMap<Integer, DistrictHol>();
 		Map<Integer, RegionHol> mapRegionHol = new HashMap<Integer, RegionHol>();
-		List<CountryHol> countries = jdbcTemplate.query(
+		List<CountryHol> countries = jdbcTemplateHol1MySql.query(
 				sqlCountry, new Object[] {}, 
 				new CountryRowMapper(mapCountryHol)
 				);
 //		logger.info("\n"+sqlDistrict);
-		jdbcTemplate.query(
+		jdbcTemplateHol1MySql.query(
 				sqlDistrict, new Object[] {}, 
 				new DestrictRowMapper(mapCountryHol, mapDistrictHol)
 				);
-		jdbcTemplate.query(
+		jdbcTemplateHol1MySql.query(
 				sqlRegion, new Object[] {}, 
 				new RegionRowMapper(mapDistrictHol, mapRegionHol)
 				);
-		jdbcTemplate.query(
+		jdbcTemplateHol1MySql.query(
 				sqlLocality, new Object[] {}, 
 				new LocalityRowMapper(mapRegionHol)
 				);
@@ -1410,7 +1383,7 @@ public class CuwyDbService1 {
 				+ " FROM history h GROUP BY YEAR(h.history_in) "
 				+ " ORDER BY YEAR(h.history_in) DESC";
 		logger.info("\n"+sql);
-		List<Map<String, Object>> countPatientProYear = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> countPatientProYear = jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientProYear;
 	}
 
@@ -1422,7 +1395,7 @@ public class CuwyDbService1 {
 				+ " GROUP BY WEEKOFYEAR(h.history_in) ORDER BY WEEKOFYEAR(h.history_in) DESC";
 		logger.info("\n"+sql+" "+year+" "+minWeek+" "+maxWeek);
 		List<Map<String, Object>> countPatientsProWeek 
-		= jdbcTemplate.queryForList(sql, new Object[] { year, minWeek, maxWeek });
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { year, minWeek, maxWeek });
 		return countPatientsProWeek;
 	}
 
@@ -1434,7 +1407,7 @@ public class CuwyDbService1 {
 				+ " GROUP BY WEEKOFYEAR(h.history_in) ORDER BY WEEKOFYEAR(h.history_in) DESC";
 		logger.info("\n"+sql+" "+year+" "+monthNr);
 		List<Map<String, Object>> countPatientsProWeek 
-		= jdbcTemplate.queryForList(sql, new Object[] { year, monthNr });
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { year, monthNr });
 		return countPatientsProWeek;
 	}
 
@@ -1444,7 +1417,7 @@ public class CuwyDbService1 {
 				+ " WHERE YEAR(h.history_in)= ? GROUP BY MONTH(h.history_in) ORDER BY MONTH(h.history_in) DESC";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql, new Object[] { year });
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { year });
 		return countPatientsProMonth;
 	}
 
@@ -1452,14 +1425,14 @@ public class CuwyDbService1 {
 		String sql = "SELECT * FROM locality WHERE region_id = ? ";
 		logger.info("\n"+sql.replaceFirst("\\?", ""+regionId));
 		List<Map<String, Object>> countPatientsProWeek 
-		= jdbcTemplate.queryForList(sql, new Object[] { regionId });
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { regionId });
 		return countPatientsProWeek;
 	}
 
 	public List<Map<String, Object>> patientsYearWeekRsList(Integer year, Integer week) {
 		logger.info("\n"+sqlPatientsYearWeek+" "+year+" "+week);
 		List<Map<String, Object>> countPatientsProWeek 
-		= jdbcTemplate.queryForList(sqlPatientsYearWeek, new Object[] { year, week });
+		= jdbcTemplateHol1MySql.queryForList(sqlPatientsYearWeek, new Object[] { year, week });
 		return countPatientsProWeek;
 	}
 
@@ -1477,7 +1450,7 @@ public class CuwyDbService1 {
 				+ " AND o_saved.operation_id=oo.new_operation_id";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 
@@ -1498,7 +1471,7 @@ public class CuwyDbService1 {
 				+ " AND o.operation_id=oo.operation_id ";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 	public List<Map<String,Object>> getPersonalListe() {
@@ -1509,7 +1482,7 @@ public class CuwyDbService1 {
 				+ ") pdd ON p.personal_id = pdd.personal_id";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 
@@ -1521,7 +1494,7 @@ public class CuwyDbService1 {
 //		+ " ORDER BY operation_code ";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 	public List<Map<String, Object>> getSurgeryOperationListe(Integer personalId) {
@@ -1530,14 +1503,14 @@ public class CuwyDbService1 {
 				+ " FROM operation_history "
 				+ " WHERE personal_id = ? GROUP BY operation_id) oh, operation o "
 				+ " WHERE o.operation_id=oh.operation_id ORDER BY operation_cnt DESC";
-		final List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(sql, new Object[] { personalId});
+		final List<Map<String, Object>> queryForList = jdbcTemplateHol1MySql.queryForList(sql, new Object[] { personalId});
 		return queryForList;
 	}
 	public List<Map<String, Object>> getAnestesiaListe() {
 		String sql = "SELECT * FROM anestesia";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> anestesiaListe 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return anestesiaListe;
 	}
 
@@ -1545,7 +1518,7 @@ public class CuwyDbService1 {
 		String sql = "SELECT * FROM personal WHERE personal_anesthetist";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> surgeryListe 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return surgeryListe;
 	}
 
@@ -1553,7 +1526,7 @@ public class CuwyDbService1 {
 		String sql = "SELECT * FROM personal WHERE personal_surgeon";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> surgeryListe 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return surgeryListe;
 	}
 	
@@ -1561,14 +1534,14 @@ public class CuwyDbService1 {
 		String sql = "select * from operation_result";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> operationResultListe 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return operationResultListe;
 	}
 	public List<Map<String, Object>> getComplicationListe() {
 		String sql = "SELECT * FROM operation_complication";
 		logger.info("\n"+sql);
 		List<Map<String, Object>> countPatientsProMonth 
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		return countPatientsProMonth;
 	}
 
@@ -1577,7 +1550,7 @@ public class CuwyDbService1 {
 		String sql2 = sql.replaceFirst("\\?", query);
 		logger.debug(sql2);
 		Icd10UaClass icd10UaRoot = new Icd10UaClass();
-		List<Icd10UaClass> icd10Classes = jdbcTemplate.query(
+		List<Icd10UaClass> icd10Classes = jdbcTemplateHol1MySql.query(
 				sql2,
 				new Icd2TreeMapper(icd10UaRoot));
 		logger.debug(""+icd10UaRoot);
@@ -1588,7 +1561,7 @@ public class CuwyDbService1 {
 		String sql2 = sql.replaceFirst("\\?", query);
 		logger.info("\n"+sql2);
 		List<Map<String, Object>> seekIcd10 
-		= jdbcTemplate.queryForList(sql2);
+		= jdbcTemplateHol1MySql.queryForList(sql2);
 		List<Map<String, Object>> icdTree = new ArrayList<Map<String,Object>>();
 		if(seekIcd10.size()>0){
 			icdTree.add(seekIcd10.get(0));
@@ -1620,8 +1593,8 @@ public class CuwyDbService1 {
 		String sql2 = sql.replaceFirst("\\?", tableName);
 		logger.info("\n"+sql2);
 		List<Map<String, Object>> nextIdList
-			= jdbcTemplate.queryForList(sql2);
-//		= jdbcTemplate.queryForList(sql, new Object[] { tableName });
+			= jdbcTemplateHol1MySql.queryForList(sql2);
+//		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { tableName });
 		BigInteger nextId = (BigInteger) nextIdList.get(0).values().toArray()[0];
 		return nextId.intValue();
 	}
@@ -1629,14 +1602,14 @@ public class CuwyDbService1 {
 	private int readNextId(String sql) {
 		logger.info("\n"+sql);
 		List<Map<String, Object>> nextIdList
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		BigInteger nextId = (BigInteger) nextIdList.get(0).get("nextId");
 		return nextId.intValue();
 	}
 	private int readNextIdDouble(String sql) {
 		logger.info("\n"+sql);
 		List<Map<String, Object>> nextIdList
-		= jdbcTemplate.queryForList(sql);
+		= jdbcTemplateHol1MySql.queryForList(sql);
 		Double nextId = (Double) nextIdList.get(0).get("nextId");
 		return nextId.intValue();
 	}
@@ -1646,7 +1619,7 @@ public class CuwyDbService1 {
 		sqlOperationHistorys = readSqlFromFile("operation-historys.sql", sqlOperationHistorys);
 		logger.info("\n"+sqlOperationHistorys.replaceFirst("\\?", ""+shortPatientHistory.getHistoryId()));
 		List<Map<String, Object>> lmso
-			= jdbcTemplate.queryForList(sqlOperationHistorys, new Object[] { shortPatientHistory.getHistoryId()});
+			= jdbcTemplateHol1MySql.queryForList(sqlOperationHistorys, new Object[] { shortPatientHistory.getHistoryId()});
 		return lmso;
 	}
 
@@ -1677,7 +1650,7 @@ public class CuwyDbService1 {
 //	public List<Map<String, Object>> dsReferral(Integer departmentId) {
 //		logger.info("\n"+sqlGroupReferral.replaceFirst("\\?", ""+departmentId));
 //		List<Map<String, Object>> groupReferral
-//		= jdbcTemplate.queryForList(sqlGroupReferral, new Object[] { departmentId});
+//		= jdbcTemplateHol1MySql.queryForList(sqlGroupReferral, new Object[] { departmentId});
 //		return groupReferral;
 //	}
 	public List<Map<String, Object>> dsNapravlenya(Integer departmentId) {
@@ -1686,21 +1659,21 @@ public class CuwyDbService1 {
 				+ "\n) s GROUP BY s.cds_code, s.direct_id"
 				+ "\n ORDER BY s.cds_code, s.direct_id"
 				+ "\n";
-		logger.info("\n"+sql.replaceFirst("\\?", ""+departmentId));
+		logger.info("\n Село Місто \n"+sql.replaceFirst("\\?", ""+departmentId));
 		List<Map<String, Object>> dsMistoSelo
-		= jdbcTemplate.queryForList(sql, new Object[] { departmentId});
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { departmentId});
 		return dsMistoSelo;
 	}
-	public List<Map<String, Object>> dsMistoSelo2(Integer departmentId) {
-		return queryForList(departmentId, sqlMistoSelo_cDs_group);
-	}
+//	public List<Map<String, Object>> dsMistoSelo2(Integer departmentId) {
+//		return queryForList(departmentId, sqlMistoSelo_cDs_group);
+//	}
 
 
-	List<Map<String, Object>> queryForList(Integer departmentId, String sql) {
+	List<Map<String, Object>> monthPeriodReport(Integer departmentId, Integer fromMonth, Integer toMonth, String sql) {
 		logger.info("\n----------------------------------------------- \n "
 				+sql.replaceFirst("\\?", ""+departmentId));
 		List<Map<String, Object>> list
-		= jdbcTemplate.queryForList(sql, new Object[] { departmentId});
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { departmentId, fromMonth, toMonth});
 		return list;
 	}
 	public List<Map<String, Object>> dsMistoSelo(Integer departmentId) {
@@ -1710,13 +1683,18 @@ public class CuwyDbService1 {
 				+ "\n  ORDER BY s.cds_code ";
 		logger.info("\n"+sql.replaceFirst("\\?", ""+departmentId));
 		List<Map<String, Object>> dsMistoSelo
-		= jdbcTemplate.queryForList(sql, new Object[] { departmentId});
+		= jdbcTemplateHol1MySql.queryForList(sql, new Object[] { departmentId});
 		return dsMistoSelo;
+	}
+	public List<Map<String, Object>> icd10uk() {
+		List<Map<String, Object>> icd10uk
+		= jdbcTemplateHol1MySql.queryForList("select icd_code, icd_name from icd;");
+		return icd10uk;
 	}
 	public List<Map<String, Object>> jornalMovePatient(Integer departmentId) {
 		logger.info("\n"+sqlMoveQuartal.replaceFirst("\\?", ""+departmentId));
 		List<Map<String, Object>> jmp
-			= jdbcTemplate.queryForList(sqlMoveQuartal, new Object[] { departmentId});
+			= jdbcTemplateHol1MySql.queryForList(sqlMoveQuartal, new Object[] { departmentId});
 		return jmp;
 	}
 	
@@ -1725,7 +1703,7 @@ public class CuwyDbService1 {
 	String sqlHistoryInDepartmentProYearMonths1
 	= "SELECT d.department_id ,YEAR(history_in) ,MONTH(history_in) , h.* \n"
 			+ " FROM history h, department d \n"
-			+ " WHERE YEAR(history_in) = 2014 AND (MONTH(history_in) > 1 OR MONTH(history_in) < 4) AND d.department_id = 5 \n"
+			+ " WHERE YEAR(history_in) = 2014 AND (MONTH(history_in) > 1 OR MONTH(history_in) < 7) AND d.department_id = 5 \n"
 			+ " AND d.department_id = h.history_department_in";
 
 	String sqlPatientAdress = "SELECT p.patient_id,CONCAT(p.patient_surname,' ',p.patient_name,' ',p.patient_patronnymic) pip "
@@ -1742,7 +1720,7 @@ public class CuwyDbService1 {
 			+ "\n (SELECT  h.patient_id ,h.history_id, h.history_no , dh.department_history_in d_in , dh.department_history_out  d_out "
 			+ "\n , if(dh.department_history_bed_day = 0,1,dh.department_history_bed_day) b_d, dr.direct_id , dr.direct_name dr_name "
 			+ "\n FROM history h, department_history dh, direct dr "
-			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
+			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) <= 6) "
 			+ "\n AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id) historyInDepartmentProYearMonths "
 			+ "\n LEFT JOIN ( SELECT  hd.history_id pHistoryId, concat(icd.icd_code, ' ',icd.icd_name, ' ',hd.history_diagnos_additional) pDs "
 			+ "\n FROM history_diagnos hd, icd icd "
@@ -1762,7 +1740,7 @@ public class CuwyDbService1 {
 			+ "\n  LEFT JOIN department_history dhf on dh.history_id = dhf.history_id "
 			+ "\n and TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 "
 			+ "\n  , direct dr "
-			+ "\n   WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4) "
+			+ "\n   WHERE YEAR(dh.department_history_in) = 2015 AND (MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 7) "
 			+ "\n    AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
 
 	static String sqlReferral = "\n SELECT h.history_id, h.patient_id, (dh.department_history_bed_day +1) b_d "
@@ -1771,8 +1749,9 @@ public class CuwyDbService1 {
 			+ "\n , dr.direct_id , dr.direct_name dr_name ,dhf.department_id "
 			+ "\n FROM history h, department_history dh LEFT JOIN department_history dhf ON dh.history_id = dhf.history_id "
 			+ "\n AND TIMESTAMPDIFF(SECOND,dhf.department_history_out,dh.department_history_in) = 1 , direct dr "
-			+ "\n WHERE YEAR(dh.department_history_in) = 2015 AND MONTH(dh.department_history_in) >= 1 AND MONTH(dh.department_history_in) < 4 "
-			+ "\n AND dh.department_id = ? AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
+			+ "\n WHERE dh.department_id = ? AND YEAR(dh.department_history_in) = 2015 "
+			+ "\n AND MONTH(dh.department_history_in) >= ? AND MONTH(dh.department_history_in) <= ? "
+			+ "\n AND dh.history_id = h.history_id AND dr.direct_id=h.direct_id";
 
 	static String sql_pAd = "SELECT p.patient_id, p.district_id, p.region_id, p.locality_id, l.locality_type "
 			+ "\n , IF(l.locality_id=1 or l.locality_id=821,CONCAT('1_',locality_name),CONCAT('0_',region_name)) adress_code"
@@ -1788,7 +1767,7 @@ public class CuwyDbService1 {
 			+ "\n FROM history h ,  department_history dh LEFT JOIN department_history dhf "
 			+ "\n ON dh.history_id = dhf.history_id AND TIMESTAMPDIFF(SECOND,dh.department_history_out,dhf.department_history_in) = 1 "
 			+ "\n WHERE h.history_id=dh.history_id and dh.department_id=? AND dhf.department_id IS NOT NULL AND "
-			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
+			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= ? AND MONTH(h.history_out) <= ?)";
 
 	static String sqlPerevedeni2hol_pAd = ""
 			+ "SELECT locality_type, locality_type2, adress_code, region_id, count(region_id) cnt_region, sum(b_d) sum_b_d, region_name, district_name, locality_name"
@@ -1809,7 +1788,7 @@ public class CuwyDbService1 {
 			+ "\n FROM history h, department_history dh LEFT JOIN department_history dhf "
 			+ "\n ON dh.history_id = dhf.history_id AND TIMESTAMPDIFF(SECOND,dh.department_history_out,dhf.department_history_in) = 1 "
 			+ "\n WHERE h.result_id<7 and h.history_id=dh.history_id AND dh.department_id = ? AND dhf.department_id IS NULL AND "
-			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= 1 AND MONTH(h.history_out) < 4)";
+			+ "\n YEAR(h.history_out)=2015  AND (MONTH(h.history_out) >= ? AND MONTH(h.history_out) <= ?)";
 	
 	static String sqlDeadOrvipisany_pAd = "SELECT locality_type, locality_type2, adress_code, region_id, COUNT(deadVipisan) cnt_deadVipisan, deadVipisan, SUM(b_d) sum_b_d, region_name, district_name, locality_name "
 			+ "\n FROM ( SELECT pAd.*, sqlDeadOrvipisany.deadVipisan, sqlDeadOrvipisany.b_d "
@@ -1925,7 +1904,7 @@ public class CuwyDbService1 {
 		String sql = "SELECT concat('dep-',d.department_id,'_per-',p.personal_id) role, p.personal_username username"
 				+ " FROM personal_department pd, personal p, department d "
 				+ " WHERE pd.personal_id = p.personal_id AND d.department_id=pd.department_id";
-		List<Map<String, Object>> userRoleList = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> userRoleList = jdbcTemplateHol1MySql.queryForList(sql);
 		for (Map<String, Object> map : userRoleList) {
 			final String username = (String) map.get("username");
 			final String role = (String) map.get("role");
@@ -1952,7 +1931,7 @@ public class CuwyDbService1 {
 		}
 		logger.debug(arrayList.toString());
 		List<Map<String, Object>> list
-		= jdbcTemplate.queryForList(sqlBasicAnalysis, arrayList.toArray());
+		= jdbcTemplateHol1MySql.queryForList(sqlBasicAnalysis, arrayList.toArray());
 		return list;
 	}
 
@@ -1978,7 +1957,7 @@ public class CuwyDbService1 {
 		.replaceFirst("\\?", historyTreatmentAnalysisId.toString())
 		.replaceFirst("\\?", historyId.toString()));
 		
-		jdbcTemplate.update( sqlInsertHistoryTreatmentAnalysis,
+		jdbcTemplateHol1MySql.update( sqlInsertHistoryTreatmentAnalysis,
 				new Object[] {historyTreatmentAnalysisText, sort, treatmentAnalysId, historyTreatmentAnalysisId, historyId },
 				new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER}
 				);
@@ -2017,7 +1996,7 @@ public class CuwyDbService1 {
 	int deleteHistoryTreatmentAnalysisSort(Integer htaId) {
 		logger.debug(sqlDeleteHistoryTreatmentAnalysis
 				.replaceFirst("\\?", htaId.toString()));
-		final int update = jdbcTemplate.update( sqlDeleteHistoryTreatmentAnalysis, new Object[] {htaId }
+		final int update = jdbcTemplateHol1MySql.update( sqlDeleteHistoryTreatmentAnalysis, new Object[] {htaId }
 		, new int[] {Types.INTEGER} );
 		return update;
 	}
@@ -2025,7 +2004,7 @@ public class CuwyDbService1 {
 		logger.debug(sqlUpdateHistoryTreatmentAnalysis3
 				.replaceFirst("\\?", sort.toString())
 				.replaceFirst("\\?", htaId.toString()));
-		final int update = jdbcTemplate.update( sqlUpdateHistoryTreatmentAnalysis3, new Object[] {sort, htaId }
+		final int update = jdbcTemplateHol1MySql.update( sqlUpdateHistoryTreatmentAnalysis3, new Object[] {sort, htaId }
 		, new int[] {Types.VARCHAR, Types.INTEGER} );
 		return update;
 	}
@@ -2035,7 +2014,7 @@ public class CuwyDbService1 {
 				.replaceFirst("\\?", historyTreatmentAnalysisText)
 				.replaceFirst("\\?", sort.toString())
 				.replaceFirst("\\?", htaId.toString()));
-		final int update = jdbcTemplate.update( sqlUpdateHistoryTreatmentAnalysis1, new Object[] {historyTreatmentAnalysisText, sort, htaId }
+		final int update = jdbcTemplateHol1MySql.update( sqlUpdateHistoryTreatmentAnalysis1, new Object[] {historyTreatmentAnalysisText, sort, htaId }
 		, new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER} );
 		return update;
 	}
@@ -2057,10 +2036,13 @@ public class CuwyDbService1 {
 		epicrise.remove(delPart);
 		final List<Map<String, Object>> epicriseGroups = (List<Map<String, Object>>) epicrise.get("epicriseGroups");
 		Integer hid =  Integer.parseInt((String) epicrise.get("hid"));
-
+		final Integer userPersonalId = Integer.parseInt((String) epicrise.get("userPersonalId"));
+//		final int departmentPersonalId = personalId2departmentPersonalId(epicrise);
+//		epicrise.put("departmentPersonalId", departmentPersonalId);
 		for (int sort = 0; sort < epicriseGroups.size(); sort++) {
 			Map<String, Object> epiMap = epicriseGroups.get(sort);
 			epiMap.put("sort", sort);
+			final String nameGroup = (String) epiMap.get("name");
 			final Boolean
 			isTextHtml = (Boolean) epiMap.get("isTextHtml")
 			,isLabor = (Boolean) epiMap.get("isLabor");
@@ -2069,6 +2051,17 @@ public class CuwyDbService1 {
 			String historyTreatmentAnalysisText = null;
 			if(isLabor!=null && isLabor){
 				historyTreatmentAnalysisText = getLaborTable(epiMap);
+			}else if("Діагнози".equals(nameGroup)){
+				final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) epiMap.get("diagnosis");
+				logger.info(" diagnosis "+diagnosis);
+
+				for (Map<String, Object> map : diagnosis) {
+					logger.info(" diagnos "+map);
+					Integer historyDiagnosId = (Integer) map.get("historyDiagnosId");
+					logger.info(" historyDiagnosId "+historyDiagnosId);
+					insertUpdateDiagnos(map, userPersonalId, hid);
+				}
+
 			}else if(isTextHtml!=null && isTextHtml){
 				historyTreatmentAnalysisText = getHistoryTreatmentAnalysisText(epiMap);
 			}
@@ -2087,6 +2080,22 @@ public class CuwyDbService1 {
 		}
 	}
 
+	void insertUpdateDiagnos(Map<String, Object> map, Integer userPersonalId, Integer historyId) {
+		map.put("userPersonalId", userPersonalId);
+		map.put("historyId", historyId);
+		Integer historyDiagnosId = (Integer) map.get("historyDiagnosId");
+		logger.debug(""+historyDiagnosId);
+		if(null == historyDiagnosId){
+			insertHistoryDiagnosis(map);
+		}else{
+			Integer diagnosId = (Integer) map.get("diagnosId");
+			if(diagnosId >2 || diagnosId<5) {
+				map.put("userPersonalId", userPersonalId);
+				updateHistoryDiagnosis(map);
+			}
+		}
+	}
+	
 	private String getLaborTable(Map<String, Object> epiMap) {
 		Map value = (Map) epiMap.get("value");
 		if(value == null){
@@ -2139,7 +2148,7 @@ public class CuwyDbService1 {
 	private boolean isIdInTable(Integer htaId, String tableName) {
 		final String sql = isIdInTableMap.get(tableName);
 		logger.debug("\n "+sql.replaceFirst("\\?", htaId.toString()));
-		List<Map<String, Object>> l = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> l = jdbcTemplateHol1MySql.queryForList(sql);
 		if(l.size()>0)
 			return true;
 		return false;

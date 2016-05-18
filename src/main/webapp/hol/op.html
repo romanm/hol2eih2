@@ -56,21 +56,62 @@
 				<ol class="list-inline navbar-right">
 					<li><span data-ng-show="autoSaveCount > 0"
 						title="Кільськість автозбережень - {{autoSaveCount}}">
-							{{autoSaveCount}} </span> 
-			<button type="button" class="btn btn-primary btn-sm"
-				data-ng-click="saveOperation()" data-toggle="modal">
-				<span class="glyphicon glyphicon-floppy-disk"></span> Запис
-			</button>
-							<!-- 
+							{{autoSaveCount}} </span>
+						<button type="button" class="btn btn-primary btn-sm"
+							data-ng-click="saveOperation()" data-toggle="modal">
+							<span class="glyphicon glyphicon-floppy-disk"></span> Запис
+						</button>
+
+						<div class="btn-group">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								title="Меню" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<span class="glyphicon glyphicon-option-vertical"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a
+									href="/hol/history.html?hno={{patientHistory.historyId}}">
+										<i class="fa fa-history"></i> Перегляд ІХ
+								</a></li>
+								<li><a href="/hol/op.html?hid={{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-pushpin"></span>Операція
+								</a></li>
+								<li><a
+									href="/hol/epicrise.html?hid={{patientHistory.historyId}}">
+										<small><span class="fa-stack"> <i
+												class="fa fa-square-o fa-stack-2x"></i> <i
+												class="fa fa-send fa-stack-1x"></i>
+										</span></small> Епікриз
+								</a></li>
+								<li><a
+									ng-click="patientHistory.collapseMovePatient = !patientHistory.collapseMovePatient ">
+										<span class="glyphicon glyphicon-transfer"></span> Переведеня
+								</a></li>
+
+								<li role="separator" class="divider"></li>
+								<li><a
+									href="/hol/addPatient.html?hno={{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-edit"></span> Редагування ПЧ
+								</a></li>
+
+
+								<li role="separator" class="divider"></li>
+								<li><a
+									href="http://{{configHol.hol1IP}}/history/{{patientHistory.historyId}}">
+										<span class="glyphicon glyphicon-link"></span> HOL1
+								</a></li>
+								<li><a href="/hol/home.html"><span
+										class="glyphicon glyphicon-home"></span> ХОЛ стартова</a></li>
+							</ul>
+						</div> <!-- 
 							<span class="glyphicon glyphicon-floppy-disk"></span>
 						<a data-ng-click="saveOperation()" href="#"
 						title="Запис {{numberOfChange}} незбережених змін"> Запис
 							{{numberOfChange}} </a> 
-							 -->
-							<span
+							 --> <span
 						data-ng-show="patientHistory.requiredFieldFullProcent > 0">
 							ТЧ {{patientHistory.requiredFieldFullProcent}}%</span></li>
-							<!-- 
+					<!-- 
 					<li>|</li>
 					<li><span class="glyphicon glyphicon-eye-open"></span> <a
 						href="/hol/history.html?hno={{patientHistory.historyId}}">
@@ -522,30 +563,29 @@
 				</ol>
 			</div>
 		</nav>
-<!-- 
-	<script src="/js/jquery-2.1.3.min.js" type="application/javascript"></script>
-	<script src="/css/b/js/bootstrap.min.js" type="application/javascript"></script>
-	<script src="/js/rangy-core.js" type="application/javascript"></script>
-	<script src="/js/a/angular.min.js" type="application/javascript"></script>
-	<script src="/js/a/sortable.js"></script>
-	<script src="/js/a/angular-sanitize.min.js" type="application/javascript"></script>
-	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js" type="application/javascript"></script>
-	<script src="/css/b/js/bootstrap.min.js" type="application/javascript"></script>
-	<script src="/js/bootstrap-datepicker.min.js" type="application/javascript"></script>
-	<script src='/js/textAngular-sanitize.min.js' type="application/javascript"></script>
-	<script src='/js/textAngular.min.js' type="application/javascript"></script>
-	<script src="/db/config.json.js" type="application/javascript"></script>
-	<script src="/db/operationTree.json.js" type="application/javascript"></script>
-	<script src="/db/icd10uaGroups.json.js" type="application/javascript"></script>
-	<script src="/js/cuwy1.directives.js" type="application/javascript"></script>
-	<script src="/js/operation.directive.js" type="application/javascript"></script>
-	<script src="/js/operation2.directive.js" type="application/javascript"></script>
-	<script src="/js/cuwy1.controller.js" type="application/javascript"></script>
-	<script src="/js/icd10Editor1Ctrl.js" type="application/javascript"></script>
- -->
-	
 </body>
 
+<script src="/js2/jquery-2.1.4.min.js"></script>
+<script src="/js/jquery-1.11.4.ui.min.js"></script>
+<script src="/js2/angular_uk.min.js"></script>
+<script src="/js/a/sortable.js"></script>
+<script src="/js/a/angular-sanitize.min.js"></script>
+<script src="/js/rangy-core.js"></script>
+<script src="/js2/ui-bootstrap-tpls-0.13.0.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+<script src="/css/b/js/bootstrap.min.js"></script>
+<script src="/db/config.json.js"></script>
+<script src="/db/operationTree.json.js"></script>
+<script src="/db/icd10uaGroups.json.js"></script>
+<script src="/js/cuwy1.directives.js"></script>
+<script src="/js/cuwy1.controller.js"></script>
+<script src="/js/icd10Editor1Ctrl.js"></script>
+<script src="/js/operation.directive.js" type="application/javascript"></script>
+	<script src="/js/operation2.directive.js" type="application/javascript"></script>
+
+<!-- 
 	<script src="/js/jquery-2.1.3.min.js"></script>
 	<script src="/js/a/angular.min.js"></script>
 	<script src="/css/b/js/bootstrap.min.js"></script>
@@ -566,5 +606,6 @@
 	<script src="/js/icd10Editor1Ctrl.js"></script>
 	<script src="/js/operation.directive.js" type="application/javascript"></script>
 	<script src="/js/operation2.directive.js" type="application/javascript"></script>
+ -->
 
 </html>

@@ -124,6 +124,8 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	saveWorkDocEpicrise = function(){
 		$scope.epicrise.hid = parameters.hid;
 		$scope.epicrise.patientHistory = $scope.patientHistory;
+		console.log($scope.userPersonalId);
+		$scope.epicrise.userPersonalId = $scope.userPersonalId;
 //		saveWorkDoc("/save/epicrise", $scope, $http);
 		//saveWorkDoc("/db/saveepicrise", $scope, $http);
 		var docToSave = $scope.epicrise;
@@ -173,12 +175,19 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 		if(!epicriseGroup.diagnosis)
 			epicriseGroup.diagnosis = [];
 		epicriseGroup.diagnosis.push(diagnose);
-		
 	}
 	$scope.addOperation = function(epicriseGroup, operation){
 		epicriseGroup.operationHistorys.push(operation);
 	}
 	
+	var initEpicriseDiagnose = function(){
+		$scope.patientHistory.diagnosis.forEach(function(diagnose, idx){
+			if(diagnose.diagnosId == 3){//клінічний
+				$scope.diagnosisIndex = idx;
+			}
+		})
+		console.log($scope.diagnosisIndex);
+	}
 	var initEpicriseHol1Id = function(){
 		var htaCopy = $scope.patientHistory.historyTreatmentAnalysises;
 
@@ -232,6 +241,9 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 							//necessary labor 
 							hta.removeFromHol1DB = true;
 							hta.htaId = hta.historyTreatmentAnalysisId;
+							if(!$scope.epicrise.delPart){
+								$scope.epicrise.delPart = [];
+							}
 							$scope.epicrise.delPart.push(hta);
 						}
 					}
@@ -397,12 +409,15 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 
 	//-------------------------read history ------------------------------------
 	readHol1 = function(){
+		console.log("-----------------");
 		$http({ method : 'GET', url : historyUrl
 		}).success(function(data, status, headers, config) {
 			$scope.patientHistory = data;
+			console.log($scope.patientHistory);
 			initHistory();
 			initEpicrise();
 			initEpicriseHol1Id();
+			initEpicriseDiagnose();
 			initAppConfig($scope, $http, $sce, $filter);
 			seekDepartmentFromConfig($scope, 5);
 		}).error(function(data, status, headers, config) {
@@ -412,13 +427,64 @@ cuwyApp.controller('EpicriseCtrl', [ '$scope', '$http', '$filter', '$sce', funct
 	$http({ method : 'GET', url : epicriseUrl
 	}).success(function(data, status, headers, config) {
 		$scope.epicrise = data;
+		console.log($scope.epicrise);
 		readHol1();
 	}).error(function(data, status, headers, config) {
 		readHol1();
 	});
 	//-------------------------read end -------------------------------------END
 
-	//--------------sort array-----------------------------------------------END
+	//--------------ICD---------------------------------------------------------
+	$scope.useCodeOnly = function(){
+		console.log("-----------");
+		findEpicriseDiagnosGroup();
+		$scope.epicrise.epicriseGroups[$scope.epicriseDiagnosGroupIdx].diagnosis[0].useCodeOnly = 
+			!$scope.epicrise.epicriseGroups[$scope.epicriseDiagnosGroupIdx].diagnosis[0].useCodeOnly;
+	}
+	$scope.setIcd10 = function(icd10){
+		setHistoryDiagnos(icd10);
+	}
+	findEpicriseDiagnosGroup = function(){
+		for (var i = 0; i < $scope.epicrise.epicriseGroups.length; i++) {
+			if($scope.epicrise.epicriseGroups[i].name == "Діагнози"){
+				$scope.epicriseDiagnosGroupIdx = i;
+				break;
+			}
+		}
+	}
+	setEpicriseDiagnos = function(){
+		findEpicriseDiagnosGroup();
+		if(!$scope.epicrise.epicriseGroups[$scope.epicriseDiagnosGroupIdx].diagnosis)
+			$scope.epicrise.epicriseGroups[$scope.epicriseDiagnosGroupIdx].diagnosis = [];
+		$scope.epicrise.epicriseGroups[$scope.epicriseDiagnosGroupIdx].diagnosis[0] = 
+			$scope.patientHistory.diagnosis[$scope.diagnosisIndex];
+	}
+	setHistoryDiagnos = function(icd10){
+		console.log($scope.patientHistory.diagnosis.length);
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdCode = icd10.icdCode;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdEnd = icd10.icdEnd;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdId = icd10.icdId;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName = icd10.icdName;
+		$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdStart = icd10.icdStart;
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex]);
+		setEpicriseDiagnos();
+	}
+	$scope.changeIcd10Name = function(){
+		console.log("changeIcd10Name");
+		seekIcd10Tree();
+	}
+	seekIcd10Tree = function(){
+		console.log("seekIcd10Tree");
+		console.log($scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName);
+		var seerIcd10TreeUrl = "/seekIcd10Tree/"+$scope.patientHistory.diagnosis[$scope.diagnosisIndex].icdName;
+		$http({ method : 'GET', url : seerIcd10TreeUrl
+		}).success(function(data, status, headers, config) {
+			$scope.icd10Root = data;
+			console.log($scope.icd10Root);
+		}).error(function(data, status, headers, config) {
+		});
+	};
+	//--------------ICD------------------------------------------------------END
 
 	//-----------------context menu---------------------------------------------
 	$scope.menuDiagnos = [

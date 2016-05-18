@@ -17,6 +17,9 @@ body {
 	padding-top: 60px;
 	padding-bottom: 60px;
 }
+.fromToMonth {
+	background-color: yellow;
+}
 </style>
 <title>ХОЛ::{{department.department_name}}::квартальний звіт</title>
 </head>
@@ -49,20 +52,35 @@ body {
 		</div>
 	</nav>
 
-	<h1>
-		{{department.department_name}} <span
-			data-ng-show="!department"> Відділення <small>
-				<span class="glyphicon glyphicon-refresh gly-spin"> </span>
-		</small>
-		</span>
-		<small class="no-print"> <sub> {{loadDurationS_MS}} </sub></small>
-	</h1>
 
 	<div class="container">
+		<h1>
+			{{department.department_name}} <span
+				data-ng-show="!department"> Відділення <small>
+					<span class="glyphicon glyphicon-refresh gly-spin"> </span>
+			</small>
+			</span>
+			<small class="no-print"> <sub> {{loadDurationS_MS}} </sub></small>
+		</h1>
+		<div>
+			<button ng-click="readMonthReport()">з {{fromMonth}} до {{toMonth}}</button>
+			<table class="table">
+				<tr>
+					<td data-ng-repeat="month in [1,2,3,4,5,6,7,8,9,10,11,12]"
+						ng-click="setMonthPeriode(month)"
+						ng-class="{fromToMonth: month >= fromMonth && month <= toMonth}">
+						{{month}}</td>
+				</tr>
+			</table>
+		</div>
 		<table class="table-striped border">
 			<caption>
 				<h3>Основні показники надання стаціонарної медичної допомоги
-					населенню за місцем проживання за I квартал 2015 р.</h3>
+					населенню за місцем проживання 
+					з {{fromMonth}}
+					по {{toMonth}}
+					місяць
+					2015 р.</h3>
 			</caption>
 			<thead>
 				<tr class="center">
@@ -119,8 +137,8 @@ body {
 	
 		<table class="table-striped border">
 			<caption>
-				<h3>Основні показники роботи за нозологічними формами за I
-					квартал 2015 р.</h3>
+				<h3>Основні показники роботи за нозологічними формами з
+					{{fromMonth}} по {{toMonth}} місяць 2015 р.</h3>
 			</caption>
 			<thead>
 				<!-- 
@@ -223,19 +241,23 @@ body {
 
 	</div>
 
-	<script src="/js/jquery-2.1.3.min.js"></script>
-	<script src="/css/b/js/bootstrap.min.js"></script>
-	<script src="/js/rangy-core.js"></script>
-	<script src="/js/a/angular.min.js"></script>
-	<script src="/js/a/angular-sanitize.min.js"></script>
-	<script src="/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
-	<script src="/css/b/js/bootstrap.min.js"></script>
-	<script src="/js/bootstrap-datepicker.min.js"></script>
-	<script src='/js/textAngular-sanitize.min.js'></script>
-	<script src='/js/textAngular.min.js'></script>
-	<script src="/db/config.json.js"></script>
-	<script src="/js/cuwy1.directives.js"></script>
-	<script src="/js/cuwy1.controller.js"></script>
 
+<script src="/js2/jquery-2.1.4.min.js"></script>
+<script src="/js/jquery-1.11.4.ui.min.js"></script>
+<script src="/js2/angular_uk.min.js"></script>
+<script src="/js/a/sortable.js"></script>
+<script src="/js/a/angular-sanitize.min.js"></script>
+<script src="/js/rangy-core.js"></script>
+<script src="/js2/ui-bootstrap-tpls-0.13.0.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+<script src="/css/b/js/bootstrap.min.js"></script>
+<script src="/db/config.json.js"></script>
+
+<script src="/js/cuwy1.directives.js"></script>
+<script src="/js/cuwy1.controller.js"></script>
+
+	
 </body>
 </html>

@@ -109,7 +109,7 @@ Date.prototype.addMonths2 = function (num) {
     value.setYear(yr);
     return value;
 }
-
+console.log("-------112--------------")
 'use strict';
 var cuwyApp = angular.module('cuwyApp', ['ui.bootstrap', 'ui.sortable', 'ngSanitize', 'textAngular']);
 
@@ -217,7 +217,6 @@ readInitHistory = function($scope, $http, $sce, $filter){
 		return Object.keys(object);
 	}
 	$scope.setDiagnosIndex = function($index){
-		
 		if($scope.diagnosisIndex != $index){
 			$scope.collapseIcd10Liste = false;
 		}else{

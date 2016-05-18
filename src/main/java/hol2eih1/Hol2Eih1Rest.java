@@ -102,32 +102,66 @@ public class Hol2Eih1Rest {
 		map.put("basicAnalysis", basicAnalysis);
 		return map;
 	}
-	@RequestMapping(value = "/hol/quartalReport_{departmentId}", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> quartalReport(@PathVariable Integer departmentId
+
+	@RequestMapping(value = "/hol/monthPeriodReport_{departmentId}_{fromMonth}_{toMonth}", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> monthPeriodReport(
+			@PathVariable Integer departmentId
+			,@PathVariable Integer fromMonth
+			,@PathVariable Integer toMonth
 			, Principal userPrincipal, HttpSession session) throws IOException {
+		logger.debug(departmentId+"/"+fromMonth+"/"+toMonth);
 		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("fromMonth", fromMonth);
+		map.put("toMonth", toMonth);
 		DepartmentHol departmentHol = cuwyDbService1.getDepartmentsHol(departmentId);
 		departmentHol.setUser(userPrincipal);
 		map.put("department", departmentHol);
 //		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.dsMistoSelo2(departmentId);
-		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlMistoSelo_cDs_group);
+		logger.debug("Місто село");
+		final List<Map<String, Object>> dsMistoSelo = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlMistoSelo_cDs_group);
 		map.put("dsMistoSelo", dsMistoSelo);
 //		final List<Map<String, Object>> dsNapravlenya = cuwyDbService1.dsNapravlenya(departmentId);
 //		map.put("dsNapravlenya", dsNapravlenya);
 //		final List<Map<String, Object>> dsReferral = cuwyDbService1.dsReferral(departmentId);
-		final List<Map<String, Object>> dsReferral = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlReferral_cDs_group);
+		logger.debug("Місто село");
+		logger.debug("Поступлення з направленням, без, з іншого відділення (діагнози)");
+		final List<Map<String, Object>> dsReferral = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlReferral_cDs_group);
 		map.put("dsReferral", dsReferral);
-		final List<Map<String, Object>> adReferral = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlReferral_pAd);
+		logger.debug("Поступлення з направленням, без, з іншого відділення (адреси)");
+		final List<Map<String, Object>> adReferral = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlReferral_pAd);
 		map.put("adReferral", adReferral);
-		final List<Map<String, Object>> dsDeadOrvipisany = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlDeadOrvipisany_cDs_group);
+		logger.debug("Померлі або виписані  (по діагнозу) ");
+		final List<Map<String, Object>> dsDeadOrvipisany = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlDeadOrvipisany_cDs_group);
 		map.put("dsDeadOrvipisany", dsDeadOrvipisany);
-		final List<Map<String, Object>> adDeadOrvipisany = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlDeadOrvipisany_pAd);
+		logger.debug("Померлі та виписані (за адресою)");
+		final List<Map<String, Object>> adDeadOrvipisany = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlDeadOrvipisany_pAd);
 		map.put("adDeadOrvipisany", adDeadOrvipisany);
-		final List<Map<String, Object>> dsPerevedeni = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlPerevedeni2hol_cDs_group);
+		logger.debug("Померлі та виписані ");
+		final List<Map<String, Object>> dsPerevedeni = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlPerevedeni2hol_cDs_group);
 		map.put("dsPerevedeni", dsPerevedeni);
-		final List<Map<String, Object>> adPerevedeni = cuwyDbService1.queryForList(departmentId, CuwyDbService1.sqlPerevedeni2hol_pAd);
+		final List<Map<String, Object>> adPerevedeni = cuwyDbService1.monthPeriodReport(departmentId, fromMonth, toMonth, CuwyDbService1.sqlPerevedeni2hol_pAd);
 		map.put("adPerevedeni", adPerevedeni);
 		return map;
+	}
+
+	@RequestMapping(value = "/hol/quartalReport_{departmentId}", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> quartalReport(@PathVariable Integer departmentId
+			, Principal userPrincipal, HttpSession session) throws IOException {
+		Map<String, Object> map = monthPeriodReport(departmentId, 1, 6, userPrincipal, session);
+		return map;
+	}
+
+	@RequestMapping(value = "/hol/icd10uk", method = RequestMethod.GET)
+	public @ResponseBody Map icd10uk() throws IOException {
+		logger.info("\n Start /hol/icd10uk");
+		final List<Map<String, Object>> jornalMovePatient = cuwyDbService1.icd10uk();
+		Map icd10uk = new HashMap<>();
+		for (Map<String, Object> map : jornalMovePatient) {
+			String key = (String) map.get("icd_code");
+			String value = (String) map.get("icd_name");
+			icd10uk.put(key, value);
+		}
+		return icd10uk;
 	}
 	@RequestMapping(value = "/hol/jornalMovePatient_{departmentId}", method = RequestMethod.GET)
 	public @ResponseBody DepartmentHol jornalMovePatient(@PathVariable Integer departmentId
@@ -140,7 +174,7 @@ public class Hol2Eih1Rest {
 		departmentHol.setUser(userPrincipal);
 		return departmentHol;
 	}
-	
+
 	@RequestMapping(value = "/hol/archives_{departmentId}_{seekInArchives}", method = RequestMethod.GET)
 	public @ResponseBody DepartmentHol getHolArchives(
 			@PathVariable Integer departmentId
@@ -178,6 +212,7 @@ public class Hol2Eih1Rest {
 	@RequestMapping(value = "/db/epicrise_hid_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getHol2EpicriseByPatientHistoryId(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) throws IOException {
 		logger.info("\n Start /db/epicrise_hid_"+historyId);
+		logger.debug(""+userPrincipal);
 		Map<String, Object> epicrise = hol2Service.initEpicrise(historyId);
 		logger.debug(""+epicrise.size());
 		logger.debug(historyId+" epicrise.epicriseGroups = "+epicrise.get("epicriseGroups"));
@@ -292,26 +327,17 @@ public class Hol2Eih1Rest {
 		}
 		final List<Map<String, Object>> diagnosis = (List<Map<String, Object>>) historyHolDb.get("diagnosis");
 		logger.info(" diagnosis "+diagnosis);
+		final Integer userPersonalId = Integer.parseInt((String) historyHolDb.get("userPersonalId"));
+		final Integer historyId = (Integer) historyHolDb.get("historyId");
 		for (Map<String, Object> map : diagnosis) {
-			logger.debug(""+map);
 			if(null != map){
-				map.put("userPersonalId", historyHolDb.get("userPersonalId"));
-				map.put("historyId", historyHolDb.get("historyId"));
-				Integer historyDiagnosId = (Integer) map.get("historyDiagnosId");
-				logger.debug(""+historyDiagnosId);
-				if(null == historyDiagnosId){
-					cuwyDbService1.insertHistoryDiagnosis(map);
-				}else{
-					Integer diagnosId = (Integer) map.get("diagnosId");
-					if(diagnosId >2 || diagnosId<5) {
-						cuwyDbService1.updateHistoryDiagnosis(map);
-					}
-				}
+				cuwyDbService1.insertUpdateDiagnos(map, userPersonalId, historyId);
 			}
 		}
 		logger.info(" diagnosis ");
 		return historyHolDb;
 	}
+
 
 	@RequestMapping(value = "/db/history_id_{historyId}", method = RequestMethod.GET)
 	public @ResponseBody HistoryHolDb getHolPatientHistoryById(@PathVariable Integer historyId, Principal userPrincipal, HttpSession session) 

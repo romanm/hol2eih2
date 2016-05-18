@@ -235,7 +235,7 @@ body {
 		</div>
 
 		<hr class="shortPatienHistory" />
-
+		
 		<div collapse="!patientHistory.collapseMovePatient" class="well"
 			ng-controller="departmentCtrl">
 			<div class="row">
@@ -263,7 +263,7 @@ body {
 							placeholder="Відділення переведення" id="department"
 							name="department" data-ng-model="patientEditing.departmentName"
 							required="" ng-change="seekMoveDepartment()"
-							tooltip-html-unsafe="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
+							tooltip-html="Відділення госпіталізації &lt;b class='required-tooltip'>*&lt;/b>" />
 					</div>
 				</div>
 				<div class="col-xs-6">
@@ -403,6 +403,7 @@ body {
 				</div>
 				<div class="col-xs-6" data-ng-controller="icd10Ctrl">
 
+
 					<ul>
 						<li ng-repeat="icd10Class1 in icd10Root.icd10Childs"><span
 							ng-if="!icd10Class1.collapse"
@@ -500,11 +501,10 @@ body {
 			</div>
 
 		</div>
-		<hr class="shortPatienHistory" />
 		<!-- 
-				<div data-ng-show="patientHistory.historyTreatmentAnalysises.length > 0">
-				</div>
-					 -->
+		<hr class="shortPatienHistory" />
+		 -->
+		
 		<div data-ng-if="patientHistory.operationHistorys">
 			<h3>
 				<small> <span class="glyphicon glyphicon-pushpin"></span>

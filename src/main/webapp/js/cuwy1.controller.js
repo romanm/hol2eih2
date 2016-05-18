@@ -178,23 +178,59 @@ cuwyApp.controller('quartalReportCtrl', [ '$scope','$interval', '$http', '$filte
 	
 	var checkLoadTimeInterval = $interval(function(){loadDurationTimer()},1023);
 
-	$http({
-		method : 'GET',
-		url : "/hol/quartalReport_"+parameters.dep
-	}).success(function(data, status, headers, config) {
-		$scope.department = data.department;
-		$scope.data = data;
-		calcDsReportTable();
-		calcAdressReportTable();
-		//		clearInterval(checkLoadTimeInterval);
-		if(angular.isDefined(checkLoadTimeInterval)){
-			$interval.cancel(checkLoadTimeInterval);
-			checkLoadTimeInterval=undefined;
+	var url = "/hol/quartalReport_"+parameters.dep;
+
+	readUrl = function(url){
+		$http({ method : 'GET', url : url
+		}).success(function(data, status, headers, config) {
+			console.log(data);
+			$scope.department = data.department;
+			$scope.data = data;
+			calcDsReportTable();
+			calcAdressReportTable();
+			//		clearInterval(checkLoadTimeInterval);
+			if(angular.isDefined(checkLoadTimeInterval)){
+				$interval.cancel(checkLoadTimeInterval);
+				checkLoadTimeInterval=undefined;
+			}
+			$scope.loadDurationMs = new Date().getTime() - startLoadTime.getTime();
+			//initAppConfig($scope, $http, $sce, $filter);
+		}).error(function(data, status, headers, config) {
+		});
+	}
+	readUrl(url);
+	$scope.readMonthReport = function(){
+		console.log("-----readMonthReport---------");
+		if($scope.fromMonth>$scope.toMonth)
+			return;
+		var url = "/hol/monthPeriodReport_"+parameters.dep+"_"+$scope.fromMonth+"_"+$scope.toMonth;
+		readUrl(url);
+	}
+	$scope.setMonthPeriode = function(month){
+		console.log("b "+month+"/"+$scope.fromMonth+"/"+$scope.toMonth);
+		if(month > $scope.fromMonth){
+			if(month > $scope.toMonth){
+				$scope.toMonth = month;
+			}else if(month == $scope.toMonth){
+				$scope.toMonth = month - 1;
+			}else{//month < $scope.toMonth
+				if($scope.toMonth - month < month - $scope.fromMonth){
+					$scope.toMonth = month;
+				}else{
+					$scope.fromMonth = month;
+				}
+			}
+		}else if(month == $scope.fromMonth){
+			$scope.fromMonth = month + 1;
+		}else if(month < $scope.fromMonth){
+			$scope.fromMonth = month;
+		}else{
+			$scope.fromMonth = month;
+			$scope.toMonth = month;
 		}
-		$scope.loadDurationMs = new Date().getTime() - startLoadTime.getTime();
-		//initAppConfig($scope, $http, $sce, $filter);
-	}).error(function(data, status, headers, config) {
-	});
+		console.log("e "+month+"/"+$scope.fromMonth+"/"+$scope.toMonth);
+	};
+
 	$scope.getAdReportTableKey = function(){
 		if($scope.data){
 			return Object.keys($scope.data.adressReportTable).sort();
